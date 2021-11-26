@@ -87,3 +87,8 @@ lint/tmp/
 # Android Profiling
 *.hprof
 keystore.properties
+
+
+
+*.tmp
+*.docx
