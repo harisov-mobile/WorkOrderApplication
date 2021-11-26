@@ -1,6 +1,7 @@
 package ru.internetcloud.workorderapplication.domain.repository
 
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
+import java.util.*
 
 interface WorkOrderRepositoryInterface {
     fun addWorkOrder(workOrder: WorkOrder)
@@ -9,5 +10,5 @@ interface WorkOrderRepositoryInterface {
 
     fun getWorkOrderList() : List<WorkOrder>
 
-    fun getWorkOrder(id: String): WorkOrder
+    fun getWorkOrder(id: UUID): WorkOrder?
 }

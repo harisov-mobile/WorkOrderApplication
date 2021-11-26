@@ -4,7 +4,7 @@ import ru.internetcloud.workorderapplication.domain.catalog.*
 import java.util.*
 
 data class WorkOrder(
-    var id: String = "",
+    val id: UUID = UUID.randomUUID(),
     var number: String = "",
     var date: Date,
     var client: Partner? = null,
