@@ -36,6 +36,5 @@ class WorkOrderListFragment : Fragment() {
                 Log.i("Rustam", it.toString())
             }
         )
-        viewModel.getWorkOrderList()
     }
 }
