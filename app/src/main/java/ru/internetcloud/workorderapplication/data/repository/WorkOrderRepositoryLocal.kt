@@ -8,6 +8,13 @@ class WorkOrderRepositoryLocal : WorkOrderRepositoryInterface {
 
     private val workOrderList = mutableListOf<WorkOrder>()
 
+    init {
+        for (i in 0..100) {
+            val item = WorkOrder(number = "#$i")
+            addWorkOrder(item)
+        }
+    }
+
     override fun addWorkOrder(workOrder: WorkOrder) {
         workOrderList.add(workOrder)
     }
