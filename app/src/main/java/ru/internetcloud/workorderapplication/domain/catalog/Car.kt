@@ -1,6 +1,6 @@
 package ru.internetcloud.workorderapplication.domain.catalog
 
-import java.util.*
+import java.util.Date
 
 data class Car(
     var id: String = "",

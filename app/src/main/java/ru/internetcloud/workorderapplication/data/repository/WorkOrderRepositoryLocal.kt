@@ -1,10 +1,10 @@
 package ru.internetcloud.workorderapplication.data.repository
 
+import java.util.UUID
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepositoryInterface
-import java.util.*
 
-class WorkOrderRepositoryLocal: WorkOrderRepositoryInterface {
+class WorkOrderRepositoryLocal : WorkOrderRepositoryInterface {
 
     private val workOrderList = mutableListOf<WorkOrder>()
 
