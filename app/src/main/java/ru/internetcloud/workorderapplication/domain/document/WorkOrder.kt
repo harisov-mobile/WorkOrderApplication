@@ -19,7 +19,7 @@ data class WorkOrder(
     var department: Department? = null,
     var requestReason: String? = null,
     var master: Employee? = null,
-    var Comment: String? = null,
+    var comment: String? = null,
     var performers: List<Employee> = emptyList(),
     var jobs: List<JobDetail> = emptyList()
 )

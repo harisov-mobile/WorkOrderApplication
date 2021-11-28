@@ -8,11 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
 
 class WorkOrderListFragment : Fragment() {
 
     private lateinit var viewModel: WorkOrderListViewModel
+    private lateinit var workOrderRecyclerView: RecyclerView
+    private lateinit var workOrderListAdapter: WorkOrderListAdapter
 
     companion object {
         fun newInstance(): WorkOrderListFragment {
@@ -23,6 +26,12 @@ class WorkOrderListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.fragment_work_order_list, container, false)
+
+
+        val workOrderRecyclerView = view.findViewById<RecyclerView>(R.id.work_order_recycler_view)
+        workOrderListAdapter = WorkOrderListAdapter()
+        workOrderRecyclerView.adapter = workOrderListAdapter
+
         return view
     }
 
@@ -34,6 +43,7 @@ class WorkOrderListFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 Log.i("Rustam", it.toString())
+                workOrderListAdapter.workOrderList = it
             }
         )
     }
