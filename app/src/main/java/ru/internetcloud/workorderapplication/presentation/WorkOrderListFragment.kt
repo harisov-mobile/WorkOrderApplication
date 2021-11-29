@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,12 +28,18 @@ class WorkOrderListFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_work_order_list, container, false)
 
-
-        val workOrderRecyclerView = view.findViewById<RecyclerView>(R.id.work_order_recycler_view)
-        workOrderListAdapter = WorkOrderListAdapter()
-        workOrderRecyclerView.adapter = workOrderListAdapter
+        setupWorkOrderRecyclerView(view)
 
         return view
+    }
+
+    private fun setupWorkOrderRecyclerView(view: View) {
+        workOrderRecyclerView = view.findViewById<RecyclerView>(R.id.work_order_recycler_view)
+        workOrderListAdapter = WorkOrderListAdapter()
+        workOrderRecyclerView.adapter = workOrderListAdapter
+        workOrderListAdapter.onWorkOrderClickListener = {
+            Toast.makeText(context, "клик ${it.number}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

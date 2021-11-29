@@ -10,6 +10,12 @@ import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 
 class WorkOrderListAdapter: RecyclerView.Adapter<WorkOrderListAdapter.WorkOrderViewHolder>() {
 
+    // для отработки нажатий на элемент списка - переменная, которая будет хранить лямбда-функцию,
+    // на вход лямбда-функции в качестве параметра будет передан workOrder: WorkOrder,
+    // лямбда-функция ничего не возрващает (то есть Unit)
+    // а первоначально переменная содержит null
+    var onWorkOrderClickListener: ((workOrder: WorkOrder) -> Unit)? = null
+
     var workOrderList = listOf<WorkOrder>()
     set(value) {
         field = value
@@ -30,9 +36,17 @@ class WorkOrderListAdapter: RecyclerView.Adapter<WorkOrderListAdapter.WorkOrderV
     override fun onBindViewHolder(holder: WorkOrderViewHolder, position: Int) {
         val workOrder = workOrderList[position]
         holder.nameTextView.text = "${workOrder.number} ${workOrder.date.toString()}"
+
+        holder.itemView.setOnClickListener {
+            onWorkOrderClickListener?.invoke(workOrder)
+        }
     }
 
     override fun getItemCount(): Int {
         return workOrderList.size
+    }
+
+    companion object {
+
     }
 }
