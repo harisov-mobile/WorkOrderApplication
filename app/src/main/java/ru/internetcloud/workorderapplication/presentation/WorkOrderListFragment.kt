@@ -50,7 +50,7 @@ class WorkOrderListFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 Log.i("Rustam", it.toString())
-                workOrderListAdapter.workOrderList = it
+                workOrderListAdapter.submitList(it)
             }
         )
     }

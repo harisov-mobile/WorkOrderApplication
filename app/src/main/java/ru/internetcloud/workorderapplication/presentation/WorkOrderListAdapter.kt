@@ -4,28 +4,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 
-class WorkOrderListAdapter : RecyclerView.Adapter<WorkOrderListAdapter.WorkOrderViewHolder>() {
+class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderViewHolder>(WorkOrderDiffCallback()) {
 
     // для отработки нажатий на элемент списка - переменная, которая будет хранить лямбда-функцию,
     // на вход лямбда-функции в качестве параметра будет передан workOrder: WorkOrder,
     // лямбда-функция ничего не возрващает (то есть Unit)
     // а первоначально переменная содержит null
     var onWorkOrderClickListener: ((workOrder: WorkOrder) -> Unit)? = null
-
-    var workOrderList = listOf<WorkOrder>()
-    set(value) {
-        field = value
-        notifyDataSetChanged()
-    }
-
-    class WorkOrderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nameTextView = itemView.findViewById<TextView>(R.id.tv_name)
-        val countTextView = itemView.findViewById<TextView>(R.id.tv_count)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkOrderViewHolder {
 
@@ -34,15 +24,11 @@ class WorkOrderListAdapter : RecyclerView.Adapter<WorkOrderListAdapter.WorkOrder
     }
 
     override fun onBindViewHolder(holder: WorkOrderViewHolder, position: Int) {
-        val workOrder = workOrderList[position]
+        val workOrder = getItem(position)
         holder.nameTextView.text = "${workOrder.number} ${workOrder.date}"
 
         holder.itemView.setOnClickListener {
             onWorkOrderClickListener?.invoke(workOrder)
         }
-    }
-
-    override fun getItemCount(): Int {
-        return workOrderList.size
     }
 }
