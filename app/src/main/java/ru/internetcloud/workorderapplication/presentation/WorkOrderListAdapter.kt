@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 
-class WorkOrderListAdapter: RecyclerView.Adapter<WorkOrderListAdapter.WorkOrderViewHolder>() {
+class WorkOrderListAdapter : RecyclerView.Adapter<WorkOrderListAdapter.WorkOrderViewHolder>() {
 
     // для отработки нажатий на элемент списка - переменная, которая будет хранить лямбда-функцию,
     // на вход лямбда-функции в качестве параметра будет передан workOrder: WorkOrder,
@@ -35,7 +35,7 @@ class WorkOrderListAdapter: RecyclerView.Adapter<WorkOrderListAdapter.WorkOrderV
 
     override fun onBindViewHolder(holder: WorkOrderViewHolder, position: Int) {
         val workOrder = workOrderList[position]
-        holder.nameTextView.text = "${workOrder.number} ${workOrder.date.toString()}"
+        holder.nameTextView.text = "${workOrder.number} ${workOrder.date}"
 
         holder.itemView.setOnClickListener {
             onWorkOrderClickListener?.invoke(workOrder)
@@ -44,9 +44,5 @@ class WorkOrderListAdapter: RecyclerView.Adapter<WorkOrderListAdapter.WorkOrderV
 
     override fun getItemCount(): Int {
         return workOrderList.size
-    }
-
-    companion object {
-
     }
 }
