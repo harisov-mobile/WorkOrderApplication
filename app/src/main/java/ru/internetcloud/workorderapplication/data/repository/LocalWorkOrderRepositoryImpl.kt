@@ -15,7 +15,7 @@ object LocalWorkOrderRepositoryImpl : WorkOrderRepository {
     private val workOrderList = mutableListOf<WorkOrder>()
 
     init {
-        for (i in 0..100) {
+        for (i in 0..4) {
             val item = WorkOrder(number = "#$i")
             addWorkOrder(item)
         }

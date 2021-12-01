@@ -52,6 +52,18 @@ class WorkOrderViewModel : ViewModel() {
         }
     }
 
+    fun updateWorkOrder(inputNumber: String?) {
+        val number = parseNumber(inputNumber)
+        val areFieldsValid = validateInput(number)
+        if (areFieldsValid) {
+            _workOrder.value?.let {
+                it.number = number
+                updateWorkOrderUseCase.updateWorkOrder(it)
+                _canFinish.value = Unit
+            }
+        }
+    }
+
     private fun parseNumber(inputNumber: String?): String {
         return inputNumber?.trim() ?: ""
     }

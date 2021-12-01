@@ -6,4 +6,7 @@
     <string name="date_label">Дата</string>
     <string name="work_order_date_hint">дата</string>
     <string name="add_work_order_fab_description">Add work order</string>
+    <string name="error_input_name">Неправильно указан номер</string>
+    <string name="success_saved">Информация записана</string>
+    <string name="save_button">Save</string>
 </resources>
