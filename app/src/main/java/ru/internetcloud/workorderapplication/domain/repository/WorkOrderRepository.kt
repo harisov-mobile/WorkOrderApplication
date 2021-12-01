@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import java.util.UUID
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 
-interface WorkOrderRepositoryInterface {
+interface WorkOrderRepository {
     fun addWorkOrder(workOrder: WorkOrder)
 
     fun updateWorkOrder(workOrder: WorkOrder)

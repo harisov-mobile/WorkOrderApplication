@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.presentation
+package ru.internetcloud.workorderapplication.presentation.workorder.list
 
 import android.view.View
 import android.widget.TextView

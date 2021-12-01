@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.util.UUID
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepositoryInterface
+import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
 
-object WorkOrderRepositoryLocal : WorkOrderRepositoryInterface {
+object LocalWorkOrderRepositoryImpl : WorkOrderRepository {
 
     private val workOrderListLiveDataMutable = MutableLiveData<List<WorkOrder>>()
     private val workOrderLiveData: LiveData<List<WorkOrder>>

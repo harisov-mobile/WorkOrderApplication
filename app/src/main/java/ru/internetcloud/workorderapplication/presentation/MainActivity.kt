@@ -1,10 +1,14 @@
- package ru.internetcloud.workorderapplication.presentation
+package ru.internetcloud.workorderapplication.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import java.util.UUID
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.WorkOrderFragment
+import ru.internetcloud.workorderapplication.presentation.workorder.list.WorkOrderListFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), WorkOrderListFragment.Callbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fragment)
@@ -16,5 +20,22 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.fragment_container, currentFragment)
                 .commit()
         }
+    }
+
+    override fun onAddWorkOrder() {
+        val fragment = WorkOrderFragment.newInstanceAddWorkOrder()
+        showFragment(fragment)
+    }
+
+    override fun onEditWorkOrder(workOrderId: UUID) {
+        val fragment = WorkOrderFragment.newInstanceEditWorkOrder(workOrderId)
+        showFragment(fragment)
+    }
+
+    private fun showFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

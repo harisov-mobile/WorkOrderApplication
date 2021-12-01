@@ -1,7 +1,7 @@
-package ru.internetcloud.workorderapplication.presentation
+package ru.internetcloud.workorderapplication.presentation.workorder.list
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +10,25 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.UUID
 import ru.internetcloud.workorderapplication.R
 
 class WorkOrderListFragment : Fragment() {
 
+    // интерфейс обратного вызова
+    interface Callbacks {
+        fun onAddWorkOrder()
+
+        fun onEditWorkOrder(workOrderId: UUID)
+    }
+
+    private var hostActivity: Callbacks? = null
+
     private lateinit var viewModel: WorkOrderListViewModel
     private lateinit var workOrderRecyclerView: RecyclerView
     private lateinit var workOrderListAdapter: WorkOrderListAdapter
+    private lateinit var addFloatingActionButton: FloatingActionButton
 
     companion object {
         fun newInstance(): WorkOrderListFragment {
@@ -28,9 +40,26 @@ class WorkOrderListFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_work_order_list, container, false)
 
+        addFloatingActionButton = view.findViewById(R.id.add_fab)
+        addFloatingActionButton.setOnClickListener {
+            hostActivity?.onAddWorkOrder()
+        }
+
         setupWorkOrderRecyclerView(view)
+        setupClickListener()
 
         return view
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        hostActivity = context as Callbacks
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        hostActivity = null
     }
 
     private fun setupWorkOrderRecyclerView(view: View) {
@@ -42,6 +71,12 @@ class WorkOrderListFragment : Fragment() {
         }
     }
 
+    private fun setupClickListener() {
+        workOrderListAdapter.onWorkOrderClickListener = { workOrder ->
+            hostActivity?.onEditWorkOrder(workOrder.id)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -49,7 +84,6 @@ class WorkOrderListFragment : Fragment() {
         viewModel.workOrderListLiveData.observe(
             viewLifecycleOwner,
             Observer {
-                Log.i("Rustam", it.toString())
                 workOrderListAdapter.submitList(it)
             }
         )

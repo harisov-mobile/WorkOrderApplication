@@ -1,11 +1,8 @@
-package ru.internetcloud.workorderapplication.presentation
+package ru.internetcloud.workorderapplication.presentation.workorder.list
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 

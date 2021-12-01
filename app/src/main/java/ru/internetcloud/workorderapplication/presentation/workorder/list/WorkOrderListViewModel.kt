@@ -1,12 +1,12 @@
-package ru.internetcloud.workorderapplication.presentation
+package ru.internetcloud.workorderapplication.presentation.workorder.list
 
 import androidx.lifecycle.ViewModel
-import ru.internetcloud.workorderapplication.data.repository.WorkOrderRepositoryLocal
+import ru.internetcloud.workorderapplication.data.repository.LocalWorkOrderRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.usecase.GetWorkOrderListUseCase
 
 class WorkOrderListViewModel : ViewModel() {
 
-    private val repository = WorkOrderRepositoryLocal
+    private val repository = LocalWorkOrderRepositoryImpl
 
     private val getWorkOrderListUseCase = GetWorkOrderListUseCase(repository)
 
