@@ -11,13 +11,18 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.textfield.TextInputLayout
 import java.util.UUID
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 
 class WorkOrderFragment : Fragment() {
+    private lateinit var numberTextInputLayout: TextInputLayout
+    private lateinit var dateTextInputLayout: TextInputLayout
+    private lateinit var mileageTextInputLayout: TextInputLayout
     private lateinit var numberEditText: EditText
     private lateinit var dateEditText: EditText
+    private lateinit var mileageEditText: EditText
     private lateinit var saveButton: Button
 
     private lateinit var viewModel: WorkOrderViewModel
@@ -52,35 +57,52 @@ class WorkOrderFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_work_order, container, false)
 
-        initViews(view)
-
         checkArgs()
+
+        initViews(view)
 
         viewModel = ViewModelProvider(this).get(WorkOrderViewModel::class.java)
 
-        when (screenMode) {
-            ScreenMode.EDIT -> launchEditMode()
-            ScreenMode.ADD -> launchAddMode()
-        }
+        launchCorrectMode()
 
+        observeViewModel()
+
+        return view
+    }
+
+    private fun observeViewModel() {
         // подписка на ошибки
         viewModel.errorInputNumber.observe(viewLifecycleOwner) {
-            if (it) {
-                Toast.makeText(context, getString(R.string.error_input_name), Toast.LENGTH_SHORT).show()
+            val message = if (it) {
+                //Toast.makeText(context, getString(R.string.error_input_name), Toast.LENGTH_SHORT).show()
+                getString(R.string.error_input_name)
+            } else {
+                null
             }
+            numberTextInputLayout.error = message
         }
 
         // подписка на успешное завершение сохранения
         viewModel.canFinish.observe(viewLifecycleOwner) {
             Toast.makeText(context, getString(R.string.success_saved), Toast.LENGTH_SHORT).show()
         }
+    }
 
-        return view
+    private fun launchCorrectMode() {
+        when (screenMode) {
+            ScreenMode.EDIT -> launchEditMode()
+            ScreenMode.ADD -> launchAddMode()
+        }
     }
 
     private fun initViews(view: View) {
+        numberTextInputLayout = view.findViewById<TextInputLayout>(R.id.number_text_input_layout)
+        dateTextInputLayout = view.findViewById<TextInputLayout>(R.id.date_text_input_layout)
+        mileageTextInputLayout = view.findViewById<TextInputLayout>(R.id.mileage_text_input_layout)
+
         numberEditText = view.findViewById<EditText>(R.id.number_edit_text)
         dateEditText = view.findViewById<EditText>(R.id.date_edit_text)
+        mileageEditText = view.findViewById<EditText>(R.id.mileage_edit_text)
         saveButton = view.findViewById<Button>(R.id.save_button)
     }
 
@@ -117,34 +139,20 @@ class WorkOrderFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-//        // TextWatcher нужно навешивать здесь, а не в onCreate или onCreateView, т.к. там еще не восстановлено
-//        // EditText и слушатели будут "дергаться" лишний раз
-//        etName.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                //
-//            }
-//
-//            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                viewModel.resetErrorInputName()
-//            }
-//
-//            override fun afterTextChanged(p0: Editable?) {
-//                //
-//            }
-//        })
-//
-//        etCount.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                //
-//            }
-//
-//            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                viewModel.resetErrorInputCount()
-//            }
-//
-//            override fun afterTextChanged(p0: Editable?) {
-//                //
-//            }
-//        })
+        // TextWatcher нужно навешивать здесь, а не в onCreate или onCreateView, т.к. там еще не восстановлено
+        // EditText и слушатели будут "дергаться" лишний раз
+        numberEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel.resetErrorInputNumber()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                //
+            }
+        })
     }
 }

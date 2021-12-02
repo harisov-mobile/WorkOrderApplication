@@ -4,6 +4,8 @@ import java.math.BigDecimal
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
 
+// это строка табличной части "Работы"
+
 data class JobDetail(
     var id: String = "",
     val carJob: CarJob? = null,

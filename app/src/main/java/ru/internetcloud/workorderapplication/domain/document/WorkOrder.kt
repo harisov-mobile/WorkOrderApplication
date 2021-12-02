@@ -10,16 +10,16 @@ import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 
 data class WorkOrder(
     val id: UUID = UUID.randomUUID(),
-    var number: String = "",
-    var date: Date = Date(),
-    var client: Partner? = null,
-    var car: Car? = null,
-    var mileage: Int = 0,
-    var repairType: RepairType? = null,
-    var department: Department? = null,
-    var requestReason: String? = null,
-    var master: Employee? = null,
-    var comment: String? = null,
-    var performers: List<Employee> = emptyList(),
-    var jobs: List<JobDetail> = emptyList()
+    var number: String = "", // номер документа
+    var date: Date = Date(), // дата документа
+    var client: Partner? = null, // заказчик
+    var car: Car? = null, // схт
+    var mileage: Int = 0, // наработка
+    var repairType: RepairType? = null, // вид ремонта
+    var department: Department? = null, // цех
+    var requestReason: String? = null, // причина обращения
+    var master: Employee? = null, // мастер (бригадир)
+    var comment: String? = null, // комментарий
+    var performers: List<Employee> = emptyList(), // исполнители (табличная часть)
+    var jobs: List<JobDetail> = emptyList() // Работы (табличная часть)
 )
