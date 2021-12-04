@@ -14,16 +14,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputLayout
 import java.util.UUID
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
+import java.lang.RuntimeException
 
 class WorkOrderFragment : Fragment() {
-    private lateinit var numberTextInputLayout: TextInputLayout
-    private lateinit var dateTextInputLayout: TextInputLayout
-    private lateinit var mileageTextInputLayout: TextInputLayout
-    private lateinit var numberEditText: EditText
-    private lateinit var dateEditText: EditText
-    private lateinit var mileageEditText: EditText
-    private lateinit var saveButton: Button
+
+    private var _binding: FragmentWorkOrderBinding? = null
+    private val binding: FragmentWorkOrderBinding
+    get() = _binding ?: throw RuntimeException("Error FragmentWorkOrderBinding is NULL")
 
     private lateinit var viewModel: WorkOrderViewModel
 
@@ -53,21 +52,25 @@ class WorkOrderFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        val view = inflater.inflate(R.layout.fragment_work_order, container, false)
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         checkArgs()
+    }
 
-        initViews(view)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+
+        _binding = FragmentWorkOrderBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(WorkOrderViewModel::class.java)
 
         launchCorrectMode()
 
         observeViewModel()
-
-        return view
     }
 
     private fun observeViewModel() {
@@ -79,7 +82,7 @@ class WorkOrderFragment : Fragment() {
             } else {
                 null
             }
-            numberTextInputLayout.error = message
+            binding.numberTextInputLayout.error = message
         }
 
         // подписка на успешное завершение сохранения
@@ -95,22 +98,20 @@ class WorkOrderFragment : Fragment() {
         }
     }
 
-    private fun initViews(view: View) {
-        numberTextInputLayout = view.findViewById<TextInputLayout>(R.id.number_text_input_layout)
-        dateTextInputLayout = view.findViewById<TextInputLayout>(R.id.date_text_input_layout)
-        mileageTextInputLayout = view.findViewById<TextInputLayout>(R.id.mileage_text_input_layout)
-
-        numberEditText = view.findViewById<EditText>(R.id.number_edit_text)
-        dateEditText = view.findViewById<EditText>(R.id.date_edit_text)
-        mileageEditText = view.findViewById<EditText>(R.id.mileage_edit_text)
-        saveButton = view.findViewById<Button>(R.id.save_button)
-    }
-
     private fun checkArgs() {
-        val mode = arguments?.getSerializable(ARG_SCREEN_MODE) ?: throw IllegalStateException("Param mode is absent")
-        screenMode = mode as ScreenMode
+
+        val args = requireArguments()
+        if (!args.containsKey(ARG_SCREEN_MODE)) {
+            throw RuntimeException("Param mode is absent")
+        }
+
+        val mode = args.getSerializable(ARG_SCREEN_MODE) as ScreenMode
+        if (mode != ScreenMode.EDIT && mode != ScreenMode.ADD) {
+            throw IllegalStateException("Uknown screen mode $mode")
+        }
+        screenMode = mode
         if (screenMode == ScreenMode.EDIT) {
-            workOrderId = arguments?.getSerializable(ARG_WORK_ORDER_ID) as UUID
+            workOrderId = args.getSerializable(ARG_WORK_ORDER_ID) as UUID
         }
     }
 
@@ -121,18 +122,18 @@ class WorkOrderFragment : Fragment() {
 
         viewModel.workOrder.observe(viewLifecycleOwner) {
             order ->
-            numberEditText.setText(order.number)
-            dateEditText.setText(order.date.toString())
+            binding.numberEditText.setText(order.number)
+            binding.dateEditText.setText(order.date.toString())
         }
 
-        saveButton.setOnClickListener {
-            viewModel.updateWorkOrder(numberEditText.text?.toString())
+        binding.saveButton.setOnClickListener {
+            viewModel.updateWorkOrder(binding.numberEditText.text?.toString())
         }
     }
 
     private fun launchAddMode() {
-        saveButton.setOnClickListener {
-            viewModel.addWorkOrder(numberEditText.text?.toString())
+        binding.saveButton.setOnClickListener {
+            viewModel.addWorkOrder(binding.numberEditText.text?.toString())
         }
     }
 
@@ -141,7 +142,7 @@ class WorkOrderFragment : Fragment() {
 
         // TextWatcher нужно навешивать здесь, а не в onCreate или onCreateView, т.к. там еще не восстановлено
         // EditText и слушатели будут "дергаться" лишний раз
-        numberEditText.addTextChangedListener(object : TextWatcher {
+        binding.numberEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 //
             }
