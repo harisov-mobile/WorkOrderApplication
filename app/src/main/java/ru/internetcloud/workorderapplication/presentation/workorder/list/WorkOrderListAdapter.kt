@@ -24,7 +24,10 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
     override fun onBindViewHolder(holder: WorkOrderListViewHolder, position: Int) {
         val workOrder = getItem(position)
         val binding = holder.binding
-        binding.tvName.text = "${workOrder.number} ${workOrder.date}"
+        //binding.tvName.text = "${workOrder.number} ${workOrder.date}"
+        binding.tvName.text = String.format(binding.tvName.context.getString(R.string.work_order_presentation),
+            workOrder.number,
+            workOrder.date.toString())
 
         binding.root.setOnClickListener {
             onWorkOrderClickListener?.invoke(workOrder)
