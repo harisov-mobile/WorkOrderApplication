@@ -74,17 +74,6 @@ class WorkOrderFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        // подписка на ошибки
-        viewModel.errorInputNumber.observe(viewLifecycleOwner) {
-            val message = if (it) {
-                //Toast.makeText(context, getString(R.string.error_input_name), Toast.LENGTH_SHORT).show()
-                getString(R.string.error_input_name)
-            } else {
-                null
-            }
-            binding.numberTextInputLayout.error = message
-        }
-
         // подписка на успешное завершение сохранения
         viewModel.canFinish.observe(viewLifecycleOwner) {
             Toast.makeText(context, getString(R.string.success_saved), Toast.LENGTH_SHORT).show()
@@ -118,12 +107,6 @@ class WorkOrderFragment : Fragment() {
     private fun launchEditMode() {
         workOrderId?.let {
             viewModel.loadWorkOrder(it)
-        }
-
-        viewModel.workOrder.observe(viewLifecycleOwner) {
-            order ->
-            binding.numberEditText.setText(order.number)
-            binding.dateEditText.setText(order.date.toString())
         }
 
         binding.saveButton.setOnClickListener {

@@ -3,7 +3,7 @@
     <string name="number_hint">Номер</string>
     <string name="date_hint">Дата</string>
     <string name="add_work_order_fab_description">Add work order</string>
-    <string name="error_input_name">Неправильно указан номер</string>
+    <string name="error_input_number">Неправильно указан номер</string>
     <string name="success_saved">Информация записана</string>
     <string name="save_button">Save</string>
     <string name="exit_button">Exit</string>
