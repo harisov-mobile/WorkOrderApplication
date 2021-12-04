@@ -68,6 +68,9 @@ class WorkOrderFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(WorkOrderViewModel::class.java)
 
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
         launchCorrectMode()
 
         observeViewModel()

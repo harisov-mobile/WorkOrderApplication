@@ -8,4 +8,5 @@
     <string name="save_button">Save</string>
     <string name="exit_button">Exit</string>
     <string name="mileage_hint">Наработка</string>
-</resources>
+    <string name="work_order_presentation">Заказ-наряд № %s от %s</string>
+    </resources>

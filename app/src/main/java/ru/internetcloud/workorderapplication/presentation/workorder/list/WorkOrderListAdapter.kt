@@ -24,7 +24,8 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
     override fun onBindViewHolder(holder: WorkOrderListViewHolder, position: Int) {
         val workOrder = getItem(position)
         val binding = holder.binding
-        binding.tvName.text = "${workOrder.number} ${workOrder.date}"
+
+        binding.workOrder = workOrder // в XML-файле в теге <data> мы завели workOrder, его надо
 
         binding.root.setOnClickListener {
             onWorkOrderClickListener?.invoke(workOrder)

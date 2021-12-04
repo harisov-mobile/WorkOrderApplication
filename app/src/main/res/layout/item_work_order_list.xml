@@ -2,6 +2,12 @@
 
 <layout>
 
+    <data>
+        <variable
+            name="workOrder"
+            type="ru.internetcloud.workorderapplication.domain.document.WorkOrder" />
+    </data>
+
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -30,7 +36,10 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                tools:text="Салфетки" />
+                tools:text="Салфетки"
+
+                app:workOrderPresentation ="@{workOrder}"
+                />
 
             <TextView
                 android:id="@+id/tv_count"
