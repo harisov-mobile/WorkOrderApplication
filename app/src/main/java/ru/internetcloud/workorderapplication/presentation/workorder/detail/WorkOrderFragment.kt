@@ -78,7 +78,7 @@ class WorkOrderFragment : Fragment() {
         viewModel.errorInputNumber.observe(viewLifecycleOwner) {
             val message = if (it) {
                 //Toast.makeText(context, getString(R.string.error_input_name), Toast.LENGTH_SHORT).show()
-                getString(R.string.error_input_name)
+                getString(R.string.error_input_number)
             } else {
                 null
             }
