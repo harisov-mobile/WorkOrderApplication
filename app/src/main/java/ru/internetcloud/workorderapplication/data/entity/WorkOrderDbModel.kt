@@ -6,8 +6,9 @@ import java.util.Date
 
 @Entity(tableName = "work_orders")
 data class WorkOrderDbModel(
-    @PrimaryKey
-    val id: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+    var id1C: String,
     var number: String = "", // номер документа
     var date: Date = Date(), // дата документа
     // var client: Partner? = null, // заказчик
