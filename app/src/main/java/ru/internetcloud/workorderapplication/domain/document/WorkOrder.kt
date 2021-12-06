@@ -9,7 +9,7 @@ import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 
 data class WorkOrder(
     var id: Int,
-    var id1C: String,
+    var id1C: String = "",
     var number: String = "", // номер документа
     var date: Date = Date(), // дата документа
     var client: Partner? = null, // заказчик
