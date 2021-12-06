@@ -8,7 +8,7 @@ import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.usecase.AddWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.GetWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.UpdateWorkOrderUseCase
-import java.util.*
+import kotlin.random.Random
 
 class WorkOrderViewModel : ViewModel() {
 
@@ -34,8 +34,8 @@ class WorkOrderViewModel : ViewModel() {
     val errorInputNumber: LiveData<Boolean>
         get() = _errorInputNumber
 
-    //-------------------------------------------------------------------------------
-    fun loadWorkOrder(workOrderId: UUID) {
+    // -------------------------------------------------------------------------------
+    fun loadWorkOrder(workOrderId: Int) {
         val order = getWorkOrderUseCase.getWorkOrder(workOrderId)
         order?.let {
             _workOrder.value = it
@@ -46,7 +46,8 @@ class WorkOrderViewModel : ViewModel() {
         val number = parseNumber(inputNumber)
         val areFieldsValid = validateInput(number)
         if (areFieldsValid) {
-            val order = WorkOrder(number = number)
+            val id = Random.nextInt()
+            val order = WorkOrder(number = number, id = id, id1C = id.toString())
             addWorkOrderUseCase.addWorkOrder(order)
             _canFinish.value = Unit
         }

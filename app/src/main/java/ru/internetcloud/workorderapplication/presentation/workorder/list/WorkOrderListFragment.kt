@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.util.UUID
 import ru.internetcloud.workorderapplication.R
 
 class WorkOrderListFragment : Fragment() {
@@ -20,7 +19,7 @@ class WorkOrderListFragment : Fragment() {
     interface Callbacks {
         fun onAddWorkOrder()
 
-        fun onEditWorkOrder(workOrderId: UUID)
+        fun onEditWorkOrder(workOrderId: Int)
     }
 
     private var hostActivity: Callbacks? = null

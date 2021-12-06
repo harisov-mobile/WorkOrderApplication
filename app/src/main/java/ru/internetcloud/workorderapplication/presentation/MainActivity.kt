@@ -3,7 +3,6 @@ package ru.internetcloud.workorderapplication.presentation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import java.util.UUID
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.WorkOrderFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.list.WorkOrderListFragment
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity(), WorkOrderListFragment.Callbacks {
         showFragment(fragment)
     }
 
-    override fun onEditWorkOrder(workOrderId: UUID) {
+    override fun onEditWorkOrder(workOrderId: Int) {
         val fragment = WorkOrderFragment.newInstanceEditWorkOrder(workOrderId)
         showFragment(fragment)
     }

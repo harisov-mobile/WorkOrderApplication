@@ -1,7 +1,6 @@
 package ru.internetcloud.workorderapplication.domain.repository
 
 import androidx.lifecycle.LiveData
-import java.util.UUID
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 
 interface WorkOrderRepository {
@@ -11,5 +10,5 @@ interface WorkOrderRepository {
 
     fun getWorkOrderList(): LiveData<List<WorkOrder>>
 
-    fun getWorkOrder(id: UUID): WorkOrder?
+    fun getWorkOrder(id: Int): WorkOrder?
 }

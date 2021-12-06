@@ -12,12 +12,11 @@ import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 interface WorkOrderDao {
 
     @Query("SELECT * FROM work_orders")
-    fun getWorkOrderListLD() : LiveData<List<WorkOrder>> // Не использовать LiveData в репозитории
+    fun getWorkOrderListLD(): LiveData<List<WorkOrderDbModel>> // Не использовать LiveData в репозитории
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addWorkOrder(workOrderDbModel: WorkOrderDbModel)
 
     @Query("SELECT * FROM work_orders WHERE id=:workOrderId LIMIT 1")
-    fun getWorkOrderLD(workOrderId: String) : LiveData<WorkOrder> // Не использовать LiveData в репозитории
-
+    fun getWorkOrderLD(workOrderId: String): LiveData<WorkOrderDbModel> // Не использовать LiveData в репозитории
 }

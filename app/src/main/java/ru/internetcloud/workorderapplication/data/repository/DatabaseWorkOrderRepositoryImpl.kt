@@ -6,10 +6,9 @@ import androidx.room.Room
 import ru.internetcloud.workorderapplication.data.database.AppDatabase
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
-import java.util.*
 
 // это класс-синглтон, единственный экземпляр этого репозитория создается при запуске приложения
-class DatabaseWorkOrderRepositoryImpl private constructor(application: Application): WorkOrderRepository {
+class DatabaseWorkOrderRepositoryImpl private constructor(application: Application) : WorkOrderRepository {
 
     private val database: AppDatabase = Room.databaseBuilder(
         application,
@@ -45,7 +44,7 @@ class DatabaseWorkOrderRepositoryImpl private constructor(application: Applicati
         TODO("Not yet implemented")
     }
 
-    override fun getWorkOrder(id: UUID): WorkOrder? {
+    override fun getWorkOrder(id: Int): WorkOrder? {
         TODO("Not yet implemented")
     }
 }

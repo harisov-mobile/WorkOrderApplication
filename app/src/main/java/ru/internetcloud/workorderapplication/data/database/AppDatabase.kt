@@ -9,6 +9,5 @@ import ru.internetcloud.workorderapplication.data.entity.WorkOrderDbModel
 @TypeConverters(DatabaseTypeConverters::class)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun workOrderDao() : WorkOrderDao
-
+    abstract fun workOrderDao(): WorkOrderDao
 }

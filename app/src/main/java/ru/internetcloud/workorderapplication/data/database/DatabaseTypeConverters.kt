@@ -1,7 +1,7 @@
 package ru.internetcloud.workorderapplication.data.database
 
 import androidx.room.TypeConverter
-import java.util.*
+import java.util.Date
 
 class DatabaseTypeConverters {
 

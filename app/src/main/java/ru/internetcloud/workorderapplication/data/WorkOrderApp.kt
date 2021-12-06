@@ -3,7 +3,7 @@ package ru.internetcloud.workorderapplication.data
 import android.app.Application
 import ru.internetcloud.workorderapplication.data.repository.DatabaseWorkOrderRepositoryImpl
 
-class WorkOrderApp: Application() {
+class WorkOrderApp : Application() {
 
     override fun onCreate() {
         super.onCreate()

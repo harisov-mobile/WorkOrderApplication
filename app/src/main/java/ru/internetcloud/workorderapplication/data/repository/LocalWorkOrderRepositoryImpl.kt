@@ -2,7 +2,6 @@ package ru.internetcloud.workorderapplication.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import java.util.UUID
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
 
@@ -16,7 +15,7 @@ object LocalWorkOrderRepositoryImpl : WorkOrderRepository {
 
     init {
         for (i in 0..4) {
-            val item = WorkOrder(number = "#$i")
+            val item = WorkOrder(id = i, number = "#$i", id1C = i.toString())
             addWorkOrder(item)
         }
     }
@@ -36,7 +35,7 @@ object LocalWorkOrderRepositoryImpl : WorkOrderRepository {
         return workOrderLiveData
     }
 
-    override fun getWorkOrder(id: UUID): WorkOrder? {
+    override fun getWorkOrder(id: Int): WorkOrder? {
         return workOrderList.find { it.id == id }
     }
 

@@ -6,17 +6,12 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.textfield.TextInputLayout
-import java.util.UUID
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
-import java.lang.RuntimeException
 
 class WorkOrderFragment : Fragment() {
 
@@ -27,7 +22,7 @@ class WorkOrderFragment : Fragment() {
     private lateinit var viewModel: WorkOrderViewModel
 
     private var screenMode: ScreenMode? = null
-    private var workOrderId: UUID? = null
+    private var workOrderId: Int? = null
 
     companion object {
 
@@ -42,11 +37,11 @@ class WorkOrderFragment : Fragment() {
             return instance
         }
 
-        fun newInstanceEditWorkOrder(workOrderId: UUID): WorkOrderFragment {
+        fun newInstanceEditWorkOrder(workOrderId: Int): WorkOrderFragment {
             val instance = WorkOrderFragment()
             val args = Bundle()
             args.putSerializable(ARG_SCREEN_MODE, ScreenMode.EDIT)
-            args.putSerializable(ARG_WORK_ORDER_ID, workOrderId)
+            args.putInt(ARG_WORK_ORDER_ID, workOrderId)
             instance.arguments = args
             return instance
         }
@@ -77,7 +72,7 @@ class WorkOrderFragment : Fragment() {
         // подписка на ошибки
         viewModel.errorInputNumber.observe(viewLifecycleOwner) {
             val message = if (it) {
-                //Toast.makeText(context, getString(R.string.error_input_name), Toast.LENGTH_SHORT).show()
+                // Toast.makeText(context, getString(R.string.error_input_name), Toast.LENGTH_SHORT).show()
                 getString(R.string.error_input_number)
             } else {
                 null
@@ -111,7 +106,7 @@ class WorkOrderFragment : Fragment() {
         }
         screenMode = mode
         if (screenMode == ScreenMode.EDIT) {
-            workOrderId = args.getSerializable(ARG_WORK_ORDER_ID) as UUID
+            workOrderId = args.getInt(ARG_WORK_ORDER_ID)
         }
     }
 
