@@ -3,6 +3,7 @@ package ru.internetcloud.workorderapplication.presentation.workorder.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.internetcloud.workorderapplication.data.repository.DatabaseWorkOrderRepositoryImpl
 import ru.internetcloud.workorderapplication.data.repository.LocalWorkOrderRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.usecase.AddWorkOrderUseCase
@@ -12,7 +13,8 @@ import kotlin.random.Random
 
 class WorkOrderViewModel : ViewModel() {
 
-    private val repository = LocalWorkOrderRepositoryImpl // требуется инъекция зависимостей!!!
+    //private val repository = LocalWorkOrderRepositoryImpl // требуется инъекция зависимостей!!!
+    private val repository = DatabaseWorkOrderRepositoryImpl.get()
 
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
     private val getWorkOrderUseCase = GetWorkOrderUseCase(repository)
