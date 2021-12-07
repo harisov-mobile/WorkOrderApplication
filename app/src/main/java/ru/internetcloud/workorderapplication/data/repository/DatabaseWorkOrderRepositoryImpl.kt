@@ -16,7 +16,9 @@ class DatabaseWorkOrderRepositoryImpl private constructor(application: Applicati
         application,
         AppDatabase::class.java,
         DATABASE_NAME
-    ).build()
+    )
+        .allowMainThreadQueries()
+        .build()
 
     private val workOrderDao = database.workOrderDao()
     private val workOrderMapper = WorkOrderMapper()

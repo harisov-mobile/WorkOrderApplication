@@ -48,8 +48,7 @@ class WorkOrderViewModel : ViewModel() {
         val number = parseNumber(inputNumber)
         val areFieldsValid = validateInput(number)
         if (areFieldsValid) {
-            val id = Random.nextInt()
-            val order = WorkOrder(number = number, id = id, id1C = id.toString())
+            val order = WorkOrder(number = number)
             addWorkOrderUseCase.addWorkOrder(order)
             _canFinish.value = Unit
         }
