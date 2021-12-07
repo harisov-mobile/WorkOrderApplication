@@ -4,7 +4,7 @@ import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
 
 class AddWorkOrderUseCase(private val workOrderRepository: WorkOrderRepository) {
-    fun addWorkOrder(workOrder: WorkOrder) {
+    suspend fun addWorkOrder(workOrder: WorkOrder) {
         workOrderRepository.addWorkOrder(workOrder)
     }
 }

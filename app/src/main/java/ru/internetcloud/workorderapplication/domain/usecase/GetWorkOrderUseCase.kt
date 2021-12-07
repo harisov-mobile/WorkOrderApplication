@@ -4,7 +4,7 @@ import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
 
 class GetWorkOrderUseCase(private val workOrderRepository: WorkOrderRepository) {
-    fun getWorkOrder(id: Int): WorkOrder? {
+    suspend fun getWorkOrder(id: Int): WorkOrder? {
         return workOrderRepository.getWorkOrder(id)
     }
 }

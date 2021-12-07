@@ -39,11 +39,11 @@ class DatabaseWorkOrderRepositoryImpl private constructor(application: Applicati
         }
     }
 
-    override fun addWorkOrder(workOrder: WorkOrder) {
+    override suspend fun addWorkOrder(workOrder: WorkOrder) {
         workOrderDao.addWorkOrder(workOrderMapper.fromEntityToDbModel(workOrder))
     }
 
-    override fun updateWorkOrder(workOrder: WorkOrder) {
+    override suspend fun updateWorkOrder(workOrder: WorkOrder) {
         // т.к. onConflict = OnConflictStrategy.REPLACE, то это будет и UPDATE тоже
         workOrderDao.addWorkOrder(workOrderMapper.fromEntityToDbModel(workOrder))
     }
@@ -54,7 +54,7 @@ class DatabaseWorkOrderRepositoryImpl private constructor(application: Applicati
         }
     }
 
-    override fun getWorkOrder(workOrderId: Int): WorkOrder? {
+    override suspend fun getWorkOrder(workOrderId: Int): WorkOrder? {
         var workOrder: WorkOrder? = null
 
         val workOrderDbModel = workOrderDao.getWorkOrder(workOrderId)

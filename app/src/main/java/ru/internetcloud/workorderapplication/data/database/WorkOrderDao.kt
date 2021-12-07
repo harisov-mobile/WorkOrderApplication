@@ -15,9 +15,9 @@ interface WorkOrderDao {
     fun getWorkOrderListLD(): LiveData<List<WorkOrderDbModel>> // Не использовать LiveData в репозитории
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addWorkOrder(workOrderDbModel: WorkOrderDbModel)
+    suspend fun addWorkOrder(workOrderDbModel: WorkOrderDbModel)
 
     @Query("SELECT * FROM work_orders WHERE id=:workOrderId LIMIT 1")
     //fun getWorkOrderLD(workOrderId: String): LiveData<WorkOrderDbModel> // Не использовать LiveData в репозитории
-    fun getWorkOrder(workOrderId: Int): WorkOrderDbModel // Андрей Сумин почему-то не Лив дату возвращает...
+    suspend fun getWorkOrder(workOrderId: Int): WorkOrderDbModel // Андрей Сумин почему-то не Лив дату возвращает...
 }
