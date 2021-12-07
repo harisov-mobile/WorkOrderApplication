@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import ru.internetcloud.workorderapplication.data.database.AppDatabase
+import ru.internetcloud.workorderapplication.data.mapper.WorkOrderMapper
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
 
@@ -15,6 +16,9 @@ class DatabaseWorkOrderRepositoryImpl private constructor(application: Applicati
         AppDatabase::class.java,
         DATABASE_NAME
     ).build()
+
+    private val workOrderDao = database.workOrderDao()
+    private val workOrderMapper = WorkOrderMapper()
 
     companion object {
         private const val DATABASE_NAME = "work_order.db"
