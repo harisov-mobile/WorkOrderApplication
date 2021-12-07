@@ -46,7 +46,7 @@ class WorkOrderViewModel : ViewModel() {
         scope.launch {
             val order = getWorkOrderUseCase.getWorkOrder(workOrderId)
             order?.let {
-                _workOrder.value = it
+                _workOrder.postValue(it)
             }
         }
     }
@@ -58,7 +58,7 @@ class WorkOrderViewModel : ViewModel() {
             scope.launch {
                 val order = WorkOrder(number = number)
                 addWorkOrderUseCase.addWorkOrder(order)
-                _canFinish.value = Unit
+                _canFinish.postValue(Unit)
             }
         }
     }
@@ -71,7 +71,7 @@ class WorkOrderViewModel : ViewModel() {
                 scope.launch {
                     it.number = number
                     updateWorkOrderUseCase.updateWorkOrder(it)
-                    _canFinish.value = Unit
+                    _canFinish.postValue(Unit)
                 }
             }
         }
