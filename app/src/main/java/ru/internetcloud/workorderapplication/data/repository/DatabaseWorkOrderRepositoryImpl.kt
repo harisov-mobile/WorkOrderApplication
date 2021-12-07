@@ -2,6 +2,7 @@ package ru.internetcloud.workorderapplication.data.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.room.Room
 import ru.internetcloud.workorderapplication.data.database.AppDatabase
 import ru.internetcloud.workorderapplication.data.mapper.WorkOrderMapper
@@ -37,18 +38,29 @@ class DatabaseWorkOrderRepositoryImpl private constructor(application: Applicati
     }
 
     override fun addWorkOrder(workOrder: WorkOrder) {
-        TODO("Not yet implemented")
+        workOrderDao.addWorkOrder(workOrderMapper.fromEntityToDbModel(workOrder))
     }
 
     override fun updateWorkOrder(workOrder: WorkOrder) {
-        TODO("Not yet implemented")
+        // т.к. onConflict = OnConflictStrategy.REPLACE, то это будет и UPDATE тоже
+        workOrderDao.addWorkOrder(workOrderMapper.fromEntityToDbModel(workOrder))
     }
 
     override fun getWorkOrderList(): LiveData<List<WorkOrder>> {
-        TODO("Not yet implemented")
+        return Transformations.map(workOrderDao.getWorkOrderListLD()) {
+            workOrderMapper.fromListDbModelToListEntity(it)
+        }
     }
 
-    override fun getWorkOrder(id: Int): WorkOrder? {
-        TODO("Not yet implemented")
+    override fun getWorkOrder(workOrderId: Int): WorkOrder? {
+        var workOrder: WorkOrder? = null
+
+        val workOrderDbModel = workOrderDao.getWorkOrder(workOrderId)
+
+        workOrderDbModel?.let{
+            workOrder = workOrderMapper.fromDbModelToEntity(it)
+        }
+
+        return workOrder
     }
 }

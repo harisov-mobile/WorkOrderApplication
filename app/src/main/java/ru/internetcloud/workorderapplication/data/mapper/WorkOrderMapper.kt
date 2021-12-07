@@ -24,4 +24,8 @@ class WorkOrderMapper {
             mileage = workOrderDbModel.mileage
         )
     }
+
+    fun fromListDbModelToListEntity(list: List<WorkOrderDbModel>) = list.map {
+        fromDbModelToEntity(it)
+    }
 }

@@ -18,5 +18,6 @@ interface WorkOrderDao {
     fun addWorkOrder(workOrderDbModel: WorkOrderDbModel)
 
     @Query("SELECT * FROM work_orders WHERE id=:workOrderId LIMIT 1")
-    fun getWorkOrderLD(workOrderId: String): LiveData<WorkOrderDbModel> // Не использовать LiveData в репозитории
+    //fun getWorkOrderLD(workOrderId: String): LiveData<WorkOrderDbModel> // Не использовать LiveData в репозитории
+    fun getWorkOrder(workOrderId: Int): WorkOrderDbModel // Андрей Сумин почему-то не Лив дату возвращает...
 }
