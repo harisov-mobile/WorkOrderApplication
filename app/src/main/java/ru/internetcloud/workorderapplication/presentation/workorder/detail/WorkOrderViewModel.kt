@@ -3,6 +3,9 @@ package ru.internetcloud.workorderapplication.presentation.workorder.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.data.repository.DatabaseWorkOrderRepositoryImpl
 import ru.internetcloud.workorderapplication.data.repository.LocalWorkOrderRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
@@ -21,6 +24,8 @@ class WorkOrderViewModel : ViewModel() {
     private val addWorkOrderUseCase = AddWorkOrderUseCase(repository)
     private val updateWorkOrderUseCase = UpdateWorkOrderUseCase(repository)
 
+    private val scope = CoroutineScope(Dispatchers.IO)
+
     // LiveData-объекты, с помощью которых будет отображение данных в элементах управления:
     private val _workOrder = MutableLiveData<WorkOrder>()
     val workOrder: LiveData<WorkOrder>
@@ -38,9 +43,11 @@ class WorkOrderViewModel : ViewModel() {
 
     // -------------------------------------------------------------------------------
     fun loadWorkOrder(workOrderId: Int) {
-        val order = getWorkOrderUseCase.getWorkOrder(workOrderId)
-        order?.let {
-            _workOrder.value = it
+        scope.launch {
+            val order = getWorkOrderUseCase.getWorkOrder(workOrderId)
+            order?.let {
+                _workOrder.value = it
+            }
         }
     }
 
@@ -48,9 +55,11 @@ class WorkOrderViewModel : ViewModel() {
         val number = parseNumber(inputNumber)
         val areFieldsValid = validateInput(number)
         if (areFieldsValid) {
-            val order = WorkOrder(number = number)
-            addWorkOrderUseCase.addWorkOrder(order)
-            _canFinish.value = Unit
+            scope.launch {
+                val order = WorkOrder(number = number)
+                addWorkOrderUseCase.addWorkOrder(order)
+                _canFinish.value = Unit
+            }
         }
     }
 
@@ -59,9 +68,11 @@ class WorkOrderViewModel : ViewModel() {
         val areFieldsValid = validateInput(number)
         if (areFieldsValid) {
             _workOrder.value?.let {
-                it.number = number
-                updateWorkOrderUseCase.updateWorkOrder(it)
-                _canFinish.value = Unit
+                scope.launch {
+                    it.number = number
+                    updateWorkOrderUseCase.updateWorkOrder(it)
+                    _canFinish.value = Unit
+                }
             }
         }
     }
