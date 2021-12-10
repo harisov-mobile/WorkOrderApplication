@@ -69,4 +69,13 @@ dependencies {
     // добавил
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+
+    // Retrofit
+    retrofitVersion = '2.9.0'
+    converterGsonVersion = '2.9.0'
+    loggingInterCeptorVerion = '4.7.2'
+
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$converterGsonVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$loggingInterCeptorVerion"
 }
