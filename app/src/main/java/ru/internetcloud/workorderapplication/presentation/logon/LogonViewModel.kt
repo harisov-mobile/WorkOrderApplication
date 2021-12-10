@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class LogonViewModel(application: Application): AndroidViewModel(application) {
+class LogonViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _canContinue = MutableLiveData<Boolean>()
     val canContinue: LiveData<Boolean>

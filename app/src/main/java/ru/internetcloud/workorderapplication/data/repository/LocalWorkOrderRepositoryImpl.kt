@@ -1,6 +1,6 @@
 package ru.internetcloud.workorderapplication.data.repository
 
-//object LocalWorkOrderRepositoryImpl : WorkOrderRepository {
+// object LocalWorkOrderRepositoryImpl : WorkOrderRepository {
 object LocalWorkOrderRepositoryImpl {
 
 //    private val workOrderListLiveDataMutable = MutableLiveData<List<WorkOrder>>()

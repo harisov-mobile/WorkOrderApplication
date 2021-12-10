@@ -13,7 +13,7 @@ import ru.internetcloud.workorderapplication.domain.usecase.UpdateWorkOrderUseCa
 
 class WorkOrderViewModel : ViewModel() {
 
-    //private val repository = LocalWorkOrderRepositoryImpl // требуется инъекция зависимостей!!!
+    // private val repository = LocalWorkOrderRepositoryImpl // требуется инъекция зависимостей!!!
     private val repository = DatabaseWorkOrderRepositoryImpl.get()
 
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:

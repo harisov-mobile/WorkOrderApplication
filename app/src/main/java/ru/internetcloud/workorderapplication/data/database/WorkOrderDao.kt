@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import ru.internetcloud.workorderapplication.data.entity.WorkOrderDbModel
-import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 
 @Dao
 interface WorkOrderDao {
@@ -18,6 +17,5 @@ interface WorkOrderDao {
     suspend fun addWorkOrder(workOrderDbModel: WorkOrderDbModel)
 
     @Query("SELECT * FROM work_orders WHERE id=:workOrderId LIMIT 1")
-    //fun getWorkOrderLD(workOrderId: String): LiveData<WorkOrderDbModel> // Не использовать LiveData в репозитории
     suspend fun getWorkOrder(workOrderId: Int): WorkOrderDbModel // Андрей Сумин почему-то не Лив дату возвращает...
 }

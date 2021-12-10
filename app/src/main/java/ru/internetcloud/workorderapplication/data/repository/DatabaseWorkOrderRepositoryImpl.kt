@@ -57,7 +57,7 @@ class DatabaseWorkOrderRepositoryImpl private constructor(application: Applicati
 
         val workOrderDbModel = workOrderDao.getWorkOrder(workOrderId)
 
-        workOrderDbModel?.let{
+        workOrderDbModel?.let {
             workOrder = workOrderMapper.fromDbModelToEntity(it)
         }
 
