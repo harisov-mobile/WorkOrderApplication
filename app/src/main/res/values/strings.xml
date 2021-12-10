@@ -3,10 +3,30 @@
     <string name="number_hint">Номер</string>
     <string name="date_hint">Дата</string>
     <string name="add_work_order_fab_description">Add work order</string>
+
     <string name="error_input_number">Неправильно указан номер</string>
+    <string name="error_input_server">Укажите сервер</string>
+    <string name="error_input_login">Укажите пользователя</string>
+    <string name="error_input_password">Укажите пароль</string>
+
     <string name="success_saved">Информация записана</string>
+
     <string name="save_button">Save</string>
     <string name="exit_button">Exit</string>
+
     <string name="mileage_hint">Наработка</string>
     <string name="work_order_presentation">Заказ-наряд № %s от %s</string>
+
+    <string name="server">Сервер</string>
+    <string name="login">Пользователь</string>
+    <string name="password">Пароль</string>
+
+    <string name="enter">Войти</string>
+    <string name="cancel">Отмена</string>
+
+    <string name="server_hint">Сервер</string>
+    <string name="login_hint">Пользователь</string>
+    <string name="password_hint">Пароль</string>
+
+
 </resources>
