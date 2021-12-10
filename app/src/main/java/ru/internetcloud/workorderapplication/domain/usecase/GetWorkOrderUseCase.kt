@@ -1,10 +1,10 @@
 package ru.internetcloud.workorderapplication.domain.usecase
 
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepositoryInterface
+import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
 
-class GetWorkOrderUseCase(private val workOrderRepository: WorkOrderRepositoryInterface) {
-    fun getWorkOrder(id: String): WorkOrder {
+class GetWorkOrderUseCase(private val workOrderRepository: WorkOrderRepository) {
+    suspend fun getWorkOrder(id: Int): WorkOrder? {
         return workOrderRepository.getWorkOrder(id)
     }
 }
