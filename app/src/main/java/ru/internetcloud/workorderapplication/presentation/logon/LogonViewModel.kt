@@ -25,10 +25,6 @@ class LogonViewModel(private val app: Application) : AndroidViewModel(app) {
     val errorInputPassword: LiveData<Boolean>
         get() = _errorInputPassword
 
-    init {
-
-    }
-
     fun login(inputServer: String?, inputLogin: String?, inputPassword: String?) {
         val server = parseText(inputServer)
         val loginName = parseText(inputLogin)

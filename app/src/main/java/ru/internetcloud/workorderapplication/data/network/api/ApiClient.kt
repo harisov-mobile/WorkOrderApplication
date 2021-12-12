@@ -10,7 +10,7 @@ object ApiClient {
 
     private var client: OkHttpClient =
         if (BuildConfig.DEBUG) {
-            //val user = "test1"
+            // val user = "test1"
             val user = "1стест"
             val pwd = "588977"
             OkHttpClient.Builder()
@@ -18,7 +18,7 @@ object ApiClient {
                 .addInterceptor(BasicAuthInterceptor(user, pwd))
                 .build()
         } else {
-            //val user = "test1"
+            // val user = "test1"
             val user = "1стест"
             val pwd = "588977"
             OkHttpClient.Builder()
@@ -35,5 +35,4 @@ object ApiClient {
 
         return@lazy retrofit.create(ApiInterface::class.java)
     }
-
 }

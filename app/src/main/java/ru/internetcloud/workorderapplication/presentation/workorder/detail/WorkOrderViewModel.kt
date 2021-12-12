@@ -56,7 +56,7 @@ class WorkOrderViewModel : ViewModel() {
         }
     }
 
-   fun loadRepairTypes() {
+    fun loadRepairTypes() {
         viewModelScope.launch {
             Log.i("rustam", "вошли в loadRepairTypes")
             val order = getRepairTypeListUseCase.getRepairTypeList()
