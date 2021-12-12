@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.domain.usecase
+package ru.internetcloud.workorderapplication.domain.usecase.documentoperation
 
 import androidx.lifecycle.LiveData
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder

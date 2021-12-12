@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.data.repository.DatabaseWorkOrderRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.domain.usecase.AddWorkOrderUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.GetWorkOrderUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.UpdateWorkOrderUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.AddWorkOrderUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.UpdateWorkOrderUseCase
 
 class WorkOrderViewModel : ViewModel() {
 

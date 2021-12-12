@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.domain.usecase
+package ru.internetcloud.workorderapplication.domain.usecase.documentoperation
 
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository

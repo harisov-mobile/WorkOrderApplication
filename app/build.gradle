@@ -20,6 +20,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField 'String', 'BASE_URL', '"https://internetoblako.ru/test/hs/rest/"'
+        }
+        staging {
+            buildConfigField 'String', 'BASE_URL', '"https://internetoblako.ru/test/hs/rest/"'
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -71,11 +78,20 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
 
     // Retrofit
-    retrofitVersion = '2.9.0'
-    converterGsonVersion = '2.9.0'
-    loggingInterCeptorVerion = '4.7.2'
+    def retrofitVersion = '2.9.0'
+    def converterGsonVersion = '2.9.0'
+    def loggingInterCeptorVerion = '4.7.2'
 
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$converterGsonVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$loggingInterCeptorVerion"
+
+    // RxJava
+    def rxJava2JavaVerion = '2.2.16'
+    def rxJava2AndroidVerion = '2.1.1'
+    def rxJava2AdapterVersion = '2.9.0'
+
+    implementation "io.reactivex.rxjava2:rxjava:$rxJava2JavaVerion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxJava2AndroidVerion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rxJava2AdapterVersion"
 }
