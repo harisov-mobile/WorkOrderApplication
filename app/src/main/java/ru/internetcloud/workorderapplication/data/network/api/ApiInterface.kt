@@ -6,5 +6,5 @@ import ru.internetcloud.workorderapplication.data.network.dto.RepairTypeResponse
 interface ApiInterface {
 
     @GET("catalog/repairtype/all")
-    fun getRepairTypes(): RepairTypeResponse
+    suspend fun getRepairTypes(): RepairTypeResponse
 }

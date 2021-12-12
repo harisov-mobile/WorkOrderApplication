@@ -1,7 +1,10 @@
 package ru.internetcloud.workorderapplication.data.repository
 
 import android.app.Application
-import androidx.lifecycle.LiveData
+import android.util.Log
+import ru.internetcloud.workorderapplication.data.mapper.RepairTypeMapper
+import ru.internetcloud.workorderapplication.data.network.api.ApiClient
+import ru.internetcloud.workorderapplication.data.network.dto.RepairTypeResponse
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.repository.RepairTypeRepository
 
@@ -22,9 +25,21 @@ class RemoteRepairTypeRepositoryImpl private constructor(application: Applicatio
         }
     }
 
+    private val repairTypeMapper = RepairTypeMapper()
 
-    override fun getRepairTypeList(): LiveData<List<RepairType>> {
-        TODO("Not yet implemented")
+    override suspend fun getRepairTypeList(): List<RepairType> {
+
+        var repairTypeResponse = RepairTypeResponse(emptyList())
+
+        try {
+            repairTypeResponse = ApiClient.apiClient.getRepairTypes()
+        } catch (e: Exception) {
+            Log.i("rustam", e.toString())
+        }
+
+        Log.i("rustam", repairTypeResponse.toString())
+
+        return repairTypeMapper.fromListDtoToListEntity(repairTypeResponse.repairtypes)
     }
 
     override fun getRepairType(id: Int): RepairType? {

@@ -1,12 +1,16 @@
 package ru.internetcloud.workorderapplication.presentation.workorder.detail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.data.repository.DatabaseWorkOrderRepositoryImpl
+import ru.internetcloud.workorderapplication.data.repository.RemoteRepairTypeRepositoryImpl
+import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.GetRepairTypeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.AddWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.UpdateWorkOrderUseCase
@@ -14,19 +18,25 @@ import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.Up
 class WorkOrderViewModel : ViewModel() {
 
     // private val repository = LocalWorkOrderRepositoryImpl // требуется инъекция зависимостей!!!
-    private val repository = DatabaseWorkOrderRepositoryImpl.get()
+    private val databaseRepository = DatabaseWorkOrderRepositoryImpl.get()
+    private val remoteRepository = RemoteRepairTypeRepositoryImpl.get()
 
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
-    private val getWorkOrderUseCase = GetWorkOrderUseCase(repository)
-    private val addWorkOrderUseCase = AddWorkOrderUseCase(repository)
-    private val updateWorkOrderUseCase = UpdateWorkOrderUseCase(repository)
+    private val getWorkOrderUseCase = GetWorkOrderUseCase(databaseRepository)
+    private val addWorkOrderUseCase = AddWorkOrderUseCase(databaseRepository)
+    private val updateWorkOrderUseCase = UpdateWorkOrderUseCase(databaseRepository)
+    private val getRepairTypeListUseCase = GetRepairTypeListUseCase(remoteRepository)
 
     // LiveData-объекты, с помощью которых будет отображение данных в элементах управления:
     private val _workOrder = MutableLiveData<WorkOrder>()
     val workOrder: LiveData<WorkOrder>
         get() = _workOrder
 
-    // можно ли завершить (или закрыть)?
+    private val _repairTypes = MutableLiveData<List<RepairType>>()
+    val repairTypes: LiveData<List<RepairType>>
+        get() = _repairTypes
+
+    // можно ли завершить (или закрыть)
     private val _canFinish = MutableLiveData<Unit>()
     val canFinish: LiveData<Unit>
         get() = _canFinish
@@ -42,6 +52,16 @@ class WorkOrderViewModel : ViewModel() {
             val order = getWorkOrderUseCase.getWorkOrder(workOrderId)
             order?.let {
                 _workOrder.value = it
+            }
+        }
+    }
+
+   fun loadRepairTypes() {
+        viewModelScope.launch {
+            Log.i("rustam", "вошли в loadRepairTypes")
+            val order = getRepairTypeListUseCase.getRepairTypeList()
+            order?.let {
+                _repairTypes.value = it
             }
         }
     }

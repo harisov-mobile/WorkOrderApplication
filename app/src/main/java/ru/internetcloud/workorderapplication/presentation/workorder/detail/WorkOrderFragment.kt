@@ -3,6 +3,7 @@ package ru.internetcloud.workorderapplication.presentation.workorder.detail
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,6 +66,8 @@ class WorkOrderFragment : Fragment() {
 
         launchCorrectMode()
 
+        viewModel.loadRepairTypes()
+
         observeViewModel()
     }
 
@@ -83,6 +86,10 @@ class WorkOrderFragment : Fragment() {
         // подписка на успешное завершение сохранения
         viewModel.canFinish.observe(viewLifecycleOwner) {
             Toast.makeText(context, getString(R.string.success_saved), Toast.LENGTH_SHORT).show()
+        }
+
+        viewModel.repairTypes.observe(viewLifecycleOwner) {
+            Log.i("rustam", it.toString())
         }
     }
 
