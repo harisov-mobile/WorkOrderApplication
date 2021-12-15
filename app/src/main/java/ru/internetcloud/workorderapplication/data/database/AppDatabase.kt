@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import ru.internetcloud.workorderapplication.data.entity.CarJobDbModel
 import ru.internetcloud.workorderapplication.data.entity.RepairTypeDbModel
 import ru.internetcloud.workorderapplication.data.entity.WorkOrderDbModel
 
-@Database(entities = [WorkOrderDbModel::class, RepairTypeDbModel::class], version = 1, exportSchema = false)
+@Database(entities = [WorkOrderDbModel::class, RepairTypeDbModel::class, CarJobDbModel::class], version = 1, exportSchema = false)
 @TypeConverters(DatabaseTypeConverters::class)
 abstract class AppDatabase : RoomDatabase() {
 

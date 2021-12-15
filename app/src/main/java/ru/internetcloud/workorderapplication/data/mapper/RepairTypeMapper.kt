@@ -28,7 +28,7 @@ class RepairTypeMapper {
         fromDbModelToEntity(it)
     }
 
-    fun fromEntityToDbModel(repairType: RepairType): RepairTypeDbModel{
+    fun fromEntityToDbModel(repairType: RepairType): RepairTypeDbModel {
         return RepairTypeDbModel(
             id1C = repairType.id1C,
             name = repairType.name

@@ -2,6 +2,7 @@ package ru.internetcloud.workorderapplication.domain.catalog
 
 import java.util.Date
 
+// спр-к Автомобили (СХТ) в 1С
 data class Car(
     var id: String = "",
     var code1C: String = "",

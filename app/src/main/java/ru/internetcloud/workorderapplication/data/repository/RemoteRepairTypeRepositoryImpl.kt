@@ -43,7 +43,7 @@ class RemoteRepairTypeRepositoryImpl private constructor(application: Applicatio
     }
 
     override suspend fun addRepairType(repairType: RepairType) {
-
+        throw RuntimeException("Error - method addRepairType is restricted in RemoteRepairTypeRepositoryImpl")
     }
 
     override suspend fun getRepairType(id1C: String): RepairType? {
