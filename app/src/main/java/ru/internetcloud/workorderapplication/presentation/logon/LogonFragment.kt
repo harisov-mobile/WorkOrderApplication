@@ -18,8 +18,6 @@ class LogonFragment : Fragment() {
 
     // интерфейс обратного вызова
     interface Callbacks {
-        fun onLaunchWorkOrderList()
-
         fun onLaunchDataSynchronization()
     }
 

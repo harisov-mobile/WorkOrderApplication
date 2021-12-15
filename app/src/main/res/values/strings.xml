@@ -29,5 +29,11 @@
     <string name="password_hint">Пароль</string>
 
     <string name="error_network_wrong_server">Невозможно подключиться к серверу 1С, возможно, неправильно указан сервер.</string>
+    <string name="synchro_data_label">Синхронизация данных</string>
+    <string name="ok">OK</string>
+
+    <string name="success_synchronization">Синхронизация данных произведена успешно.</string>
+    <string name="fail_synchronization">Ошибка при синхронизации данных. Дальнейшая работа программы невозможна.</string>
+
 
 </resources>

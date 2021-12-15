@@ -11,7 +11,7 @@ import ru.internetcloud.workorderapplication.presentation.workorder.list.WorkOrd
 
 class MainActivity : AppCompatActivity(),
     WorkOrderListFragment.Callbacks,
-    LogonFragment.Callbacks {
+    LogonFragment.Callbacks, DataSynchronizationFragment.Callbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,12 +29,12 @@ class MainActivity : AppCompatActivity(),
 
     override fun onAddWorkOrder() {
         val fragment = WorkOrderFragment.newInstanceAddWorkOrder()
-        showFragment(fragment)
+        showFragmentWithBackStack(fragment)
     }
 
     override fun onEditWorkOrder(workOrderId: Int) {
         val fragment = WorkOrderFragment.newInstanceEditWorkOrder(workOrderId)
-        showFragment(fragment)
+        showFragmentWithBackStack(fragment)
     }
 
     override fun onLaunchWorkOrderList() {
@@ -47,10 +47,16 @@ class MainActivity : AppCompatActivity(),
         showFragment(fragment)
     }
 
-    private fun showFragment(fragment: Fragment) {
+    private fun showFragmentWithBackStack(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
+            .commit()
+    }
+
+    private fun showFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
             .commit()
     }
 }
