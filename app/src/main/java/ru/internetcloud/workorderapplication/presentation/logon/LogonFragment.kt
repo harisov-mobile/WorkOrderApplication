@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
@@ -18,6 +19,8 @@ class LogonFragment : Fragment() {
     // интерфейс обратного вызова
     interface Callbacks {
         fun onLaunchWorkOrderList()
+
+        fun onLaunchDataSynchronization()
     }
 
     private var hostActivity: Callbacks? = null
@@ -50,7 +53,8 @@ class LogonFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(LogonViewModel::class.java)
 
         binding.enterButton.setOnClickListener {
-            viewModel.login(
+            binding.enterButton.isEnabled = false
+            viewModel.signin(
                 binding.serverEditText.text?.toString(),
                 binding.loginEditText.text?.toString(),
                 binding.passwordEditText.text?.toString()
@@ -130,6 +134,7 @@ class LogonFragment : Fragment() {
         // подписка на ошибки
         viewModel.errorInputServer.observe(viewLifecycleOwner) {
             val message = if (it) {
+                binding.enterButton.isEnabled = true
                 getString(R.string.error_input_server)
             } else {
                 null
@@ -139,6 +144,7 @@ class LogonFragment : Fragment() {
 
         viewModel.errorInputLogin.observe(viewLifecycleOwner) {
             val message = if (it) {
+                binding.enterButton.isEnabled = true
                 getString(R.string.error_input_login)
             } else {
                 null
@@ -148,11 +154,19 @@ class LogonFragment : Fragment() {
 
         viewModel.errorInputPassword.observe(viewLifecycleOwner) {
             val message = if (it) {
+                binding.enterButton.isEnabled = true
                 getString(R.string.error_input_password)
             } else {
                 null
             }
             binding.passwordTextInputLayout.error = message
+        }
+
+        viewModel.errorAuthorization.observe(viewLifecycleOwner) {
+            // показать AlertDialog об ошибке авторизации!!!
+            // Toast.makeText(context, "Ошибка! Неправильный логин или пароль!", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, viewModel.errorMessage.value, Toast.LENGTH_LONG).show()
+            binding.enterButton.isEnabled = true
         }
 
         // подписка на завершение экрана:
@@ -169,13 +183,15 @@ class LogonFragment : Fragment() {
                     }
                 }
                 viewModel.resetCanContinue()
-                hostActivity?.onLaunchWorkOrderList()
+                // hostActivity?.onLaunchWorkOrderList()
+                hostActivity?.onLaunchDataSynchronization() // запустить фрагмент, где будет проверка пароля, сихнронизация данных из 1С и т.д.
             }
         }
     }
 
     private fun initTextInputEditText() {
         context?.let {
+            // presentation - слой напрямую полез в домайн - слой! разобраться...
             binding.serverEditText.setText(AuthorizationPreferences.getStoredServer(it.applicationContext))
             binding.loginEditText.setText(AuthorizationPreferences.getStoredLogin(it.applicationContext))
         }

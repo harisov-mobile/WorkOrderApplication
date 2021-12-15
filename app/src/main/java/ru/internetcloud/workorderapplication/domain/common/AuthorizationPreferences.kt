@@ -31,4 +31,16 @@ object AuthorizationPreferences {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         return prefs.getString(PREF_LOGIN, "")!!
     }
+
+    fun setStoredPasswordHash(context: Context, key: String, passwordHash: String) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putString(key, passwordHash)
+            .apply()
+    }
+
+    fun getStoredPasswordHash(context: Context, key: String): String {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        return prefs.getString(key, "")!!
+    }
 }

@@ -6,8 +6,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.internetcloud.workorderapplication.data.repository.LocalAuthRepositoryImpl
+import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.CheckAuthParametersUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.SetAuthParametersUseCase
+
+private const val BEGIN_SIZE = 4
 
 class LogonViewModel(private val app: Application) : AndroidViewModel(app) {
+
+    private val repository = LocalAuthRepositoryImpl.get() // требуется инъекция зависимостей!!!
+
+    // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
+    private val setAuthParametersUseCase = SetAuthParametersUseCase(repository)
+    private val checkAuthParametersUseCase = CheckAuthParametersUseCase(repository)
 
     private val _canContinue = MutableLiveData<Boolean>()
     val canContinue: LiveData<Boolean>
@@ -25,17 +36,45 @@ class LogonViewModel(private val app: Application) : AndroidViewModel(app) {
     val errorInputPassword: LiveData<Boolean>
         get() = _errorInputPassword
 
-    fun login(inputServer: String?, inputLogin: String?, inputPassword: String?) {
-        val server = parseText(inputServer)
-        val loginName = parseText(inputLogin)
+    private val _errorAuthorization = MutableLiveData<Boolean>()
+    val errorAuthorization: LiveData<Boolean>
+        get() = _errorAuthorization
+
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
+
+    fun signin(inputServer: String?, inputLogin: String?, inputPassword: String?) {
+        var server = parseText(inputServer)
+        val login = parseText(inputLogin)
         val password = parseText(inputPassword)
 
-        val areFieldsValid = validateInput(server, loginName, password)
+        val areFieldsValid = validateInput(server, login, password)
 
         if (areFieldsValid) {
             viewModelScope.launch {
+
+                server = server.lowercase()
+
+                if (server.length >= BEGIN_SIZE) {
+                    val firstFourLetters = server.substring(0, BEGIN_SIZE)
+                    if (!firstFourLetters.equals("http")) {
+                        server = "http://" + server
+                    }
+                } else {
+                    server = "http://" + server
+                }
+
+                setAuthParametersUseCase.setAuthParameters(server, login, password)
+
                 // сделать проверку пароля!!!!
-                _canContinue.value = true
+                val authResult = checkAuthParametersUseCase.checkAuthorization()
+                if (authResult.isAuthorized) {
+                    _canContinue.value = true
+                } else {
+                    _errorMessage.value = authResult.errorMessage
+                    _errorAuthorization.value = true
+                }
             }
         }
     }
@@ -44,14 +83,14 @@ class LogonViewModel(private val app: Application) : AndroidViewModel(app) {
         return input?.trim() ?: ""
     }
 
-    private fun validateInput(server: String, loginName: String, password: String): Boolean {
+    private fun validateInput(server: String, login: String, password: String): Boolean {
         var result = true
         if (server.isBlank()) {
             _errorInputServer.value = true
             result = false
         }
 
-        if (loginName.isBlank()) {
+        if (login.isBlank()) {
             _errorInputLogin.value = true
             result = false
         }

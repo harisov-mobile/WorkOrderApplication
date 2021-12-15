@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.presentation.logon.LogonFragment
+import ru.internetcloud.workorderapplication.presentation.synchro.DataSynchronizationFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.WorkOrderFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.list.WorkOrderListFragment
 
@@ -38,6 +39,11 @@ class MainActivity : AppCompatActivity(),
 
     override fun onLaunchWorkOrderList() {
         val fragment = WorkOrderListFragment.newInstance()
+        showFragment(fragment)
+    }
+
+    override fun onLaunchDataSynchronization() {
+        val fragment = DataSynchronizationFragment.newInstance()
         showFragment(fragment)
     }
 

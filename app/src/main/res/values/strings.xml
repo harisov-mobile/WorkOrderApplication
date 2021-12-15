@@ -28,5 +28,6 @@
     <string name="login_hint">Пользователь</string>
     <string name="password_hint">Пароль</string>
 
+    <string name="error_network_wrong_server">Невозможно подключиться к серверу 1С, возможно, неправильно указан сервер.</string>
 
 </resources>
