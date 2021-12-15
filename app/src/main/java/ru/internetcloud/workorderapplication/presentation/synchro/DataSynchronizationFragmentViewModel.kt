@@ -6,13 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.data.repository.DbCarJobRepositoryImpl
-import ru.internetcloud.workorderapplication.data.repository.DbRepairTypeRepositoryImpl
-import ru.internetcloud.workorderapplication.data.repository.RemoteCarJobRepositoryImpl
-import ru.internetcloud.workorderapplication.data.repository.RemoteRepairTypeRepositoryImpl
+import ru.internetcloud.workorderapplication.data.repository.*
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.AddCarJobUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.DeleteCarJobsUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.GetCarJobListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.AddDepartmentUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.DeleteDepartmentsUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.GetDepartmentListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.AddRepairTypeUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.DeleteRepairTypesUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetRepairTypeListUseCase
@@ -24,7 +24,10 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
 
     private val remoteCarJobRepository = RemoteCarJobRepositoryImpl.get() // требуется инъекция зависимостей!!!
     private val dbCarJobRepository = DbCarJobRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    
+
+    private val remoteDepartmentRepository = RemoteDepartmentRepositoryImpl.get() // требуется инъекция зависимостей!!!
+    private val dbDepartmentRepository = DbDepartmentRepositoryImpl.get() // требуется инъекция зависимостей!!!
+
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
     private val getRemoteRepairTypeListUseCase = GetRepairTypeListUseCase(remoteRepairTypeRepository)
     private val getDbRepairTypeListUseCase = GetRepairTypeListUseCase(dbRepairTypeRepository)
@@ -36,7 +39,11 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     private val addDbCarJobUseCase = AddCarJobUseCase(dbCarJobRepository)
     private val deleteCarJobsUseCase = DeleteCarJobsUseCase(dbCarJobRepository)
 
-    
+    private val getRemoteDepartmentListUseCase = GetDepartmentListUseCase(remoteDepartmentRepository)
+    private val getDbDepartmentListUseCase = GetDepartmentListUseCase(dbDepartmentRepository)
+    private val addDbDepartmentUseCase = AddDepartmentUseCase(dbDepartmentRepository)
+    private val deleteDepartmentsUseCase = DeleteDepartmentsUseCase(dbDepartmentRepository)
+
     private val _canContinue = MutableLiveData<Boolean>()
     val canContinue: LiveData<Boolean>
         get() = _canContinue
@@ -71,7 +78,10 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
                     addDbRepairTypeUseCase.addRepairType(it)
                 }
 
-                refreshCarJob()
+
+                refreshDepartment()
+
+                //refreshCarJob()
 
                 _canContinue.value = true
             }
@@ -89,12 +99,12 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     }
 
     suspend fun refreshDepartment() {
-//        val remoteRepairTypeList = getRemoteRepairTypeListUseCase.getRepairTypeList()
-//        if (!remoteRepairTypeList.isEmpty()) {
-//            deleteRepairTypesUseCase.deleteAllRepairTypes()
-//            remoteRepairTypeList.forEach {
-//                addDbRepairTypeUseCase.addRepairType(it)
-//            }
-//        }
+        val remoteDepartmentList = getRemoteDepartmentListUseCase.getDepartmentList()
+        if (!remoteDepartmentList.isEmpty()) {
+            deleteDepartmentsUseCase.deleteAllDepartments()
+            remoteDepartmentList.forEach {
+                addDbDepartmentUseCase.addDepartment(it)
+            }
+        }
     }
 }

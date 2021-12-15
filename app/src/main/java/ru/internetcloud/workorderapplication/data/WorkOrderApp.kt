@@ -13,9 +13,11 @@ class WorkOrderApp : Application() {
 
         RemoteRepairTypeRepositoryImpl.initialize(this)
         RemoteCarJobRepositoryImpl.initialize(this)
+        RemoteDepartmentRepositoryImpl.initialize(this)
 
         DbRepairTypeRepositoryImpl.initialize(this)
         DbCarJobRepositoryImpl.initialize(this)
+        DbDepartmentRepositoryImpl.initialize(this)
 
         DbWorkOrderRepositoryImpl.initialize(this)
     }
