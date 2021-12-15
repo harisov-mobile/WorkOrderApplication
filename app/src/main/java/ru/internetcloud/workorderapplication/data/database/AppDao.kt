@@ -5,10 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import ru.internetcloud.workorderapplication.data.entity.CarJobDbModel
-import ru.internetcloud.workorderapplication.data.entity.DepartmentDbModel
-import ru.internetcloud.workorderapplication.data.entity.RepairTypeDbModel
-import ru.internetcloud.workorderapplication.data.entity.WorkOrderDbModel
+import ru.internetcloud.workorderapplication.data.entity.*
 
 @Dao
 interface AppDao {
@@ -60,4 +57,17 @@ interface AppDao {
 
     @Query("SELECT * FROM departments WHERE id=:id LIMIT 1")
     suspend fun getDepartment(id: String): DepartmentDbModel?
+
+    // ----------------------------------------------------------------------
+    @Query("SELECT * FROM employees")
+    suspend fun getEmployeeList(): List<EmployeeDbModel> // Не использовать LiveData в репозитории
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addEmployee(employeeDbModel: EmployeeDbModel)
+
+    @Query("DELETE FROM employees")
+    suspend fun deleteAllEmployees()
+
+    @Query("SELECT * FROM employees WHERE id=:id LIMIT 1")
+    suspend fun getEmployee(id: String): EmployeeDbModel?
 }
