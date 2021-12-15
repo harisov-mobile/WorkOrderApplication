@@ -4,7 +4,7 @@ import ru.internetcloud.workorderapplication.domain.catalog.CarJob
 import ru.internetcloud.workorderapplication.domain.repository.CarJobRepository
 
 class GetCarJobUseCase(private val carJobRepository: CarJobRepository) {
-    suspend fun getCarJob(id1C: String): CarJob? {
-        return carJobRepository.getCarJob(id1C)
+    suspend fun getCarJob(id: String): CarJob? {
+        return carJobRepository.getCarJob(id)
     }
 }

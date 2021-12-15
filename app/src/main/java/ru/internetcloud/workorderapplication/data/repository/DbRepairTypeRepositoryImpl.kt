@@ -34,11 +34,11 @@ class DbRepairTypeRepositoryImpl private constructor(application: Application) :
         appDao.addRepairType(repairTypeMapper.fromEntityToDbModel(repairType))
     }
 
-    override suspend fun getRepairType(id1C: String): RepairType? {
+    override suspend fun getRepairType(id: String): RepairType? {
 
         var repairType: RepairType? = null
 
-        val repairTypeDbModel = appDao.getRepairType(id1C)
+        val repairTypeDbModel = appDao.getRepairType(id)
 
         repairTypeDbModel?.let {
             repairType = repairTypeMapper.fromDbModelToEntity(it)

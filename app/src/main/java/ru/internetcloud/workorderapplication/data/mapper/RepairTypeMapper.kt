@@ -8,7 +8,7 @@ class RepairTypeMapper {
 
     fun fromDtoToEntity(repairTypeDTO: RepairTypeDTO): RepairType {
         return RepairType(
-            id1C = repairTypeDTO.id1C,
+            id = repairTypeDTO.id,
             name = repairTypeDTO.name
         )
     }
@@ -19,7 +19,7 @@ class RepairTypeMapper {
 
     fun fromDbModelToEntity(repairTypeDbModel: RepairTypeDbModel): RepairType {
         return RepairType(
-            id1C = repairTypeDbModel.id1C,
+            id = repairTypeDbModel.id,
             name = repairTypeDbModel.name
         )
     }
@@ -30,7 +30,7 @@ class RepairTypeMapper {
 
     fun fromEntityToDbModel(repairType: RepairType): RepairTypeDbModel {
         return RepairTypeDbModel(
-            id1C = repairType.id1C,
+            id = repairType.id,
             name = repairType.name
         )
     }

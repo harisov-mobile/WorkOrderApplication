@@ -31,8 +31,8 @@ interface AppDao {
     @Query("DELETE FROM repair_types")
     suspend fun deleteAllRepairTypes()
 
-    @Query("SELECT * FROM repair_types WHERE id1C=:id1C LIMIT 1")
-    suspend fun getRepairType(id1C: String): RepairTypeDbModel?
+    @Query("SELECT * FROM repair_types WHERE id=:id LIMIT 1")
+    suspend fun getRepairType(id: String): RepairTypeDbModel?
 
     // ----------------------------------------------------------------------
     @Query("SELECT * FROM car_jobs")
