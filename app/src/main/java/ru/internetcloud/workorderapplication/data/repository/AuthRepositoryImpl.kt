@@ -11,22 +11,22 @@ import ru.internetcloud.workorderapplication.domain.common.AuthResult
 import ru.internetcloud.workorderapplication.domain.common.AuthorizationPreferences
 import ru.internetcloud.workorderapplication.domain.repository.AuthRepository
 
-class LocalAuthRepositoryImpl private constructor(private val application: Application) : AuthRepository {
+class AuthRepositoryImpl private constructor(private val application: Application) : AuthRepository {
 
     private var authParameters: AuthParameters = AuthParameters()
 
     companion object {
         private const val DATABASE_NAME = "work_order.db"
 
-        private var instance: LocalAuthRepositoryImpl? = null
+        private var instance: AuthRepositoryImpl? = null
 
         fun initialize(application: Application) {
             if (instance == null) {
-                instance = LocalAuthRepositoryImpl(application)
+                instance = AuthRepositoryImpl(application)
             }
         }
 
-        fun get(): LocalAuthRepositoryImpl {
+        fun get(): AuthRepositoryImpl {
             return instance ?: throw RuntimeException("LocalAuthRepositoryImpl must be initialized.")
         }
     }

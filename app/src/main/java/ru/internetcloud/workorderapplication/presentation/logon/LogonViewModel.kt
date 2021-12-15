@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.data.repository.LocalAuthRepositoryImpl
+import ru.internetcloud.workorderapplication.data.repository.AuthRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.CheckAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.SetAuthParametersUseCase
 
@@ -14,7 +14,7 @@ private const val BEGIN_SIZE = 4
 
 class LogonViewModel(private val app: Application) : AndroidViewModel(app) {
 
-    private val repository = LocalAuthRepositoryImpl.get() // требуется инъекция зависимостей!!!
+    private val repository = AuthRepositoryImpl.get() // требуется инъекция зависимостей!!!
 
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
     private val setAuthParametersUseCase = SetAuthParametersUseCase(repository)
