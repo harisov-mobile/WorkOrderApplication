@@ -6,7 +6,7 @@ interface RepairTypeRepository {
 
     suspend fun getRepairTypeList(): List<RepairType>
 
-    fun getRepairType(id: Int): RepairType?
+    suspend fun addRepairType(repairType: RepairType)
 
-    fun getRepairTypeById1C(id1C: String): RepairType?
+    suspend fun getRepairType(id1C: String): RepairType?
 }

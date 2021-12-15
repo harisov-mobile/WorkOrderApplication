@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.data.repository.DatabaseWorkOrderRepositoryImpl
+import ru.internetcloud.workorderapplication.data.repository.DbWorkOrderRepositoryImpl
 import ru.internetcloud.workorderapplication.data.repository.RemoteRepairTypeRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
@@ -18,7 +18,7 @@ import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.Up
 class WorkOrderViewModel : ViewModel() {
 
     // private val repository = LocalWorkOrderRepositoryImpl // требуется инъекция зависимостей!!!
-    private val databaseRepository = DatabaseWorkOrderRepositoryImpl.get()
+    private val databaseRepository = DbWorkOrderRepositoryImpl.get()
     private val remoteRepository = RemoteRepairTypeRepositoryImpl.get()
 
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
