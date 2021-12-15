@@ -33,6 +33,7 @@
     <string name="ok">OK</string>
 
     <string name="success_synchronization">Синхронизация данных произведена успешно.</string>
+    <string name="success_autonomus">Синхронизация данных не произведена, но можно продолжить работу в автономном режиме.</string>
     <string name="fail_synchronization">Ошибка при синхронизации данных. Дальнейшая работа программы невозможна.</string>
 
 

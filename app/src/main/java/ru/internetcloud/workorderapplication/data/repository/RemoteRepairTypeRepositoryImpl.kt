@@ -47,6 +47,11 @@ class RemoteRepairTypeRepositoryImpl private constructor(application: Applicatio
     }
 
     override suspend fun getRepairType(id1C: String): RepairType? {
-        TODO("Not yet implemented")
+        throw RuntimeException("Error - method getRepairType is restricted in RemoteRepairTypeRepositoryImpl")
+        return null
+    }
+
+    override suspend fun deleteAllRepairTypes() {
+        throw RuntimeException("Error - method deleteAllRepairTypes is restricted in RemoteRepairTypeRepositoryImpl")
     }
 }

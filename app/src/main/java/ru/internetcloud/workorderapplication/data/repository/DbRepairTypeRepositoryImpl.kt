@@ -46,4 +46,8 @@ class DbRepairTypeRepositoryImpl private constructor(application: Application) :
 
         return repairType
     }
+
+    override suspend fun deleteAllRepairTypes() {
+        appDao.deleteAllRepairTypes()
+    }
 }

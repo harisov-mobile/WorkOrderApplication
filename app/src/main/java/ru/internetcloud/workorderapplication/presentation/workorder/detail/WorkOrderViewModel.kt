@@ -10,7 +10,7 @@ import ru.internetcloud.workorderapplication.data.repository.DbWorkOrderReposito
 import ru.internetcloud.workorderapplication.data.repository.RemoteRepairTypeRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.GetRepairTypeListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetRepairTypeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.AddWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.UpdateWorkOrderUseCase

@@ -98,5 +98,19 @@ class DataSynchronizationFragment : Fragment() {
                 }
             }
         }
+
+        viewModel.canContinueWithoutSynchro.observe(viewLifecycleOwner) {
+            if (it) {
+                context?.let { currentContext ->
+                    binding.progressBar.visibility = View.GONE
+                    binding.okButton.visibility = View.VISIBLE
+
+                    binding.synchroResultTextView.text = getString(R.string.success_autonomus)
+                    context?.let { currentContext ->
+                        binding.synchroResultTextView.setTextColor(ContextCompat.getColor(currentContext, R.color.dark_yellow))
+                    }
+                }
+            }
+        }
     }
 }
