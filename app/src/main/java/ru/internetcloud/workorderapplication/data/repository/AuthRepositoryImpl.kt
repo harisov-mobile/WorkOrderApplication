@@ -48,27 +48,21 @@ class AuthRepositoryImpl private constructor(private val application: Applicatio
         try {
             ApiClient.initialize(authParameters)
         } catch (e: Exception) {
-            Log.i("rustam", "Нет связи с сервером. 1й try: " + e.toString())
             authResult.isAuthorized = false
             authResult.errorMessage = "Нет связи с сервером."
             return authResult
         }
 
-        Log.i("rustam", "Перед 2й try")
-
         // пойти в интернет и проверить авторизацию на сервере 1С.
         try {
             val authResponse: AuthResponse = ApiClient.getInstance().client.checkAuthorization()
             authResult.isAuthorized = authResponse.isAuthorized
-            Log.i("rustam", " authResult.isAuthorized = authResponse.isAuthorized    ${authResult.isAuthorized}")
         } catch (e: SocketTimeoutException) {
-            Log.i("rustam", "Нет связи с сервером. 2й try: " + e.toString())
             authResult.isAuthorized = false
             authResult.errorMessage = "Нет связи с сервером."
         } catch (e: Exception) {
             authResult.isAuthorized = false
             authResult.errorMessage = "Неправильный логин или пароль!"
-            Log.i("rustam", "Неправильный логин или пароль! 3й try: " + e.toString())
         }
 
         if (authResult.isAuthorized) {

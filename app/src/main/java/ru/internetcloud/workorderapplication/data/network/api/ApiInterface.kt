@@ -23,6 +23,9 @@ interface ApiInterface {
     @GET("alpha2/hs/rest/catalog/partner/all")
     suspend fun getPartners(): PartnerResponse
 
+    @GET("alpha2/hs/rest/catalog/car/all")
+    suspend fun getCars(): CarResponse
+
 //    @POST("auth/check")
 //    suspend fun checkAuthorization(): AuthResponse
 }

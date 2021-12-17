@@ -16,12 +16,14 @@ class WorkOrderApp : Application() {
         RemoteDepartmentRepositoryImpl.initialize(this)
         RemoteEmployeeRepositoryImpl.initialize(this)
         RemotePartnerRepositoryImpl.initialize(this)
+        RemoteCarRepositoryImpl.initialize(this)
 
         DbRepairTypeRepositoryImpl.initialize(this)
         DbCarJobRepositoryImpl.initialize(this)
         DbDepartmentRepositoryImpl.initialize(this)
         DbEmployeeRepositoryImpl.initialize(this)
         DbPartnerRepositoryImpl.initialize(this)
+        DbCarRepositoryImpl.initialize(this)
 
         DbWorkOrderRepositoryImpl.initialize(this)
     }

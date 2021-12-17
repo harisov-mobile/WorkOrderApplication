@@ -1,12 +1,14 @@
 package ru.internetcloud.workorderapplication.presentation.synchro
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.data.repository.*
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.AddCarListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.DeleteCarListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.GetCarListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.AddCarJobListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.AddCarJobUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.DeleteCarJobsUseCase
@@ -42,6 +44,9 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     private val remotePartnerRepository = RemotePartnerRepositoryImpl.get() // требуется инъекция зависимостей!!!
     private val dbPartnerRepository = DbPartnerRepositoryImpl.get() // требуется инъекция зависимостей!!!
 
+    private val remoteCarRepository = RemoteCarRepositoryImpl.get() // требуется инъекция зависимостей!!!
+    private val dbCarRepository = DbCarRepositoryImpl.get() // требуется инъекция зависимостей!!!
+
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
     private val getRemoteRepairTypeListUseCase = GetRepairTypeListUseCase(remoteRepairTypeRepository)
     private val getDbRepairTypeListUseCase = GetRepairTypeListUseCase(dbRepairTypeRepository)
@@ -70,6 +75,11 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     private val addDbPartnerListUseCase = AddPartnerListUseCase(dbPartnerRepository)
     private val deletePartnersUseCase = DeletePartnerListUseCase(dbPartnerRepository)
 
+    private val getRemoteCarListUseCase = GetCarListUseCase(remoteCarRepository)
+    private val getDbCarListUseCase = GetCarListUseCase(dbCarRepository)
+    private val addDbCarListUseCase = AddCarListUseCase(dbCarRepository)
+    private val deleteCarsUseCase = DeleteCarListUseCase(dbCarRepository)
+
     private val _canContinue = MutableLiveData<Boolean>()
     val canContinue: LiveData<Boolean>
         get() = _canContinue
@@ -90,12 +100,9 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
         viewModelScope.launch {
             val remoteRepairTypeList = getRemoteRepairTypeListUseCase.getRepairTypeList()
 
-            Log.i("rustam", " remoteRepairTypeList = " + remoteRepairTypeList.toString())
-
             if (remoteRepairTypeList.isEmpty()) {
                 // не удалось получить данные из сервера 1С, надо проверить, есть ли данные в БД
                 val dbRepairTypeList = getDbRepairTypeListUseCase.getRepairTypeList()
-                Log.i("rustam", " dbRepairTypeList = " + dbRepairTypeList.toString())
 
                 if (dbRepairTypeList.isEmpty()) {
                     _errorSynchronization.value = true
@@ -111,6 +118,7 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
                 refreshPartner()
                 refreshEmployee()
                 refreshCarJob()
+                refreshCar()
                 refreshDepartment()
 
                 _currentSituation.value = ""
@@ -158,6 +166,16 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
             deletePartnersUseCase.deleteAllPartners()
             _currentSituation.value = "Обработка справочника Контрагенты"
             addDbPartnerListUseCase.addPartnerList(remotePartnerList)
+        }
+    }
+
+    suspend fun refreshCar() {
+        _currentSituation.value = "Получение справочника СХТ из 1С"
+        val remoteCarList = getRemoteCarListUseCase.getCarList()
+        if (!remoteCarList.isEmpty()) {
+            deleteCarsUseCase.deleteAllCars()
+            _currentSituation.value = "Обработка справочника СХТ"
+            addDbCarListUseCase.addCarList(remoteCarList)
         }
     }
 }

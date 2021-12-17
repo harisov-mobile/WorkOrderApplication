@@ -1,6 +1,5 @@
 package ru.internetcloud.workorderapplication.presentation.workorder.detail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -52,16 +51,6 @@ class WorkOrderViewModel : ViewModel() {
             val order = getWorkOrderUseCase.getWorkOrder(workOrderId)
             order?.let {
                 _workOrder.value = it
-            }
-        }
-    }
-
-    fun loadRepairTypes() {
-        viewModelScope.launch {
-            Log.i("rustam", "вошли в loadRepairTypes")
-            val order = getRepairTypeListUseCase.getRepairTypeList()
-            order?.let {
-                _repairTypes.value = it
             }
         }
     }
