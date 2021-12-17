@@ -5,6 +5,7 @@ data class Partner(
     var id: String = "",
     var code1C: String = "",
     var name: String = "",
-    var INN: String = "",
-    var KPP: String = ""
+    var fullName: String = "",
+    var inn: String = "",
+    var kpp: String = ""
 )
