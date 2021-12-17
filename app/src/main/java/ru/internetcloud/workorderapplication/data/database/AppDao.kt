@@ -76,4 +76,17 @@ interface AppDao {
 
     @Query("SELECT * FROM employees WHERE id=:id LIMIT 1")
     suspend fun getEmployee(id: String): EmployeeDbModel?
+
+    // ----------------------------------------------------------------------
+    @Query("SELECT * FROM partners")
+    suspend fun getPartnerList(): List<PartnerDbModel>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addPartnerList(partnerDbModelList: List<PartnerDbModel>)
+
+    @Query("DELETE FROM partners")
+    suspend fun deleteAllPartners()
+
+    @Query("SELECT * FROM partners WHERE id=:id LIMIT 1")
+    suspend fun getPartner(id: String): PartnerDbModel?
 }

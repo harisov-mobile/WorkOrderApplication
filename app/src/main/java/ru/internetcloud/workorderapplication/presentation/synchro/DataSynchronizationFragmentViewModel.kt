@@ -18,6 +18,9 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.emp
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.AddEmployeeUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.DeleteEmployeesUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.GetEmployeeListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.AddPartnerListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.DeletePartnerListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.GetPartnerListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.AddRepairTypeUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.DeleteRepairTypesUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetRepairTypeListUseCase
@@ -35,6 +38,9 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
 
     private val remoteEmployeeRepository = RemoteEmployeeRepositoryImpl.get() // требуется инъекция зависимостей!!!
     private val dbEmployeeRepository = DbEmployeeRepositoryImpl.get() // требуется инъекция зависимостей!!!
+
+    private val remotePartnerRepository = RemotePartnerRepositoryImpl.get() // требуется инъекция зависимостей!!!
+    private val dbPartnerRepository = DbPartnerRepositoryImpl.get() // требуется инъекция зависимостей!!!
 
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
     private val getRemoteRepairTypeListUseCase = GetRepairTypeListUseCase(remoteRepairTypeRepository)
@@ -58,6 +64,11 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     private val addDbEmployeeUseCase = AddEmployeeUseCase(dbEmployeeRepository)
     private val addDbEmployeeListUseCase = AddEmployeeListUseCase(dbEmployeeRepository)
     private val deleteEmployeesUseCase = DeleteEmployeesUseCase(dbEmployeeRepository)
+
+    private val getRemotePartnerListUseCase = GetPartnerListUseCase(remotePartnerRepository)
+    private val getDbPartnerListUseCase = GetPartnerListUseCase(dbPartnerRepository)
+    private val addDbPartnerListUseCase = AddPartnerListUseCase(dbPartnerRepository)
+    private val deletePartnersUseCase = DeletePartnerListUseCase(dbPartnerRepository)
 
     private val _canContinue = MutableLiveData<Boolean>()
     val canContinue: LiveData<Boolean>
@@ -97,9 +108,10 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
                     addDbRepairTypeUseCase.addRepairType(it)
                 }
 
+                refreshPartner()
+                refreshEmployee()
                 refreshCarJob()
                 refreshDepartment()
-                refreshEmployee()
 
                 _currentSituation.value = ""
                 _canContinue.value = true
@@ -136,6 +148,16 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
             deleteEmployeesUseCase.deleteAllEmployees()
             _currentSituation.value = "Обработка справочника Сотрудники"
             addDbEmployeeListUseCase.addEmployeeList(remoteEmployeeList)
+        }
+    }
+
+    suspend fun refreshPartner() {
+        _currentSituation.value = "Получение справочника Контрагенты из 1С"
+        val remotePartnerList = getRemotePartnerListUseCase.getPartnerList()
+        if (!remotePartnerList.isEmpty()) {
+            deletePartnersUseCase.deleteAllPartners()
+            _currentSituation.value = "Обработка справочника Контрагенты"
+            addDbPartnerListUseCase.addPartnerList(remotePartnerList)
         }
     }
 }
