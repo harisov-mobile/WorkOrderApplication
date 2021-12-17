@@ -31,7 +31,7 @@ class RemoteCarJobRepositoryImpl private constructor(application: Application) :
         try {
             carJobResponse = ApiClient.getInstance().client.getCarJobs()
         } catch (e: Exception) {
-            throw e
+            // ничего не делаю
         }
         return carJobMapper.fromListDtoToListEntity(carJobResponse.carJobs)
     }

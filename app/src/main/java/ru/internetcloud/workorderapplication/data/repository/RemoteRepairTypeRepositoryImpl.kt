@@ -1,7 +1,6 @@
 package ru.internetcloud.workorderapplication.data.repository
 
 import android.app.Application
-import android.util.Log
 import ru.internetcloud.workorderapplication.data.mapper.RepairTypeMapper
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.RepairTypeResponse
@@ -34,10 +33,8 @@ class RemoteRepairTypeRepositoryImpl private constructor(application: Applicatio
         try {
             repairTypeResponse = ApiClient.getInstance().client.getRepairTypes()
         } catch (e: Exception) {
-            Log.i("rustam", e.toString())
+            // ничего не делаю
         }
-
-        Log.i("rustam", repairTypeResponse.toString())
 
         return repairTypeMapper.fromListDtoToListEntity(repairTypeResponse.repairtypes)
     }

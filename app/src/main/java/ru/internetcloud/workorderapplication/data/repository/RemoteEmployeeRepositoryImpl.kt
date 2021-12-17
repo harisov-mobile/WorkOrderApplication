@@ -31,8 +31,7 @@ class RemoteEmployeeRepositoryImpl private constructor(application: Application)
         try {
             employeeResponse = ApiClient.getInstance().client.getEmployees()
         } catch (e: Exception) {
-            // Log.i("rustam", e.toString())
-            throw e
+            // ничего не делаю
         }
         return employeeMapper.fromListDtoToListEntity(employeeResponse.employees)
     }
