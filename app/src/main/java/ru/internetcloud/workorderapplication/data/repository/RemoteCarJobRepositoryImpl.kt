@@ -31,10 +31,13 @@ class RemoteCarJobRepositoryImpl private constructor(application: Application) :
         try {
             carJobResponse = ApiClient.getInstance().client.getCarJobs()
         } catch (e: Exception) {
-            // Log.i("rustam", e.toString())
             throw e
         }
         return carJobMapper.fromListDtoToListEntity(carJobResponse.carJobs)
+    }
+
+    override suspend fun addCarJobList(carJobList: List<CarJob>) {
+        throw RuntimeException("Error - method addCarJobList is restricted in RemoteCarJobRepositoryImpl")
     }
 
     override suspend fun addCarJob(carJob: CarJob) {

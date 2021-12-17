@@ -1,6 +1,7 @@
 package ru.internetcloud.workorderapplication.data.repository
 
 import android.app.Application
+import android.util.Log
 import ru.internetcloud.workorderapplication.data.mapper.DepartmentMapper
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.DepartmentResponse
@@ -31,9 +32,10 @@ class RemoteDepartmentRepositoryImpl private constructor(application: Applicatio
         try {
             departmentResponse = ApiClient.getInstance().client.getDepartments()
         } catch (e: Exception) {
-            // Log.i("rustam", e.toString())
-            throw e
+            Log.i("rustam", e.toString())
+            //throw e
         }
+
         return departmentMapper.fromListDtoToListEntity(departmentResponse.departments)
     }
 

@@ -33,6 +33,10 @@ class DbEmployeeRepositoryImpl private constructor(application: Application) : E
         appDao.addEmployee(employeeMapper.fromEntityToDbModel(employee))
     }
 
+    override suspend fun addEmployeeList(employeeList: List<Employee>) {
+        appDao.addEmployeeList(employeeMapper.fromListEntityToListDbModel(employeeList))
+    }
+
     override suspend fun getEmployee(id: String): Employee? {
         var employee: Employee? = null
 

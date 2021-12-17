@@ -29,6 +29,10 @@ class DbCarJobRepositoryImpl private constructor(application: Application) : Car
         return carJobMapper.fromListDbModelToListEntity(appDao.getCarJobList())
     }
 
+    override suspend fun addCarJobList(carJobList: List<CarJob>) {
+        appDao.addCarJobList(carJobMapper.fromListEntityToListDbModel(carJobList))
+    }
+
     override suspend fun addCarJob(carJob: CarJob) {
         appDao.addCarJob(carJobMapper.fromEntityToDbModel(carJob))
     }

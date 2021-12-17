@@ -84,6 +84,12 @@ class DataSynchronizationFragment : Fragment() {
             }
         }
 
+        viewModel.currentSituation.observe(viewLifecycleOwner) { currentText ->
+            context?.let { currentContext ->
+                binding.currentSituationTextView.text = currentText
+            }
+        }
+
         // подписка на завершение экрана:
         viewModel.canContinue.observe(viewLifecycleOwner) {
             if (it) {

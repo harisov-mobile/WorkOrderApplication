@@ -30,6 +30,10 @@ class EmployeeMapper {
         fromDbModelToEntity(it)
     }
 
+    fun fromListEntityToListDbModel(list: List<Employee>) = list.map {
+        fromEntityToDbModel(it)
+    }
+
     fun fromEntityToDbModel(employee: Employee): EmployeeDbModel {
         return EmployeeDbModel(
             id = employee.id,

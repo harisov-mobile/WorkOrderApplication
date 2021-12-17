@@ -39,6 +39,9 @@ interface AppDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addCarJob(carJobDbModel: CarJobDbModel)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addCarJobList(carJobDbModelList: List<CarJobDbModel>)
+
     @Query("DELETE FROM car_jobs")
     suspend fun deleteAllCarJobs()
 
@@ -64,6 +67,9 @@ interface AppDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addEmployee(employeeDbModel: EmployeeDbModel)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addEmployeeList(employeeDbModelList: List<EmployeeDbModel>)
 
     @Query("DELETE FROM employees")
     suspend fun deleteAllEmployees()

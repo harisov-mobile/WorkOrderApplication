@@ -37,6 +37,10 @@ class RemoteEmployeeRepositoryImpl private constructor(application: Application)
         return employeeMapper.fromListDtoToListEntity(employeeResponse.employees)
     }
 
+    override suspend fun addEmployeeList(employeeList: List<Employee>) {
+        throw RuntimeException("Error - method addEmployeeList is restricted in RemoteEmployeeRepositoryImpl")
+    }
+
     override suspend fun addEmployee(employee: Employee) {
         throw RuntimeException("Error - method addEmployee is restricted in RemoteEmployeeRepositoryImpl")
     }
