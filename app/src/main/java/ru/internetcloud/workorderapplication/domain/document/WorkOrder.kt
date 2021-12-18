@@ -11,9 +11,8 @@ data class WorkOrder(
     var id: String = "",
     var number: String = "", // номер документа
     var date: Date = Date(), // дата документа
-    var client: Partner? = null, // заказчик
+    var partner: Partner? = null, // заказчик
     var car: Car? = null, // схт
-    var mileage: Int = 0, // наработка
     var repairType: RepairType? = null, // вид ремонта
     var department: Department? = null, // цех
     var requestReason: String? = null, // причина обращения
