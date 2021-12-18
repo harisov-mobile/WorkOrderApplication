@@ -71,9 +71,9 @@ class WorkOrderListFragment : Fragment() {
     }
 
     private fun setupClickListener() {
-        workOrderListAdapter.onWorkOrderClickListener = { workOrder ->
-            hostActivity?.onEditWorkOrder(workOrder.id)
-        }
+//        workOrderListAdapter.onWorkOrderClickListener = { workOrder ->
+//            hostActivity?.onEditWorkOrder(workOrder.id)
+//        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

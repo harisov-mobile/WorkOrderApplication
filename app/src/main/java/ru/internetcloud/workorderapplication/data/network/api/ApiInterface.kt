@@ -26,6 +26,12 @@ interface ApiInterface {
     @GET("alpha2/hs/rest/catalog/car/all")
     suspend fun getCars(): CarResponse
 
+    @GET("alpha2/hs/rest/catalog/workinghour/all")
+    suspend fun getWorkingHours(): WorkingHourResponse
+
+//    @GET("alpha2/hs/rest/document/workorder/all")
+//    suspend fun getWorkOrders(): WorkOrderResponse
+
 //    @POST("auth/check")
 //    suspend fun checkAuthorization(): AuthResponse
 }

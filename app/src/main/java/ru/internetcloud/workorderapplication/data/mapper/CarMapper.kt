@@ -16,7 +16,7 @@ class CarMapper {
             manufacturer = carDTO.manufacturer,
             model = carDTO.model,
             type = carDTO.type,
-            releaseDate = carDTO.releaseDate,
+            releaseYear = carDTO.releaseYear,
             mileage = carDTO.mileage,
             owner = Partner(carDTO.ownerId)
         )
@@ -39,7 +39,7 @@ class CarMapper {
             manufacturer = car.manufacturer,
             model = car.model,
             type = car.type,
-            releaseDate = car.releaseDate,
+            releaseYear = car.releaseYear,
             mileage = car.mileage,
             ownerId = car.owner?.id ?: ""
         )

@@ -102,4 +102,17 @@ interface AppDao {
 
     @Query("SELECT * FROM cars WHERE id=:id LIMIT 1")
     suspend fun getCar(id: String): CarDbModel?
+    
+    // ----------------------------------------------------------------------
+    @Query("SELECT * FROM working_hours")
+    suspend fun getWorkingHourList(): List<WorkingHourDbModel>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addWorkingHourList(partnerDbModelList: List<WorkingHourDbModel>)
+
+    @Query("DELETE FROM working_hours")
+    suspend fun deleteAllWorkingHours()
+
+    @Query("SELECT * FROM working_hours WHERE id=:id LIMIT 1")
+    suspend fun getWorkingHour(id: String): WorkingHourDbModel?
 }

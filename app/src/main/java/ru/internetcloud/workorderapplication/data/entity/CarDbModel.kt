@@ -14,7 +14,7 @@ data class CarDbModel(
     var manufacturer: String, // производитель
     var model: String,
     var type: String, // папка в спр-ке "Модели"
-    var releaseDate: Int = 0, // год выпуска
+    var releaseYear: Int = 0, // год выпуска
     var mileage: Int, // пробег
     var ownerId: String = "" // id владельца
 

@@ -1,5 +1,6 @@
 package ru.internetcloud.workorderapplication.presentation.synchro
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,6 +27,9 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.par
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.AddRepairTypeUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.DeleteRepairTypesUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetRepairTypeListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.AddWorkingHourListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.DeleteWorkingHourListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.GetWorkingHourListUseCase
 
 class DataSynchronizationFragmentViewModel : ViewModel() {
 
@@ -46,6 +50,9 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
 
     private val remoteCarRepository = RemoteCarRepositoryImpl.get() // требуется инъекция зависимостей!!!
     private val dbCarRepository = DbCarRepositoryImpl.get() // требуется инъекция зависимостей!!!
+
+    private val remoteWorkingHourRepository = RemoteWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
+    private val dbWorkingHourRepository = DbWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
 
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
     private val getRemoteRepairTypeListUseCase = GetRepairTypeListUseCase(remoteRepairTypeRepository)
@@ -79,6 +86,11 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     private val getDbCarListUseCase = GetCarListUseCase(dbCarRepository)
     private val addDbCarListUseCase = AddCarListUseCase(dbCarRepository)
     private val deleteCarsUseCase = DeleteCarListUseCase(dbCarRepository)
+
+    private val getRemoteWorkingHourListUseCase = GetWorkingHourListUseCase(remoteWorkingHourRepository)
+    private val getDbWorkingHourListUseCase = GetWorkingHourListUseCase(dbWorkingHourRepository)
+    private val addDbWorkingHourListUseCase = AddWorkingHourListUseCase(dbWorkingHourRepository)
+    private val deleteWorkingHoursUseCase = DeleteWorkingHourListUseCase(dbWorkingHourRepository)
 
     private val _canContinue = MutableLiveData<Boolean>()
     val canContinue: LiveData<Boolean>
@@ -120,6 +132,7 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
                 refreshCarJob()
                 refreshCar()
                 refreshDepartment()
+                refreshWorkingHour()
 
                 _currentSituation.value = ""
                 _canContinue.value = true
@@ -176,6 +189,16 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
             deleteCarsUseCase.deleteAllCars()
             _currentSituation.value = "Обработка справочника СХТ"
             addDbCarListUseCase.addCarList(remoteCarList)
+        }
+    }  
+    
+    suspend fun refreshWorkingHour() {
+        _currentSituation.value = "Получение справочника Нормочасы из 1С"
+        val remoteWorkingHourList = getRemoteWorkingHourListUseCase.getWorkingHourList()
+        if (!remoteWorkingHourList.isEmpty()) {
+            deleteWorkingHoursUseCase.deleteAllWorkingHours()
+            _currentSituation.value = "Обработка справочника Нормочасы"
+            addDbWorkingHourListUseCase.addWorkingHourList(remoteWorkingHourList)
         }
     }
 }

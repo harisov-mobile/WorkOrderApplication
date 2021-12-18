@@ -26,7 +26,7 @@ data class CarDTO(
     val type: String,
 
     @SerializedName("release_year")
-    val releaseDate: Int,
+    val releaseYear: Int,
 
     @SerializedName("mileage")
     val mileage: Int,

@@ -8,7 +8,7 @@ interface EmployeeRepository {
 
     suspend fun addEmployeeList(employeeList: List<Employee>)
 
-    suspend fun addEmployee(carJob: Employee)
+    suspend fun addEmployee(employee: Employee)
 
     suspend fun getEmployee(id: String): Employee?
 

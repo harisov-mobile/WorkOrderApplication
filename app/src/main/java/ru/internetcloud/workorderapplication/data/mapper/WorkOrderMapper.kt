@@ -8,7 +8,6 @@ class WorkOrderMapper {
     fun fromEntityToDbModel(workOrder: WorkOrder): WorkOrderDbModel {
         return WorkOrderDbModel(
             id = workOrder.id,
-            id1C = workOrder.id1C,
             number = workOrder.number,
             date = workOrder.date,
             mileage = workOrder.mileage
@@ -18,7 +17,6 @@ class WorkOrderMapper {
     fun fromDbModelToEntity(workOrderDbModel: WorkOrderDbModel): WorkOrder {
         return WorkOrder(
             id = workOrderDbModel.id,
-            id1C = workOrderDbModel.id1C,
             number = workOrderDbModel.number,
             date = workOrderDbModel.date,
             mileage = workOrderDbModel.mileage

@@ -8,8 +8,7 @@ import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 
 data class WorkOrder(
-    var id: Int = UNDEFINED_ID,
-    var id1C: String = "",
+    var id: String = "",
     var number: String = "", // номер документа
     var date: Date = Date(), // дата документа
     var client: Partner? = null, // заказчик
@@ -20,10 +19,7 @@ data class WorkOrder(
     var requestReason: String? = null, // причина обращения
     var master: Employee? = null, // мастер (бригадир)
     var comment: String? = null, // комментарий
+    var new: Boolean = false,
     var performers: List<Employee> = emptyList(), // исполнители (табличная часть)
     var jobs: List<JobDetail> = emptyList() // Работы (табличная часть)
-) {
-    companion object {
-        const val UNDEFINED_ID = 0
-    }
-}
+)

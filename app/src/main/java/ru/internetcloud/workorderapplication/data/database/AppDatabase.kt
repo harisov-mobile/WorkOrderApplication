@@ -9,7 +9,7 @@ import ru.internetcloud.workorderapplication.data.entity.*
 
 @Database(
     entities = [WorkOrderDbModel::class, RepairTypeDbModel::class, CarJobDbModel::class, DepartmentDbModel::class,
-        EmployeeDbModel::class, PartnerDbModel::class, CarDbModel::class],
+        EmployeeDbModel::class, PartnerDbModel::class, CarDbModel::class, WorkingHourDbModel::class],
     version = 1,
     exportSchema = false
 )
