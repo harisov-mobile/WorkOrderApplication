@@ -54,6 +54,8 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     private val remoteWorkingHourRepository = RemoteWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
     private val dbWorkingHourRepository = DbWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
 
+    private val loadWorkOrderRepositoryImpl = LoadWorkOrderRepositoryImpl.get() // требуется инъекция зависимостей!!!
+
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
     private val getRemoteRepairTypeListUseCase = GetRepairTypeListUseCase(remoteRepairTypeRepository)
     private val getDbRepairTypeListUseCase = GetRepairTypeListUseCase(dbRepairTypeRepository)
@@ -61,36 +63,33 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     private val deleteRepairTypesUseCase = DeleteRepairTypesUseCase(dbRepairTypeRepository)
 
     private val getRemoteCarJobListUseCase = GetCarJobListUseCase(remoteCarJobRepository)
-    private val getDbCarJobListUseCase = GetCarJobListUseCase(dbCarJobRepository)
-    private val addDbCarJobUseCase = AddCarJobUseCase(dbCarJobRepository)
     private val addDbCarJobListUseCase = AddCarJobListUseCase(dbCarJobRepository)
     private val deleteCarJobsUseCase = DeleteCarJobsUseCase(dbCarJobRepository)
 
     private val getRemoteDepartmentListUseCase = GetDepartmentListUseCase(remoteDepartmentRepository)
-    private val getDbDepartmentListUseCase = GetDepartmentListUseCase(dbDepartmentRepository)
     private val addDbDepartmentUseCase = AddDepartmentUseCase(dbDepartmentRepository)
     private val deleteDepartmentsUseCase = DeleteDepartmentsUseCase(dbDepartmentRepository)
 
     private val getRemoteEmployeeListUseCase = GetEmployeeListUseCase(remoteEmployeeRepository)
-    private val getDbEmployeeListUseCase = GetEmployeeListUseCase(dbEmployeeRepository)
-    private val addDbEmployeeUseCase = AddEmployeeUseCase(dbEmployeeRepository)
     private val addDbEmployeeListUseCase = AddEmployeeListUseCase(dbEmployeeRepository)
     private val deleteEmployeesUseCase = DeleteEmployeesUseCase(dbEmployeeRepository)
 
     private val getRemotePartnerListUseCase = GetPartnerListUseCase(remotePartnerRepository)
-    private val getDbPartnerListUseCase = GetPartnerListUseCase(dbPartnerRepository)
     private val addDbPartnerListUseCase = AddPartnerListUseCase(dbPartnerRepository)
     private val deletePartnersUseCase = DeletePartnerListUseCase(dbPartnerRepository)
 
     private val getRemoteCarListUseCase = GetCarListUseCase(remoteCarRepository)
-    private val getDbCarListUseCase = GetCarListUseCase(dbCarRepository)
     private val addDbCarListUseCase = AddCarListUseCase(dbCarRepository)
     private val deleteCarsUseCase = DeleteCarListUseCase(dbCarRepository)
 
     private val getRemoteWorkingHourListUseCase = GetWorkingHourListUseCase(remoteWorkingHourRepository)
-    private val getDbWorkingHourListUseCase = GetWorkingHourListUseCase(dbWorkingHourRepository)
     private val addDbWorkingHourListUseCase = AddWorkingHourListUseCase(dbWorkingHourRepository)
     private val deleteWorkingHoursUseCase = DeleteWorkingHourListUseCase(dbWorkingHourRepository)
+
+//    private val getRemoteWorkOrderListUseCase = GetWorkOrderListUseCase(remoteWorkOrderRepository)
+//    private val getDbWorkOrderListUseCase = GetWorkOrderListUseCase(dbWorkOrderRepository)
+//    private val addDbWorkOrderListUseCase = AddWorkOrderListUseCase(dbWorkOrderRepository)
+//    private val deleteWorkOrdersUseCase = DeleteWorkOrderListUseCase(dbWorkOrderRepository)
 
     private val _canContinue = MutableLiveData<Boolean>()
     val canContinue: LiveData<Boolean>
@@ -127,12 +126,13 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
                     addDbRepairTypeUseCase.addRepairType(it)
                 }
 
-                refreshPartner()
-                refreshEmployee()
-                refreshCarJob()
-                refreshCar()
-                refreshDepartment()
-                refreshWorkingHour()
+//                refreshPartner()
+//                refreshEmployee()
+//                refreshCarJob()
+//                refreshCar()
+//                refreshDepartment()
+//                refreshWorkingHour()
+                refreshWorkOrder()
 
                 _currentSituation.value = ""
                 _canContinue.value = true
@@ -184,6 +184,7 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
 
     suspend fun refreshCar() {
         _currentSituation.value = "Получение справочника СХТ из 1С"
+        Log.i("rustam", "Получение справочника СХТ из 1С")
         val remoteCarList = getRemoteCarListUseCase.getCarList()
         if (!remoteCarList.isEmpty()) {
             deleteCarsUseCase.deleteAllCars()
@@ -200,5 +201,11 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
             _currentSituation.value = "Обработка справочника Нормочасы"
             addDbWorkingHourListUseCase.addWorkingHourList(remoteWorkingHourList)
         }
+    }
+
+    suspend fun refreshWorkOrder() {
+        _currentSituation.value = "Получение документов Заказ-наряд из 1С"
+        val success = loadWorkOrderRepositoryImpl.loadWorkOrderList()
+        Log.i("rustam", "success = " + success.toString())
     }
 }

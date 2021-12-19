@@ -11,14 +11,37 @@ import ru.internetcloud.workorderapplication.data.entity.*
 interface AppDao {
 
     @Query("SELECT * FROM work_orders")
-    fun getWorkOrderListLD(): LiveData<List<WorkOrderDbModel>> // Не использовать LiveData в репозитории
+    fun getWorkOrderList(): List<WorkOrderDbModel> // Не использовать LiveData в репозитории
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addWorkOrder(workOrderDbModel: WorkOrderDbModel)
 
     @Query("SELECT * FROM work_orders WHERE id=:workOrderId LIMIT 1")
-    suspend fun getWorkOrder(workOrderId: Int): WorkOrderDbModel // Андрей Сумин почему-то не Лив дату возвращает...
+    suspend fun getWorkOrder(workOrderId: String): WorkOrderDbModel // Андрей Сумин почему-то не Лив дату возвращает...
 
+    @Query("DELETE FROM work_orders")
+    suspend fun deleteAllWorkOrders()
+
+    @Query("DELETE FROM work_orders_and_job_details")
+    suspend fun deleteAllWorkOrderAndJobDetailCrossRefs()
+
+    @Query("DELETE FROM work_orders_and_performer_details")
+    suspend fun deleteAllWorkOrderAndEmployeeCrossRefs()
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addJobDetailList(jobDetailDbModelList: List<JobDetailDbModel>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addWorkOrderAndJobDetailCrossRefList(workOrderAndJobDetailCrossRefList: List<WorkOrderAndJobDetailCrossRef>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addPerformerDetailList(performerDetailDbModelList: List<PerformerDetailDbModel>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addWorkOrderAndPerformerDetailCrossRefList(workOrderAndPerformerDetailCrossRefList: List<WorkOrderAndPerformerDetailCrossRef>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addWorkOrderList(workOrderDbModelList: List<WorkOrderDbModel>)
     // ----------------------------------------------------------------------
     @Query("SELECT * FROM repair_types")
     suspend fun getRepairTypeList(): List<RepairTypeDbModel> // Не использовать LiveData в репозитории

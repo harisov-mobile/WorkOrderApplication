@@ -11,5 +11,5 @@ class WorkOrderListViewModel : ViewModel() {
 
     private val getWorkOrderListUseCase = GetWorkOrderListUseCase(repository)
 
-    val workOrderListLiveData = getWorkOrderListUseCase.getWorkOrderList()
+    //val workOrderListLiveData = getWorkOrderListUseCase.getWorkOrderList()
 }

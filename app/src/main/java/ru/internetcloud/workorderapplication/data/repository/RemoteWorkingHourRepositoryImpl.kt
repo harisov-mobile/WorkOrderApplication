@@ -33,6 +33,7 @@ class RemoteWorkingHourRepositoryImpl private constructor(application: Applicati
             workingHourResponse = ApiClient.getInstance().client.getWorkingHours()
         } catch (e: Exception) {
             // ничего не делаю
+            Log.i("rustam", "ошибка при загрузке getWorkingHours" + e.toString())
         }
 
         return workingHourMapper.fromListDtoToListEntity(workingHourResponse.workingHours)

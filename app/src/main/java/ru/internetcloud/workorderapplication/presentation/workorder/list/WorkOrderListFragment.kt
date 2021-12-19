@@ -19,7 +19,7 @@ class WorkOrderListFragment : Fragment() {
     interface Callbacks {
         fun onAddWorkOrder()
 
-        fun onEditWorkOrder(workOrderId: Int)
+        fun onEditWorkOrder(workOrderId: String)
     }
 
     private var hostActivity: Callbacks? = null
@@ -80,11 +80,11 @@ class WorkOrderListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(WorkOrderListViewModel::class.java)
-        viewModel.workOrderListLiveData.observe(
-            viewLifecycleOwner,
-            Observer {
-                workOrderListAdapter.submitList(it)
-            }
-        )
+//        viewModel.workOrderListLiveData.observe(
+//            viewLifecycleOwner,
+//            Observer {
+//                workOrderListAdapter.submitList(it)
+//            }
+//        )
     }
 }

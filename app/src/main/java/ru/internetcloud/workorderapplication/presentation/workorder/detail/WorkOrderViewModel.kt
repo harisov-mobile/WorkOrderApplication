@@ -46,7 +46,7 @@ class WorkOrderViewModel : ViewModel() {
         get() = _errorInputNumber
 
     // -------------------------------------------------------------------------------
-    fun loadWorkOrder(workOrderId: Int) {
+    fun loadWorkOrder(workOrderId: String) {
         viewModelScope.launch {
             val order = getWorkOrderUseCase.getWorkOrder(workOrderId)
             order?.let {

@@ -1,6 +1,7 @@
 package ru.internetcloud.workorderapplication.data.repository
 
 import android.app.Application
+import android.util.Log
 import ru.internetcloud.workorderapplication.data.mapper.CarMapper
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.CarResponse
@@ -32,6 +33,7 @@ class RemoteCarRepositoryImpl private constructor(application: Application) : Ca
             carResponse = ApiClient.getInstance().client.getCars()
         } catch (e: Exception) {
             // ничего не делаю
+            Log.i("rustam", "ошибка при загрузке getCars" + e.toString())
         }
 
         return carMapper.fromListDtoToListEntity(carResponse.cars)

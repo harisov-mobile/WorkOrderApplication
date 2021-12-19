@@ -22,7 +22,7 @@ class WorkOrderFragment : Fragment() {
     private lateinit var viewModel: WorkOrderViewModel
 
     private var screenMode: ScreenMode? = null
-    private var workOrderId: Int? = null
+    private var workOrderId: String? = null
 
     companion object {
 
@@ -37,11 +37,11 @@ class WorkOrderFragment : Fragment() {
             return instance
         }
 
-        fun newInstanceEditWorkOrder(workOrderId: Int): WorkOrderFragment {
+        fun newInstanceEditWorkOrder(workOrderId: String): WorkOrderFragment {
             val instance = WorkOrderFragment()
             val args = Bundle()
             args.putSerializable(ARG_SCREEN_MODE, ScreenMode.EDIT)
-            args.putInt(ARG_WORK_ORDER_ID, workOrderId)
+            args.putString(ARG_WORK_ORDER_ID, workOrderId)
             instance.arguments = args
             return instance
         }
@@ -106,7 +106,7 @@ class WorkOrderFragment : Fragment() {
         }
         screenMode = mode
         if (screenMode == ScreenMode.EDIT) {
-            workOrderId = args.getInt(ARG_WORK_ORDER_ID)
+            workOrderId = args.getString(ARG_WORK_ORDER_ID)
         }
     }
 

@@ -5,7 +5,7 @@ import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
 
 class GetWorkOrderListUseCase(private val workOrderRepository: WorkOrderRepository) {
-    fun getWorkOrderList(): LiveData<List<WorkOrder>> {
+    suspend fun getWorkOrderList(): List<WorkOrder> {
         return workOrderRepository.getWorkOrderList()
     }
 }

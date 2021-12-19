@@ -20,5 +20,5 @@ data class WorkOrder(
     var comment: String? = null, // комментарий
     var new: Boolean = false,
     var performers: List<Employee> = emptyList(), // исполнители (табличная часть)
-    var jobs: List<JobDetail> = emptyList() // Работы (табличная часть)
+    var jobDetails: List<JobDetail> = emptyList() // Работы (табличная часть)
 )

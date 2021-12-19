@@ -6,7 +6,7 @@ data class DepartmentDTO(
     @SerializedName("id")
     val id: String,
 
-    @SerializedName("code1C")
+    @SerializedName("code_1c")
     val code1C: String,
 
     @SerializedName("name")

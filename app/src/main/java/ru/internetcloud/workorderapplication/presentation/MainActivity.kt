@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(),
         showFragmentWithBackStack(fragment)
     }
 
-    override fun onEditWorkOrder(workOrderId: Int) {
+    override fun onEditWorkOrder(workOrderId: String) {
         val fragment = WorkOrderFragment.newInstanceEditWorkOrder(workOrderId)
         showFragmentWithBackStack(fragment)
     }
