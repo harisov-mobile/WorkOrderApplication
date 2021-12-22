@@ -16,5 +16,7 @@ data class WorkOrderDbModel(
     var departmentId: String = "", // цех
     var requestReason: String = "", // причина обращения
     var masterId: String = "", // мастер (бригадир)
-    var comment: String = "" // комментарий
+    var comment: String = "", // комментарий
+    var isNew: Boolean = false,
+    var isModified: Boolean = false
 )

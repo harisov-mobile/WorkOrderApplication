@@ -11,7 +11,7 @@ import ru.internetcloud.workorderapplication.data.entity.*
 interface AppDao {
 
     @Query("SELECT * FROM work_orders")
-    fun getWorkOrderList(): List<WorkOrderDbModel> // Не использовать LiveData в репозитории
+    fun getWorkOrderList(): LiveData<List<WorkOrderDbModel>> // Не использовать LiveData в репозитории
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addWorkOrder(workOrderDbModel: WorkOrderDbModel)

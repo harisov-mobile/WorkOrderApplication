@@ -37,10 +37,11 @@ class DbWorkOrderRepositoryImpl private constructor(application: Application) : 
         workOrderDao.addWorkOrder(workOrderMapper.fromEntityToDbModel(workOrder))
     }
 
-    override suspend fun getWorkOrderList(): List<WorkOrder> {
-//        return Transformations.map(workOrderDao.getWorkOrderListLD()) {
-//            workOrderMapper.fromListDbModelToListEntity(it)
-        return workOrderMapper.fromListDbModelToListEntity(workOrderDao.getWorkOrderList())
+    override fun getWorkOrderList(): LiveData<List<WorkOrder>> {
+        return Transformations.map(workOrderDao.getWorkOrderList()) {
+            workOrderMapper.fromListDbModelToListEntity(it)
+        }
+        //return workOrderMapper.fromListDbModelToListEntity(workOrderDao.getWorkOrderList())
     }
 
     override suspend fun getWorkOrder(workOrderId: String): WorkOrder? {

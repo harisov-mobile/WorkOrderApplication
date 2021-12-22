@@ -5,7 +5,7 @@ import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 
 interface WorkOrderRepository {
 
-    suspend fun getWorkOrderList(): List<WorkOrder>
+    fun getWorkOrderList(): LiveData<List<WorkOrder>>
 
     suspend fun getWorkOrder(workOrderId: String): WorkOrder?
 

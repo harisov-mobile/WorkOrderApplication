@@ -15,10 +15,11 @@ data class WorkOrder(
     var car: Car? = null, // схт
     var repairType: RepairType? = null, // вид ремонта
     var department: Department? = null, // цех
-    var requestReason: String? = null, // причина обращения
+    var requestReason: String = "", // причина обращения
     var master: Employee? = null, // мастер (бригадир)
-    var comment: String? = null, // комментарий
-    var new: Boolean = false,
-    var performers: List<Employee> = emptyList(), // исполнители (табличная часть)
+    var comment: String = "", // комментарий
+    var isNew: Boolean = false,
+    var isModified: Boolean = false,
+    var performers: List<PerformerDetail> = emptyList(), // исполнители (табличная часть)
     var jobDetails: List<JobDetail> = emptyList() // Работы (табличная часть)
 )
