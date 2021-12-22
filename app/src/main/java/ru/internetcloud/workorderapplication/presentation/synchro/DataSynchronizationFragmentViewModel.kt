@@ -109,6 +109,11 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
 
     fun synchonizeData() {
         viewModelScope.launch {
+
+            // послать новые или измененные заказ-наряды в 1С
+            // success = uploadWorkOrders()...
+            // if (success) {
+
             val remoteRepairTypeList = getRemoteRepairTypeListUseCase.getRepairTypeList()
 
             if (remoteRepairTypeList.isEmpty()) {
@@ -126,12 +131,12 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
                     addDbRepairTypeUseCase.addRepairType(it)
                 }
 
-//                refreshPartner()
-//                refreshEmployee()
-//                refreshCarJob()
-//                refreshCar()
-//                refreshDepartment()
-//                refreshWorkingHour()
+                refreshPartner()
+                refreshEmployee()
+                refreshCarJob()
+                refreshCar()
+                refreshDepartment()
+                refreshWorkingHour()
                 refreshWorkOrder()
 
                 _currentSituation.value = ""

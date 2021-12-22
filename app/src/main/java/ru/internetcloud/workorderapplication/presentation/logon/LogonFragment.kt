@@ -182,7 +182,7 @@ class LogonFragment : Fragment() {
                 }
                 viewModel.resetCanContinue()
                 // hostActivity?.onLaunchWorkOrderList()
-                hostActivity?.onLaunchDataSynchronization() // запустить фрагмент, где будет проверка пароля, сихнронизация данных из 1С и т.д.
+                hostActivity?.onLaunchDataSynchronization() // запустить фрагмент, где будет сихнронизация данных из 1С
             }
         }
     }

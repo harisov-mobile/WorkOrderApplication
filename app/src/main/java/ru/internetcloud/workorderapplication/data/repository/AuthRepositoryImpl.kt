@@ -74,7 +74,7 @@ class AuthRepositoryImpl private constructor(private val application: Applicatio
             authResult = checkLocalAuthorization(authResult)
         }
 
-        Log.i("rustam", "isAuthorized = ${authResult.isAuthorized}")
+        Log.i("rustam", "Авторизация isAuthorized = ${authResult.isAuthorized}")
         return authResult
     }
 

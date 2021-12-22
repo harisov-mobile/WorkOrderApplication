@@ -48,7 +48,7 @@ class DataSynchronizationFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(DataSynchronizationFragmentViewModel::class.java)
 
         binding.okButton.setOnClickListener {
-            hostActivity?.onLaunchWorkOrderList() // запустить фрагмент, где будет проверка пароля, сихнронизация данных из 1С и т.д.
+            hostActivity?.onLaunchWorkOrderList() // запустить фрагмент, где будет список заказ-нарядов
         }
 
         binding.exitButton.setOnClickListener {
