@@ -22,23 +22,11 @@ interface AppDao {
     @Query("DELETE FROM work_orders")
     suspend fun deleteAllWorkOrders()
 
-    @Query("DELETE FROM work_orders_and_job_details")
-    suspend fun deleteAllWorkOrderAndJobDetailCrossRefs()
-
-    @Query("DELETE FROM work_orders_and_performer_details")
-    suspend fun deleteAllWorkOrderAndEmployeeCrossRefs()
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addJobDetailList(jobDetailDbModelList: List<JobDetailDbModel>)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addWorkOrderAndJobDetailCrossRefList(workOrderAndJobDetailCrossRefList: List<WorkOrderAndJobDetailCrossRef>)
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addPerformerDetailList(performerDetailDbModelList: List<PerformerDetailDbModel>)
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addWorkOrderAndPerformerDetailCrossRefList(workOrderAndPerformerDetailCrossRefList: List<WorkOrderAndPerformerDetailCrossRef>)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addWorkOrderList(workOrderDbModelList: List<WorkOrderDbModel>)

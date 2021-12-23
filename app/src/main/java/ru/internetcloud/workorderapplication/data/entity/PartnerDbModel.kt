@@ -9,7 +9,7 @@ data class PartnerDbModel(
     val id: String,
     val code1C: String,
     val name: String,
-    var fullName: String = "",
-    var inn: String = "",
-    var kpp: String = ""
+    val fullName: String = "",
+    val inn: String = "",
+    val kpp: String = ""
 )

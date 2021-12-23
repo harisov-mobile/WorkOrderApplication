@@ -43,13 +43,8 @@ class LoadWorkOrderRepositoryImpl private constructor(
         }
 
         if (success) {
-            loadDbWorkOrderRepository.deleteAllWorkOrderAndJobDetailCrossRefs()
             loadDbWorkOrderRepository.addJobDetailList(workOrderResponse.jobDetails)
-
-            loadDbWorkOrderRepository.deleteAllWorkOrderAndEmployeeCrossRefs()
             loadDbWorkOrderRepository.addPerformersList(workOrderResponse.performerDetails)
-
-
 
             loadDbWorkOrderRepository.deleteAllWorkOrders()
 
@@ -61,5 +56,4 @@ class LoadWorkOrderRepositoryImpl private constructor(
 
         return success
     }
-
 }

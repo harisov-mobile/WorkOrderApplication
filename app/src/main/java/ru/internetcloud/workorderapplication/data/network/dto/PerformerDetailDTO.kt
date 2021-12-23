@@ -7,5 +7,8 @@ data class PerformerDetailDTO(
     val id: String,
 
     @SerializedName("employee_id")
-    val employeeId: String
+    val employeeId: String,
+
+    @SerializedName("work_order_id")
+    val workOrderId: String
 )

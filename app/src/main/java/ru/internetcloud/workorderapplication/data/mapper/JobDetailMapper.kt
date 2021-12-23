@@ -12,7 +12,8 @@ class JobDetailMapper {
             quantity = jobDetailDTO.quantity,
             timeNorm = jobDetailDTO.timeNorm,
             workingHourId = jobDetailDTO.workingHourId,
-            sum = jobDetailDTO.sum
+            sum = jobDetailDTO.sum,
+            workOrderId = jobDetailDTO.workOrderId
         )
     }
 

@@ -20,5 +20,8 @@ data class JobDetailDTO(
     val workingHourId: String,
 
     @SerializedName("sum")
-    val sum: BigDecimal
+    val sum: BigDecimal,
+
+    @SerializedName("work_order_id")
+    val workOrderId: String
 )

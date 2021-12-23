@@ -7,10 +7,11 @@ import java.math.BigDecimal
 @Entity(tableName = "job_details")
 data class JobDetailDbModel(
     @PrimaryKey
-    var id: String = "",
+    val id: String = "",
     val carJobId: String = "",
-    var quantity: BigDecimal = BigDecimal.ZERO,
-    var timeNorm: BigDecimal = BigDecimal.ZERO,
-    var workingHourId: String = "", // нормо-часы
-    var sum: BigDecimal = BigDecimal.ZERO
+    val quantity: BigDecimal = BigDecimal.ZERO,
+    val timeNorm: BigDecimal = BigDecimal.ZERO,
+    val workingHourId: String = "", // нормо-часы
+    val sum: BigDecimal = BigDecimal.ZERO,
+    val workOrderId: String = ""
 )

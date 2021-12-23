@@ -7,7 +7,8 @@ class PerformerDetailMapper {
     fun fromDtoToDbModel(performerDetailDTO: PerformerDetailDTO): PerformerDetailDbModel {
         return PerformerDetailDbModel(
             id = performerDetailDTO.id,
-            employeeId = performerDetailDTO.employeeId
+            employeeId = performerDetailDTO.employeeId,
+            workOrderId = performerDetailDTO.workOrderId
         )
     }
 }
