@@ -40,7 +40,6 @@ class DbWorkOrderRepositoryImpl private constructor(application: Application) : 
         return Transformations.map(workOrderDao.getWorkOrderList()) {
             workOrderMapper.fromListDbModelToListEntity(it)
         }
-        //return workOrderMapper.fromListDbModelToListEntity(workOrderDao.getWorkOrderList())
     }
 
     override suspend fun getWorkOrder(workOrderId: String): WorkOrder? {

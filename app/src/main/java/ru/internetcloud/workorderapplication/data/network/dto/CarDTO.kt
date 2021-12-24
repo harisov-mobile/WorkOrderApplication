@@ -1,7 +1,6 @@
 package ru.internetcloud.workorderapplication.data.network.dto
 
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
 data class CarDTO(
     @SerializedName("id")

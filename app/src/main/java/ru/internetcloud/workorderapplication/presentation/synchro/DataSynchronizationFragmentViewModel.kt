@@ -11,14 +11,12 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.DeleteCarListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.GetCarListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.AddCarJobListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.AddCarJobUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.DeleteCarJobsUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.GetCarJobListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.AddDepartmentUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.DeleteDepartmentsUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.GetDepartmentListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.AddEmployeeListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.AddEmployeeUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.DeleteEmployeesUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.GetEmployeeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.AddPartnerListUseCase
@@ -196,8 +194,8 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
             _currentSituation.value = "Обработка справочника СХТ"
             addDbCarListUseCase.addCarList(remoteCarList)
         }
-    }  
-    
+    }
+
     suspend fun refreshWorkingHour() {
         _currentSituation.value = "Получение справочника Нормочасы из 1С"
         val remoteWorkingHourList = getRemoteWorkingHourListUseCase.getWorkingHourList()

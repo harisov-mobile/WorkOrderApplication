@@ -1,7 +1,6 @@
 package ru.internetcloud.workorderapplication.data.network.dto
 
 import com.google.gson.annotations.SerializedName
-import java.math.BigDecimal
 
 data class WorkOrderDTO(
     @SerializedName("id")
@@ -25,13 +24,13 @@ data class WorkOrderDTO(
     @SerializedName("department_id")
     val departmentId: String,
 
-   @SerializedName("request_reason")
+    @SerializedName("request_reason")
     val requestReason: String,
 
-   @SerializedName("master_id")
+    @SerializedName("master_id")
     val masterId: String,
 
-   @SerializedName("comment")
+    @SerializedName("comment")
     val comment: String
 
     // а сумма документа???

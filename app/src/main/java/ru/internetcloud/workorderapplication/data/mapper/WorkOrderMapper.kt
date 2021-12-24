@@ -5,7 +5,6 @@ import ru.internetcloud.workorderapplication.data.entity.WorkOrderWithDetails
 import ru.internetcloud.workorderapplication.data.network.dto.WorkOrderDTO
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import java.util.*
 
 class WorkOrderMapper {
 
@@ -30,14 +29,14 @@ class WorkOrderMapper {
             id = workOrderWithDetails.workOrder.id,
             number = workOrderWithDetails.workOrder.number,
             date = workOrderWithDetails.workOrder.date,
-            partner = partnerMapper.fromDbModelToEntity(workOrderWithDetails.partner),
-            car = carMapper.fromDbModelToEntity(workOrderWithDetails.car),
-            repairType = repairTypeMapper.fromDbModelToEntity(workOrderWithDetails.repairType),
-            department = departmentMapper.fromDbModelToEntity(workOrderWithDetails.department),
+            partner = partnerMapper.fromDbModelToEntityWithNull(workOrderWithDetails.partner),
+            car = carMapper.fromDbModelToEntityWithNull(workOrderWithDetails.car),
+            repairType = repairTypeMapper.fromDbModelToEntityWithNull(workOrderWithDetails.repairType),
+            department = departmentMapper.fromDbModelToEntityWithNull(workOrderWithDetails.department),
             requestReason = workOrderWithDetails.workOrder.requestReason,
-            master = employeeMapper.fromDbModelToEntity(workOrderWithDetails.master),
+            master = employeeMapper.fromDbModelToEntityWithNull(workOrderWithDetails.master),
             comment = workOrderWithDetails.workOrder.comment,
-            //performers = performerDetailMapper.fromDtoToDbModel(workOrderWithDetails.performers),
+            performers = performerDetailMapper.fromListDbToListEntity(workOrderWithDetails.performers),
             jobDetails = jobDetailMapper.fromListDbToListEntity(workOrderWithDetails.jobDetails)
         )
     }
@@ -54,8 +53,8 @@ class WorkOrderMapper {
         return WorkOrderDbModel(
             id = workOrderDTO.id,
             number = workOrderDTO.number,
-            //date = DateConverter.fromStringToDate(workOrderDTO.dateString),
-            date = Date(),
+            date = DateConverter.fromStringToDate(workOrderDTO.dateString),
+            // date = Date(),
             partnerId = workOrderDTO.partnerId,
             carId = workOrderDTO.carId,
             repairTypeId = workOrderDTO.repairTypeId,

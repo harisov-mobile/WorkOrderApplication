@@ -3,7 +3,6 @@ package ru.internetcloud.workorderapplication.presentation.workorder.list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.ItemWorkOrderListBinding
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
@@ -34,7 +33,7 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
         // binding.commentTextView.text = workOrder.comment
         binding.requestReasonTextView.text = workOrder.requestReason
 
-        binding.commentTextView.text = workOrder.jobDetails.toString()
+        binding.commentTextView.text = workOrder.performers.toString()
 
         binding.root.setOnClickListener {
             onWorkOrderClickListener?.invoke(workOrder)

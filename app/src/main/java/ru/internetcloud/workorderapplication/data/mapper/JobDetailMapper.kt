@@ -2,7 +2,6 @@ package ru.internetcloud.workorderapplication.data.mapper
 
 import ru.internetcloud.workorderapplication.data.entity.JobDetailDbModel
 import ru.internetcloud.workorderapplication.data.entity.JobDetailWithRequisities
-import ru.internetcloud.workorderapplication.data.entity.WorkOrderWithDetails
 import ru.internetcloud.workorderapplication.data.network.dto.JobDetailDTO
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 
@@ -56,5 +55,4 @@ class JobDetailMapper {
     fun fromListDbToListEntity(list: List<JobDetailWithRequisities>) = list.map {
         fromDbToEntity(it)
     }
-
 }

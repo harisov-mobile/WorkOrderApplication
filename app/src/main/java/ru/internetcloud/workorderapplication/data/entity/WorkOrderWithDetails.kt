@@ -41,13 +41,7 @@ data class WorkOrderWithDetails(
         entityColumn = "workOrderId",
         entity = PerformerDetailDbModel::class
     )
-    val performers: List<PerformerDetailDbModel>,
-//    @Relation(
-//        parentColumn = "id",
-//        entityColumn = "workOrderId",
-//        entity = JobDetailDbModel::class
-//    )
-//    val jobDetails: List<JobDetailDbModel>
+    val performers: List<PerformerDetailWithRequisities>,
     @Relation(
         parentColumn = "id",
         entityColumn = "workOrderId",

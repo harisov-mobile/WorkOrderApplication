@@ -17,7 +17,7 @@ class PartnerMapper {
         )
     }
 
-    fun fromDbModelToEntity(partnerDbModel: PartnerDbModel?): Partner? {
+    fun fromDbModelToEntityWithNull(partnerDbModel: PartnerDbModel?): Partner? {
         var result: Partner? = null
         if (partnerDbModel != null) {
             result = Partner(
@@ -32,7 +32,7 @@ class PartnerMapper {
         return result
     }
 
-    fun fromDbModelToEntityWithoutNull(partnerDbModel: PartnerDbModel): Partner {
+    fun fromDbModelToEntity(partnerDbModel: PartnerDbModel): Partner {
             return Partner(
                 id = partnerDbModel.id,
                 code1C = partnerDbModel.code1C,
@@ -59,7 +59,7 @@ class PartnerMapper {
     }
 
     fun fromListDbModelToListEntity(list: List<PartnerDbModel>) = list.map {
-        fromDbModelToEntityWithoutNull(it)
+        fromDbModelToEntity(it)
     }
 
     fun fromListEntityToListDbModel(list: List<Partner>) = list.map {

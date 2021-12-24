@@ -18,7 +18,7 @@ class EmployeeMapper {
         fromDtoToEntity(it)
     }
 
-    fun fromDbModelToEntity(employeeDbModel: EmployeeDbModel?): Employee? {
+    fun fromDbModelToEntityWithNull(employeeDbModel: EmployeeDbModel?): Employee? {
         var result: Employee? = null
         if (employeeDbModel != null) {
             result = Employee(
@@ -30,7 +30,7 @@ class EmployeeMapper {
         return result
     }
 
-    fun fromDbModelToEntityWithoutNull(employeeDbModel: EmployeeDbModel): Employee {
+    fun fromDbModelToEntity(employeeDbModel: EmployeeDbModel): Employee {
             return Employee(
                 id = employeeDbModel.id,
                 code1C = employeeDbModel.code1C,
@@ -39,7 +39,7 @@ class EmployeeMapper {
     }
 
     fun fromListDbModelToListEntity(list: List<EmployeeDbModel>) = list.map {
-        fromDbModelToEntityWithoutNull(it)
+        fromDbModelToEntity(it)
     }
 
     fun fromListEntityToListDbModel(list: List<Employee>) = list.map {

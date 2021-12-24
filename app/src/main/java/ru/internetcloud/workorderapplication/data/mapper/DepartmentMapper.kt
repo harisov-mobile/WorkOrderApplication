@@ -18,7 +18,7 @@ class DepartmentMapper {
         fromDtoToEntity(it)
     }
 
-    fun fromDbModelToEntity(departmentDbModel: DepartmentDbModel?): Department? {
+    fun fromDbModelToEntityWithNull(departmentDbModel: DepartmentDbModel?): Department? {
         var result: Department? = null
         if (departmentDbModel != null) {
             result = Department(
@@ -30,7 +30,7 @@ class DepartmentMapper {
         return result
     }
 
-    fun fromDbModelToEntityWithoutNull(departmentDbModel: DepartmentDbModel): Department {
+    fun fromDbModelToEntity(departmentDbModel: DepartmentDbModel): Department {
             return Department(
                 id = departmentDbModel.id,
                 code1C = departmentDbModel.code1C,
@@ -39,7 +39,7 @@ class DepartmentMapper {
     }
 
     fun fromListDbModelToListEntity(list: List<DepartmentDbModel>) = list.map {
-        fromDbModelToEntityWithoutNull(it)
+        fromDbModelToEntity(it)
     }
 
     fun fromEntityToDbModel(department: Department): DepartmentDbModel {
