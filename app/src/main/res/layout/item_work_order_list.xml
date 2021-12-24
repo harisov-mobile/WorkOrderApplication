@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
 
                 app:layout_constraintStart_toEndOf="@id/start_guideline"
                 app:layout_constraintTop_toTopOf="parent"
@@ -44,22 +44,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
 
                 app:layout_constraintStart_toEndOf="@id/start_guideline"
                 app:layout_constraintTop_toBottomOf="@id/date_text_view"
                 tools:text="number" />
 
             <TextView
-                android:id="@+id/comment2_text_view"
-                android:layout_width="wrap_content"
+                android:id="@+id/car_text_view"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
 
+                app:layout_constraintEnd_toStartOf="@+id/second_guideline"
                 app:layout_constraintStart_toStartOf="@+id/start_guideline"
                 app:layout_constraintTop_toBottomOf="@id/number_text_view"
-                tools:text="comment2" />
+                tools:text="car" />
 
 
             <androidx.constraintlayout.widget.Guideline
@@ -74,8 +76,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
-                android:layout_marginTop="8dp"
-
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/second_guideline"
@@ -84,14 +85,29 @@
 
             <TextView
                 android:id="@+id/comment_text_view"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
 
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/second_guideline"
                 app:layout_constraintTop_toBottomOf="@id/department_text_view"
                 tools:text="comment" />
+
+            <TextView
+                android:id="@+id/request_reason_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/second_guideline"
+                app:layout_constraintTop_toBottomOf="@id/comment_text_view"
+                tools:text="request_reason" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

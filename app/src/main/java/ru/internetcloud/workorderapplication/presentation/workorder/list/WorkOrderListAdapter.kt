@@ -28,10 +28,12 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
         // binding.tvName.text = "${workOrder.number} ${workOrder.date}"
         binding.numberTextView.text = workOrder.number
         binding.dateTextView.text = DateConverter.getDateString(workOrder.date)
+        binding.carTextView.text = workOrder.car?.name
 
         binding.departmentTextView.text = workOrder.department?.name
         binding.commentTextView.text = workOrder.comment
-        binding.comment2TextView.text = workOrder.comment
+        binding.requestReasonTextView.text = workOrder.requestReason
+
 
         binding.root.setOnClickListener {
             onWorkOrderClickListener?.invoke(workOrder)
