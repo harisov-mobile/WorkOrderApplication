@@ -15,6 +15,7 @@ class WorkOrderMapper {
     private val departmentMapper = DepartmentMapper()
     private val employeeMapper = EmployeeMapper()
     private val performerDetailMapper = PerformerDetailMapper()
+    private val jobDetailMapper = JobDetailMapper()
 
     fun fromEntityToDbModel(workOrder: WorkOrder): WorkOrderDbModel {
         return WorkOrderDbModel(
@@ -37,6 +38,7 @@ class WorkOrderMapper {
             master = employeeMapper.fromDbModelToEntity(workOrderWithDetails.master),
             comment = workOrderWithDetails.workOrder.comment,
             //performers = performerDetailMapper.fromDtoToDbModel(workOrderWithDetails.performers),
+            jobDetails = jobDetailMapper.fromListDbToListEntity(workOrderWithDetails.jobDetails)
         )
     }
 

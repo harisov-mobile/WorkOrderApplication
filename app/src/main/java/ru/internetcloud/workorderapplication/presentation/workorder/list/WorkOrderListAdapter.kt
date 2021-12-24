@@ -31,9 +31,10 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
         binding.carTextView.text = workOrder.car?.name
 
         binding.departmentTextView.text = workOrder.department?.name
-        binding.commentTextView.text = workOrder.comment
+        // binding.commentTextView.text = workOrder.comment
         binding.requestReasonTextView.text = workOrder.requestReason
 
+        binding.commentTextView.text = workOrder.jobDetails.toString()
 
         binding.root.setOnClickListener {
             onWorkOrderClickListener?.invoke(workOrder)

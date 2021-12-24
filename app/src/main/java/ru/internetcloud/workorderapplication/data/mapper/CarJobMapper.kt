@@ -22,6 +22,18 @@ class CarJobMapper {
         )
     }
 
+    fun fromDbModelToEntityWithNull(carJobDbModel: CarJobDbModel?): CarJob? {
+        var result: CarJob? = null
+        carJobDbModel?.let {
+            result = CarJob(
+                id = carJobDbModel.id,
+                code1C = carJobDbModel.code1C,
+                name = carJobDbModel.name
+            )
+        }
+        return result
+    }
+
     fun fromEntityToDbModel(carJob: CarJob): CarJobDbModel {
         return CarJobDbModel(
             id = carJob.id,

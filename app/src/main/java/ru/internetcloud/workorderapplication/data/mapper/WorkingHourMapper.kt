@@ -24,6 +24,19 @@ class WorkingHourMapper {
         )
     }
 
+    fun fromDbModelToEntityWithNull(workingHourDbModel: WorkingHourDbModel?): WorkingHour? {
+        var result: WorkingHour? = null
+        workingHourDbModel?.let {
+            result = WorkingHour(
+                id = workingHourDbModel.id,
+                code1C = workingHourDbModel.code1C,
+                name = workingHourDbModel.name,
+                price = workingHourDbModel.price
+            )
+        }
+        return result
+    }
+
     fun fromEntityToDbModel(workingHour: WorkingHour): WorkingHourDbModel {
         return WorkingHourDbModel(
             id = workingHour.id,
