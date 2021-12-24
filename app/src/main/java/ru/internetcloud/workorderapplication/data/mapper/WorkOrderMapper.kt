@@ -1,12 +1,20 @@
 package ru.internetcloud.workorderapplication.data.mapper
 
 import ru.internetcloud.workorderapplication.data.entity.WorkOrderDbModel
+import ru.internetcloud.workorderapplication.data.entity.WorkOrderWithDetails
 import ru.internetcloud.workorderapplication.data.network.dto.WorkOrderDTO
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import java.util.*
 
 class WorkOrderMapper {
+
+    private val partnerMapper = PartnerMapper()
+    private val carMapper = CarMapper()
+    private val repairTypeMapper = RepairTypeMapper()
+    private val departmentMapper = DepartmentMapper()
+    private val employeeMapper = EmployeeMapper()
+    private val performerDetailMapper = PerformerDetailMapper()
 
     fun fromEntityToDbModel(workOrder: WorkOrder): WorkOrderDbModel {
         return WorkOrderDbModel(
@@ -16,15 +24,23 @@ class WorkOrderMapper {
         )
     }
 
-    fun fromDbModelToEntity(workOrderDbModel: WorkOrderDbModel): WorkOrder {
+    fun fromDbModelToEntity(workOrderWithDetails: WorkOrderWithDetails): WorkOrder {
         return WorkOrder(
-            id = workOrderDbModel.id,
-            number = workOrderDbModel.number,
-            date = workOrderDbModel.date
+            id = workOrderWithDetails.workOrder.id,
+            number = workOrderWithDetails.workOrder.number,
+            date = workOrderWithDetails.workOrder.date,
+            partner = partnerMapper.fromDbModelToEntity(workOrderWithDetails.partner),
+            car = carMapper.fromDbModelToEntity(workOrderWithDetails.car),
+            repairType = repairTypeMapper.fromDbModelToEntity(workOrderWithDetails.repairType),
+            department = departmentMapper.fromDbModelToEntity(workOrderWithDetails.department),
+            requestReason = workOrderWithDetails.workOrder.requestReason,
+            master = employeeMapper.fromDbModelToEntity(workOrderWithDetails.master),
+            comment = workOrderWithDetails.workOrder.comment,
+            //performers = performerDetailMapper.fromDtoToDbModel(workOrderWithDetails.performers),
         )
     }
 
-    fun fromListDbModelToListEntity(list: List<WorkOrderDbModel>) = list.map {
+    fun fromListDbModelToListEntity(list: List<WorkOrderWithDetails>) = list.map {
         fromDbModelToEntity(it)
     }
 

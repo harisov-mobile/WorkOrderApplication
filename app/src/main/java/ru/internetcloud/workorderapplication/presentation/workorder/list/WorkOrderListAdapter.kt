@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.ItemWorkOrderListBinding
+import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 
 class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(WorkOrderDiffCallback()) {
@@ -25,9 +26,12 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
         val workOrder = getItem(position)
         val binding = holder.binding
         // binding.tvName.text = "${workOrder.number} ${workOrder.date}"
-        binding.tvName.text = String.format(binding.tvName.context.getString(R.string.work_order_presentation),
-            workOrder.number,
-            workOrder.date.toString())
+        binding.numberTextView.text = workOrder.number
+        binding.dateTextView.text = DateConverter.getDateString(workOrder.date)
+
+        binding.departmentTextView.text = workOrder.department?.name
+        binding.commentTextView.text = workOrder.comment
+        binding.comment2TextView.text = workOrder.comment
 
         binding.root.setOnClickListener {
             onWorkOrderClickListener?.invoke(workOrder)

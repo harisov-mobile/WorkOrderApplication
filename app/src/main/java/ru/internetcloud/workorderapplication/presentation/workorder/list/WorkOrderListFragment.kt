@@ -35,6 +35,12 @@ class WorkOrderListFragment : Fragment() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        hostActivity = context as Callbacks
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.fragment_work_order_list, container, false)
@@ -50,32 +56,6 @@ class WorkOrderListFragment : Fragment() {
         return view
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        hostActivity = context as Callbacks
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        hostActivity = null
-    }
-
-    private fun setupWorkOrderRecyclerView(view: View) {
-        workOrderRecyclerView = view.findViewById<RecyclerView>(R.id.work_order_recycler_view)
-        workOrderListAdapter = WorkOrderListAdapter()
-        workOrderRecyclerView.adapter = workOrderListAdapter
-        workOrderListAdapter.onWorkOrderClickListener = {
-            Toast.makeText(context, "клик ${it.number}", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun setupClickListener() {
-//        workOrderListAdapter.onWorkOrderClickListener = { workOrder ->
-//            hostActivity?.onEditWorkOrder(workOrder.id)
-//        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -87,4 +67,25 @@ class WorkOrderListFragment : Fragment() {
             }
         )
     }
+
+    override fun onDetach() {
+        super.onDetach()
+        hostActivity = null
+    }
+
+    private fun setupWorkOrderRecyclerView(view: View) {
+        workOrderRecyclerView = view.findViewById<RecyclerView>(R.id.work_order_recycler_view)
+        workOrderListAdapter = WorkOrderListAdapter()
+        workOrderRecyclerView.adapter = workOrderListAdapter
+//        workOrderListAdapter.onWorkOrderClickListener = {
+//            Toast.makeText(context, "клик ${it.number}", Toast.LENGTH_SHORT).show()
+//        }
+    }
+
+    private fun setupClickListener() {
+        workOrderListAdapter.onWorkOrderClickListener = { workOrder ->
+            hostActivity?.onEditWorkOrder(workOrder.id)
+        }
+    }
+
 }

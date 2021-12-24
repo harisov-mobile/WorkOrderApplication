@@ -18,16 +18,28 @@ class DepartmentMapper {
         fromDtoToEntity(it)
     }
 
-    fun fromDbModelToEntity(departmentDbModel: DepartmentDbModel): Department {
-        return Department(
-            id = departmentDbModel.id,
-            code1C = departmentDbModel.code1C,
-            name = departmentDbModel.name
-        )
+    fun fromDbModelToEntity(departmentDbModel: DepartmentDbModel?): Department? {
+        var result: Department? = null
+        if (departmentDbModel != null) {
+            result = Department(
+                id = departmentDbModel.id,
+                code1C = departmentDbModel.code1C,
+                name = departmentDbModel.name
+            )
+        }
+        return result
+    }
+
+    fun fromDbModelToEntityWithoutNull(departmentDbModel: DepartmentDbModel): Department {
+            return Department(
+                id = departmentDbModel.id,
+                code1C = departmentDbModel.code1C,
+                name = departmentDbModel.name
+            )
     }
 
     fun fromListDbModelToListEntity(list: List<DepartmentDbModel>) = list.map {
-        fromDbModelToEntity(it)
+        fromDbModelToEntityWithoutNull(it)
     }
 
     fun fromEntityToDbModel(department: Department): DepartmentDbModel {

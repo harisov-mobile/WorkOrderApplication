@@ -1,23 +1,21 @@
 package ru.internetcloud.workorderapplication.data.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import ru.internetcloud.workorderapplication.data.entity.*
 
 @Dao
 interface AppDao {
 
+    @Transaction
     @Query("SELECT * FROM work_orders")
-    fun getWorkOrderList(): LiveData<List<WorkOrderDbModel>> // Не использовать LiveData в репозитории
+    fun getWorkOrderList(): LiveData<List<WorkOrderWithDetails>> // Не использовать LiveData в репозитории
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addWorkOrder(workOrderDbModel: WorkOrderDbModel)
 
     @Query("SELECT * FROM work_orders WHERE id=:workOrderId LIMIT 1")
-    suspend fun getWorkOrder(workOrderId: String): WorkOrderDbModel // Андрей Сумин почему-то не Лив дату возвращает...
+    suspend fun getWorkOrder(workOrderId: String): WorkOrderWithDetails // Андрей Сумин почему-то не Лив дату возвращает...
 
     @Query("DELETE FROM work_orders")
     suspend fun deleteAllWorkOrders()

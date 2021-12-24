@@ -8,7 +8,6 @@ import ru.internetcloud.workorderapplication.data.mapper.WorkOrderMapper
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
 
-// это класс-синглтон, единственный экземпляр этого репозитория создается при запуске приложения
 class DbWorkOrderRepositoryImpl private constructor(application: Application) : WorkOrderRepository {
 
     private val workOrderDao = AppDatabase.getInstance(application).appDao()
@@ -47,9 +46,9 @@ class DbWorkOrderRepositoryImpl private constructor(application: Application) : 
     override suspend fun getWorkOrder(workOrderId: String): WorkOrder? {
         var workOrder: WorkOrder? = null
 
-        val workOrderDbModel = workOrderDao.getWorkOrder(workOrderId)
+        val workOrderWithDetails = workOrderDao.getWorkOrder(workOrderId)
 
-        workOrderDbModel?.let {
+        workOrderWithDetails?.let {
             workOrder = workOrderMapper.fromDbModelToEntity(it)
         }
 

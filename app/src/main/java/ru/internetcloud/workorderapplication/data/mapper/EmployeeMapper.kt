@@ -18,16 +18,28 @@ class EmployeeMapper {
         fromDtoToEntity(it)
     }
 
-    fun fromDbModelToEntity(employeeDbModel: EmployeeDbModel): Employee {
-        return Employee(
-            id = employeeDbModel.id,
-            code1C = employeeDbModel.code1C,
-            name = employeeDbModel.name
-        )
+    fun fromDbModelToEntity(employeeDbModel: EmployeeDbModel?): Employee? {
+        var result: Employee? = null
+        if (employeeDbModel != null) {
+            result = Employee(
+                id = employeeDbModel.id,
+                code1C = employeeDbModel.code1C,
+                name = employeeDbModel.name
+            )
+        }
+        return result
+    }
+
+    fun fromDbModelToEntityWithoutNull(employeeDbModel: EmployeeDbModel): Employee {
+            return Employee(
+                id = employeeDbModel.id,
+                code1C = employeeDbModel.code1C,
+                name = employeeDbModel.name
+            )
     }
 
     fun fromListDbModelToListEntity(list: List<EmployeeDbModel>) = list.map {
-        fromDbModelToEntity(it)
+        fromDbModelToEntityWithoutNull(it)
     }
 
     fun fromListEntityToListDbModel(list: List<Employee>) = list.map {

@@ -3,7 +3,7 @@ package ru.internetcloud.workorderapplication.data.entity
 import androidx.room.Embedded
 import androidx.room.Relation
 
-data class WordOrderWithDetails(
+data class WorkOrderWithDetails(
     @Embedded
     val workOrder: WorkOrderDbModel,
     @Relation(
@@ -11,31 +11,31 @@ data class WordOrderWithDetails(
         entityColumn = "id",
         entity = PartnerDbModel::class
     )
-    val partner: PartnerDbModel,
+    val partner: PartnerDbModel?,
     @Relation(
         parentColumn = "carId",
         entityColumn = "id",
         entity = CarDbModel::class
     )
-    val car: CarDbModel,
+    val car: CarDbModel?,
     @Relation(
         parentColumn = "repairTypeId",
         entityColumn = "id",
         entity = RepairTypeDbModel::class
     )
-    val repairType: RepairTypeDbModel,
+    val repairType: RepairTypeDbModel?,
     @Relation(
         parentColumn = "departmentId",
         entityColumn = "id",
         entity = DepartmentDbModel::class
     )
-    val department: DepartmentDbModel,
+    val department: DepartmentDbModel?,
     @Relation(
         parentColumn = "masterId",
         entityColumn = "id",
         entity = EmployeeDbModel::class
     )
-    val master: EmployeeDbModel,
+    val master: EmployeeDbModel?,
     @Relation(
         parentColumn = "id",
         entityColumn = "workOrderId",

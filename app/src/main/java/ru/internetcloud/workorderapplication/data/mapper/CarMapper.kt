@@ -22,7 +22,20 @@ class CarMapper {
         )
     }
 
-    fun fromDbModelToEntity(carDbModel: CarDbModel): Car {
+    fun fromDbModelToEntity(carDbModel: CarDbModel?): Car? {
+        var result: Car? = null
+        if (carDbModel != null) {
+
+            result = Car(
+                id = carDbModel.id,
+                code1C = carDbModel.code1C,
+                name = carDbModel.name
+            )
+        }
+        return result
+    }
+
+    fun fromDbModelToEntityWithoutNull(carDbModel: CarDbModel): Car {
         return Car(
             id = carDbModel.id,
             code1C = carDbModel.code1C,
@@ -50,7 +63,7 @@ class CarMapper {
     }
 
     fun fromListDbModelToListEntity(list: List<CarDbModel>) = list.map {
-        fromDbModelToEntity(it)
+        fromDbModelToEntityWithoutNull(it)
     }
 
     fun fromListEntityToListDbModel(list: List<Car>) = list.map {

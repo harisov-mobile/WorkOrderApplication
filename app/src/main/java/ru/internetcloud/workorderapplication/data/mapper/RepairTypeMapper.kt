@@ -17,15 +17,26 @@ class RepairTypeMapper {
         fromDtoToEntity(it)
     }
 
-    fun fromDbModelToEntity(repairTypeDbModel: RepairTypeDbModel): RepairType {
-        return RepairType(
-            id = repairTypeDbModel.id,
-            name = repairTypeDbModel.name
-        )
+    fun fromDbModelToEntity(repairTypeDbModel: RepairTypeDbModel?): RepairType? {
+        var result: RepairType? = null
+        if (repairTypeDbModel != null) {
+            result = RepairType(
+                id = repairTypeDbModel.id,
+                name = repairTypeDbModel.name
+            )
+        }
+        return result
+    }
+
+    fun fromDbModelToEntityWithoutNull(repairTypeDbModel: RepairTypeDbModel): RepairType {
+            return RepairType(
+                id = repairTypeDbModel.id,
+                name = repairTypeDbModel.name
+            )
     }
 
     fun fromListDbModelToListEntity(list: List<RepairTypeDbModel>) = list.map {
-        fromDbModelToEntity(it)
+        fromDbModelToEntityWithoutNull(it)
     }
 
     fun fromEntityToDbModel(repairType: RepairType): RepairTypeDbModel {
