@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
+import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 
 class WorkOrderFragment : Fragment() {
@@ -97,12 +98,12 @@ class WorkOrderFragment : Fragment() {
 
         val args = requireArguments()
         if (!args.containsKey(ARG_SCREEN_MODE)) {
-            throw RuntimeException("Param mode is absent")
+            throw RuntimeException("Parameter mode is absent")
         }
 
         val mode = args.getSerializable(ARG_SCREEN_MODE) as ScreenMode
         if (mode != ScreenMode.EDIT && mode != ScreenMode.ADD) {
-            throw IllegalStateException("Uknown screen mode $mode")
+            throw RuntimeException("Uknown screen mode $mode")
         }
         screenMode = mode
         if (screenMode == ScreenMode.EDIT) {
@@ -118,7 +119,7 @@ class WorkOrderFragment : Fragment() {
         viewModel.workOrder.observe(viewLifecycleOwner) {
             order ->
             binding.numberEditText.setText(order.number)
-            binding.dateEditText.setText(order.date.toString())
+            binding.dateEditText.setText(DateConverter.getDateString(order.date))
         }
 
         binding.saveButton.setOnClickListener {

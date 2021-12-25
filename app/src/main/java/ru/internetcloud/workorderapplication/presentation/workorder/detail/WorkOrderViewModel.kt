@@ -18,13 +18,11 @@ class WorkOrderViewModel : ViewModel() {
 
     // private val repository = LocalWorkOrderRepositoryImpl // требуется инъекция зависимостей!!!
     private val databaseRepository = DbWorkOrderRepositoryImpl.get()
-    private val remoteRepository = RemoteRepairTypeRepositoryImpl.get()
 
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
     private val getWorkOrderUseCase = GetWorkOrderUseCase(databaseRepository)
     private val addWorkOrderUseCase = AddWorkOrderUseCase(databaseRepository)
     private val updateWorkOrderUseCase = UpdateWorkOrderUseCase(databaseRepository)
-    private val getRepairTypeListUseCase = GetRepairTypeListUseCase(remoteRepository)
 
     // LiveData-объекты, с помощью которых будет отображение данных в элементах управления:
     private val _workOrder = MutableLiveData<WorkOrder>()
@@ -36,8 +34,8 @@ class WorkOrderViewModel : ViewModel() {
         get() = _repairTypes
 
     // можно ли завершить (или закрыть)
-    private val _canFinish = MutableLiveData<Unit>()
-    val canFinish: LiveData<Unit>
+    private val _canFinish = MutableLiveData<Boolean>()
+    val canFinish: LiveData<Boolean>
         get() = _canFinish
 
     // для обработки ошибок:
@@ -62,7 +60,7 @@ class WorkOrderViewModel : ViewModel() {
             viewModelScope.launch {
                 val order = WorkOrder(number = number)
                 addWorkOrderUseCase.addWorkOrder(order)
-                _canFinish.value = Unit
+                _canFinish.value = true
             }
         }
     }
@@ -75,7 +73,7 @@ class WorkOrderViewModel : ViewModel() {
                 viewModelScope.launch {
                     it.number = number
                     updateWorkOrderUseCase.updateWorkOrder(it)
-                    _canFinish.value = Unit
+                    _canFinish.value = true
                 }
             }
         }
