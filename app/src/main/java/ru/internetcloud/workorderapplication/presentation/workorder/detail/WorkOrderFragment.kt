@@ -120,6 +120,7 @@ class WorkOrderFragment : Fragment() {
             order ->
             binding.numberEditText.setText(order.number)
             binding.dateEditText.setText(DateConverter.getDateString(order.date))
+            // сюда добавить
         }
 
         binding.saveButton.setOnClickListener {
