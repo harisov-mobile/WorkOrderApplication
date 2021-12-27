@@ -71,7 +71,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/mileage_text_input_layout"
+                    android:id="@+id/request_reason_text_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -79,10 +79,26 @@
                     android:layout_marginBottom="4dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/mileage_edit_text"
+                        android:id="@+id/request_reason_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/mileage_hint" />
+                        android:hint="@string/request_reason_hint" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/comment_text_input_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="4dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/comment_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/comment_hint" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

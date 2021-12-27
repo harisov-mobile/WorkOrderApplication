@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.data.repository.*
+import ru.internetcloud.workorderapplication.domain.common.FunctionResult
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.AddCarListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.DeleteCarListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.GetCarListUseCase
@@ -31,6 +32,7 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.wor
 
 class DataSynchronizationFragmentViewModel : ViewModel() {
 
+    // Репозитории
     private val remoteRepairTypeRepository = RemoteRepairTypeRepositoryImpl.get() // требуется инъекция зависимостей!!!
     private val dbRepairTypeRepository = DbRepairTypeRepositoryImpl.get() // требуется инъекция зависимостей!!!
 
@@ -89,6 +91,7 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
 //    private val addDbWorkOrderListUseCase = AddWorkOrderListUseCase(dbWorkOrderRepository)
 //    private val deleteWorkOrdersUseCase = DeleteWorkOrderListUseCase(dbWorkOrderRepository)
 
+    // ЛивДаты
     private val _canContinue = MutableLiveData<Boolean>()
     val canContinue: LiveData<Boolean>
         get() = _canContinue
@@ -105,12 +108,18 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     val currentSituation: LiveData<String>
         get() = _currentSituation
 
+    private val _uploadResult = MutableLiveData<FunctionResult>()
+    val uploadResult: LiveData<FunctionResult>
+        get() = _uploadResult
+
     fun synchonizeData() {
         viewModelScope.launch {
 
             // послать новые или измененные заказ-наряды в 1С
-            // success = uploadWorkOrders()...
-            // if (success) {
+            val result = uploadWorkOrders()
+            result?.let {
+                _uploadResult.value = it
+            }
 
             val remoteRepairTypeList = getRemoteRepairTypeListUseCase.getRepairTypeList()
 
@@ -210,5 +219,13 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
         _currentSituation.value = "Получение документов Заказ-наряд из 1С"
         val success = loadWorkOrderRepositoryImpl.loadWorkOrderList()
         Log.i("rustam", "success = " + success.toString())
+    }
+
+    suspend fun uploadWorkOrders(): FunctionResult {
+
+        _currentSituation.value = "Отправка документов Заказ-наряд в 1С"
+        val functionResult = loadWorkOrderRepositoryImpl.uploadWorkOrderList()
+
+        return functionResult
     }
 }

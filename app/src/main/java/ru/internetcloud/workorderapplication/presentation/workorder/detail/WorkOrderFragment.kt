@@ -73,7 +73,6 @@ class WorkOrderFragment : Fragment() {
         // подписка на ошибки
         viewModel.errorInputNumber.observe(viewLifecycleOwner) {
             val message = if (it) {
-                // Toast.makeText(context, getString(R.string.error_input_name), Toast.LENGTH_SHORT).show()
                 getString(R.string.error_input_number)
             } else {
                 null
@@ -121,17 +120,31 @@ class WorkOrderFragment : Fragment() {
             binding.numberEditText.setText(order.number)
             binding.dateEditText.setText(DateConverter.getDateString(order.date))
             // сюда добавить
+            binding.requestReasonEditText.setText(order.requestReason)
+            binding.commentEditText.setText(order.comment)
+
         }
 
         binding.saveButton.setOnClickListener {
-            viewModel.updateWorkOrder(binding.numberEditText.text?.toString())
+            setupFieldsToWorkOrder()
+            viewModel.updateWorkOrder()
         }
     }
 
     private fun launchAddMode() {
+        viewModel.createWorkOrder()
+
         binding.saveButton.setOnClickListener {
-            viewModel.addWorkOrder(binding.numberEditText.text?.toString())
+            setupFieldsToWorkOrder()
+            viewModel.addWorkOrder()
         }
+    }
+
+    private fun setupFieldsToWorkOrder() {
+        viewModel.workOrder.value?.number = parseText(binding.numberEditText.text?.toString())
+        viewModel.workOrder.value?.requestReason = parseText(binding.requestReasonEditText.text?.toString())
+        viewModel.workOrder.value?.comment = parseText(binding.commentEditText.text?.toString())
+        viewModel.workOrder.value?.isModified
     }
 
     override fun onStart() {
@@ -157,5 +170,9 @@ class WorkOrderFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun parseText(inputText: String?): String {
+        return inputText?.trim() ?: ""
     }
 }

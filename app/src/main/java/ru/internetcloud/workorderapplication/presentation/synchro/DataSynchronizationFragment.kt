@@ -90,6 +90,16 @@ class DataSynchronizationFragment : Fragment() {
             }
         }
 
+        viewModel.uploadResult.observe(viewLifecycleOwner) { result ->
+            context?.let { currentContext ->
+                if (result.isSuccess) {
+                    binding.uploadResultTextView.text = getString(R.string.success_upload_work_orders)
+                } else {
+                    binding.uploadResultTextView.text = getString(R.string.fail_upload_work_orders) + " " + result.errorMessage
+                }
+            }
+        }
+
         // подписка на завершение экрана:
         viewModel.canContinue.observe(viewLifecycleOwner) {
             if (it) {

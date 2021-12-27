@@ -6,13 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.data.repository.DbWorkOrderRepositoryImpl
-import ru.internetcloud.workorderapplication.data.repository.RemoteRepairTypeRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetRepairTypeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.AddWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.UpdateWorkOrderUseCase
+import java.util.*
 
 class WorkOrderViewModel : ViewModel() {
 
@@ -43,56 +42,65 @@ class WorkOrderViewModel : ViewModel() {
     val errorInputNumber: LiveData<Boolean>
         get() = _errorInputNumber
 
+    companion object {
+        private const val NUMBER_PREFIX = "new"
+    }
+
+
     // -------------------------------------------------------------------------------
     fun loadWorkOrder(workOrderId: String) {
         viewModelScope.launch {
             val order = getWorkOrderUseCase.getWorkOrder(workOrderId)
             order?.let {
                 _workOrder.value = it
+            } ?: run {
+                createWorkOrder()
             }
         }
     }
 
-    fun addWorkOrder(inputNumber: String?) {
-        val number = parseNumber(inputNumber)
-        val areFieldsValid = validateInput(number)
+    fun addWorkOrder() {
+        val areFieldsValid = validateInput()
         if (areFieldsValid) {
-            viewModelScope.launch {
-                val order = WorkOrder(number = number)
-                addWorkOrderUseCase.addWorkOrder(order)
-                _canFinish.value = true
-            }
-        }
-    }
-
-    fun updateWorkOrder(inputNumber: String?) {
-        val number = parseNumber(inputNumber)
-        val areFieldsValid = validateInput(number)
-        if (areFieldsValid) {
-            _workOrder.value?.let {
+            workOrder.value?.let { order ->
                 viewModelScope.launch {
-                    it.number = number
-                    updateWorkOrderUseCase.updateWorkOrder(it)
+                    addWorkOrderUseCase.addWorkOrder(order)
                     _canFinish.value = true
                 }
             }
         }
     }
 
-    private fun parseNumber(inputNumber: String?): String {
-        return inputNumber?.trim() ?: ""
+    fun updateWorkOrder() {
+        val areFieldsValid = validateInput()
+        if (areFieldsValid) {
+            _workOrder.value?.let { order ->
+                viewModelScope.launch {
+                    updateWorkOrderUseCase.updateWorkOrder(order)
+                    _canFinish.value = true
+                }
+            }
+        }
     }
 
-    private fun validateInput(number: String): Boolean {
+    private fun validateInput(): Boolean {
         var result = true
-        if (number.isBlank()) {
-            _errorInputNumber.value = true
-            result = false
+        workOrder.value?.let { order ->
+            if (order.number.isBlank()) {
+                _errorInputNumber.value = true
+                result = false
+            }
         }
         return result
     }
 
     fun resetErrorInputNumber() {
         _errorInputNumber.value = false
+    }
+
+    fun createWorkOrder() {
+        _workOrder.value = WorkOrder(
+            id = NUMBER_PREFIX + UUID.randomUUID().toString(),
+            isNew = true)
     }
 }

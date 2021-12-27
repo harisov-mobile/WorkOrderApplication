@@ -2,6 +2,11 @@
     <string name="app_name">WorkOrderApplication</string>
     <string name="number_hint">Номер</string>
     <string name="date_hint">Дата</string>
+    <string name="request_reason_hint">Причина обращения</string>
+    <string name="comment_hint">Комментарий</string>
+    <string name="mileage_hint">Наработка</string>
+
+
     <string name="add_work_order_fab_description">Add work order</string>
 
     <string name="error_input_number">Неправильно указан номер</string>
@@ -14,7 +19,6 @@
     <string name="save_button">Save</string>
     <string name="exit_button">Exit</string>
 
-    <string name="mileage_hint">Наработка</string>
     <string name="work_order_presentation">Заказ-наряд № %s от %s</string>
 
     <string name="server">Сервер</string>
@@ -36,5 +40,7 @@
     <string name="success_autonomus">Синхронизация данных не произведена, но можно продолжить работу в автономном режиме.</string>
     <string name="fail_synchronization">Ошибка при синхронизации данных. Дальнейшая работа программы невозможна.</string>
 
+    <string name="success_upload_work_orders">Заказ-наряды успешно выгружены на сервер 1С.</string>
+    <string name="fail_upload_work_orders">Ошибка при выгрузке заказ-нарядов: </string>
 
 </resources>

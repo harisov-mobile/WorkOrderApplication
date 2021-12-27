@@ -20,7 +20,16 @@ class WorkOrderMapper {
         return WorkOrderDbModel(
             id = workOrder.id,
             number = workOrder.number,
-            date = workOrder.date
+            date = workOrder.date,
+            partnerId = workOrder.partner?.id ?:"",
+            carId = workOrder.car?.id ?:"",
+            repairTypeId = workOrder.repairType?.id ?:"",
+            departmentId = workOrder.department?.id ?:"",
+            requestReason = workOrder.requestReason,
+            masterId = workOrder.master?.id ?:"",
+            comment = workOrder.comment,
+            isNew = workOrder.isNew,
+            isModified = workOrder.isModified
         )
     }
 
