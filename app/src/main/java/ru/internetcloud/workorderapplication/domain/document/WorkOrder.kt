@@ -18,6 +18,7 @@ data class WorkOrder(
     var requestReason: String = "", // причина обращения
     var master: Employee? = null, // мастер (бригадир)
     var comment: String = "", // комментарий
+    var mileage: Int = 0, // Пробег (наработка)
     var isNew: Boolean = false,
     var isModified: Boolean = false,
     var performers: List<PerformerDetail> = emptyList(), // исполнители (табличная часть)

@@ -4,6 +4,8 @@ import android.app.Application
 import ru.internetcloud.workorderapplication.data.database.AppDatabase
 import ru.internetcloud.workorderapplication.data.entity.JobDetailDbModel
 import ru.internetcloud.workorderapplication.data.entity.PerformerDetailDbModel
+import ru.internetcloud.workorderapplication.data.entity.WorkOrderDbModel
+import ru.internetcloud.workorderapplication.data.entity.WorkOrderWithDetails
 import ru.internetcloud.workorderapplication.data.mapper.JobDetailMapper
 import ru.internetcloud.workorderapplication.data.mapper.PerformerDetailMapper
 import ru.internetcloud.workorderapplication.data.mapper.WorkOrderMapper
@@ -64,5 +66,9 @@ class LoadDbWorkOrderRepository private constructor(application: Application) {
 
     suspend fun addWorkOrderList(workOrders: List<WorkOrderDTO>) {
         appDao.addWorkOrderList(workOrderMapper.fromListDtoToListDboModel(workOrders))
+    }
+
+    suspend fun getModifiedWorkOrders() : List<WorkOrderWithDetails> {
+        return appDao.getModifiedWorkOrders()
     }
 }

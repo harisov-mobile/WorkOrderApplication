@@ -57,23 +57,30 @@ class LoadWorkOrderRepositoryImpl private constructor(
 
         val result = FunctionResult()
 
-        Log.i("rustam", "начинаем uploadWorkOrderList")
+        val listWO = loadDbWorkOrderRepository.getModifiedWorkOrders()
+        if (listWO.isEmpty()) {
+            result.isSuccess = true
+            result.successMessage = ""
+        } else {
+            Log.i("rustam", "начинаем uploadWorkOrderList")
 
-        val testWO = WorkOrderDTO("1", "2", Date().toString(), "3", "3","3","3","3","3","3")
+            //val testWO = WorkOrderDTO("1", "2", Date().toString(), "3", "3","3","3","3","3","3")
 
-        try {
-            val uploadWorkOrderResponse = ApiClient.getInstance().client.uploadWorkOrders(testWO)
-            Log.i("rustam", "после  ApiClient.getInstance().client.uploadWorkOrders()")
-            if (uploadWorkOrderResponse.uploadResult.isSuccess) {
-                result.isSuccess = true
-            } else {
-                result.errorMessage = uploadWorkOrderResponse.uploadResult.errorMessage
+            try {
+                val uploadWorkOrderResponse = ApiClient.getInstance().client.uploadWorkOrders(listWO)
+                Log.i("rustam", "после  ApiClient.getInstance().client.uploadWorkOrders()")
+                if (uploadWorkOrderResponse.uploadResult.isSuccess) {
+                    result.isSuccess = true
+                } else {
+                    result.errorMessage = uploadWorkOrderResponse.uploadResult.errorMessage
+                }
+            } catch (e: Exception) {
+                // ничего не делаю
+                Log.i("rustam", "ошибка при выгрузке заказ-нарядов" + e.toString())
+                result.errorMessage = e.toString()
             }
-        } catch (e: Exception) {
-            // ничего не делаю
-            Log.i("rustam", "ошибка при выгрузке заказ-нарядов" + e.toString())
-            result.errorMessage = e.toString()
         }
+
         return result
     }
 }

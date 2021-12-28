@@ -31,7 +31,10 @@ data class WorkOrderDTO(
     val masterId: String,
 
     @SerializedName("comment")
-    val comment: String
+    val comment: String,
+
+    @SerializedName("mileage")
+    var mileage: Int = 0 // Пробег (наработка)
 
     // а сумма документа???
 )

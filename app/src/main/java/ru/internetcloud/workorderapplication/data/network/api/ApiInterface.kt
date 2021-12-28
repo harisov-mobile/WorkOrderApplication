@@ -3,6 +3,7 @@ package ru.internetcloud.workorderapplication.data.network.api
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import ru.internetcloud.workorderapplication.data.entity.WorkOrderWithDetails
 import ru.internetcloud.workorderapplication.data.network.dto.*
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 
@@ -36,5 +37,5 @@ interface ApiInterface {
     suspend fun getWorkOrders(): WorkOrderResponse
 
     @POST("alpha2/hs/rest/document/workorder/upload")
-    suspend fun uploadWorkOrders(@Body  workOrder: WorkOrderDTO): UploadWorkOrderResponse
+    suspend fun uploadWorkOrders(@Body  listWO: List<WorkOrderWithDetails>): UploadWorkOrderResponse
 }
