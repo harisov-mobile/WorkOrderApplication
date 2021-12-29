@@ -6,6 +6,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.domain.common.AuthParameters
+import com.google.gson.GsonBuilder
+
+import com.google.gson.Gson
+
+
+
 
 class ApiClient private constructor(private val authParameters: AuthParameters) {
 
@@ -35,11 +41,16 @@ class ApiClient private constructor(private val authParameters: AuthParameters) 
                 .build()
         }
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(authParameters.server)
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    private fun getRetrofit(): Retrofit {
+        val gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(authParameters.server)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+        return retrofit
+    }
 
-    val client: ApiInterface = retrofit.create(ApiInterface::class.java)
+
+    val client: ApiInterface = getRetrofit().create(ApiInterface::class.java)
 }
