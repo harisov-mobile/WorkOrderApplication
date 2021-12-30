@@ -12,8 +12,7 @@ interface AppDao {
     fun getWorkOrderList(): LiveData<List<WorkOrderWithDetails>> // Не использовать LiveData в репозитории
 
     @Transaction
-    @Query("SELECT * FROM work_orders LIMIT 1")
-    // @Query("SELECT * FROM work_orders WHERE isModified")
+    @Query("SELECT * FROM work_orders WHERE isModified")
     suspend fun getModifiedWorkOrders(): List<WorkOrderWithDetails> // Не использовать LiveData в репозитории
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

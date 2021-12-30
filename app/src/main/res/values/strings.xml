@@ -16,8 +16,8 @@
 
     <string name="success_saved">Информация записана</string>
 
-    <string name="save_button">Save</string>
-    <string name="exit_button">Exit</string>
+    <string name="save_button">Сохранить</string>
+    <string name="exit_button">Выход</string>
 
     <string name="work_order_presentation">Заказ-наряд № %s от %s</string>
 
@@ -42,5 +42,8 @@
 
     <string name="success_upload_work_orders">Заказ-наряды успешно выгружены на сервер 1С.</string>
     <string name="fail_upload_work_orders">Ошибка при выгрузке заказ-нарядов: </string>
+    <string name="partner_label">Заказчик:</string>
+    <string name="choose_label">...</string>
+    <string name="car_label">СХТ:</string>
 
 </resources>

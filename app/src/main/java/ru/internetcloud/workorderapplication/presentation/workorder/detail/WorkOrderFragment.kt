@@ -122,7 +122,8 @@ class WorkOrderFragment : Fragment() {
             // сюда добавить
             binding.requestReasonEditText.setText(order.requestReason)
             binding.commentEditText.setText(order.comment)
-
+            binding.partnerTextView.text = order.partner?.name
+            binding.carTextView.text = order.car?.name
         }
 
         binding.saveButton.setOnClickListener {

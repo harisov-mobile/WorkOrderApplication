@@ -4,17 +4,18 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/drawable-v24/ic_add_24.xml" value="0.38" />
+        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/drawable/text_view_border.xml" value="0.2921875" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/activity_fragment.xml" value="0.3697916666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/activity_main2.xml" value="0.2760416666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_data_synchronization.xml" value="0.35999999219721035" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_logon.xml" value="0.3697916666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_logon2.xml" value="0.25" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_wor_order2.xml" value="0.3697916666666667" />
-        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_work_order.xml" value="0.23999999479814021" />
+        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_work_order.xml" value="0.2727272668160684" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_work_order2.xml" value="0.3697916666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_work_order3.xml" value="0.16944444444444445" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_work_order_list.xml" value="0.2760416666666667" />
-        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_work_order_list.xml" value="0.7309090750670634" />
+        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_work_order_list.xml" value="0.5454545336321368" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/temp.xml" value="0.3697916666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/test1.xml" value="0.2727272668160684" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/test3.xml" value="0.3697916666666667" />
