@@ -59,24 +59,109 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/date_text_input_layout"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/date_label_text_view"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="18dp"
+                    android:text="@string/date_label"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/number_text_input_layout" />
+
+                <TextView
+                    android:id="@+id/date_text_view"
+                    style="@style/work_order_text_view"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+
+                    app:layout_constraintStart_toEndOf="@+id/partner_label_text_view"
+                    app:layout_constraintEnd_toStartOf="@+id/date_select_button"
+                    app:layout_constraintTop_toBottomOf="@+id/number_text_input_layout"
+                    tools:text="date" />
+
+                <Button
+                    android:id="@+id/date_select_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="8dp"
+
+                    android:minWidth="40dp"
+                    android:text="@string/choose_label"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/number_text_input_layout" />
+
+
+                <TextView
+                    android:id="@+id/partner_label_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="18dp"
+                    android:text="@string/partner_label"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/number_text_input_layout">
+                    app:layout_constraintTop_toBottomOf="@+id/date_text_view" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/date_edit_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/date_hint" />
+                <TextView
+                    android:id="@+id/partner_text_view"
+                    style="@style/work_order_text_view"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    app:layout_constraintEnd_toStartOf="@+id/partner_select_button"
+                    app:layout_constraintStart_toEndOf="@+id/partner_label_text_view"
+                    app:layout_constraintTop_toBottomOf="@+id/date_text_view"
+                    tools:text="partner" />
+
+                <Button
+                    android:id="@+id/partner_select_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="8dp"
+
+                    android:minWidth="40dp"
+                    android:text="@string/choose_label"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/date_text_view" />
+
+                <TextView
+                    android:id="@+id/car_label_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="18dp"
+                    android:text="@string/car_label"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/partner_text_view" />
+
+                <TextView
+                    android:id="@+id/car_text_view"
+                    style="@style/work_order_text_view"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+
+                    app:layout_constraintStart_toEndOf="@+id/partner_label_text_view"
+                    app:layout_constraintEnd_toStartOf="@+id/car_select_button"
+                    app:layout_constraintTop_toBottomOf="@+id/partner_text_view"
+                    tools:text="car" />
+
+                <Button
+                    android:id="@+id/car_select_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:minWidth="40dp"
+
+                    android:text="@string/choose_label"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/partner_text_view" />
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/request_reason_text_input_layout"
@@ -119,73 +204,6 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/partner_label_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="18dp"
-                    android:text="@string/partner_label"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/date_text_input_layout" />
-
-                <TextView
-                    android:id="@+id/partner_text_view"
-                    style="@style/work_order_text_view"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-
-                    app:layout_constraintEnd_toStartOf="@+id/partner_select_button"
-                    app:layout_constraintStart_toEndOf="@+id/partner_label_text_view"
-                    app:layout_constraintTop_toBottomOf="@+id/date_text_input_layout"
-                    tools:text="partner" />
-
-                <Button
-                    android:id="@+id/partner_select_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="8dp"
-
-                    android:minWidth="40dp"
-                    android:text="@string/choose_label"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/date_text_input_layout" />
-
-                <TextView
-                    android:id="@+id/car_label_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="18dp"
-                    android:text="@string/car_label"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/partner_text_view" />
-
-                <TextView
-                    android:id="@+id/car_text_view"
-                    style="@style/work_order_text_view"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-
-                    app:layout_constraintEnd_toStartOf="@+id/car_select_button"
-                    app:layout_constraintStart_toEndOf="@+id/car_label_text_view"
-                    app:layout_constraintTop_toBottomOf="@+id/partner_text_view"
-                    tools:text="car" />
-
-                <Button
-                    android:id="@+id/car_select_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="8dp"
-                    android:minWidth="40dp"
-
-                    android:text="@string/choose_label"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/partner_text_view" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
