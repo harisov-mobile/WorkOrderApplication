@@ -15,6 +15,7 @@ import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerPickerFragment
 import java.util.*
 
 class WorkOrderFragment : Fragment(), FragmentResultListener {

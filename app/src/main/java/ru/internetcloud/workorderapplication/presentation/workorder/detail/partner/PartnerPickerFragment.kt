@@ -1,16 +1,20 @@
-package ru.internetcloud.workorderapplication.presentation.workorder.detail
+package ru.internetcloud.workorderapplication.presentation.workorder.detail.partner
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.domain.catalog.Partner
+import ru.internetcloud.workorderapplication.presentation.workorder.list.WorkOrderListViewModel
 import java.lang.RuntimeException
-import java.util.*
 
 class PartnerPickerFragment: DialogFragment() {
 
@@ -32,9 +36,13 @@ class PartnerPickerFragment: DialogFragment() {
         }
     }
 
+    private var partnerId = ""
+    private lateinit var viewModel: PartnerListViewModel
+    private lateinit var partnerListRecyclerView: RecyclerView
+    private lateinit var partnerListAdapter: PartnerListAdapter
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        var partnerId = ""
         var requestKey = ""
         var argPartnerIdName = ""
 
@@ -55,15 +63,39 @@ class PartnerPickerFragment: DialogFragment() {
 
         alertDialogBuilder.setNegativeButton(R.string.button_cancel, null) // для негативного ответа ничего не делаем
 
-        alertDialogBuilder.setPositiveButton(R.string.button_ok
-        ) { dialog, which ->
+        alertDialogBuilder.setPositiveButton(R.string.button_ok) { dialog, which ->
             val bundle = Bundle().apply {
                 putString(argPartnerIdName, partnerId)
             }
-            Toast.makeText(context, "привет", Toast.LENGTH_SHORT).show()
             setFragmentResult(requestKey, bundle)
         }
 
+        setupPartnerListRecyclerView(container)
+
+        viewModel = ViewModelProvider(this).get(PartnerListViewModel::class.java)
+        viewModel.partnerListLiveData.observe(this, { partners ->
+            partnerListAdapter = PartnerListAdapter(partners)
+            partnerListRecyclerView.adapter = partnerListAdapter
+            setupClickListener()
+        })
+
+        viewModel.loadPartnerList() // самое главное!!!
+
         return alertDialogBuilder.create()
+    }
+
+    private fun setupPartnerListRecyclerView(view: View) {
+        partnerListRecyclerView = view.findViewById(R.id.partner_list_recycler_view)
+        partnerListAdapter = PartnerListAdapter(emptyList())
+        // LinearLayoutManager задан в XML-разметке
+        partnerListRecyclerView.adapter = partnerListAdapter
+    }
+
+    private fun setupClickListener() {
+        partnerListAdapter.onPartnerClickListener = { partner ->
+            partnerId = partner.id
+            Log.i("rustam", " onPartnerSelected = " + partner.name)
+            Log.i("rustam", " partnerId = " + partnerId)
+        }
     }
 }

@@ -61,7 +61,7 @@ class WorkOrderListFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(WorkOrderListViewModel::class.java)
         viewModel.workOrderListLiveData.observe(
             viewLifecycleOwner,
-            Observer {
+            {
                 workOrderListAdapter.submitList(it)
             }
         )
