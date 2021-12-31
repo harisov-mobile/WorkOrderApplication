@@ -7,6 +7,7 @@ class DateConverter {
     companion object {
 
         private const val DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss"
+        private const val DATE_FORMAT = "dd.MM.yyyy"
         private const val TIME_FORMAT = "HH : mm"
 
         fun fromStringToDate(dateString: String): Date {
@@ -14,7 +15,7 @@ class DateConverter {
         }
 
         fun getDateString(date: Date?): String {
-            val sdf = SimpleDateFormat(DATE_TIME_FORMAT)
+            val sdf = SimpleDateFormat(DATE_FORMAT)
             return date?.let { sdf.format(date) } ?: ""
         }
 

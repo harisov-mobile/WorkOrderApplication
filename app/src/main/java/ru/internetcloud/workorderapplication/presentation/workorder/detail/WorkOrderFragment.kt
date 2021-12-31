@@ -8,13 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
+import java.util.*
 
-class WorkOrderFragment : Fragment() {
+class WorkOrderFragment : Fragment(), FragmentResultListener {
 
     private var _binding: FragmentWorkOrderBinding? = null
     private val binding: FragmentWorkOrderBinding
@@ -29,6 +31,9 @@ class WorkOrderFragment : Fragment() {
 
         const val ARG_SCREEN_MODE = "screen_mode"
         const val ARG_WORK_ORDER_ID = "work_order_id"
+
+        private val REQUEST_DATE_PICKER_KEY = "request_date_picker_key"
+        private val ARG_DATE = "date_picker_date"
 
         fun newInstanceAddWorkOrder(): WorkOrderFragment {
             val instance = WorkOrderFragment()
@@ -67,6 +72,10 @@ class WorkOrderFragment : Fragment() {
         launchCorrectMode()
 
         observeViewModel()
+
+        childFragmentManager.setFragmentResultListener(REQUEST_DATE_PICKER_KEY, viewLifecycleOwner, this)
+
+        setupClickListeners()
     }
 
     private fun observeViewModel() {
@@ -118,7 +127,7 @@ class WorkOrderFragment : Fragment() {
         viewModel.workOrder.observe(viewLifecycleOwner) {
             order ->
             binding.numberEditText.setText(order.number)
-            binding.dateEditText.setText(DateConverter.getDateString(order.date))
+            binding.dateTextView.text = DateConverter.getDateString(order.date)
             // сюда добавить
             binding.requestReasonEditText.setText(order.requestReason)
             binding.commentEditText.setText(order.comment)
@@ -175,5 +184,25 @@ class WorkOrderFragment : Fragment() {
 
     private fun parseText(inputText: String?): String {
         return inputText?.trim() ?: ""
+    }
+
+    override fun onFragmentResult(requestKey: String, result: Bundle) {
+        when(requestKey) {
+            REQUEST_DATE_PICKER_KEY -> {
+                val date = result.getSerializable(ARG_DATE) as Date
+                binding.dateTextView.text = DateConverter.getDateString(date)
+                viewModel.workOrder.value?.date = date
+            }
+        }
+    }
+
+    private fun setupClickListeners() {
+        binding.dateSelectButton.setOnClickListener {
+            viewModel.workOrder.value?.let { order ->
+                DatePickerFragment
+                    .newInstance(order.date, REQUEST_DATE_PICKER_KEY, ARG_DATE)
+                    .show(childFragmentManager, REQUEST_DATE_PICKER_KEY)
+            }
+        }
     }
 }
