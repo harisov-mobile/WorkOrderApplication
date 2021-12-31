@@ -47,4 +47,10 @@
     <string name="car_label">СХТ:</string>
     <string name="date_label">Дата:</string>
 
+
+    <string name="partner_picker_title">Выберите заказчика</string>
+    <string name="button_cancel">Отмена</string>
+    <string name="button_ok">Ок</string>
+    <string name="search_label">Поиск</string>
+
 </resources>

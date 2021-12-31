@@ -3,6 +3,7 @@ package ru.internetcloud.workorderapplication.presentation.workorder.detail
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +34,10 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         const val ARG_WORK_ORDER_ID = "work_order_id"
 
         private val REQUEST_DATE_PICKER_KEY = "request_date_picker_key"
-        private val ARG_DATE = "date_picker_date"
+        private val ARG_DATE = "date_picker"
+
+        private val REQUEST_PARTNER_ID_PICKER_KEY = "request_partner_id_picker_key"
+        private val ARG_PARTNER_ID = "partner_id_picker"
 
         fun newInstanceAddWorkOrder(): WorkOrderFragment {
             val instance = WorkOrderFragment()
@@ -74,6 +78,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         observeViewModel()
 
         childFragmentManager.setFragmentResultListener(REQUEST_DATE_PICKER_KEY, viewLifecycleOwner, this)
+        childFragmentManager.setFragmentResultListener(REQUEST_PARTNER_ID_PICKER_KEY, viewLifecycleOwner, this)
 
         setupClickListeners()
     }
@@ -193,6 +198,13 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 binding.dateTextView.text = DateConverter.getDateString(date)
                 viewModel.workOrder.value?.date = date
             }
+            REQUEST_PARTNER_ID_PICKER_KEY -> {
+                val partnerId = result.getString(ARG_PARTNER_ID)
+                // binding.dateTextView.text = DateConverter.getDateString(date)
+                //viewModel.workOrder.value?.date = date
+                Log.i("rustam", "Получение partner id")
+                Toast.makeText(context, "partnerId = " + partnerId, Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -202,6 +214,14 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 DatePickerFragment
                     .newInstance(order.date, REQUEST_DATE_PICKER_KEY, ARG_DATE)
                     .show(childFragmentManager, REQUEST_DATE_PICKER_KEY)
+            }
+        }
+
+        binding.partnerSelectButton.setOnClickListener {
+            viewModel.workOrder.value?.let { order ->
+                PartnerPickerFragment
+                    .newInstance(order.partner?.id ?: "", REQUEST_PARTNER_ID_PICKER_KEY, ARG_PARTNER_ID)
+                    .show(childFragmentManager, REQUEST_PARTNER_ID_PICKER_KEY)
             }
         }
     }
