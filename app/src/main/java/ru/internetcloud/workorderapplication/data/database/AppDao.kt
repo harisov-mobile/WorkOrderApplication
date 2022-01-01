@@ -8,7 +8,7 @@ import ru.internetcloud.workorderapplication.data.entity.*
 interface AppDao {
 
     @Transaction
-    @Query("SELECT * FROM work_orders")
+    @Query("SELECT * FROM work_orders ORDER BY date, number")
     fun getWorkOrderList(): LiveData<List<WorkOrderWithDetails>> // Не использовать LiveData в репозитории
 
     @Transaction

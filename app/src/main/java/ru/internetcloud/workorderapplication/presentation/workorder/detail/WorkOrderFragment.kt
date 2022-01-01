@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
+import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerPickerFragment
@@ -37,8 +38,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         private val REQUEST_DATE_PICKER_KEY = "request_date_picker_key"
         private val ARG_DATE = "date_picker"
 
-        private val REQUEST_PARTNER_ID_PICKER_KEY = "request_partner_id_picker_key"
-        private val ARG_PARTNER_ID = "partner_id_picker"
+        private val REQUEST_PARTNER_PICKER_KEY = "request_partner_picker_key"
+        private val ARG_PARTNER = "partner_picker"
 
         fun newInstanceAddWorkOrder(): WorkOrderFragment {
             val instance = WorkOrderFragment()
@@ -79,7 +80,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         observeViewModel()
 
         childFragmentManager.setFragmentResultListener(REQUEST_DATE_PICKER_KEY, viewLifecycleOwner, this)
-        childFragmentManager.setFragmentResultListener(REQUEST_PARTNER_ID_PICKER_KEY, viewLifecycleOwner, this)
+        childFragmentManager.setFragmentResultListener(REQUEST_PARTNER_PICKER_KEY, viewLifecycleOwner, this)
 
         setupClickListeners()
     }
@@ -99,9 +100,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         viewModel.canFinish.observe(viewLifecycleOwner) {
             Toast.makeText(context, getString(R.string.success_saved), Toast.LENGTH_SHORT).show()
         }
-
-        // подписка на выбор Заказчика
-
     }
 
     private fun launchCorrectMode() {
@@ -202,19 +200,12 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 binding.dateTextView.text = DateConverter.getDateString(date)
                 viewModel.workOrder.value?.date = date
             }
-            REQUEST_PARTNER_ID_PICKER_KEY -> {
-                val partnerId = result.getString(ARG_PARTNER_ID)
-                partnerId?.let {
-                    if (!partnerId.isEmpty()) {
-                        viewModel.setupPartnerById(partnerId)
-                    }
-                } ?: run {
-                    viewModel.workOrder.value?.let { order ->
-                        order.partner = null
-                        binding.partnerTextView.text = ""
-                    }
+            REQUEST_PARTNER_PICKER_KEY -> {
+                val partner: Partner? = result.getParcelable<Partner>(ARG_PARTNER)
+                viewModel.workOrder.value?.let { order ->
+                    order.partner = partner
+                    binding.partnerTextView.text = partner?.name ?:""
                 }
-                Log.i("rustam", "Получение partner id" + partnerId)
             }
         }
     }
@@ -231,8 +222,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         binding.partnerSelectButton.setOnClickListener {
             viewModel.workOrder.value?.let { order ->
                 PartnerPickerFragment
-                    .newInstance(order.partner?.id ?: "", REQUEST_PARTNER_ID_PICKER_KEY, ARG_PARTNER_ID)
-                    .show(childFragmentManager, REQUEST_PARTNER_ID_PICKER_KEY)
+                    .newInstance(order.partner, REQUEST_PARTNER_PICKER_KEY, ARG_PARTNER)
+                    .show(childFragmentManager, REQUEST_PARTNER_PICKER_KEY)
             }
         }
     }

@@ -17,15 +17,18 @@ class PartnerPickerFragment: DialogFragment() {
 
     companion object {
 
-        private const val PARTNER_ID = "partner_id"
+        private const val PARTNER = "partner"
         private const val PARENT_REQUEST_KEY = "parent_request_partner_id_picker_key"
-        private const val PARENT_ARG_PARTNER_ID_NAME = "parent_arg_partner_id_name"
+        private const val PARENT_PARTNER_ARG_NAME = "parent_partner_arg_name"
 
-        fun newInstance(partnerId: String, parentRequestKey: String, parentArgDateName: String): PartnerPickerFragment {
+        private const val NOT_FOUND_POSITION = -1
+        private const val DIFFERENCE_POS = 5
+
+        fun newInstance(partner: Partner?, parentRequestKey: String, parentArgDateName: String): PartnerPickerFragment {
             val args = Bundle().apply {
-                putString(PARTNER_ID, partnerId)
+                putParcelable(PARTNER, partner)
                 putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_ARG_PARTNER_ID_NAME, parentArgDateName)
+                putString(PARENT_PARTNER_ARG_NAME, parentArgDateName)
             }
             return PartnerPickerFragment().apply {
                 arguments = args
@@ -33,11 +36,11 @@ class PartnerPickerFragment: DialogFragment() {
         }
     }
 
-    private var partnerId = ""
+    private var partner: Partner? = null
     private var previousSelectedPartner: Partner? = null
 
     private var requestKey = ""
-    private var argPartnerIdName = ""
+    private var argPartnerName = ""
 
     private lateinit var viewModel: PartnerListViewModel
     private lateinit var partnerListRecyclerView: RecyclerView
@@ -46,9 +49,9 @@ class PartnerPickerFragment: DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         arguments?.let { arg ->
-            partnerId = arg.getString(PARTNER_ID, "")
+            partner = arg.getParcelable(PARTNER)
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
-            argPartnerIdName = arg.getString(PARENT_ARG_PARTNER_ID_NAME, "")
+            argPartnerName = arg.getString(PARENT_PARTNER_ARG_NAME, "")
         } ?: run {
             throw RuntimeException("There are not arguments in PartnerPickerFragment")
         }
@@ -66,7 +69,7 @@ class PartnerPickerFragment: DialogFragment() {
         alertDialogBuilder.setNegativeButton(R.string.button_cancel, null) // для негативного ответа ничего не делаем
 
         alertDialogBuilder.setPositiveButton(R.string.button_ok) { dialog, which ->
-            sendResultToFragment(partnerId)
+            sendResultToFragment(partner)
         }
 
         setupPartnerListRecyclerView(container)
@@ -76,7 +79,7 @@ class PartnerPickerFragment: DialogFragment() {
             partnerListAdapter = PartnerListAdapter(partners)
             partnerListRecyclerView.adapter = partnerListAdapter
             setupClickListeners()
-            partnerListRecyclerView.scrollToPosition(getCurrentPositionToId(partnerId));
+            partnerListRecyclerView.scrollToPosition(getCurrentPosition(partner));
         })
 
         viewModel.loadPartnerList() // самое главное!!!
@@ -92,43 +95,47 @@ class PartnerPickerFragment: DialogFragment() {
     }
 
     private fun setupClickListeners() {
-        partnerListAdapter.onPartnerClickListener = { partner ->
-            partnerId = partner.id
+        partnerListAdapter.onPartnerClickListener = { currentPartner ->
+            partner = currentPartner
             previousSelectedPartner?.isSelected = false
-            partner.isSelected = true
+            partner?.isSelected = true
             previousSelectedPartner = partner
-            Log.i("rustam", " onPartnerSelected = " + partner.name)
-            Log.i("rustam", " partnerId = " + partnerId)
+            Log.i("rustam", " onPartnerSelected = " + partner?.name)
+            Log.i("rustam", " partnerId = " + partner?.id)
         }
 
-        partnerListAdapter.onPartnerLongClickListener = { partner ->
-            sendResultToFragment(partner.id)
+        partnerListAdapter.onPartnerLongClickListener = { currentPartner ->
+            sendResultToFragment(currentPartner)
             dismiss()
         }
     }
 
-    private fun getCurrentPositionToId(id: String): Int {
-        var currentPosition = -1
-        if (!id.isEmpty()) {
+    private fun getCurrentPosition(searchedPartner: Partner?): Int {
+        var currentPosition = NOT_FOUND_POSITION
+        searchedPartner?.let {
             var isFound = false
             for (currentPartner in partnerListAdapter.partners) {
                 currentPosition++
-                if (currentPartner.id == id) {
+                if (currentPartner.id == searchedPartner.id) {
                     isFound = true
                     previousSelectedPartner = currentPartner
                     break
                 }
             }
-            if (!isFound) {
-                currentPosition = -1
+            if (isFound) {
+                if (currentPosition > (partnerListAdapter.getItemCount() - DIFFERENCE_POS)) {
+                    currentPosition = partnerListAdapter.getItemCount() - 1
+                }
+            } else {
+                currentPosition = NOT_FOUND_POSITION
             }
         }
         return currentPosition
     }
 
-    private fun sendResultToFragment(result: String?) {
+    private fun sendResultToFragment(result: Partner?) {
         val bundle = Bundle().apply {
-            putString(argPartnerIdName, result)
+            putParcelable(argPartnerName, result)
         }
         setFragmentResult(requestKey, bundle)
     }
