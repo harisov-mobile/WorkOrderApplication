@@ -99,6 +99,9 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         viewModel.canFinish.observe(viewLifecycleOwner) {
             Toast.makeText(context, getString(R.string.success_saved), Toast.LENGTH_SHORT).show()
         }
+
+        // подписка на выбор Заказчика
+
     }
 
     private fun launchCorrectMode() {
@@ -201,10 +204,17 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             }
             REQUEST_PARTNER_ID_PICKER_KEY -> {
                 val partnerId = result.getString(ARG_PARTNER_ID)
-                // binding.dateTextView.text = DateConverter.getDateString(date)
-                //viewModel.workOrder.value?.date = date
-                Log.i("rustam", "Получение partner id")
-                Toast.makeText(context, "partnerId = " + partnerId, Toast.LENGTH_LONG).show()
+                partnerId?.let {
+                    if (!partnerId.isEmpty()) {
+                        viewModel.setupPartnerById(partnerId)
+                    }
+                } ?: run {
+                    viewModel.workOrder.value?.let { order ->
+                        order.partner = null
+                        binding.partnerTextView.text = ""
+                    }
+                }
+                Log.i("rustam", "Получение partner id" + partnerId)
             }
         }
     }

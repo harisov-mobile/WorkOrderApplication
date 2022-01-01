@@ -34,19 +34,3 @@ class PartnerListAdapter(var partners: List<Partner>) : RecyclerView.Adapter<Par
         return partners.size
     }
 }
-
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartnerListViewHolder {
-//        val binding = ItemPartnerListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-//        return PartnerListViewHolder(binding)    }
-//
-//    override fun onBindViewHolder(holder: PartnerListViewHolder, position: Int) {
-//        val partner = getItem(position)
-//        val binding = holder.binding
-//
-//        binding.nameTextView.text = partner.name
-//        binding.innTextView.text = partner.inn
-//
-//        binding.root.setOnClickListener {
-//            onPartnerClickListener?.invoke(partner)
-//        }
-//    }
