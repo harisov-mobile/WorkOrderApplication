@@ -103,6 +103,9 @@ interface AppDao {
     @Query("SELECT * FROM partners WHERE id=:id LIMIT 1")
     suspend fun getPartner(id: String): PartnerDbModel?
 
+    @Query("SELECT * FROM partners WHERE name LIKE :searchText OR inn LIKE :searchText")
+    suspend fun searhPartners(searchText: String): List<PartnerDbModel>
+
     // ----------------------------------------------------------------------
     @Query("SELECT * FROM cars")
     suspend fun getCarList(): List<CarDbModel>

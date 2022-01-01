@@ -1,6 +1,7 @@
 package ru.internetcloud.workorderapplication.presentation.workorder.detail.partner
 
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import ru.internetcloud.workorderapplication.databinding.ItemPartnerListBinding
 
-class PartnerListViewHolder(val binding: ItemPartnerListBinding) : RecyclerView.ViewHolder(binding.root)
+class PartnerListViewHolder(val binding: ViewBinding) : RecyclerView.ViewHolder(binding.root)

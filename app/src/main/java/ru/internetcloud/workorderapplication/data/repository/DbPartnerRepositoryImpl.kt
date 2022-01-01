@@ -48,4 +48,8 @@ class DbPartnerRepositoryImpl private constructor(application: Application) : Pa
     override suspend fun deleteAllPartners() {
         appDao.deleteAllPartners()
     }
+
+    override suspend fun searchPartners(searchText: String): List<Partner> {
+        return partnerMapper.fromListDbModelToListEntity(appDao.searhPartners("%$searchText%"))
+    }
 }

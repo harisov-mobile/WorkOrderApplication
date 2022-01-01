@@ -221,6 +221,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         binding.partnerSelectButton.setOnClickListener {
             viewModel.workOrder.value?.let { order ->
+                order.partner?.isSelected = true
+
                 PartnerPickerFragment
                     .newInstance(order.partner, REQUEST_PARTNER_PICKER_KEY, ARG_PARTNER)
                     .show(childFragmentManager, REQUEST_PARTNER_PICKER_KEY)

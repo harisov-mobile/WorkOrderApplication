@@ -49,4 +49,8 @@ class RemotePartnerRepositoryImpl private constructor(application: Application) 
     override suspend fun deleteAllPartners() {
         throw RuntimeException("Error - method deleteAllPartners is restricted in RemotePartnerRepositoryImpl")
     }
+
+    override suspend fun searchPartners(searchText: String): List<Partner> {
+        throw RuntimeException("Error - method searchPartners is restricted in RemotePartnerRepositoryImpl")
+    }
 }

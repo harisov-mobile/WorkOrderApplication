@@ -53,5 +53,6 @@
     <string name="button_clear">Очистить</string>
     <string name="button_ok">Ок</string>
     <string name="search_label">Поиск</string>
+    <string name="search_button">Найти</string>
 
 </resources>

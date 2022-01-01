@@ -5,11 +5,14 @@ import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import java.lang.RuntimeException
 
@@ -46,6 +49,9 @@ class PartnerPickerFragment: DialogFragment() {
     private lateinit var partnerListRecyclerView: RecyclerView
     private lateinit var partnerListAdapter: PartnerListAdapter
 
+    private lateinit var searchButton: Button
+    private lateinit var searchEditText: EditText
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         arguments?.let { arg ->
@@ -60,6 +66,9 @@ class PartnerPickerFragment: DialogFragment() {
         alertDialogBuilder.setTitle(R.string.partner_picker_title)
 
         val container = layoutInflater.inflate(R.layout.fragment_partner_picker, null, false)
+        searchButton = container.findViewById(R.id.search_button)
+        searchEditText = container.findViewById(R.id.search_edit_text)
+
         alertDialogBuilder.setView(container)
 
         alertDialogBuilder.setNeutralButton(R.string.button_clear) { _, _ ->
@@ -79,7 +88,22 @@ class PartnerPickerFragment: DialogFragment() {
             partnerListAdapter = PartnerListAdapter(partners)
             partnerListRecyclerView.adapter = partnerListAdapter
             setupClickListeners()
-            partnerListRecyclerView.scrollToPosition(getCurrentPosition(partner));
+
+            val currentPosition = getCurrentPosition(partner)
+
+            val scrollPosition = if (currentPosition > (partnerListAdapter.getItemCount() - DIFFERENCE_POS)) {
+                partnerListAdapter.getItemCount() - 1
+            } else {
+                currentPosition
+            }
+
+            partnerListRecyclerView.scrollToPosition(scrollPosition);
+
+            if (currentPosition != NOT_FOUND_POSITION) {
+                partners[currentPosition].isSelected = true
+                // partnerListAdapter.notifyDataSetChanged()
+                partnerListAdapter.notifyItemChanged(currentPosition, Unit)
+            }
         })
 
         viewModel.loadPartnerList() // самое главное!!!
@@ -108,6 +132,15 @@ class PartnerPickerFragment: DialogFragment() {
             sendResultToFragment(currentPartner)
             dismiss()
         }
+
+        searchButton.setOnClickListener {
+            val searchText = searchEditText.text.toString()
+            if (searchText.isEmpty()) {
+                viewModel.loadPartnerList()
+            } else {
+                viewModel.searchPartners(searchText)
+            }
+        }
     }
 
     private fun getCurrentPosition(searchedPartner: Partner?): Int {
@@ -122,11 +155,7 @@ class PartnerPickerFragment: DialogFragment() {
                     break
                 }
             }
-            if (isFound) {
-                if (currentPosition > (partnerListAdapter.getItemCount() - DIFFERENCE_POS)) {
-                    currentPosition = partnerListAdapter.getItemCount() - 1
-                }
-            } else {
+            if (!isFound) {
                 currentPosition = NOT_FOUND_POSITION
             }
         }
