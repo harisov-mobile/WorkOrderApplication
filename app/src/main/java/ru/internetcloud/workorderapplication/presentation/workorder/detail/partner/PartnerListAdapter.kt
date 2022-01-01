@@ -8,9 +8,9 @@ import ru.internetcloud.workorderapplication.databinding.ItemPartnerListBinding
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
 
 class PartnerListAdapter(var partners: List<Partner>) : RecyclerView.Adapter<PartnerListViewHolder>()
-//ListAdapter<Partner, PartnerListViewHolder>() {
 {
     var onPartnerClickListener: ((partner: Partner) -> Unit)? = null
+    var onPartnerLongClickListener: ((partner: Partner) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartnerListViewHolder {
         val binding = ItemPartnerListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -28,6 +28,11 @@ class PartnerListAdapter(var partners: List<Partner>) : RecyclerView.Adapter<Par
             onPartnerClickListener?.invoke(partner)
             Log.i("rustam", " нажат элемент " + partner.name)
         }
+        binding.root.setOnLongClickListener {
+            onPartnerLongClickListener?.invoke(partner)
+            true
+        }
+
     }
 
     override fun getItemCount(): Int {

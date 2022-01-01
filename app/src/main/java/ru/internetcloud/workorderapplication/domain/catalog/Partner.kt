@@ -7,5 +7,6 @@ data class Partner(
     var name: String = "",
     var fullName: String = "",
     var inn: String = "",
-    var kpp: String = ""
+    var kpp: String = "",
+    var isSelected: Boolean = false
 )

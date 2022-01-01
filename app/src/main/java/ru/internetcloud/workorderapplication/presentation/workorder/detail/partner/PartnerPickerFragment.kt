@@ -10,6 +10,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import java.lang.RuntimeException
 
 class PartnerPickerFragment: DialogFragment() {
@@ -33,14 +34,16 @@ class PartnerPickerFragment: DialogFragment() {
     }
 
     private var partnerId = ""
+    private var previousSelectedPartner: Partner? = null
+
+    private var requestKey = ""
+    private var argPartnerIdName = ""
+
     private lateinit var viewModel: PartnerListViewModel
     private lateinit var partnerListRecyclerView: RecyclerView
     private lateinit var partnerListAdapter: PartnerListAdapter
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-        var requestKey = ""
-        var argPartnerIdName = ""
 
         arguments?.let { arg ->
             partnerId = arg.getString(PARTNER_ID, "")
@@ -57,19 +60,13 @@ class PartnerPickerFragment: DialogFragment() {
         alertDialogBuilder.setView(container)
 
         alertDialogBuilder.setNeutralButton(R.string.button_clear) { _, _ ->
-            val bundle = Bundle().apply {
-                putString(argPartnerIdName, null)
-            }
-            setFragmentResult(requestKey, bundle)
+            sendResultToFragment(null)
         }
 
         alertDialogBuilder.setNegativeButton(R.string.button_cancel, null) // для негативного ответа ничего не делаем
 
         alertDialogBuilder.setPositiveButton(R.string.button_ok) { dialog, which ->
-            val bundle = Bundle().apply {
-                putString(argPartnerIdName, partnerId)
-            }
-            setFragmentResult(requestKey, bundle)
+            sendResultToFragment(partnerId)
         }
 
         setupPartnerListRecyclerView(container)
@@ -78,7 +75,7 @@ class PartnerPickerFragment: DialogFragment() {
         viewModel.partnerListLiveData.observe(this, { partners ->
             partnerListAdapter = PartnerListAdapter(partners)
             partnerListRecyclerView.adapter = partnerListAdapter
-            setupClickListener()
+            setupClickListeners()
             partnerListRecyclerView.scrollToPosition(getCurrentPositionToId(partnerId));
         })
 
@@ -94,11 +91,19 @@ class PartnerPickerFragment: DialogFragment() {
         partnerListRecyclerView.adapter = partnerListAdapter
     }
 
-    private fun setupClickListener() {
+    private fun setupClickListeners() {
         partnerListAdapter.onPartnerClickListener = { partner ->
             partnerId = partner.id
+            previousSelectedPartner?.isSelected = false
+            partner.isSelected = true
+            previousSelectedPartner = partner
             Log.i("rustam", " onPartnerSelected = " + partner.name)
             Log.i("rustam", " partnerId = " + partnerId)
+        }
+
+        partnerListAdapter.onPartnerLongClickListener = { partner ->
+            sendResultToFragment(partner.id)
+            dismiss()
         }
     }
 
@@ -110,6 +115,7 @@ class PartnerPickerFragment: DialogFragment() {
                 currentPosition++
                 if (currentPartner.id == id) {
                     isFound = true
+                    previousSelectedPartner = currentPartner
                     break
                 }
             }
@@ -118,5 +124,12 @@ class PartnerPickerFragment: DialogFragment() {
             }
         }
         return currentPosition
+    }
+
+    private fun sendResultToFragment(result: String?) {
+        val bundle = Bundle().apply {
+            putString(argPartnerIdName, result)
+        }
+        setFragmentResult(requestKey, bundle)
     }
 }
