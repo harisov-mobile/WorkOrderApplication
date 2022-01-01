@@ -28,6 +28,7 @@ class WorkOrderMapper {
             requestReason = workOrder.requestReason,
             masterId = workOrder.master?.id ?:"",
             comment = workOrder.comment,
+            performersString = workOrder.performersString,
             mileage = workOrder.mileage,
             isNew = workOrder.isNew,
             isModified = workOrder.isModified
@@ -46,6 +47,7 @@ class WorkOrderMapper {
             requestReason = workOrderWithDetails.workOrder.requestReason,
             master = employeeMapper.fromDbModelToEntityWithNull(workOrderWithDetails.master),
             comment = workOrderWithDetails.workOrder.comment,
+            performersString = workOrderWithDetails.workOrder.performersString,
             mileage = workOrderWithDetails.workOrder.mileage,
             performers = performerDetailMapper.fromListDbToListEntity(workOrderWithDetails.performers),
             jobDetails = jobDetailMapper.fromListDbToListEntity(workOrderWithDetails.jobDetails)
@@ -72,6 +74,7 @@ class WorkOrderMapper {
             requestReason = workOrderDTO.requestReason,
             masterId = workOrderDTO.masterId,
             comment = workOrderDTO.comment,
+            performersString = workOrderDTO.performersString,
             mileage = workOrderDTO.mileage
         )
     }

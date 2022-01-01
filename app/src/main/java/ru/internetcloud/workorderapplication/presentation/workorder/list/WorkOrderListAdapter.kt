@@ -15,6 +15,10 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
     // а первоначально переменная содержит null
     var onWorkOrderClickListener: ((workOrder: WorkOrder) -> Unit)? = null
 
+    companion object {
+        private const val PERFORMERS_STRING_SIZE = 50
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkOrderListViewHolder {
 
         val binding = ItemWorkOrderListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -27,9 +31,16 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
 
         binding.numberTextView.text = workOrder.number
         binding.dateTextView.text = DateConverter.getDateString(workOrder.date)
+        binding.partnerTextView.text = workOrder.partner?.name
         binding.carTextView.text = workOrder.car?.name
 
         binding.departmentTextView.text = workOrder.department?.name
+
+        var performersString = workOrder.performersString
+        if (performersString.length > PERFORMERS_STRING_SIZE) {
+            performersString = performersString.substring(0, PERFORMERS_STRING_SIZE) + "..."
+        }
+        binding.performersStringTextView.text = performersString
         binding.commentTextView.text = workOrder.comment
         binding.requestReasonTextView.text = workOrder.requestReason
 
