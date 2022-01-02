@@ -17,5 +17,4 @@ data class CarDbModel(
     var releaseYear: Int = 0, // год выпуска
     var mileage: Int, // пробег
     var ownerId: String = "" // id владельца
-
 )

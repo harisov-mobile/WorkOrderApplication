@@ -29,6 +29,10 @@ class DbCarRepositoryImpl private constructor(application: Application) : CarRep
         return carMapper.fromListDbModelToListEntity(appDao.getCarList())
     }
 
+    override suspend fun getCarsByOwner(ownerId: String): List<Car> {
+        appDao.getCarsByOwner(ownerId)
+    }
+
     override suspend fun addCarList(carList: List<Car>) {
         appDao.addCarList(carMapper.fromListEntityToListDbModel(carList))
     }
@@ -47,5 +51,9 @@ class DbCarRepositoryImpl private constructor(application: Application) : CarRep
 
     override suspend fun deleteAllCars() {
         appDao.deleteAllCars()
+    }
+
+    override suspend fun searchCars(searchText: String): List<Car> {
+        return carMapper.fromListDbModelToListEntity(appDao.searhCars("%$searchText%"))
     }
 }

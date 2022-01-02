@@ -52,7 +52,6 @@ class PartnerListAdapter(var partners: List<Partner>) : RecyclerView.Adapter<Par
         binding.root.setOnClickListener {
             onPartnerClickListener?.invoke(partner)
             notifyItemChanged(partners.indexOf(partner), Unit) // перерисовка без анимации
-            Log.i("rustam", " нажат элемент " + partner.name)
         }
         binding.root.setOnLongClickListener {
             onPartnerLongClickListener?.invoke(partner)

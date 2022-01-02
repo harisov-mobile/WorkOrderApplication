@@ -1,11 +1,14 @@
 package ru.internetcloud.workorderapplication.data.mapper
 
 import ru.internetcloud.workorderapplication.data.entity.CarDbModel
+import ru.internetcloud.workorderapplication.data.entity.CarWithOwner
 import ru.internetcloud.workorderapplication.data.network.dto.CarDTO
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
 
 class CarMapper {
+
+    private val partnerMapper = PartnerMapper()
 
     fun fromDtoToEntity(carDTO: CarDTO): Car {
         return Car(
@@ -22,24 +25,38 @@ class CarMapper {
         )
     }
 
-    fun fromDbModelToEntityWithNull(carDbModel: CarDbModel?): Car? {
+    fun fromDbModelToEntityWithNull(carWithOwner: CarWithOwner?): Car? {
         var result: Car? = null
-        if (carDbModel != null) {
+        if (carWithOwner != null) {
 
-            result = Car(
-                id = carDbModel.id,
-                code1C = carDbModel.code1C,
-                name = carDbModel.name
+            return Car(
+                id = carWithOwner.car.id,
+                code1C = carWithOwner.car.code1C,
+                name = carWithOwner.car.name,
+                vin = carWithOwner.car.vin,
+                manufacturer = carWithOwner.car.manufacturer,
+                model = carWithOwner.car.model,
+                type = carWithOwner.car.type,
+                releaseYear = carWithOwner.car.releaseYear,
+                mileage = carWithOwner.car.mileage,
+                owner = partnerMapper.fromDbModelToEntityWithNull(carWithOwner.owner)
             )
         }
         return result
     }
 
-    fun fromDbModelToEntity(carDbModel: CarDbModel): Car {
+    fun fromDbModelToEntity(carWithOwner: CarWithOwner): Car {
         return Car(
-            id = carDbModel.id,
-            code1C = carDbModel.code1C,
-            name = carDbModel.name
+            id = carWithOwner.car.id,
+            code1C = carWithOwner.car.code1C,
+            name = carWithOwner.car.name,
+            vin = carWithOwner.car.vin,
+            manufacturer = carWithOwner.car.manufacturer,
+            model = carWithOwner.car.model,
+            type = carWithOwner.car.type,
+            releaseYear = carWithOwner.car.releaseYear,
+            mileage = carWithOwner.car.mileage,
+            owner = partnerMapper.fromDbModelToEntityWithNull(carWithOwner.owner)
         )
     }
 
@@ -62,7 +79,7 @@ class CarMapper {
         fromDtoToEntity(it)
     }
 
-    fun fromListDbModelToListEntity(list: List<CarDbModel>) = list.map {
+    fun fromListDbModelToListEntity(list: List<CarWithOwner>) = list.map {
         fromDbModelToEntity(it)
     }
 

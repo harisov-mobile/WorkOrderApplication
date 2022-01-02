@@ -17,7 +17,7 @@ data class WorkOrderWithDetails(
         entityColumn = "id",
         entity = CarDbModel::class
     )
-    val car: CarDbModel?,
+    val car: CarWithOwner?,
     @Relation(
         parentColumn = "repairTypeId",
         entityColumn = "id",

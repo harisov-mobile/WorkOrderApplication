@@ -46,6 +46,7 @@ interface AppDao {
     suspend fun getRepairType(id: String): RepairTypeDbModel?
 
     // ----------------------------------------------------------------------
+
     @Query("SELECT * FROM car_jobs")
     suspend fun getCarJobList(): List<CarJobDbModel> // Не использовать LiveData в репозитории
 
@@ -107,8 +108,13 @@ interface AppDao {
     suspend fun searhPartners(searchText: String): List<PartnerDbModel>
 
     // ----------------------------------------------------------------------
+    @Transaction
+    @Query("SELECT * FROM cars WHERE ownerId=:ownerId ORDER BY name")
+    suspend fun getCarsByOwner(ownerId: String): List<CarWithOwner> // Не использовать LiveData в репозитории
+
+    @Transaction
     @Query("SELECT * FROM cars")
-    suspend fun getCarList(): List<CarDbModel>
+    suspend fun getCarList(): List<CarWithOwner>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addCarList(partnerDbModelList: List<CarDbModel>)
@@ -116,9 +122,13 @@ interface AppDao {
     @Query("DELETE FROM cars")
     suspend fun deleteAllCars()
 
+    @Transaction
     @Query("SELECT * FROM cars WHERE id=:id LIMIT 1")
     suspend fun getCar(id: String): CarDbModel?
-    
+
+    @Query("SELECT * FROM cars WHERE name LIKE :searchText OR manufacturer LIKE :searchText")
+    suspend fun searhCars(searchText: String): List<CarDbModel>
+
     // ----------------------------------------------------------------------
     @Query("SELECT * FROM working_hours")
     suspend fun getWorkingHourList(): List<WorkingHourDbModel>

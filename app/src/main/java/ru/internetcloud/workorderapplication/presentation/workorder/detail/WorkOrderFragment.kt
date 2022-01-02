@@ -16,6 +16,7 @@ import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBindin
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.car.CarPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerPickerFragment
 import java.util.*
 
@@ -40,6 +41,9 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         private val REQUEST_PARTNER_PICKER_KEY = "request_partner_picker_key"
         private val ARG_PARTNER = "partner_picker"
+
+        private val REQUEST_CAR_PICKER_KEY = "request_car_picker_key"
+        private val ARG_CAR = "car_picker"
 
         fun newInstanceAddWorkOrder(): WorkOrderFragment {
             val instance = WorkOrderFragment()
@@ -226,6 +230,16 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 PartnerPickerFragment
                     .newInstance(order.partner, REQUEST_PARTNER_PICKER_KEY, ARG_PARTNER)
                     .show(childFragmentManager, REQUEST_PARTNER_PICKER_KEY)
+            }
+        }
+
+        binding.carSelectButton.setOnClickListener {
+            viewModel.workOrder.value?.let { order ->
+                order.car?.isSelected = true
+
+                CarPickerFragment
+                    .newInstance(order.car, REQUEST_CAR_PICKER_KEY, ARG_CAR)
+                    .show(childFragmentManager, REQUEST_CAR_PICKER_KEY)
             }
         }
     }

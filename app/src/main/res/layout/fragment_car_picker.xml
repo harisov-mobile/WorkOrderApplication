@@ -39,7 +39,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/partner_list_recycler_view"
+        android:id="@+id/car_list_recycler_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -51,7 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_edit_text"
-        tools:listitem="@layout/item_partner_list" />
+        tools:listitem="@layout/item_car_list" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

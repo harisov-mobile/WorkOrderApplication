@@ -39,6 +39,10 @@ class RemoteCarRepositoryImpl private constructor(application: Application) : Ca
         return carMapper.fromListDtoToListEntity(carResponse.cars)
     }
 
+    override suspend fun getCarsByOwner(ownerId: String): List<Car> {
+        throw RuntimeException("Error - method getCarsByOwner is restricted in RemoteCarModelRepositoryImpl")
+    }
+
     override suspend fun addCarList(carList: List<Car>) {
         throw RuntimeException("Error - method addCarList is restricted in RemoteCarModelRepositoryImpl")
     }
@@ -50,5 +54,9 @@ class RemoteCarRepositoryImpl private constructor(application: Application) : Ca
 
     override suspend fun deleteAllCars() {
         throw RuntimeException("Error - method deleteAllCars is restricted in RemoteCarModelRepositoryImpl")
+    }
+
+    override suspend fun searchCars(searchText: String): List<Car> {
+        throw RuntimeException("Error - method searchCars is restricted in RemoteCarModelRepositoryImpl")
     }
 }

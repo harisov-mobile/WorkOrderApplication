@@ -49,6 +49,7 @@
 
 
     <string name="partner_picker_title">Выберите заказчика</string>
+    <string name="car_picker_title">Выберите СХТ</string>
     <string name="button_cancel">Отмена</string>
     <string name="button_clear">Очистить</string>
     <string name="button_ok">Ок</string>

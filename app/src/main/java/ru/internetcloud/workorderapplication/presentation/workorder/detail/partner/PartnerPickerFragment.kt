@@ -21,7 +21,7 @@ class PartnerPickerFragment: DialogFragment() {
     companion object {
 
         private const val PARTNER = "partner"
-        private const val PARENT_REQUEST_KEY = "parent_request_partner_id_picker_key"
+        private const val PARENT_REQUEST_KEY = "parent_request_partner_picker_key"
         private const val PARENT_PARTNER_ARG_NAME = "parent_partner_arg_name"
 
         private const val NOT_FOUND_POSITION = -1
@@ -101,7 +101,6 @@ class PartnerPickerFragment: DialogFragment() {
 
             if (currentPosition != NOT_FOUND_POSITION) {
                 partners[currentPosition].isSelected = true
-                // partnerListAdapter.notifyDataSetChanged()
                 partnerListAdapter.notifyItemChanged(currentPosition, Unit)
             }
         })
@@ -124,8 +123,6 @@ class PartnerPickerFragment: DialogFragment() {
             previousSelectedPartner?.isSelected = false
             partner?.isSelected = true
             previousSelectedPartner = partner
-            Log.i("rustam", " onPartnerSelected = " + partner?.name)
-            Log.i("rustam", " partnerId = " + partner?.id)
         }
 
         partnerListAdapter.onPartnerLongClickListener = { currentPartner ->

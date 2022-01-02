@@ -3,8 +3,8 @@ package ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.ca
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.repository.CarRepository
 
-class GetCarUseCase(private val carRepository: CarRepository) {
-    suspend fun getCar(id: String): Car? {
-        return carRepository.getCar(id)
+class SearchCarsUseCase(private val carRepository: CarRepository) {
+    suspend fun searchCars(searchText: String): List<Car> {
+        return carRepository.searchCars(searchText)
     }
 }
