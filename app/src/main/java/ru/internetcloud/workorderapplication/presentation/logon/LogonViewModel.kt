@@ -1,6 +1,7 @@
 package ru.internetcloud.workorderapplication.presentation.logon
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -64,6 +65,9 @@ class LogonViewModel(private val app: Application) : AndroidViewModel(app) {
                 } else {
                     server = "http://" + server
                 }
+                Log.i("rustam", "Имя сервера = " + server)
+                Log.i("rustam", "Логин = " + login)
+                Log.i("rustam", "Пароль = " + password)
 
                 setAuthParametersUseCase.setAuthParameters(server, login, password)
 

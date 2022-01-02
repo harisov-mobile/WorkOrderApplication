@@ -24,11 +24,11 @@ android {
         debug {
             // buildConfigField 'String', 'BASE_URL', '"https://internetoblako.ru/test/hs/rest/"'
             // alpha2/hs/rest/auth/check
-            buildConfigField 'String', 'BASE_URL', '"http://78.138.142.134:4444/alpha2/hs/rest/"'
+            //buildConfigField 'String', 'BASE_URL', '"http://78.138.142.134:4444/alpha2/hs/rest/"'
         }
         staging {
             //buildConfigField 'String', 'BASE_URL', '"https://internetoblako.ru/test/hs/rest/"'
-            buildConfigField 'String', 'BASE_URL', '"http://78.138.142.134:4444/alpha2/hs/rest/"'
+            //buildConfigField 'String', 'BASE_URL', '"http://78.138.142.134:4444/alpha2/hs/rest/"'
         }
 
         release {

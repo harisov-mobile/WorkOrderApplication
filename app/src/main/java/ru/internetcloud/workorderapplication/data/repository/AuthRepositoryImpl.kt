@@ -48,6 +48,7 @@ class AuthRepositoryImpl private constructor(private val application: Applicatio
         try {
             ApiClient.initialize(authParameters)
         } catch (e: Exception) {
+            Log.i("rustam", "Ошибка при инициализации ApiClient = " + e.toString())
             authResult.isAuthorized = false
             authResult.errorMessage = "Нет связи с сервером."
             return authResult
@@ -58,9 +59,11 @@ class AuthRepositoryImpl private constructor(private val application: Applicatio
             val authResponse: AuthResponse = ApiClient.getInstance().client.checkAuthorization()
             authResult.isAuthorized = authResponse.isAuthorized
         } catch (e: SocketTimeoutException) {
+            Log.i("rustam", "SocketTimeoutException = " + e.toString())
             authResult.isAuthorized = false
             authResult.errorMessage = "Нет связи с сервером."
         } catch (e: Exception) {
+            Log.i("rustam", "Exception e = " + e.toString())
             authResult.isAuthorized = false
             authResult.errorMessage = "Неправильный логин или пароль!"
         }
