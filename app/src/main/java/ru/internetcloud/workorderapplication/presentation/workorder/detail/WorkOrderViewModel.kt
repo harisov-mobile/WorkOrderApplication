@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.data.repository.DbPartnerRepositoryImpl
-import ru.internetcloud.workorderapplication.data.repository.DbWorkOrderRepositoryImpl
+import ru.internetcloud.workorderapplication.data.repository.db.DbPartnerRepositoryImpl
+import ru.internetcloud.workorderapplication.data.repository.db.DbWorkOrderRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.GetPartnerUseCase
@@ -107,15 +107,5 @@ class WorkOrderViewModel : ViewModel() {
         _workOrder.value = WorkOrder(
             id = NUMBER_PREFIX + UUID.randomUUID().toString(),
             isNew = true)
-    }
-
-    fun setupPartnerById(partnerId: String) {
-        workOrder.value?.let { order ->
-            if (order.partner == null || partnerId != order.partner?.id) {
-                viewModelScope.launch {
-                    order.partner = getPartnerUseCase.getPartner(partnerId)
-                }
-            }
-        }
     }
 }

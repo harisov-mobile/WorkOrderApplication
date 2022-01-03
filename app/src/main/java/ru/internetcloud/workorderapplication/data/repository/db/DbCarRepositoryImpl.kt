@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.data.repository
+package ru.internetcloud.workorderapplication.data.repository.db
 
 import android.app.Application
 import ru.internetcloud.workorderapplication.data.database.AppDatabase
@@ -26,11 +26,11 @@ class DbCarRepositoryImpl private constructor(application: Application) : CarRep
     }
 
     override suspend fun getCarList(): List<Car> {
-        return carMapper.fromListDbModelToListEntity(appDao.getCarList())
+        return carMapper.fromListCarWithOwnerToListEntity(appDao.getCarList())
     }
 
-    override suspend fun getCarsByOwner(ownerId: String): List<Car> {
-        appDao.getCarsByOwner(ownerId)
+    override suspend fun getCarListByOwner(ownerId: String): List<Car> {
+        return carMapper.fromListCarWithOwnerToListEntity(appDao.getCarsByOwner(ownerId))
     }
 
     override suspend fun addCarList(carList: List<Car>) {
@@ -40,10 +40,10 @@ class DbCarRepositoryImpl private constructor(application: Application) : CarRep
     override suspend fun getCar(id: String): Car? {
         var car: Car? = null
 
-        val carDbModel = appDao.getCar(id)
+        val carWithOwner = appDao.getCar(id)
 
-        carDbModel?.let {
-            car = carMapper.fromDbModelToEntity(it)
+        carWithOwner?.let {
+            car = carMapper.fromCarWithOwnerToEntity(it)
         }
 
         return car
@@ -54,6 +54,6 @@ class DbCarRepositoryImpl private constructor(application: Application) : CarRep
     }
 
     override suspend fun searchCars(searchText: String): List<Car> {
-        return carMapper.fromListDbModelToListEntity(appDao.searhCars("%$searchText%"))
+        return carMapper.fromListCarWithOwnerToListEntity(appDao.searhCars("%$searchText%"))
     }
 }

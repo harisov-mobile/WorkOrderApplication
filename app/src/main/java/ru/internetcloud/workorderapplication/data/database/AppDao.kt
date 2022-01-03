@@ -45,6 +45,9 @@ interface AppDao {
     @Query("SELECT * FROM repair_types WHERE id=:id LIMIT 1")
     suspend fun getRepairType(id: String): RepairTypeDbModel?
 
+    @Query("SELECT * FROM repair_types WHERE name LIKE :searchText")
+    suspend fun searhRepairTypes(searchText: String): List<RepairTypeDbModel>
+
     // ----------------------------------------------------------------------
 
     @Query("SELECT * FROM car_jobs")
@@ -117,17 +120,18 @@ interface AppDao {
     suspend fun getCarList(): List<CarWithOwner>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addCarList(partnerDbModelList: List<CarDbModel>)
+    suspend fun addCarList(carDbModelList: List<CarDbModel>)
 
     @Query("DELETE FROM cars")
     suspend fun deleteAllCars()
 
     @Transaction
     @Query("SELECT * FROM cars WHERE id=:id LIMIT 1")
-    suspend fun getCar(id: String): CarDbModel?
+    suspend fun getCar(id: String): CarWithOwner?
 
+    @Transaction
     @Query("SELECT * FROM cars WHERE name LIKE :searchText OR manufacturer LIKE :searchText")
-    suspend fun searhCars(searchText: String): List<CarDbModel>
+    suspend fun searhCars(searchText: String): List<CarWithOwner>
 
     // ----------------------------------------------------------------------
     @Query("SELECT * FROM working_hours")

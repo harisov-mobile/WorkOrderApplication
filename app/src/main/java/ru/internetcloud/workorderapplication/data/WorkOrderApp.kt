@@ -2,6 +2,8 @@ package ru.internetcloud.workorderapplication.data
 
 import android.app.Application
 import ru.internetcloud.workorderapplication.data.repository.*
+import ru.internetcloud.workorderapplication.data.repository.db.*
+import ru.internetcloud.workorderapplication.data.repository.remote.*
 
 class WorkOrderApp : Application() {
 

@@ -21,42 +21,8 @@ class CarMapper {
             type = carDTO.type,
             releaseYear = carDTO.releaseYear,
             mileage = carDTO.mileage,
-            owner = Partner(carDTO.ownerId)
-        )
-    }
-
-    fun fromDbModelToEntityWithNull(carWithOwner: CarWithOwner?): Car? {
-        var result: Car? = null
-        if (carWithOwner != null) {
-
-            return Car(
-                id = carWithOwner.car.id,
-                code1C = carWithOwner.car.code1C,
-                name = carWithOwner.car.name,
-                vin = carWithOwner.car.vin,
-                manufacturer = carWithOwner.car.manufacturer,
-                model = carWithOwner.car.model,
-                type = carWithOwner.car.type,
-                releaseYear = carWithOwner.car.releaseYear,
-                mileage = carWithOwner.car.mileage,
-                owner = partnerMapper.fromDbModelToEntityWithNull(carWithOwner.owner)
-            )
-        }
-        return result
-    }
-
-    fun fromDbModelToEntity(carWithOwner: CarWithOwner): Car {
-        return Car(
-            id = carWithOwner.car.id,
-            code1C = carWithOwner.car.code1C,
-            name = carWithOwner.car.name,
-            vin = carWithOwner.car.vin,
-            manufacturer = carWithOwner.car.manufacturer,
-            model = carWithOwner.car.model,
-            type = carWithOwner.car.type,
-            releaseYear = carWithOwner.car.releaseYear,
-            mileage = carWithOwner.car.mileage,
-            owner = partnerMapper.fromDbModelToEntityWithNull(carWithOwner.owner)
+            owner = Partner(carDTO.ownerId) // специально псевдо-объект Partner создаю, с единственной целью:
+            // чтобы он хранил ownerId, мне понадобится ownerId потом
         )
     }
 
@@ -79,11 +45,46 @@ class CarMapper {
         fromDtoToEntity(it)
     }
 
-    fun fromListDbModelToListEntity(list: List<CarWithOwner>) = list.map {
-        fromDbModelToEntity(it)
-    }
-
     fun fromListEntityToListDbModel(list: List<Car>) = list.map {
         fromEntityToDbModel(it)
+    }
+
+    fun fromCarWithOwnerToEntityWithNull(carWithOwner: CarWithOwner?): Car? {
+        var result: Car? = null
+        if (carWithOwner != null) {
+
+            return Car(
+                id = carWithOwner.car.id,
+                code1C = carWithOwner.car.code1C,
+                name = carWithOwner.car.name,
+                vin = carWithOwner.car.vin,
+                manufacturer = carWithOwner.car.manufacturer,
+                model = carWithOwner.car.model,
+                type = carWithOwner.car.type,
+                releaseYear = carWithOwner.car.releaseYear,
+                mileage = carWithOwner.car.mileage,
+                owner = partnerMapper.fromDbModelToEntityWithNull(carWithOwner.owner)
+            )
+        }
+        return result
+    }
+
+    fun fromCarWithOwnerToEntity(carWithOwner: CarWithOwner): Car {
+        return Car(
+            id = carWithOwner.car.id,
+            code1C = carWithOwner.car.code1C,
+            name = carWithOwner.car.name,
+            vin = carWithOwner.car.vin,
+            manufacturer = carWithOwner.car.manufacturer,
+            model = carWithOwner.car.model,
+            type = carWithOwner.car.type,
+            releaseYear = carWithOwner.car.releaseYear,
+            mileage = carWithOwner.car.mileage,
+            owner = partnerMapper.fromDbModelToEntityWithNull(carWithOwner.owner)
+        )
+    }
+
+    fun fromListCarWithOwnerToListEntity(list: List<CarWithOwner>) = list.map {
+        fromCarWithOwnerToEntity(it)
     }
 }

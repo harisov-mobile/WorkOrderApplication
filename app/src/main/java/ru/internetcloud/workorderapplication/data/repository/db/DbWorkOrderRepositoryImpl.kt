@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.data.repository
+package ru.internetcloud.workorderapplication.data.repository.db
 
 import android.app.Application
 import androidx.lifecycle.LiveData

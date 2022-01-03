@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.data.repository
+package ru.internetcloud.workorderapplication.data.repository.remote
 
 import android.app.Application
 import ru.internetcloud.workorderapplication.data.mapper.CarJobMapper

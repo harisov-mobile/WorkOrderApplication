@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.data.repository
+package ru.internetcloud.workorderapplication.data.repository.remote
 
 import android.app.Application
 import ru.internetcloud.workorderapplication.data.mapper.RepairTypeMapper
@@ -50,5 +50,9 @@ class RemoteRepairTypeRepositoryImpl private constructor(application: Applicatio
 
     override suspend fun deleteAllRepairTypes() {
         throw RuntimeException("Error - method deleteAllRepairTypes is restricted in RemoteRepairTypeRepositoryImpl")
+    }
+
+    override suspend fun searchRepairTypes(searchText: String): List<RepairType> {
+        throw RuntimeException("Error - method searchRepairTypes is restricted in RemoteRepairTypeRepositoryImpl")
     }
 }

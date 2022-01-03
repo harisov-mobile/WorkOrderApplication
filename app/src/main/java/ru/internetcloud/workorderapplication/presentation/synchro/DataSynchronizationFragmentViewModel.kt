@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.data.repository.*
+import ru.internetcloud.workorderapplication.data.repository.db.*
+import ru.internetcloud.workorderapplication.data.repository.remote.*
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.AddCarListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.DeleteCarListUseCase

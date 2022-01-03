@@ -3,8 +3,8 @@ package ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.re
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.repository.RepairTypeRepository
 
-class GetRepairTypeUseCase(private val repairTypeRepository: RepairTypeRepository) {
-    suspend fun getRepairType(id: String): RepairType? {
-        return repairTypeRepository.getRepairType(id)
+class SearchRepairTypesUseCase(private val repairTypeRepository: RepairTypeRepository) {
+    suspend fun searchRepairTypes(searchText: String): List<RepairType> {
+        return repairTypeRepository.searchRepairTypes(searchText)
     }
 }

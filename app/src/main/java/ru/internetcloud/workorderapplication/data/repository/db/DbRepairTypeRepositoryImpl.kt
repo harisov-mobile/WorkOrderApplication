@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.data.repository
+package ru.internetcloud.workorderapplication.data.repository.db
 
 import android.app.Application
 import ru.internetcloud.workorderapplication.data.database.AppDatabase
@@ -49,5 +49,9 @@ class DbRepairTypeRepositoryImpl private constructor(application: Application) :
 
     override suspend fun deleteAllRepairTypes() {
         appDao.deleteAllRepairTypes()
+    }
+
+    override suspend fun searchRepairTypes(searchText: String): List<RepairType> {
+        return repairTypeMapper.fromListDbModelToListEntity(appDao.searhRepairTypes("%$searchText%"))
     }
 }

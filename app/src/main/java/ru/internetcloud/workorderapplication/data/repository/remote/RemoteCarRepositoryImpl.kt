@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.data.repository
+package ru.internetcloud.workorderapplication.data.repository.remote
 
 import android.app.Application
 import android.util.Log
@@ -39,7 +39,7 @@ class RemoteCarRepositoryImpl private constructor(application: Application) : Ca
         return carMapper.fromListDtoToListEntity(carResponse.cars)
     }
 
-    override suspend fun getCarsByOwner(ownerId: String): List<Car> {
+    override suspend fun getCarListByOwner(ownerId: String): List<Car> {
         throw RuntimeException("Error - method getCarsByOwner is restricted in RemoteCarModelRepositoryImpl")
     }
 

@@ -3,7 +3,6 @@ package ru.internetcloud.workorderapplication.presentation.workorder.detail.car
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -13,10 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.catalog.Car
-import ru.internetcloud.workorderapplication.domain.catalog.Partner
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerListAdapter
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerListViewModel
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerPickerFragment
 import java.lang.RuntimeException
 
 class CarPickerFragment: DialogFragment() {

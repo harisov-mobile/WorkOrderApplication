@@ -41,7 +41,7 @@ class WorkOrderMapper {
             number = workOrderWithDetails.workOrder.number,
             date = workOrderWithDetails.workOrder.date,
             partner = partnerMapper.fromDbModelToEntityWithNull(workOrderWithDetails.partner),
-            car = carMapper.fromDbModelToEntityWithNull(workOrderWithDetails.car),
+            car = carMapper.fromCarWithOwnerToEntityWithNull(workOrderWithDetails.car),
             repairType = repairTypeMapper.fromDbModelToEntityWithNull(workOrderWithDetails.repairType),
             department = departmentMapper.fromDbModelToEntityWithNull(workOrderWithDetails.department),
             requestReason = workOrderWithDetails.workOrder.requestReason,
