@@ -63,7 +63,7 @@ class CarPickerFragment: DialogFragment() {
         val alertDialogBuilder = AlertDialog.Builder(activity)
         alertDialogBuilder.setTitle(R.string.car_picker_title)
 
-        val container = layoutInflater.inflate(R.layout.fragment_car_picker, null, false)
+        val container = layoutInflater.inflate(R.layout.fragment_picker, null, false)
         searchButton = container.findViewById(R.id.search_button)
         searchEditText = container.findViewById(R.id.search_edit_text)
 
@@ -109,7 +109,7 @@ class CarPickerFragment: DialogFragment() {
     }
 
     private fun setupCarListRecyclerView(view: View) {
-        carListRecyclerView = view.findViewById(R.id.car_list_recycler_view)
+        carListRecyclerView = view.findViewById(R.id.list_recycler_view)
         carListAdapter = CarListAdapter(emptyList())
         // LinearLayoutManager задан в XML-разметке
         carListRecyclerView.adapter = carListAdapter

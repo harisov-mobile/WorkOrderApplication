@@ -63,7 +63,7 @@ class RepairTypePickerFragment: DialogFragment() {
         val alertDialogBuilder = AlertDialog.Builder(activity)
         alertDialogBuilder.setTitle(R.string.repair_type_picker_title)
 
-        val container = layoutInflater.inflate(R.layout.fragment_repair_type_picker, null, false)
+        val container = layoutInflater.inflate(R.layout.fragment_picker, null, false)
         searchButton = container.findViewById(R.id.search_button)
         searchEditText = container.findViewById(R.id.search_edit_text)
 
@@ -109,7 +109,7 @@ class RepairTypePickerFragment: DialogFragment() {
     }
 
     private fun setupRepairTypeListRecyclerView(view: View) {
-        repairTypeListRecyclerView = view.findViewById(R.id.repair_type_list_recycler_view)
+        repairTypeListRecyclerView = view.findViewById(R.id.list_recycler_view)
         repairTypeListAdapter = RepairTypeListAdapter(emptyList())
         // LinearLayoutManager задан в XML-разметке
         repairTypeListRecyclerView.adapter = repairTypeListAdapter
