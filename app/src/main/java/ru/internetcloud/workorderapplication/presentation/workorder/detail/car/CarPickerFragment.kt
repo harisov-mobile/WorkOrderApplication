@@ -14,7 +14,7 @@ import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import java.lang.RuntimeException
 
-class CarPickerFragment: DialogFragment() {
+class CarPickerFragment : DialogFragment() {
 
     companion object {
 
@@ -95,7 +95,7 @@ class CarPickerFragment: DialogFragment() {
                 currentPosition
             }
 
-            carListRecyclerView.scrollToPosition(scrollPosition);
+            carListRecyclerView.scrollToPosition(scrollPosition)
 
             if (currentPosition != CarPickerFragment.NOT_FOUND_POSITION) {
                 cars[currentPosition].isSelected = true

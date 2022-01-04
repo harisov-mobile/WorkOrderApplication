@@ -8,8 +8,7 @@ import ru.internetcloud.workorderapplication.databinding.ItemRepairTypeListBindi
 import ru.internetcloud.workorderapplication.databinding.ItemRepairTypeListSelectedBinding
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 
-class RepairTypeListAdapter(var repairTypes: List<RepairType>) : RecyclerView.Adapter<RepairTypeListViewHolder>()
-{
+class RepairTypeListAdapter(var repairTypes: List<RepairType>) : RecyclerView.Adapter<RepairTypeListViewHolder>() {
     var onRepairTypeClickListener: ((repairType: RepairType) -> Unit)? = null
     var onRepairTypeLongClickListener: ((repairType: RepairType) -> Unit)? = null
 

@@ -1,14 +1,9 @@
 package ru.internetcloud.workorderapplication.data.mapper
 
-import ru.internetcloud.workorderapplication.data.entity.JobDetailWithRequisities
 import ru.internetcloud.workorderapplication.data.entity.PerformerDetailDbModel
 import ru.internetcloud.workorderapplication.data.entity.PerformerDetailWithRequisities
-import ru.internetcloud.workorderapplication.data.entity.WorkOrderWithDetails
 import ru.internetcloud.workorderapplication.data.network.dto.PerformerDetailDTO
-import ru.internetcloud.workorderapplication.domain.catalog.Employee
-import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
-import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 
 class PerformerDetailMapper {
 

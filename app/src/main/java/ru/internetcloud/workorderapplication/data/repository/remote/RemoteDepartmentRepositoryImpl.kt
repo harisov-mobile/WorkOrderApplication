@@ -49,4 +49,8 @@ class RemoteDepartmentRepositoryImpl private constructor(application: Applicatio
     override suspend fun deleteAllDepartments() {
         throw RuntimeException("Error - method deleteAllDepartments is restricted in RemoteDepartmentRepositoryImpl")
     }
+
+    override suspend fun searchDepartments(searchText: String): List<Department> {
+        throw RuntimeException("Error - method searchDepartments is restricted in RemoteDepartmentRepositoryImpl")
+    }
 }

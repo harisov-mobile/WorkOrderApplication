@@ -3,12 +3,9 @@ package ru.internetcloud.workorderapplication.data.repository
 import android.app.Application
 import android.util.Log
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
-import ru.internetcloud.workorderapplication.data.network.dto.UploadWorkOrderResponse
-import ru.internetcloud.workorderapplication.data.network.dto.WorkOrderDTO
 import ru.internetcloud.workorderapplication.data.network.dto.WorkOrderResponse
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
 import ru.internetcloud.workorderapplication.domain.repository.LoadWorkOrderRepository
-import java.util.*
 
 class LoadWorkOrderRepositoryImpl private constructor(
     application: Application,
@@ -63,8 +60,6 @@ class LoadWorkOrderRepositoryImpl private constructor(
             result.successMessage = ""
         } else {
             Log.i("rustam", "начинаем uploadWorkOrderList")
-
-            //val testWO = WorkOrderDTO("1", "2", Date().toString(), "3", "3","3","3","3","3","3")
 
             try {
                 val uploadWorkOrderResponse = ApiClient.getInstance().client.uploadWorkOrders(listWO)

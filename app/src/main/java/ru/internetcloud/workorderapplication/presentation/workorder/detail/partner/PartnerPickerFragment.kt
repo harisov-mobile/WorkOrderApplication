@@ -3,7 +3,6 @@ package ru.internetcloud.workorderapplication.presentation.workorder.detail.part
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -12,11 +11,9 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
-import java.lang.RuntimeException
 
-class PartnerPickerFragment: DialogFragment() {
+class PartnerPickerFragment : DialogFragment() {
 
     companion object {
 
@@ -97,7 +94,7 @@ class PartnerPickerFragment: DialogFragment() {
                 currentPosition
             }
 
-            partnerListRecyclerView.scrollToPosition(scrollPosition);
+            partnerListRecyclerView.scrollToPosition(scrollPosition)
 
             if (currentPosition != NOT_FOUND_POSITION) {
                 partners[currentPosition].isSelected = true

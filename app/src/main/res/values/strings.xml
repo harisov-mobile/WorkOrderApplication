@@ -46,12 +46,14 @@
     <string name="choose_label">...</string>
     <string name="car_label">СХТ:</string>
     <string name="repair_type_label">Вид ремонта:</string>
+    <string name="department_type_label">Цех:</string>
     <string name="date_label">Дата:</string>
 
 
     <string name="partner_picker_title">Выберите заказчика</string>
     <string name="car_picker_title">Выберите СХТ</string>
     <string name="repair_type_picker_title">Выберите вид ремонта</string>
+    <string name="department_picker_title">Выберите цех</string>
     <string name="button_cancel">Отмена</string>
     <string name="button_clear">Очистить</string>
     <string name="button_ok">Ок</string>

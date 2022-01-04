@@ -14,7 +14,7 @@ import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import java.lang.RuntimeException
 
-class RepairTypePickerFragment: DialogFragment() {
+class RepairTypePickerFragment : DialogFragment() {
 
     companion object {
 

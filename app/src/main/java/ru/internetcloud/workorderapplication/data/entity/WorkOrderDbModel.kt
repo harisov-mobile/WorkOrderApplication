@@ -20,5 +20,5 @@ data class WorkOrderDbModel(
     var performersString: String = "", // исполнители строкой
     var mileage: Int = 0, // Пробег (наработка)
     var isNew: Boolean = false,
-    var isModified: Boolean = false,
+    var isModified: Boolean = false
 )

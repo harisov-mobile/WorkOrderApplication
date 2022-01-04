@@ -11,4 +11,6 @@ interface DepartmentRepository {
     suspend fun getDepartment(id: String): Department?
 
     suspend fun deleteAllDepartments()
+
+    suspend fun searchDepartments(searchText: String): List<Department>
 }

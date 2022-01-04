@@ -3,7 +3,6 @@ package ru.internetcloud.workorderapplication.presentation.workorder.detail
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
 import ru.internetcloud.workorderapplication.domain.catalog.Car
+import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.car.CarPickerFragment
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.repairtype.RepairTypePickerFragment
 import java.util.*
@@ -50,6 +51,9 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         private val REQUEST_REPAIR_TYPE_PICKER_KEY = "request_repair_type_picker_key"
         private val ARG_REPAIR_TYPE = "repair_type_picker"
+
+        private val REQUEST_DEPARTMENT_PICKER_KEY = "request_department_picker_key"
+        private val ARG_DEPARTMENT = "department_picker"
 
         fun newInstanceAddWorkOrder(): WorkOrderFragment {
             val instance = WorkOrderFragment()
@@ -93,6 +97,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         childFragmentManager.setFragmentResultListener(REQUEST_PARTNER_PICKER_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_CAR_PICKER_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_REPAIR_TYPE_PICKER_KEY, viewLifecycleOwner, this)
+        childFragmentManager.setFragmentResultListener(REQUEST_DEPARTMENT_PICKER_KEY, viewLifecycleOwner, this)
 
         setupClickListeners()
     }
@@ -150,7 +155,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             binding.partnerTextView.text = order.partner?.name
             binding.carTextView.text = order.car?.name
             binding.repairTypeTextView.text = order.repairType?.name
-            // binding.departmentTypeTextView.text = order.department?.name
+            binding.departmentTextView.text = order.department?.name
 
             binding.mileageEditText.setText(order.mileage.toString())
             binding.requestReasonEditText.setText(order.requestReason)
@@ -210,7 +215,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     }
 
     override fun onFragmentResult(requestKey: String, result: Bundle) {
-        when(requestKey) {
+        when (requestKey) {
             REQUEST_DATE_PICKER_KEY -> {
                 val date = result.getSerializable(ARG_DATE) as Date
                 binding.dateTextView.text = DateConverter.getDateString(date)
@@ -220,21 +225,30 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 val partner: Partner? = result.getParcelable(ARG_PARTNER)
                 viewModel.workOrder.value?.let { order ->
                     order.partner = partner
-                    binding.partnerTextView.text = partner?.name ?:""
+                    binding.partnerTextView.text = partner?.name ?: ""
                 }
             }
             REQUEST_CAR_PICKER_KEY -> {
                 val car: Car? = result.getParcelable(ARG_CAR)
                 viewModel.workOrder.value?.let { order ->
                     order.car = car
-                    binding.carTextView.text = car?.name ?:""
+                    binding.carTextView.text = car?.name ?: ""
                 }
             }
+
             REQUEST_REPAIR_TYPE_PICKER_KEY -> {
                 val repairType: RepairType? = result.getParcelable(ARG_REPAIR_TYPE)
                 viewModel.workOrder.value?.let { order ->
                     order.repairType = repairType
-                    binding.repairTypeTextView.text = repairType?.name ?:""
+                    binding.repairTypeTextView.text = repairType?.name ?: ""
+                }
+            }
+
+            REQUEST_DEPARTMENT_PICKER_KEY -> {
+                val department: Department? = result.getParcelable(ARG_DEPARTMENT)
+                viewModel.workOrder.value?.let { order ->
+                    order.department = department
+                    binding.departmentTextView.text = department?.name ?: ""
                 }
             }
         }
@@ -276,6 +290,16 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 RepairTypePickerFragment
                     .newInstance(order.repairType, REQUEST_REPAIR_TYPE_PICKER_KEY, ARG_REPAIR_TYPE)
                     .show(childFragmentManager, REQUEST_REPAIR_TYPE_PICKER_KEY)
+            }
+        }
+
+        binding.departmentSelectButton.setOnClickListener {
+            viewModel.workOrder.value?.let { order ->
+                order.department?.isSelected = true
+
+                DepartmentPickerFragment
+                    .newInstance(order.department, REQUEST_DEPARTMENT_PICKER_KEY, ARG_DEPARTMENT)
+                    .show(childFragmentManager, REQUEST_DEPARTMENT_PICKER_KEY)
             }
         }
     }

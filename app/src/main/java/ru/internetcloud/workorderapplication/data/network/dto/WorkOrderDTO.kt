@@ -33,7 +33,7 @@ data class WorkOrderDTO(
     @SerializedName("comment")
     val comment: String,
 
-@SerializedName("performers_string")
+    @SerializedName("performers_string")
     val performersString: String,
 
     @SerializedName("mileage")

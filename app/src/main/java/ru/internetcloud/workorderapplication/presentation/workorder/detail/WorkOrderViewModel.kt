@@ -51,7 +51,6 @@ class WorkOrderViewModel : ViewModel() {
         private const val NUMBER_PREFIX = "new"
     }
 
-
     // -------------------------------------------------------------------------------
     fun loadWorkOrder(workOrderId: String) {
         viewModelScope.launch {

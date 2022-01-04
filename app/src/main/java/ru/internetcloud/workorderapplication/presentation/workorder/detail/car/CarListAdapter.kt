@@ -8,8 +8,7 @@ import ru.internetcloud.workorderapplication.databinding.ItemCarListBinding
 import ru.internetcloud.workorderapplication.databinding.ItemCarListSelectedBinding
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 
-class CarListAdapter(var cars: List<Car>) : RecyclerView.Adapter<CarListViewHolder>()
-{
+class CarListAdapter(var cars: List<Car>) : RecyclerView.Adapter<CarListViewHolder>() {
     var onCarClickListener: ((car: Car) -> Unit)? = null
     var onCarLongClickListener: ((car: Car) -> Unit)? = null
 

@@ -48,4 +48,8 @@ class DbDepartmentRepositoryImpl private constructor(application: Application) :
     override suspend fun deleteAllDepartments() {
         appDao.deleteAllDepartments()
     }
+
+    override suspend fun searchDepartments(searchText: String): List<Department> {
+        return departmentMapper.fromListDbModelToListEntity(appDao.searhDepartments("%$searchText%"))
+    }
 }

@@ -3,7 +3,6 @@ package ru.internetcloud.workorderapplication.presentation.workorder.detail
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import java.util.*

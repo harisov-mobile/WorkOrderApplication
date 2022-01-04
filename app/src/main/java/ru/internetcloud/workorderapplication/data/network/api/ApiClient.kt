@@ -1,17 +1,12 @@
 package ru.internetcloud.workorderapplication.data.network.api
 
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.domain.common.AuthParameters
-import com.google.gson.GsonBuilder
-
-import com.google.gson.Gson
-
-
-
 
 class ApiClient private constructor(private val authParameters: AuthParameters) {
 
@@ -50,7 +45,6 @@ class ApiClient private constructor(private val authParameters: AuthParameters) 
             .build()
         return retrofit
     }
-
 
     val client: ApiInterface = getRetrofit().create(ApiInterface::class.java)
 }

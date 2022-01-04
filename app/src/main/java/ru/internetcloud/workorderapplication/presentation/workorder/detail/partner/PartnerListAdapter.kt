@@ -1,18 +1,14 @@
 package ru.internetcloud.workorderapplication.presentation.workorder.detail.partner
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.ItemPartnerListBinding
 import ru.internetcloud.workorderapplication.databinding.ItemPartnerListSelectedBinding
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
-import java.lang.RuntimeException
 
-class PartnerListAdapter(var partners: List<Partner>) : RecyclerView.Adapter<PartnerListViewHolder>()
-{
+class PartnerListAdapter(var partners: List<Partner>) : RecyclerView.Adapter<PartnerListViewHolder>() {
     var onPartnerClickListener: ((partner: Partner) -> Unit)? = null
     var onPartnerLongClickListener: ((partner: Partner) -> Unit)? = null
 
@@ -40,7 +36,7 @@ class PartnerListAdapter(var partners: List<Partner>) : RecyclerView.Adapter<Par
         val binding = holder.binding
 
         if (partner.isSelected) {
-             val currentBinding = binding as ItemPartnerListSelectedBinding
+            val currentBinding = binding as ItemPartnerListSelectedBinding
             currentBinding.nameTextView.text = partner.name
             currentBinding.innTextView.text = partner.inn
         } else {
