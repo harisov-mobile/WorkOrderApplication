@@ -46,7 +46,8 @@
     <string name="choose_label">...</string>
     <string name="car_label">СХТ:</string>
     <string name="repair_type_label">Вид ремонта:</string>
-    <string name="department_type_label">Цех:</string>
+    <string name="department_label">Цех:</string>
+    <string name="performers_label">Исполнители:</string>
     <string name="date_label">Дата:</string>
 
 
@@ -59,5 +60,7 @@
     <string name="button_ok">Ок</string>
     <string name="search_label">Поиск</string>
     <string name="search_button">Найти</string>
+    <string name="add_performers_button">Добавить</string>
+    <string name="delete_performers_button">Удалить</string>
 
 </resources>
