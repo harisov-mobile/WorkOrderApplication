@@ -19,7 +19,7 @@ class DataSynchronizationFragment : Fragment() {
         fun onLaunchWorkOrderList()
     }
 
-    private var hostActivity: DataSynchronizationFragment.Callbacks? = null
+    private var hostActivity: Callbacks? = null
     private lateinit var viewModel: DataSynchronizationFragmentViewModel
 
     private var _binding: FragmentDataSynchronizationBinding? = null
@@ -34,7 +34,7 @@ class DataSynchronizationFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        hostActivity = context as DataSynchronizationFragment.Callbacks
+        hostActivity = context as Callbacks
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -93,7 +93,11 @@ class DataSynchronizationFragment : Fragment() {
         viewModel.uploadResult.observe(viewLifecycleOwner) { result ->
             context?.let { currentContext ->
                 if (result.isSuccess) {
-                    binding.uploadResultTextView.text = getString(R.string.success_upload_work_orders)
+                    if (result.amountOfModifiedWorkOrders == 0) {
+                        binding.uploadResultTextView.text = getString(R.string.no_work_orders_to_upload)
+                    } else {
+                        binding.uploadResultTextView.text = getString(R.string.success_upload_work_orders)
+                    }
                 } else {
                     binding.uploadResultTextView.text = getString(R.string.fail_upload_work_orders) + " " + result.errorMessage
                 }

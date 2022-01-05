@@ -52,7 +52,12 @@ class JobDetailMapper {
         fromDbToEntityWithNull(it)
     }
 
-    fun fromListDbToListEntity(list: List<JobDetailWithRequisities>) = list.map {
-        fromDbToEntity(it)
+    fun fromListDbToListEntity(list: List<JobDetailWithRequisities>): List<JobDetail> {
+        val result = list.sortedBy {
+            it.jobDetailDbModel.id
+        }
+        return result.map {
+            fromDbToEntity(it)
+        }
     }
 }

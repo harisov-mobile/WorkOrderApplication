@@ -27,8 +27,13 @@ class PerformerDetailMapper {
         )
     }
 
-    fun fromListDbToListEntity(list: List<PerformerDetailWithRequisities>) = list.map {
-        fromDbToEntity(it)
+    fun fromListDbToListEntity(list: List<PerformerDetailWithRequisities>): List<PerformerDetail> {
+        val result = list.sortedBy {
+            it.performerDetailDbModel.id
+        }
+        return result.map {
+            fromDbToEntity(it)
+        }
     }
 
     fun fromDbToEntity(performerDetailWithRequisities: PerformerDetailWithRequisities): PerformerDetail {

@@ -57,9 +57,10 @@ class LoadWorkOrderRepositoryImpl private constructor(
         val listWO = loadDbWorkOrderRepository.getModifiedWorkOrders()
         if (listWO.isEmpty()) {
             result.isSuccess = true
-            result.successMessage = ""
         } else {
             Log.i("rustam", "начинаем uploadWorkOrderList")
+
+            result.amountOfModifiedWorkOrders = listWO.size
 
             try {
                 val uploadWorkOrderResponse = ApiClient.getInstance().client.uploadWorkOrders(listWO)

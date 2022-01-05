@@ -2,6 +2,6 @@ package ru.internetcloud.workorderapplication.domain.common
 
 data class FunctionResult(
     var isSuccess: Boolean = false,
-    var successMessage: String = "",
-    var errorMessage: String = ""
+    var errorMessage: String = "",
+    var amountOfModifiedWorkOrders: Int = 0
 )
