@@ -33,10 +33,6 @@ class WorkOrderViewModel : ViewModel() {
     val workOrder: LiveData<WorkOrder>
         get() = _workOrder
 
-    private val _repairTypes = MutableLiveData<List<RepairType>>()
-    val repairTypes: LiveData<List<RepairType>>
-        get() = _repairTypes
-
     // можно ли завершить (или закрыть)
     private val _canFinish = MutableLiveData<Boolean>()
     val canFinish: LiveData<Boolean>

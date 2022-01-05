@@ -18,9 +18,12 @@ import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
+import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.car.CarPickerFragment
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentListAdapter
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerPickerFragment
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailListAdapter
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.repairtype.RepairTypePickerFragment
 import java.util.*
 
@@ -31,6 +34,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     get() = _binding ?: throw RuntimeException("Error FragmentWorkOrderBinding is NULL")
 
     private lateinit var viewModel: WorkOrderViewModel
+    private lateinit var performerDetailListAdapter: PerformerDetailListAdapter
 
     private var screenMode: ScreenMode? = null
     private var workOrderId: String? = null
@@ -88,6 +92,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(WorkOrderViewModel::class.java)
+
+        setupPerformerDetailListRecyclerView(emptyList())
 
         launchCorrectMode()
 
@@ -160,12 +166,21 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             binding.mileageEditText.setText(order.mileage.toString())
             binding.requestReasonEditText.setText(order.requestReason)
             binding.commentEditText.setText(order.comment)
+
+            // Табличная часть Исполнители:
+            setupPerformerDetailListRecyclerView(order.performers)
         }
 
         binding.saveButton.setOnClickListener {
             setupFieldsToWorkOrder()
             viewModel.updateWorkOrder()
         }
+    }
+
+    private fun setupPerformerDetailListRecyclerView(performerDetailList: List<PerformerDetail>) {
+        performerDetailListAdapter = PerformerDetailListAdapter()
+        performerDetailListAdapter.submitList(performerDetailList)
+        binding.performerDetailRecyclerView.adapter = performerDetailListAdapter
     }
 
     private fun launchAddMode() {
