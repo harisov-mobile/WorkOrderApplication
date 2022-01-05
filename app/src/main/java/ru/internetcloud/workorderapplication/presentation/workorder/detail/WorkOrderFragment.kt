@@ -35,6 +35,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
     private lateinit var viewModel: WorkOrderViewModel
     private lateinit var performerDetailListAdapter: PerformerDetailListAdapter
+    private var performerDetail: PerformerDetail? = null
+    private var previousSelectedPerformerDetail: PerformerDetail? = null
 
     private var screenMode: ScreenMode? = null
     private var workOrderId: String? = null
@@ -181,6 +183,13 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         performerDetailListAdapter = PerformerDetailListAdapter()
         performerDetailListAdapter.submitList(performerDetailList)
         binding.performerDetailRecyclerView.adapter = performerDetailListAdapter
+
+        performerDetailListAdapter.onPerformerDetailClickListener = { currentPerformerDetail ->
+            performerDetail = currentPerformerDetail
+            previousSelectedPerformerDetail?.isSelected = false
+            performerDetail?.isSelected = true
+            previousSelectedPerformerDetail = performerDetail
+        }
     }
 
     private fun launchAddMode() {

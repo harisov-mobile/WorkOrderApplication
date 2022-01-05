@@ -51,7 +51,7 @@ class PerformerDetailListAdapter : ListAdapter<PerformerDetail, PerformerDetailL
 
         binding.root.setOnClickListener {
             onPerformerDetailClickListener?.invoke(performerDetail)
-            // не надо !!!  notifyItemChanged(departments.indexOf(performerDetail), Unit) // перерисовка без анимации
+            notifyItemChanged(currentList.indexOf(performerDetail), Unit) // перерисовка без анимации
         }
     }
 
