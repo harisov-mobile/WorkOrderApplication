@@ -10,7 +10,7 @@
         android:id="@+id/work_order_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/light_yellow"
+        style="@style/work_order_recycler_view"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_work_order_list"></androidx.recyclerview.widget.RecyclerView>
 

@@ -30,6 +30,7 @@
 
             <TextView
                 android:id="@+id/number_text_view"
+                style="@style/item_list_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
@@ -44,6 +45,7 @@
 
             <TextView
                 android:id="@+id/date_text_view"
+                style="@style/item_list_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
@@ -58,6 +60,7 @@
 
             <TextView
                 android:id="@+id/partner_text_view"
+                style="@style/item_list_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 tools:text="partner"
@@ -71,6 +74,7 @@
 
             <TextView
                 android:id="@+id/car_text_view"
+                style="@style/item_list_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
@@ -92,6 +96,7 @@
 
             <TextView
                 android:id="@+id/department_text_view"
+                style="@style/item_list_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
@@ -104,6 +109,7 @@
 
             <TextView
                 android:id="@+id/performers_string_text_view"
+                style="@style/item_list_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 tools:text="performers_string"
@@ -119,6 +125,7 @@
 
             <TextView
                 android:id="@+id/request_reason_text_view"
+                style="@style/item_list_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
@@ -132,6 +139,7 @@
 
             <TextView
                 android:id="@+id/comment_text_view"
+                style="@style/item_list_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
