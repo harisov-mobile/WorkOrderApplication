@@ -49,7 +49,8 @@
     <string name="car_label">СХТ:</string>
     <string name="repair_type_label">Вид ремонта:</string>
     <string name="department_label">Цех:</string>
-    <string name="performers_label">Исполнители:</string>
+    <string name="performer_details_label">Исполнители:</string>
+    <string name="job_detals_label">Работы:</string>
     <string name="date_label">Дата:</string>
 
 
@@ -64,5 +65,11 @@
     <string name="search_button">Найти</string>
     <string name="add_performers_button">Добавить</string>
     <string name="delete_performers_button">Удалить</string>
+
+    <string name="job_detail_quantity">Количество = %1$s</string>
+    <string name="job_detail_line_number">No = %1$s</string>
+    <string name="job_detail_sum">Сумма = %1$s</string>
+    <string name="job_detail_time_norm">Норма времени = %1$s</string>
+    <string name="job_detail_working_hour">Нормочас = %1$s</string>
 
 </resources>

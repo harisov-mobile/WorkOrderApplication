@@ -8,6 +8,7 @@ import java.math.BigDecimal
 data class JobDetailDbModel(
     @PrimaryKey
     val id: String = "",
+    var lineNumber: Int = 0,
     val carJobId: String = "",
     val quantity: BigDecimal = BigDecimal.ZERO,
     val timeNorm: BigDecimal = BigDecimal.ZERO,

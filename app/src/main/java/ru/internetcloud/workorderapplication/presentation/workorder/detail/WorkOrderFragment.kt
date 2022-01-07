@@ -18,10 +18,11 @@ import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
+import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.car.CarPickerFragment
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentListAdapter
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentPickerFragment
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailListAdapter
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailListAdapter
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.repairtype.RepairTypePickerFragment
@@ -37,6 +38,10 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     private lateinit var performerDetailListAdapter: PerformerDetailListAdapter
     private var performerDetail: PerformerDetail? = null
     private var previousSelectedPerformerDetail: PerformerDetail? = null
+
+    private lateinit var jobDetailListAdapter: JobDetailListAdapter
+    private var jobDetail: JobDetail? = null
+    private var previousSelectedJobDetail: JobDetail? = null
 
     private var screenMode: ScreenMode? = null
     private var workOrderId: String? = null
@@ -96,6 +101,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         viewModel = ViewModelProvider(this).get(WorkOrderViewModel::class.java)
 
         setupPerformerDetailListRecyclerView(emptyList())
+        setupJobDetailListRecyclerView(emptyList())
 
         launchCorrectMode()
 
@@ -171,6 +177,9 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
             // Табличная часть Исполнители:
             setupPerformerDetailListRecyclerView(order.performers)
+
+            // Табличная часть Работы:
+            setupJobDetailListRecyclerView(order.jobDetails)
         }
 
         binding.saveButton.setOnClickListener {
@@ -182,13 +191,26 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     private fun setupPerformerDetailListRecyclerView(performerDetailList: List<PerformerDetail>) {
         performerDetailListAdapter = PerformerDetailListAdapter()
         performerDetailListAdapter.submitList(performerDetailList)
-        binding.performerDetailRecyclerView.adapter = performerDetailListAdapter
+        binding.performerDetailsRecyclerView.adapter = performerDetailListAdapter
 
         performerDetailListAdapter.onPerformerDetailClickListener = { currentPerformerDetail ->
             performerDetail = currentPerformerDetail
             previousSelectedPerformerDetail?.isSelected = false
             performerDetail?.isSelected = true
             previousSelectedPerformerDetail = performerDetail
+        }
+    }
+
+    private fun setupJobDetailListRecyclerView(jobDetailList: List<JobDetail>) {
+        jobDetailListAdapter = JobDetailListAdapter()
+        jobDetailListAdapter.submitList(jobDetailList)
+        binding.jobDetailsRecyclerView.adapter = jobDetailListAdapter
+
+        jobDetailListAdapter.onJobDetailClickListener = { currentJobDetail ->
+            jobDetail = currentJobDetail
+            previousSelectedJobDetail?.isSelected = false
+            jobDetail?.isSelected = true
+            previousSelectedJobDetail = jobDetail
         }
     }
 

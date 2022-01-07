@@ -7,6 +7,9 @@ data class JobDetailDTO(
     @SerializedName("id")
     val id: String,
 
+    @SerializedName("line_number")
+    val lineNumber: Int,
+
     @SerializedName("car_job_id")
     val carJobId: String,
 

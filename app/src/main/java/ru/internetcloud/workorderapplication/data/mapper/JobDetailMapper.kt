@@ -13,6 +13,7 @@ class JobDetailMapper {
     fun fromDtoToDbModel(jobDetailDTO: JobDetailDTO): JobDetailDbModel {
         return JobDetailDbModel(
             id = jobDetailDTO.id,
+            lineNumber = jobDetailDTO.lineNumber,
             carJobId = jobDetailDTO.carJobId,
             quantity = jobDetailDTO.quantity,
             timeNorm = jobDetailDTO.timeNorm,
@@ -27,6 +28,7 @@ class JobDetailMapper {
         jobDetailWithRequisities?.let {
             result = JobDetail(
                 id = jobDetailWithRequisities.jobDetailDbModel.id,
+                lineNumber = jobDetailWithRequisities.jobDetailDbModel.lineNumber,
                 carJob = carJobMapper.fromDbModelToEntityWithNull(jobDetailWithRequisities.carJob),
                 quantity = jobDetailWithRequisities.jobDetailDbModel.quantity,
                 timeNorm = jobDetailWithRequisities.jobDetailDbModel.timeNorm,
@@ -40,6 +42,7 @@ class JobDetailMapper {
     fun fromDbToEntity(jobDetailWithRequisities: JobDetailWithRequisities): JobDetail {
             return JobDetail(
                 id = jobDetailWithRequisities.jobDetailDbModel.id,
+                lineNumber = jobDetailWithRequisities.jobDetailDbModel.lineNumber,
                 carJob = carJobMapper.fromDbModelToEntityWithNull(jobDetailWithRequisities.carJob),
                 quantity = jobDetailWithRequisities.jobDetailDbModel.quantity,
                 timeNorm = jobDetailWithRequisities.jobDetailDbModel.timeNorm,
@@ -54,7 +57,7 @@ class JobDetailMapper {
 
     fun fromListDbToListEntity(list: List<JobDetailWithRequisities>): List<JobDetail> {
         val result = list.sortedBy {
-            it.jobDetailDbModel.id
+            it.jobDetailDbModel.lineNumber
         }
         return result.map {
             fromDbToEntity(it)
