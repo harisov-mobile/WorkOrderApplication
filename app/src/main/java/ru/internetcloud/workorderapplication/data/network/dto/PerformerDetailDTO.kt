@@ -6,6 +6,9 @@ data class PerformerDetailDTO(
     @SerializedName("id")
     val id: String,
 
+    @SerializedName("line_number")
+    val lineNumber: Int,
+
     @SerializedName("employee_id")
     val employeeId: String,
 

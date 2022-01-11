@@ -6,7 +6,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "performer_details")
 data class PerformerDetailDbModel(
     @PrimaryKey
-    var id: String = "",
+    val id: String = "",
+    val lineNumber: Int = 0,
     val employeeId: String = "",
     val workOrderId: String = ""
 )

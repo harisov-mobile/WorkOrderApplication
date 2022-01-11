@@ -44,9 +44,11 @@ class PerformerDetailListAdapter : ListAdapter<PerformerDetail, PerformerDetailL
         if (performerDetail.isSelected) {
             val currentBinding = binding as ItemPerformerDetailListSelectedBinding
             currentBinding.nameTextView.text = performerDetail.employee?.name
+            currentBinding.lineNumberTextView.text = performerDetail.lineNumber.toString()
         } else {
             val currentBinding = binding as ItemPerformerDetailListBinding
             currentBinding.nameTextView.text = performerDetail.employee?.name
+            currentBinding.lineNumberTextView.text = performerDetail.lineNumber.toString()
         }
 
         binding.root.setOnClickListener {

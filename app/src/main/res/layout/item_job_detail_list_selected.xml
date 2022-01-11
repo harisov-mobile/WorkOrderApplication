@@ -35,11 +35,11 @@
                 android:layout_height="wrap_content"
 
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="8dp"
 
                 app:layout_constraintStart_toEndOf="@id/start_guideline"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="line_number" />
+
 
             <TextView
                 android:id="@+id/car_job_text_view"
@@ -52,10 +52,10 @@
 
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@id/line_number_text_view"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="car_job" />
-
 
             <View
                 android:id="@+id/line_after_car_job"

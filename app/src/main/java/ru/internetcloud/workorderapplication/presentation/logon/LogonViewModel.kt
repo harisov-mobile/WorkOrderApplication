@@ -11,9 +11,14 @@ import ru.internetcloud.workorderapplication.data.repository.AuthRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.CheckAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.SetAuthParametersUseCase
 
-private const val BEGIN_SIZE = 4
+
 
 class LogonViewModel(private val app: Application) : AndroidViewModel(app) {
+
+    companion object {
+        private const val BEGIN_SIZE = 4
+        private const val HTTP_PREFIX = "https://"
+    }
 
     private val repository = AuthRepositoryImpl.get() // требуется инъекция зависимостей!!!
 
@@ -60,10 +65,10 @@ class LogonViewModel(private val app: Application) : AndroidViewModel(app) {
                 if (server.length >= BEGIN_SIZE) {
                     val firstFourLetters = server.substring(0, BEGIN_SIZE)
                     if (!firstFourLetters.equals("http")) {
-                        server = "http://" + server
+                        server = HTTP_PREFIX + server
                     }
                 } else {
-                    server = "http://" + server
+                    server = HTTP_PREFIX + server
                 }
                 Log.i("rustam", "Имя сервера = " + server)
                 Log.i("rustam", "Логин = " + login)

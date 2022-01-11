@@ -12,6 +12,7 @@ class PerformerDetailMapper {
     fun fromDtoToDbModel(performerDetailDTO: PerformerDetailDTO): PerformerDetailDbModel {
         return PerformerDetailDbModel(
             id = performerDetailDTO.id,
+            lineNumber = performerDetailDTO.lineNumber,
             employeeId = performerDetailDTO.employeeId,
             workOrderId = performerDetailDTO.workOrderId
         )
@@ -23,13 +24,14 @@ class PerformerDetailMapper {
 
     fun fromDbModelToEntity(performerDetailDbModel: PerformerDetailDbModel): PerformerDetail {
         return PerformerDetail(
-            id = performerDetailDbModel.id
+            id = performerDetailDbModel.id,
+            lineNumber = performerDetailDbModel.lineNumber
         )
     }
 
     fun fromListDbToListEntity(list: List<PerformerDetailWithRequisities>): List<PerformerDetail> {
         val result = list.sortedBy {
-            it.performerDetailDbModel.id
+            it.performerDetailDbModel.lineNumber
         }
         return result.map {
             fromDbToEntity(it)
@@ -39,6 +41,7 @@ class PerformerDetailMapper {
     fun fromDbToEntity(performerDetailWithRequisities: PerformerDetailWithRequisities): PerformerDetail {
         return PerformerDetail(
             id = performerDetailWithRequisities.performerDetailDbModel.id,
+            lineNumber = performerDetailWithRequisities.performerDetailDbModel.lineNumber,
             employee = employeeMapper.fromDbModelToEntityWithNull(performerDetailWithRequisities.employee)
         )
     }
