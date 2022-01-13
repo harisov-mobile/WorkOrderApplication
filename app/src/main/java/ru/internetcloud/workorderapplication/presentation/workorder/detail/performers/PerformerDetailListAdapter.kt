@@ -37,7 +37,6 @@ class PerformerDetailListAdapter : ListAdapter<PerformerDetail, PerformerDetailL
     }
 
     override fun onBindViewHolder(holder: PerformerDetailListViewHolder, position: Int) {
-        Log.i("rustam", "position = " + position)
         val performerDetail = getItem(position)
         val binding = holder.binding
 

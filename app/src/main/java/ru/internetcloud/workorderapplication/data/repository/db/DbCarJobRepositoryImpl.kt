@@ -52,4 +52,8 @@ class DbCarJobRepositoryImpl private constructor(application: Application) : Car
     override suspend fun deleteAllCarJobs() {
         appDao.deleteAllCarJobs()
     }
+
+    override suspend fun searchCarJobs(searchText: String): List<CarJob> {
+        return carJobMapper.fromListDbModelToListEntity(appDao.searhCarJobs("%$searchText%"))
+    }
 }

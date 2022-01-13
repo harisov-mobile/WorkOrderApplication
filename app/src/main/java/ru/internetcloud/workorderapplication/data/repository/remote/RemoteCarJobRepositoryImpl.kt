@@ -52,4 +52,8 @@ class RemoteCarJobRepositoryImpl private constructor(application: Application) :
     override suspend fun deleteAllCarJobs() {
         throw RuntimeException("Error - method deleteAllCarJobs is restricted in RemoteCarJobRepositoryImpl")
     }
+
+    override suspend fun searchCarJobs(searchText: String): List<CarJob> {
+        throw RuntimeException("Error - method searchCarJobs is restricted in RemoteCarJobRepositoryImpl")
+    }
 }

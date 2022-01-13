@@ -11,6 +11,14 @@
         <item name="android:backgroundTint">?attr/colorOnPrimary</item>
     </style>
 
+    <style name="detail_text_view">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/gray_850</item>
+        <item name="android:background">@drawable/text_view_border</item>
+    </style>
+
     <style name="work_order_recycler_view">
         <item name="android:background">@color/light_blue_100</item>
     </style>

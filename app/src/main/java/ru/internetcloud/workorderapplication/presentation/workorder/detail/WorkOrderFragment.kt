@@ -22,6 +22,7 @@ import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.car.CarPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentPickerFragment
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailListAdapter
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailListAdapter
@@ -345,6 +346,14 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
                 DepartmentPickerFragment
                     .newInstance(order.department, REQUEST_DEPARTMENT_PICKER_KEY, ARG_DEPARTMENT)
+                    .show(childFragmentManager, REQUEST_DEPARTMENT_PICKER_KEY)
+            }
+        }
+
+        binding.addJobDetailButton.setOnClickListener {
+            viewModel.workOrder.value?.let { order ->
+                JobDetailFragment
+                    .newInstance(JobDetail()) // здесь надо подумать как правильно создавать новую строку ТЧ
                     .show(childFragmentManager, REQUEST_DEPARTMENT_PICKER_KEY)
             }
         }

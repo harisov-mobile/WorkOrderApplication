@@ -65,6 +65,9 @@ interface AppDao {
     @Query("SELECT * FROM car_jobs WHERE id=:id LIMIT 1")
     suspend fun getCarJob(id: String): CarJobDbModel?
 
+    @Query("SELECT * FROM car_jobs WHERE name LIKE :searchText")
+    suspend fun searhCarJobs(searchText: String): List<CarJobDbModel>
+
     // ----------------------------------------------------------------------
     @Query("SELECT * FROM departments")
     suspend fun getDepartmentList(): List<DepartmentDbModel> // Не использовать LiveData в репозитории

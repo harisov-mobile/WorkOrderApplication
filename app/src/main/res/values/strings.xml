@@ -52,9 +52,14 @@
     <string name="performer_details_label">Исполнители:</string>
     <string name="job_detals_label">Работы:</string>
     <string name="date_label">Дата:</string>
+    <string name="line_number_label">No строки:</string>
+    <string name="car_job_label">Работа:</string>
+    <string name="working_hour_label">Нормо-час:</string>
+    <string name="quantity_label">Количество:</string>
 
 
     <string name="partner_picker_title">Выберите заказчика</string>
+    <string name="car_job_picker_title">Выберите автоработу</string>
     <string name="car_picker_title">Выберите СХТ</string>
     <string name="repair_type_picker_title">Выберите вид ремонта</string>
     <string name="department_picker_title">Выберите цех</string>
@@ -71,5 +76,7 @@
     <string name="job_detail_sum">Сумма = %1$s</string>
     <string name="job_detail_time_norm">Норма времени = %1$s</string>
     <string name="job_detail_working_hour">Нормочас = %1$s</string>
+
+    <string name="job_detail_title">Работы</string>
 
 </resources>
