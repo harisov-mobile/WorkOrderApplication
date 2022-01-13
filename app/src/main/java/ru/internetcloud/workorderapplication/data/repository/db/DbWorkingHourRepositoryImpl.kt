@@ -48,4 +48,8 @@ class DbWorkingHourRepositoryImpl private constructor(application: Application) 
     override suspend fun deleteAllWorkingHours() {
         appDao.deleteAllWorkingHours()
     }
+
+    override suspend fun searchWorkingHours(searchText: String): List<WorkingHour> {
+        return workingHourMapper.fromListDbModelToListEntity(appDao.searhWorkingHours("%$searchText%"))
+    }
 }

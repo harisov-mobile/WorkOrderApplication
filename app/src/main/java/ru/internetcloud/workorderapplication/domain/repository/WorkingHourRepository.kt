@@ -11,4 +11,6 @@ interface WorkingHourRepository {
     suspend fun getWorkingHour(id: String): WorkingHour?
 
     suspend fun deleteAllWorkingHours()
+
+    suspend fun searchWorkingHours(searchText: String): List<WorkingHour>
 }

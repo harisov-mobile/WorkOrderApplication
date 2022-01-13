@@ -10,5 +10,8 @@ data class CarJobDTO(
     val code1C: String,
 
     @SerializedName("name")
-    val name: String
+    val name: String,
+
+    @SerializedName("folder")
+    val folder: String
 )

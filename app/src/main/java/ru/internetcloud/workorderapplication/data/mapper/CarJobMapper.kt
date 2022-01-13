@@ -10,7 +10,8 @@ class CarJobMapper {
         return CarJob(
             id = carJobDTO.id,
             code1C = carJobDTO.code1C,
-            name = carJobDTO.name
+            name = carJobDTO.name,
+            folder = carJobDTO.folder
         )
     }
 
@@ -18,7 +19,8 @@ class CarJobMapper {
         return CarJob(
             id = carJobDbModel.id,
             code1C = carJobDbModel.code1C,
-            name = carJobDbModel.name
+            name = carJobDbModel.name,
+            folder = carJobDbModel.folder
         )
     }
 
@@ -28,7 +30,8 @@ class CarJobMapper {
             result = CarJob(
                 id = carJobDbModel.id,
                 code1C = carJobDbModel.code1C,
-                name = carJobDbModel.name
+                name = carJobDbModel.name,
+                folder = carJobDbModel.folder
             )
         }
         return result
@@ -38,7 +41,8 @@ class CarJobMapper {
         return CarJobDbModel(
             id = carJob.id,
             code1C = carJob.code1C,
-            name = carJob.name
+            name = carJob.name,
+            folder = carJob.folder
         )
     }
 

@@ -11,8 +11,6 @@ import ru.internetcloud.workorderapplication.data.repository.AuthRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.CheckAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.SetAuthParametersUseCase
 
-
-
 class LogonViewModel(private val app: Application) : AndroidViewModel(app) {
 
     companion object {

@@ -11,10 +11,12 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
+import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.carjob.CarJobPickerFragment
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.workinghour.WorkingHourPickerFragment
 
-class JobDetailFragment: DialogFragment(), FragmentResultListener {
+class JobDetailFragment : DialogFragment(), FragmentResultListener {
 
     companion object {
 
@@ -24,6 +26,9 @@ class JobDetailFragment: DialogFragment(), FragmentResultListener {
 
         private val REQUEST_CAR_JOB_PICKER_KEY = "request_car_job_picker_key"
         private val ARG_CAR_JOB = "car_job_picker"
+
+        private val REQUEST_WORKING_HOUR_PICKER_KEY = "request_working_hour_picker_key"
+        private val ARG_WORKING_HOUR = "working_hour_picker"
 
         fun newInstance(jobDetail: JobDetail?): JobDetailFragment {
             val args = Bundle().apply {
@@ -51,12 +56,11 @@ class JobDetailFragment: DialogFragment(), FragmentResultListener {
             jobDetail = arg.getParcelable(JOB_DETAIL)
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
             argJobDetailName = arg.getString(PARENT_JOB_DETAIL_ARG_NAME, "")
-
         } ?: run {
             throw RuntimeException("There are not arguments in JobDetailFragment")
         }
 
-        jobDetail?:let {
+        jobDetail ?: let {
             throw RuntimeException("jobDetail is Null in JobDetailFragment")
         }
 
@@ -88,6 +92,7 @@ class JobDetailFragment: DialogFragment(), FragmentResultListener {
 
         // viewLifecycleOwner - здесь не может быть получен, вместо него this использую
         childFragmentManager.setFragmentResultListener(REQUEST_CAR_JOB_PICKER_KEY, this, this)
+        childFragmentManager.setFragmentResultListener(REQUEST_WORKING_HOUR_PICKER_KEY, this, this)
 
         return alertDialogBuilder.create()
     }
@@ -104,7 +109,14 @@ class JobDetailFragment: DialogFragment(), FragmentResultListener {
         }
 
         // выбор Нормо-часа
-        // ...
+        workingHourSelectButton.setOnClickListener {
+            viewModel.jobDetail?.let { jobdet ->
+
+                WorkingHourPickerFragment
+                    .newInstance(jobdet.workingHour, REQUEST_WORKING_HOUR_PICKER_KEY, ARG_WORKING_HOUR)
+                    .show(childFragmentManager, REQUEST_WORKING_HOUR_PICKER_KEY)
+            }
+        }
     }
 
     private fun sendResultToFragment(result: JobDetail?) {
@@ -121,6 +133,14 @@ class JobDetailFragment: DialogFragment(), FragmentResultListener {
                 viewModel.jobDetail?.let { jobdet ->
                     jobdet.carJob = carJob
                     carJobTextView.text = carJob?.name ?: ""
+                }
+            }
+
+            REQUEST_WORKING_HOUR_PICKER_KEY -> {
+                val workingHour: WorkingHour? = result.getParcelable(ARG_WORKING_HOUR)
+                viewModel.jobDetail?.let { jobdet ->
+                    jobdet.workingHour = workingHour
+                    workingHourTextView.text = workingHour?.name ?: ""
                 }
             }
         }

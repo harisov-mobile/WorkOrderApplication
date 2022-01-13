@@ -10,5 +10,6 @@ data class WorkingHour(
     var id: String = "",
     var code1C: String = "",
     var name: String = "",
-    var price: BigDecimal = BigDecimal.ZERO
+    var price: BigDecimal = BigDecimal.ZERO,
+    var isSelected: Boolean = false
 ) : Parcelable

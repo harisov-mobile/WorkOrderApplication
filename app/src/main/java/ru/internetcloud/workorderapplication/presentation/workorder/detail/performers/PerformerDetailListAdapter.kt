@@ -1,6 +1,5 @@
 package ru.internetcloud.workorderapplication.presentation.workorder.detail.performers
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -8,7 +7,6 @@ import androidx.viewbinding.ViewBinding
 import ru.internetcloud.workorderapplication.databinding.ItemPerformerDetailListBinding
 import ru.internetcloud.workorderapplication.databinding.ItemPerformerDetailListSelectedBinding
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentListAdapter
 
 class PerformerDetailListAdapter : ListAdapter<PerformerDetail, PerformerDetailListViewHolder>(PerformerDetailDiffCallback()) {
 

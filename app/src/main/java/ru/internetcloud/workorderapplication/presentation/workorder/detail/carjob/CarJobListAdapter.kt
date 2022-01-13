@@ -31,26 +31,26 @@ class CarJobListAdapter(var carJobs: List<CarJob>) : RecyclerView.Adapter<CarJob
     }
 
     override fun onBindViewHolder(holder: CarJobListViewHolder, position: Int) {
-        val CarJob = carJobs[position]
+        val carJob = carJobs[position]
 
         val binding = holder.binding
 
-        if (CarJob.isSelected) {
+        if (carJob.isSelected) {
             val currentBinding = binding as ItemCarJobListSelectedBinding
-            currentBinding.nameTextView.text = CarJob.name
-            currentBinding.folderTextView.text = CarJob.folder
+            currentBinding.nameTextView.text = carJob.name
+            currentBinding.folderTextView.text = carJob.folder
         } else {
             val currentBinding = binding as ItemCarJobListBinding
-            currentBinding.nameTextView.text = CarJob.name
-            currentBinding.folderTextView.text = CarJob.folder
+            currentBinding.nameTextView.text = carJob.name
+            currentBinding.folderTextView.text = carJob.folder
         }
 
         binding.root.setOnClickListener {
-            onCarJobClickListener?.invoke(CarJob)
-            notifyItemChanged(carJobs.indexOf(CarJob), Unit) // перерисовка без анимации
+            onCarJobClickListener?.invoke(carJob)
+            notifyItemChanged(carJobs.indexOf(carJob), Unit) // перерисовка без анимации
         }
         binding.root.setOnLongClickListener {
-            onCarJobLongClickListener?.invoke(CarJob)
+            onCarJobLongClickListener?.invoke(carJob)
             true
         }
     }
@@ -60,9 +60,9 @@ class CarJobListAdapter(var carJobs: List<CarJob>) : RecyclerView.Adapter<CarJob
     }
 
     override fun getItemViewType(position: Int): Int {
-        val CarJob = carJobs[position]
+        val carJob = carJobs[position]
 
-        return if (CarJob.isSelected) {
+        return if (carJob.isSelected) {
             SELECTED_ITEM_TYPE
         } else {
             UNSELECTED_ITEM_TYPE

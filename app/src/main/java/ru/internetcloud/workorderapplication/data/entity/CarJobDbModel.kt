@@ -8,5 +8,7 @@ data class CarJobDbModel(
     @PrimaryKey
     val id: String,
     val code1C: String,
-    val name: String
+    val name: String,
+    val folder: String
+
 )

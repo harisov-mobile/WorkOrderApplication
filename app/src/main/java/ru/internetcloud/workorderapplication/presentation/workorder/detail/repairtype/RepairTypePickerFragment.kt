@@ -95,7 +95,7 @@ class RepairTypePickerFragment : DialogFragment() {
                 currentPosition
             }
 
-            repairTypeListRecyclerView.scrollToPosition(scrollPosition);
+            repairTypeListRecyclerView.scrollToPosition(scrollPosition)
 
             if (currentPosition != NOT_FOUND_POSITION) {
                 repairTypes[currentPosition].isSelected = true

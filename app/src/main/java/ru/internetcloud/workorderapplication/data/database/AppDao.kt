@@ -151,4 +151,7 @@ interface AppDao {
 
     @Query("SELECT * FROM working_hours WHERE id=:id LIMIT 1")
     suspend fun getWorkingHour(id: String): WorkingHourDbModel?
+
+    @Query("SELECT * FROM working_hours WHERE name LIKE :searchText")
+    suspend fun searhWorkingHours(searchText: String): List<WorkingHourDbModel>
 }

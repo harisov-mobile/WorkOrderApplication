@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.catalog.Department
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.WorkOrderFragment
 
 class DepartmentPickerFragment : DialogFragment() {
 

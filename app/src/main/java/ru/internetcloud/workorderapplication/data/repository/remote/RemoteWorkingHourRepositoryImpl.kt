@@ -51,4 +51,8 @@ class RemoteWorkingHourRepositoryImpl private constructor(application: Applicati
     override suspend fun deleteAllWorkingHours() {
         throw RuntimeException("Error - method deleteAllWorkingHours is restricted in RemoteWorkingHourRepositoryImpl")
     }
+
+    override suspend fun searchWorkingHours(searchText: String): List<WorkingHour> {
+        throw RuntimeException("Error - method searchWorkingHours is restricted in RemoteWorkingHourRepositoryImpl")
+    }
 }
