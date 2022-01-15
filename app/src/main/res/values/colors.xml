@@ -25,4 +25,7 @@
     <color name="light_blue_50">#E1F5FE</color>
     <color name="light_blue_100">#B3E5FC</color>
 
+    <color name="red_100">#FFCDD2</color>
+    <color name="green_100">#C8E6C9</color>
+
 </resources>

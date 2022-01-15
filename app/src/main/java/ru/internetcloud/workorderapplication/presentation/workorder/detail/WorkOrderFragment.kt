@@ -17,9 +17,12 @@ import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
+import ru.internetcloud.workorderapplication.domain.common.MessageDialogMode
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
+import ru.internetcloud.workorderapplication.domain.document.WorkOrder
+import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.car.CarPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailFragment
@@ -353,9 +356,31 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         binding.addJobDetailButton.setOnClickListener {
             viewModel.workOrder.value?.let { order ->
                 JobDetailFragment
-                    .newInstance(JobDetail()) // здесь надо подумать как правильно создавать новую строку ТЧ
+                    .newInstance(getNewJobDetail(order)) // здесь надо подумать как правильно создавать новую строку ТЧ
                     .show(childFragmentManager, REQUEST_DEPARTMENT_PICKER_KEY)
             }
         }
+
+        binding.editJobDetailButton.setOnClickListener {
+            viewModel.workOrder.value?.let { order ->
+
+                val selectedJobDetail = order.jobDetails.find { it.isSelected }
+                selectedJobDetail?.let {
+                    JobDetailFragment
+                        .newInstance(it)
+                        .show(childFragmentManager, REQUEST_DEPARTMENT_PICKER_KEY)
+                } ?: run {
+                    MessageDialogFragment.newInstance(getString(R.string.job_detail_not_selected), MessageDialogMode.INFO)
+                        .show(childFragmentManager, null)
+                }
+            }
+        }
+    }
+
+    private fun getNewJobDetail(order: WorkOrder): JobDetail {
+        var lineNumber = order.jobDetails.size
+        lineNumber++
+        val id = order.id + "_" + lineNumber.toString()
+        return JobDetail(id = id, lineNumber = lineNumber)
     }
 }

@@ -31,5 +31,24 @@
         <item name="android:background">@color/light_blue_100</item>
     </style>
 
+    <style name="detail_image_button_button">
+        <item name="android:background">@drawable/round_outline_image_button</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="ErrorDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/red_100</item>
+    </style>
+
+    <style name="SuccessDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/green_100</item>
+    </style>
+
+    <style name="InfoDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/white</item>
+    </style>
 
 </resources>
