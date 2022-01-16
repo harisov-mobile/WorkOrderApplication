@@ -370,7 +370,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         .newInstance(it)
                         .show(childFragmentManager, REQUEST_DEPARTMENT_PICKER_KEY)
                 } ?: run {
-                    MessageDialogFragment.newInstance(getString(R.string.job_detail_not_selected), MessageDialogMode.INFO)
+                    MessageDialogFragment.newInstance(getString(R.string.job_detail_not_selected))
                         .show(childFragmentManager, null)
                 }
             }

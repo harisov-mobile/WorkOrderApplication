@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentResultListener
@@ -49,6 +50,10 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
     private lateinit var workingHourSelectButton: Button
     private lateinit var carJobTextView: TextView
     private lateinit var workingHourTextView: TextView
+    private lateinit var lineNumberTextView: TextView
+    private lateinit var sumTextView: TextView
+    private lateinit var quantityEditText: EditText
+    private lateinit var timeNormEditText: EditText
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -75,14 +80,16 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
         workingHourSelectButton = container.findViewById(R.id.working_hour_select_button)
         carJobTextView = container.findViewById(R.id.car_job_text_view)
         workingHourTextView = container.findViewById(R.id.working_hour_text_view)
+        lineNumberTextView = container.findViewById(R.id.line_number_text_view)
+        quantityEditText = container.findViewById(R.id.quantity_edit_text)
+        timeNormEditText = container.findViewById(R.id.time_norm_edit_text)
+        sumTextView = container.findViewById(R.id.sum_text_view)
 
         alertDialogBuilder.setView(container)
 
-        setupClickListeners()
+        setupViews()
 
-//        alertDialogBuilder.setNeutralButton(R.string.button_clear) { _, _ ->
-//            sendResultToFragment(null)
-//        }
+        setupClickListeners()
 
         alertDialogBuilder.setNegativeButton(R.string.button_cancel, null) // для негативного ответа ничего не делаем
 
@@ -95,6 +102,17 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
         childFragmentManager.setFragmentResultListener(REQUEST_WORKING_HOUR_PICKER_KEY, this, this)
 
         return alertDialogBuilder.create()
+    }
+
+    private fun setupViews() {
+        viewModel.jobDetail?.let { jobdet ->
+            lineNumberTextView.text = jobdet.lineNumber.toString()
+            carJobTextView.text = jobdet.carJob?.name ?: ""
+            workingHourTextView.text = jobdet.workingHour?.name ?: ""
+            quantityEditText.setText(jobdet.quantity.toString())
+            timeNormEditText.setText(jobdet.timeNorm.toString())
+            sumTextView.text = jobdet.sum.toString()
+        }
     }
 
     private fun setupClickListeners() {

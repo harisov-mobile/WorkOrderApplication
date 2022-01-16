@@ -56,7 +56,8 @@
     <string name="car_job_label">Работа:</string>
     <string name="working_hour_label">Нормо-час:</string>
     <string name="quantity_label">Количество:</string>
-
+    <string name="time_norm_label">Норма вр.:</string>
+    <string name="sum_label">Сумма:</string>
 
     <string name="partner_picker_title">Выберите заказчика</string>
     <string name="car_job_picker_title">Выберите автоработу</string>
