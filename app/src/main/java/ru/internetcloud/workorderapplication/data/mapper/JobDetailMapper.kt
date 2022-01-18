@@ -55,12 +55,17 @@ class JobDetailMapper {
         fromDbToEntityWithNull(it)
     }
 
-    fun fromListDbToListEntity(list: List<JobDetailWithRequisities>): List<JobDetail> {
-        val result = list.sortedBy {
+    fun fromListDbToListEntity(list: List<JobDetailWithRequisities>): MutableList<JobDetail> {
+        val sortedList = list.sortedBy {
             it.jobDetailDbModel.lineNumber
         }
-        return result.map {
-            fromDbToEntity(it)
+
+        val result: MutableList<JobDetail> = mutableListOf()
+
+        sortedList.forEach {
+            result.add(fromDbToEntity(it))
         }
+
+        return result
     }
 }

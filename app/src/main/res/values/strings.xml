@@ -78,6 +78,8 @@
     <string name="job_detail_sum">Сумма = %1$s</string>
     <string name="job_detail_time_norm">Норма времени = %1$s</string>
     <string name="job_detail_working_hour">Нормочас = %1$s</string>
+    <string name="error_empty_working_hour">Ошибка! Не заполнен нормо-час</string>
+    <string name="error_empty_car_job">Ошибка! Не заполнена работа</string>
 
     <string name="job_detail_title">Работы</string>
     <string name="job_detail_not_selected">Не выбрана строка работ для редактирования.</string>

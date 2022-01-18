@@ -23,5 +23,5 @@ data class WorkOrder(
     var isModified: Boolean = false,
     var performers: List<PerformerDetail> = emptyList(), // исполнители (табличная часть)
     var performersString: String = "", // исполнители строкой
-    var jobDetails: List<JobDetail> = emptyList() // Работы (табличная часть)
+    var jobDetails: MutableList<JobDetail> = mutableListOf() // emptyList() // Работы (табличная часть)
 )

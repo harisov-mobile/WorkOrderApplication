@@ -195,6 +195,43 @@
 
             tools:text="sum" />
 
+        <Button
+            android:id="@+id/ok_button"
+            style="@style/dialog_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="8dp"
+
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:minWidth="0dp"
+
+            android:minHeight="0dp"
+            android:text="@string/button_ok"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sum_text_view" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            style="@style/dialog_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+
+            android:layout_marginBottom="16dp"
+            android:minWidth="0dp"
+
+            android:minHeight="0dp"
+
+            android:text="@string/button_cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ok_button"
+            app:layout_constraintTop_toBottomOf="@+id/sum_text_view" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

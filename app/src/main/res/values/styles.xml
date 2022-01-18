@@ -31,7 +31,7 @@
         <item name="android:background">@color/light_blue_100</item>
     </style>
 
-    <style name="detail_image_button_button">
+    <style name="detail_image_button">
         <item name="android:background">@drawable/round_outline_image_button</item>
         <item name="android:layout_width">40dp</item>
         <item name="android:layout_height">40dp</item>
@@ -49,6 +49,11 @@
 
     <style name="InfoDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="dialog_button">
+        <item name="android:background">@drawable/dialog_button_shape</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
     </style>
 
 </resources>

@@ -17,7 +17,6 @@ import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
-import ru.internetcloud.workorderapplication.domain.common.MessageDialogMode
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
@@ -70,6 +69,9 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         private val REQUEST_DEPARTMENT_PICKER_KEY = "request_department_picker_key"
         private val ARG_DEPARTMENT = "department_picker"
 
+        private val REQUEST_JOB_DETAIL_PICKER_KEY = "request_job_detail_picker_key"
+        private val ARG_JOB_DETAIL = "job_detail_picker"
+
         fun newInstanceAddWorkOrder(): WorkOrderFragment {
             val instance = WorkOrderFragment()
             val args = Bundle()
@@ -116,6 +118,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         childFragmentManager.setFragmentResultListener(REQUEST_CAR_PICKER_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_REPAIR_TYPE_PICKER_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_DEPARTMENT_PICKER_KEY, viewLifecycleOwner, this)
+        childFragmentManager.setFragmentResultListener(REQUEST_JOB_DETAIL_PICKER_KEY, viewLifecycleOwner, this)
 
         setupClickListeners()
     }
@@ -301,6 +304,23 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                     binding.departmentTextView.text = department?.name ?: ""
                 }
             }
+
+            REQUEST_JOB_DETAIL_PICKER_KEY -> {
+                val jobDetail: JobDetail? = result.getParcelable(ARG_JOB_DETAIL)
+                jobDetail?.let { jobdet ->
+                    viewModel.workOrder.value?.let { order ->
+                        val currentJobDetail = order.jobDetails.find { it.lineNumber == jobdet.lineNumber }
+                        currentJobDetail ?: let {
+                            // это новая строка, добавленная в ТЧ
+                            order.jobDetails.add(jobdet)
+                        }
+                        order.jobDetails.forEach {
+                            it.isSelected = false
+                        }
+                        jobDetailListAdapter.notifyItemChanged(order.jobDetails.indexOf(jobdet), Unit)
+                    }
+                }
+            }
         }
     }
 
@@ -356,8 +376,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         binding.addJobDetailButton.setOnClickListener {
             viewModel.workOrder.value?.let { order ->
                 JobDetailFragment
-                    .newInstance(getNewJobDetail(order)) // здесь надо подумать как правильно создавать новую строку ТЧ
-                    .show(childFragmentManager, REQUEST_DEPARTMENT_PICKER_KEY)
+                    .newInstance(getNewJobDetail(order), REQUEST_JOB_DETAIL_PICKER_KEY, ARG_JOB_DETAIL) // здесь надо подумать как правильно создавать новую строку ТЧ
+                    .show(childFragmentManager, REQUEST_JOB_DETAIL_PICKER_KEY)
             }
         }
 
@@ -367,8 +387,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 val selectedJobDetail = order.jobDetails.find { it.isSelected }
                 selectedJobDetail?.let {
                     JobDetailFragment
-                        .newInstance(it)
-                        .show(childFragmentManager, REQUEST_DEPARTMENT_PICKER_KEY)
+                        .newInstance(it, REQUEST_JOB_DETAIL_PICKER_KEY, ARG_JOB_DETAIL)
+                        .show(childFragmentManager, REQUEST_JOB_DETAIL_PICKER_KEY)
                 } ?: run {
                     MessageDialogFragment.newInstance(getString(R.string.job_detail_not_selected))
                         .show(childFragmentManager, null)
@@ -381,6 +401,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         var lineNumber = order.jobDetails.size
         lineNumber++
         val id = order.id + "_" + lineNumber.toString()
-        return JobDetail(id = id, lineNumber = lineNumber)
+        return JobDetail(id = id, lineNumber = lineNumber, isSelected = true)
     }
 }

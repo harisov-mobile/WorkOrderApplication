@@ -64,11 +64,13 @@
 
                 android:layout_marginStart="2dp"
                 android:layout_marginTop="2dp"
-
                 android:background="@color/gray_600"
-                app:layout_constraintEnd_toEndOf="parent"
+
+                app:layout_constraintTop_toBottomOf="@+id/car_job_text_view"
                 app:layout_constraintStart_toStartOf="@id/line_number_text_view"
-                app:layout_constraintTop_toBottomOf="@+id/line_number_text_view" />
+                app:layout_constraintEnd_toEndOf="parent"
+
+                 />
 
             />
 
@@ -78,12 +80,10 @@
                 android:layout_height="0dp"
 
                 android:layout_marginStart="4dp"
-
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="@id/line_number_text_view"
-
                 android:background="@color/gray_600"
 
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/car_job_text_view"
                 app:layout_constraintStart_toEndOf="@id/line_number_text_view"
                 />
             />

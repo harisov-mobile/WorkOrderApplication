@@ -24,11 +24,11 @@ class DepartmentPickerFragment : DialogFragment() {
         private const val NOT_FOUND_POSITION = -1
         private const val DIFFERENCE_POS = 5
 
-        fun newInstance(department: Department?, parentRequestKey: String, parentArgDateName: String): DepartmentPickerFragment {
+        fun newInstance(department: Department?, parentRequestKey: String, parentArgName: String): DepartmentPickerFragment {
             val args = Bundle().apply {
                 putParcelable(DEPARTMENT, department)
                 putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_DEPARTMENT_ARG_NAME, parentArgDateName)
+                putString(PARENT_DEPARTMENT_ARG_NAME, parentArgName)
             }
             return DepartmentPickerFragment().apply {
                 arguments = args

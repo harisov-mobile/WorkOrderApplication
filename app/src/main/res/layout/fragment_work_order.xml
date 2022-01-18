@@ -281,7 +281,7 @@
 
                 <ImageButton
                     android:id="@+id/add_performer_detail_button"
-                    style="@style/detail_image_button_button"
+                    style="@style/detail_image_button"
                     app:srcCompat="@drawable/ic_baseline_add_24"
 
                     app:layout_constraintStart_toEndOf="@+id/performer_details_label_text_view"
@@ -290,7 +290,7 @@
 
                 <ImageButton
                     android:id="@+id/delete_performer_detail_button"
-                    style="@style/detail_image_button_button"
+                    style="@style/detail_image_button"
 
                     app:srcCompat="@drawable/ic_baseline_horizontal_rule_24"
 
@@ -300,7 +300,7 @@
 
                 <ImageButton
                     android:id="@+id/edit_performer_detail_button"
-                    style="@style/detail_image_button_button"
+                    style="@style/detail_image_button"
 
                     app:srcCompat="@drawable/ic_baseline_edit_24"
 
@@ -373,7 +373,7 @@
 
                 <ImageButton
                     android:id="@+id/add_job_detail_button"
-                    style="@style/detail_image_button_button"
+                    style="@style/detail_image_button"
                     app:srcCompat="@drawable/ic_baseline_add_24"
 
                     app:layout_constraintStart_toEndOf="@+id/performer_details_label_text_view"
@@ -382,7 +382,7 @@
 
                 <ImageButton
                     android:id="@+id/delete_job_detail_button"
-                    style="@style/detail_image_button_button"
+                    style="@style/detail_image_button"
                     app:srcCompat="@drawable/ic_baseline_horizontal_rule_24"
 
                     app:layout_constraintStart_toEndOf="@+id/add_job_detail_button"
@@ -391,7 +391,7 @@
 
                 <ImageButton
                     android:id="@+id/edit_job_detail_button"
-                    style="@style/detail_image_button_button"
+                    style="@style/detail_image_button"
                     app:srcCompat="@drawable/ic_baseline_edit_24"
 
                     app:layout_constraintStart_toEndOf="@+id/delete_job_detail_button"
