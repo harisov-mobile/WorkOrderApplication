@@ -313,6 +313,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         currentJobDetail ?: let {
                             // это новая строка, добавленная в ТЧ
                             order.jobDetails.add(jobdet)
+                            binding.jobDetailsRecyclerView.scrollToPosition(order.jobDetails.indexOf(jobdet))
+                            previousSelectedJobDetail = jobdet
                         }
                         order.jobDetails.forEach {
                             it.isSelected = false
