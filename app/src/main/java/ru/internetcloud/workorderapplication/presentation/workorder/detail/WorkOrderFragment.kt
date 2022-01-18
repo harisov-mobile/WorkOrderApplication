@@ -317,6 +317,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         order.jobDetails.forEach {
                             it.isSelected = false
                         }
+                        jobdet.isSelected = true
                         jobDetailListAdapter.notifyItemChanged(order.jobDetails.indexOf(jobdet), Unit)
                     }
                 }
@@ -401,6 +402,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         var lineNumber = order.jobDetails.size
         lineNumber++
         val id = order.id + "_" + lineNumber.toString()
-        return JobDetail(id = id, lineNumber = lineNumber, isSelected = true)
+        return JobDetail(id = id, lineNumber = lineNumber)
     }
 }
