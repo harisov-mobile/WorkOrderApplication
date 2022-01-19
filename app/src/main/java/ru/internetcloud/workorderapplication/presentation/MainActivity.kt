@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity(),
 
         var currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (currentFragment == null) {
-            // currentFragment = WorkOrderListFragment.newInstance()
             currentFragment = LogonFragment.newInstance() // фрагмент, который запускается первым
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, currentFragment)

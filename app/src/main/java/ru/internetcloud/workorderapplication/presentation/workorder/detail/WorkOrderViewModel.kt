@@ -25,8 +25,6 @@ class WorkOrderViewModel : ViewModel() {
     private val addWorkOrderUseCase = AddWorkOrderUseCase(workOrderRepository)
     private val updateWorkOrderUseCase = UpdateWorkOrderUseCase(workOrderRepository)
 
-    private val getPartnerUseCase = GetPartnerUseCase(partnerRepository)
-
     // LiveData-объекты, с помощью которых будет отображение данных в элементах управления:
     private val _workOrder = MutableLiveData<WorkOrder>()
     val workOrder: LiveData<WorkOrder>

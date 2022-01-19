@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
@@ -75,7 +76,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         fun newInstanceAddWorkOrder(): WorkOrderFragment {
             val instance = WorkOrderFragment()
             val args = Bundle()
-            args.putSerializable(ARG_SCREEN_MODE, ScreenMode.ADD)
+            args.putParcelable(ARG_SCREEN_MODE, ScreenMode.ADD)
             instance.arguments = args
             return instance
         }
@@ -83,16 +84,11 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         fun newInstanceEditWorkOrder(workOrderId: String): WorkOrderFragment {
             val instance = WorkOrderFragment()
             val args = Bundle()
-            args.putSerializable(ARG_SCREEN_MODE, ScreenMode.EDIT)
+            args.putParcelable(ARG_SCREEN_MODE, ScreenMode.EDIT)
             args.putString(ARG_WORK_ORDER_ID, workOrderId)
             instance.arguments = args
             return instance
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        checkArgs()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -106,10 +102,17 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         viewModel = ViewModelProvider(this).get(WorkOrderViewModel::class.java)
 
-        setupPerformerDetailListRecyclerView(emptyList())
-        setupJobDetailListRecyclerView(emptyList())
-
-        launchCorrectMode()
+        savedInstanceState ?.let {
+            viewModel.workOrder.value?.let { order ->
+                updateUI(order)
+            }
+        } ?: let {
+            checkArgs()
+            // списки сначала инициализирую пустым списком, потом они заполнятся
+            setupPerformerDetailListRecyclerView(emptyList())
+            setupJobDetailListRecyclerView(emptyList())
+            launchCorrectMode()
+        }
 
         observeViewModel()
 
@@ -145,6 +148,10 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             ScreenMode.EDIT -> launchEditMode()
             ScreenMode.ADD -> launchAddMode()
         }
+
+        viewModel.workOrder.observe(viewLifecycleOwner) { order ->
+            updateUI(order)
+        }
     }
 
     private fun checkArgs() {
@@ -154,7 +161,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             throw RuntimeException("Parameter mode is absent")
         }
 
-        val mode = args.getSerializable(ARG_SCREEN_MODE) as ScreenMode
+        val mode = args.getParcelable<ScreenMode>(ARG_SCREEN_MODE)
         if (mode != ScreenMode.EDIT && mode != ScreenMode.ADD) {
             throw RuntimeException("Uknown screen mode $mode")
         }
@@ -168,31 +175,10 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         workOrderId?.let {
             viewModel.loadWorkOrder(it)
         }
+    }
 
-        viewModel.workOrder.observe(viewLifecycleOwner) {
-            order ->
-            binding.numberEditText.setText(order.number)
-            binding.dateTextView.text = DateConverter.getDateString(order.date)
-            binding.partnerTextView.text = order.partner?.name
-            binding.carTextView.text = order.car?.name
-            binding.repairTypeTextView.text = order.repairType?.name
-            binding.departmentTextView.text = order.department?.name
-
-            binding.mileageEditText.setText(order.mileage.toString())
-            binding.requestReasonEditText.setText(order.requestReason)
-            binding.commentEditText.setText(order.comment)
-
-            // Табличная часть Исполнители:
-            setupPerformerDetailListRecyclerView(order.performers)
-
-            // Табличная часть Работы:
-            setupJobDetailListRecyclerView(order.jobDetails)
-        }
-
-        binding.saveButton.setOnClickListener {
-            setupFieldsToWorkOrder()
-            viewModel.updateWorkOrder()
-        }
+    private fun launchAddMode() {
+        viewModel.createWorkOrder()
     }
 
     private fun setupPerformerDetailListRecyclerView(performerDetailList: List<PerformerDetail>) {
@@ -221,22 +207,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         }
     }
 
-    private fun launchAddMode() {
-        viewModel.createWorkOrder()
-
-        binding.saveButton.setOnClickListener {
-            setupFieldsToWorkOrder()
-            viewModel.addWorkOrder()
-        }
-    }
-
-    private fun setupFieldsToWorkOrder() {
-        viewModel.workOrder.value?.number = parseText(binding.numberEditText.text?.toString())
-        viewModel.workOrder.value?.mileage = parseText(binding.mileageEditText.text?.toString()).toInt()
-        viewModel.workOrder.value?.requestReason = parseText(binding.requestReasonEditText.text?.toString())
-        viewModel.workOrder.value?.comment = parseText(binding.commentEditText.text?.toString())
-        viewModel.workOrder.value?.isModified
-    }
 
     override fun onStart() {
         super.onStart()
@@ -253,9 +223,55 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                //
+                viewModel.workOrder.value?.number = parseText(p0?.toString())
+                viewModel.workOrder.value?.isModified
             }
         })
+
+        binding.mileageEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                viewModel.workOrder.value?.mileage = parseNumber(p0?.toString()).toInt()
+                viewModel.workOrder.value?.isModified
+            }
+        })
+
+        binding.requestReasonEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                viewModel.workOrder.value?.requestReason = parseText(p0?.toString())
+                viewModel.workOrder.value?.isModified
+            }
+        })
+
+        binding.commentEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                viewModel.workOrder.value?.comment = parseText(p0?.toString())
+                viewModel.workOrder.value?.isModified
+            }
+        })
+
     }
 
     override fun onDestroyView() {
@@ -265,6 +281,16 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
     private fun parseText(inputText: String?): String {
         return inputText?.trim() ?: ""
+    }
+
+    private fun parseNumber(inputText: String?): String {
+        var result = "0"
+        inputText?.let {
+            if (!it.isEmpty()) {
+                result = it
+            }
+        }
+        return result
     }
 
     override fun onFragmentResult(requestKey: String, result: Bundle) {
@@ -328,6 +354,11 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     }
 
     private fun setupClickListeners() {
+
+        binding.saveButton.setOnClickListener {
+            viewModel.updateWorkOrder()
+        }
+
         binding.dateSelectButton.setOnClickListener {
             viewModel.workOrder.value?.let { order ->
                 DatePickerFragment
@@ -405,5 +436,24 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         lineNumber++
         val id = order.id + "_" + lineNumber.toString()
         return JobDetail(id = id, lineNumber = lineNumber)
+    }
+
+    private fun updateUI(order: WorkOrder) {
+        binding.numberEditText.setText(order.number)
+        binding.dateTextView.text = DateConverter.getDateString(order.date)
+        binding.partnerTextView.text = order.partner?.name
+        binding.carTextView.text = order.car?.name
+        binding.repairTypeTextView.text = order.repairType?.name
+        binding.departmentTextView.text = order.department?.name
+
+        binding.mileageEditText.setText(order.mileage.toString())
+        binding.requestReasonEditText.setText(order.requestReason)
+        binding.commentEditText.setText(order.comment)
+
+        // Табличная часть Исполнители:
+        setupPerformerDetailListRecyclerView(order.performers)
+
+        // Табличная часть Работы:
+        setupJobDetailListRecyclerView(order.jobDetails)
     }
 }
