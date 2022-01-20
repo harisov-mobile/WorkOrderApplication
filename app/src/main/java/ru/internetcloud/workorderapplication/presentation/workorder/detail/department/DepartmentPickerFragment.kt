@@ -68,13 +68,13 @@ class DepartmentPickerFragment : DialogFragment() {
 
         alertDialogBuilder.setView(container)
 
-        alertDialogBuilder.setNeutralButton(R.string.button_clear) { _, _ ->
+        alertDialogBuilder.setNeutralButton(R.string.clear_button) { _, _ ->
             sendResultToFragment(null)
         }
 
-        alertDialogBuilder.setNegativeButton(R.string.button_cancel, null) // для негативного ответа ничего не делаем
+        alertDialogBuilder.setNegativeButton(R.string.cancel_button, null) // для негативного ответа ничего не делаем
 
-        alertDialogBuilder.setPositiveButton(R.string.button_ok) { dialog, which ->
+        alertDialogBuilder.setPositiveButton(R.string.ok_button) { dialog, which ->
             sendResultToFragment(department)
         }
 

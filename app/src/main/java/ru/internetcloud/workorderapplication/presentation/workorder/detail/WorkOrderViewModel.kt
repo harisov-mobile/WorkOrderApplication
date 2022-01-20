@@ -40,6 +40,8 @@ class WorkOrderViewModel : ViewModel() {
     val errorInputNumber: LiveData<Boolean>
         get() = _errorInputNumber
 
+    var closeOnSave: Boolean = false
+
     companion object {
         private const val NUMBER_PREFIX = "new"
     }
@@ -85,6 +87,7 @@ class WorkOrderViewModel : ViewModel() {
         workOrder.value?.let { order ->
             if (order.number.isBlank()) {
                 _errorInputNumber.value = true
+                closeOnSave = false
                 result = false
             }
         }

@@ -6,6 +6,11 @@
     <string name="comment_hint">Комментарий</string>
     <string name="mileage_hint">Наработка</string>
 
+    <string name="cancel_button">Отмена</string>
+    <string name="clear_button">Очистить</string>
+    <string name="ok_button">Ок</string>
+    <string name="yes_button">Да</string>
+    <string name="no_button">Нет</string>
 
     <string name="add_work_order_fab_description">Add work order</string>
 
@@ -16,8 +21,8 @@
 
     <string name="success_saved">Информация записана</string>
 
-    <string name="save_button">Сохранить</string>
-    <string name="exit_button">Выход</string>
+    <string name="save_button">Записать</string>
+    <string name="exit_button">Закрыть</string>
 
     <string name="work_order_presentation">Заказ-наряд № %s от %s</string>
 
@@ -34,7 +39,6 @@
 
     <string name="error_network_wrong_server">Невозможно подключиться к серверу 1С, возможно, неправильно указан сервер.</string>
     <string name="synchro_data_label">Синхронизация данных</string>
-    <string name="ok">OK</string>
 
     <string name="success_synchronization">Синхронизация данных произведена успешно.</string>
     <string name="success_autonomus">Синхронизация данных не произведена, но можно продолжить работу в автономном режиме.</string>
@@ -65,9 +69,6 @@
     <string name="car_picker_title">Выберите СХТ</string>
     <string name="repair_type_picker_title">Выберите вид ремонта</string>
     <string name="department_picker_title">Выберите цех</string>
-    <string name="button_cancel">Отмена</string>
-    <string name="button_clear">Очистить</string>
-    <string name="button_ok">Ок</string>
     <string name="search_label">Поиск</string>
     <string name="search_button">Найти</string>
     <string name="add_performers_button">Добавить</string>
@@ -83,5 +84,7 @@
 
     <string name="job_detail_title">Работы</string>
     <string name="job_detail_not_selected">Не выбрана строка работ для редактирования.</string>
+
+    <string name="data_was_changed_question">Данные были изменены. Сохранить изменения?</string>
 
 </resources>

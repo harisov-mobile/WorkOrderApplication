@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +23,7 @@ import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
+import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.car.CarPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailFragment
@@ -73,6 +74,9 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         private val REQUEST_JOB_DETAIL_PICKER_KEY = "request_job_detail_picker_key"
         private val ARG_JOB_DETAIL = "job_detail_picker"
 
+        private val REQUEST_DATA_WAS_CHANGED_KEY = "data_was_changed_key"
+        private val ARG_ANSWER = "answer"
+
         fun newInstanceAddWorkOrder(): WorkOrderFragment {
             val instance = WorkOrderFragment()
             val args = Bundle()
@@ -89,6 +93,16 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             instance.arguments = args
             return instance
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                onExitWorkOrder()
+            }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -122,24 +136,35 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         childFragmentManager.setFragmentResultListener(REQUEST_REPAIR_TYPE_PICKER_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_DEPARTMENT_PICKER_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_JOB_DETAIL_PICKER_KEY, viewLifecycleOwner, this)
+        childFragmentManager.setFragmentResultListener(REQUEST_DATA_WAS_CHANGED_KEY, viewLifecycleOwner, this)
 
         setupClickListeners()
     }
 
     private fun observeViewModel() {
         // подписка на ошибки
-        viewModel.errorInputNumber.observe(viewLifecycleOwner) {
-            val message = if (it) {
+        viewModel.errorInputNumber.observe(viewLifecycleOwner) { isError ->
+            val message = if (isError) {
                 getString(R.string.error_input_number)
             } else {
                 null
             }
             binding.numberTextInputLayout.error = message
+            if (isError) {
+                MessageDialogFragment.newInstance(getString(R.string.error_input_number))
+                    .show(childFragmentManager, null)
+            }
         }
 
         // подписка на успешное завершение сохранения
         viewModel.canFinish.observe(viewLifecycleOwner) {
-            Toast.makeText(context, getString(R.string.success_saved), Toast.LENGTH_SHORT).show()
+            if (viewModel.closeOnSave) {
+                Toast.makeText(context, getString(R.string.success_saved), Toast.LENGTH_SHORT).show()
+                activity?.supportFragmentManager?.popBackStack()
+            } else {
+                MessageDialogFragment.newInstance(getString(R.string.success_saved))
+                    .show(childFragmentManager, null)
+            }
         }
     }
 
@@ -207,7 +232,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         }
     }
 
-
     override fun onStart() {
         super.onStart()
 
@@ -224,7 +248,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
             override fun afterTextChanged(p0: Editable?) {
                 viewModel.workOrder.value?.number = parseText(p0?.toString())
-                viewModel.workOrder.value?.isModified
+                viewModel.workOrder.value?.isModified = true
             }
         })
 
@@ -234,12 +258,11 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
+                viewModel.workOrder.value?.mileage = parseNumber(p0?.toString()).toInt()
+                viewModel.workOrder.value?.isModified = true
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                viewModel.workOrder.value?.mileage = parseNumber(p0?.toString()).toInt()
-                viewModel.workOrder.value?.isModified
             }
         })
 
@@ -254,7 +277,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
             override fun afterTextChanged(p0: Editable?) {
                 viewModel.workOrder.value?.requestReason = parseText(p0?.toString())
-                viewModel.workOrder.value?.isModified
+                viewModel.workOrder.value?.isModified = true
             }
         })
 
@@ -268,7 +291,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
             override fun afterTextChanged(p0: Editable?) {
                 viewModel.workOrder.value?.comment = parseText(p0?.toString())
-                viewModel.workOrder.value?.isModified
+                viewModel.workOrder.value?.isModified = true
             }
         })
 
@@ -350,6 +373,16 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                     }
                 }
             }
+
+            REQUEST_DATA_WAS_CHANGED_KEY -> {
+                val needSaveData: Boolean = result.getBoolean(ARG_ANSWER, false)
+                if (needSaveData) {
+                    viewModel.closeOnSave = true
+                    viewModel.updateWorkOrder()
+                } else {
+                    activity?.supportFragmentManager?.popBackStack()
+                }
+            }
         }
     }
 
@@ -357,6 +390,20 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         binding.saveButton.setOnClickListener {
             viewModel.updateWorkOrder()
+        }
+
+        binding.exitButton.setOnClickListener {
+            viewModel.workOrder.value?.let { order ->
+                if (order.isModified) {
+                    QuestionDialogFragment
+                        .newInstance(getString(R.string.data_was_changed_question), REQUEST_DATA_WAS_CHANGED_KEY, ARG_ANSWER)
+                        .show(childFragmentManager, REQUEST_DATA_WAS_CHANGED_KEY)
+                } else {
+                    activity?.supportFragmentManager?.popBackStack()
+                }
+            } ?: let {
+                activity?.supportFragmentManager?.popBackStack()
+            }
         }
 
         binding.dateSelectButton.setOnClickListener {
@@ -429,6 +476,15 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 }
             }
         }
+
+        binding.mileageEditText.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                val currentValue = binding.mileageEditText.text.toString()
+                if (currentValue.equals("0")) {
+                    binding.mileageEditText.setText("")
+                }
+            }
+        }
     }
 
     private fun getNewJobDetail(order: WorkOrder): JobDetail {
@@ -455,5 +511,19 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         // Табличная часть Работы:
         setupJobDetailListRecyclerView(order.jobDetails)
+    }
+
+    private fun onExitWorkOrder() {
+        viewModel.workOrder.value?.let { order ->
+            if (order.isModified) {
+                QuestionDialogFragment
+                    .newInstance(getString(R.string.data_was_changed_question), REQUEST_DATA_WAS_CHANGED_KEY, ARG_ANSWER)
+                    .show(childFragmentManager, REQUEST_DATA_WAS_CHANGED_KEY)
+            } else {
+                activity?.supportFragmentManager?.popBackStack()
+            }
+        } ?: let {
+            activity?.supportFragmentManager?.popBackStack()
+        }
     }
 }

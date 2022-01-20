@@ -4,13 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.domain.catalog.Department
-import ru.internetcloud.workorderapplication.domain.common.MessageDialogMode
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentListAdapter
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentListViewModel
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentPickerFragment
 
 class MessageDialogFragment: DialogFragment() {
 
@@ -40,7 +34,7 @@ class MessageDialogFragment: DialogFragment() {
 
         val alertDialogBuilder = AlertDialog.Builder(activity)
         alertDialogBuilder.setMessage(message)
-        alertDialogBuilder.setPositiveButton(R.string.button_ok, null)
+        alertDialogBuilder.setPositiveButton(R.string.ok_button, null)
 
         return alertDialogBuilder.create()
     }
