@@ -37,16 +37,11 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
     private var _binding: FragmentWorkOrderBinding? = null
     private val binding: FragmentWorkOrderBinding
-    get() = _binding ?: throw RuntimeException("Error FragmentWorkOrderBinding is NULL")
+        get() = _binding ?: throw RuntimeException("Error FragmentWorkOrderBinding is NULL")
 
     private lateinit var viewModel: WorkOrderViewModel
     private lateinit var performerDetailListAdapter: PerformerDetailListAdapter
-    private var performerDetail: PerformerDetail? = null
-    private var previousSelectedPerformerDetail: PerformerDetail? = null
-
     private lateinit var jobDetailListAdapter: JobDetailListAdapter
-    private var jobDetail: JobDetail? = null
-    private var previousSelectedJobDetail: JobDetail? = null
 
     private var screenMode: ScreenMode? = null
     private var workOrderId: String? = null
@@ -77,6 +72,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         private val ARG_JOB_DETAIL = "job_detail_picker"
 
         private val REQUEST_DATA_WAS_CHANGED_KEY = "data_was_changed_key"
+        private val REQUEST_DELETE_JOB_DETAIL_KEY = "delete_job_detail_key"
         private val ARG_ANSWER = "answer"
 
         fun newInstanceAddWorkOrder(): WorkOrderFragment {
@@ -118,7 +114,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         viewModel = ViewModelProvider(this).get(WorkOrderViewModel::class.java)
 
-        savedInstanceState ?.let {
+        savedInstanceState?.let {
             viewModel.workOrder.value?.let { order ->
                 updateUI(order)
             }
@@ -139,6 +135,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         childFragmentManager.setFragmentResultListener(REQUEST_DEPARTMENT_PICKER_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_JOB_DETAIL_PICKER_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_DATA_WAS_CHANGED_KEY, viewLifecycleOwner, this)
+        childFragmentManager.setFragmentResultListener(REQUEST_DELETE_JOB_DETAIL_KEY, viewLifecycleOwner, this)
 
         setupClickListeners()
     }
@@ -215,10 +212,9 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         binding.performerDetailsRecyclerView.adapter = performerDetailListAdapter
 
         performerDetailListAdapter.onPerformerDetailClickListener = { currentPerformerDetail ->
-            performerDetail = currentPerformerDetail
-            previousSelectedPerformerDetail?.isSelected = false
-            performerDetail?.isSelected = true
-            previousSelectedPerformerDetail = performerDetail
+            viewModel.selectedPerformerDetail?.isSelected = false
+            viewModel.selectedPerformerDetail = currentPerformerDetail
+            viewModel.selectedPerformerDetail?.isSelected = true
         }
     }
 
@@ -228,10 +224,9 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         binding.jobDetailsRecyclerView.adapter = jobDetailListAdapter
 
         jobDetailListAdapter.onJobDetailClickListener = { currentJobDetail ->
-            jobDetail = currentJobDetail
-            previousSelectedJobDetail?.isSelected = false
-            jobDetail?.isSelected = true
-            previousSelectedJobDetail = jobDetail
+            viewModel.selectedJobDetail?.isSelected = false // предыдущую отмеченную строку работ сделаем неотмеченной
+            viewModel.selectedJobDetail = currentJobDetail
+            viewModel.selectedJobDetail?.isSelected = true
         }
     }
 
@@ -338,6 +333,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                     }
                 }
             }
+
             REQUEST_PARTNER_PICKER_KEY -> {
                 val partner: Partner? = result.getParcelable(ARG_PARTNER)
                 viewModel.workOrder.value?.let { order ->
@@ -345,6 +341,10 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         order.partner = partner
                         binding.partnerTextView.text = partner?.name ?: ""
                         order.isModified = true
+
+                        // т.к. изменили Заказчика надо очистить СХТ, .т.к. СХТ от другого заказчика
+                        order.car = null
+                        binding.carTextView.text = ""
                     }
                 }
             }
@@ -386,18 +386,22 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 val jobDetail: JobDetail? = result.getParcelable(ARG_JOB_DETAIL)
                 jobDetail?.let { jobdet ->
                     viewModel.workOrder.value?.let { order ->
-                        val currentJobDetail = order.jobDetails.find { it.lineNumber == jobdet.lineNumber }
-                        currentJobDetail ?: let {
+                        val foundJobDetail = order.jobDetails.find { it.lineNumber == jobdet.lineNumber }
+                        foundJobDetail ?: let {
                             // это новая строка, добавленная в ТЧ
                             order.jobDetails.add(jobdet)
                             binding.jobDetailsRecyclerView.scrollToPosition(order.jobDetails.indexOf(jobdet))
-                            previousSelectedJobDetail = jobdet
                         }
                         order.jobDetails.forEach {
                             it.isSelected = false
                         }
-                        jobdet.isSelected = true
-                        jobDetailListAdapter.notifyItemChanged(order.jobDetails.indexOf(jobdet), Unit)
+                        viewModel.selectedJobDetail = jobdet
+                        viewModel.selectedJobDetail?.isSelected = true
+
+                        jobDetailListAdapter.notifyItemChanged(
+                            order.jobDetails.indexOf(viewModel.selectedJobDetail),
+                            Unit
+                        )
                         order.isModified = true
                     }
                 }
@@ -410,6 +414,20 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                     viewModel.updateWorkOrder()
                 } else {
                     activity?.supportFragmentManager?.popBackStack()
+                }
+            }
+
+            REQUEST_DELETE_JOB_DETAIL_KEY -> {
+                val delete: Boolean = result.getBoolean(ARG_ANSWER, false)
+                if (delete) {
+                    viewModel.workOrder.value?.let { order ->
+                        val removedPosition = order.jobDetails.indexOf(viewModel.selectedJobDetail)
+                        Toast.makeText(context, "indexOf = " + removedPosition.toString(), Toast.LENGTH_SHORT).show()
+                        order.jobDetails.remove(viewModel.selectedJobDetail)
+                        viewModel.selectedJobDetail = null
+                        jobDetailListAdapter.notifyItemRemoved(removedPosition)
+                        order.isModified = true
+                    }
                 }
             }
         }
@@ -425,7 +443,11 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             viewModel.workOrder.value?.let { order ->
                 if (order.isModified) {
                     QuestionDialogFragment
-                        .newInstance(getString(R.string.data_was_changed_question), REQUEST_DATA_WAS_CHANGED_KEY, ARG_ANSWER)
+                        .newInstance(
+                            getString(R.string.data_was_changed_question),
+                            REQUEST_DATA_WAS_CHANGED_KEY,
+                            ARG_ANSWER
+                        )
                         .show(childFragmentManager, REQUEST_DATA_WAS_CHANGED_KEY)
                 } else {
                     activity?.supportFragmentManager?.popBackStack()
@@ -494,21 +516,40 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         binding.addJobDetailButton.setOnClickListener {
             viewModel.workOrder.value?.let { order ->
                 JobDetailFragment
-                    .newInstance(getNewJobDetail(order), REQUEST_JOB_DETAIL_PICKER_KEY, ARG_JOB_DETAIL) // здесь надо подумать как правильно создавать новую строку ТЧ
+                    .newInstance(
+                        getNewJobDetail(order),
+                        REQUEST_JOB_DETAIL_PICKER_KEY,
+                        ARG_JOB_DETAIL
+                    ) // здесь надо подумать как правильно создавать новую строку ТЧ
                     .show(childFragmentManager, REQUEST_JOB_DETAIL_PICKER_KEY)
             }
         }
 
         binding.editJobDetailButton.setOnClickListener {
             viewModel.workOrder.value?.let { order ->
-
-                val selectedJobDetail = order.jobDetails.find { it.isSelected }
-                selectedJobDetail?.let {
+                viewModel.selectedJobDetail?.let {
                     JobDetailFragment
                         .newInstance(it, REQUEST_JOB_DETAIL_PICKER_KEY, ARG_JOB_DETAIL)
                         .show(childFragmentManager, REQUEST_JOB_DETAIL_PICKER_KEY)
                 } ?: run {
-                    MessageDialogFragment.newInstance(getString(R.string.job_detail_not_selected))
+                    MessageDialogFragment.newInstance(getString(R.string.edit_job_detail_not_selected))
+                        .show(childFragmentManager, null)
+                }
+            }
+        }
+
+        binding.deleteJobDetailButton.setOnClickListener {
+            viewModel.workOrder.value?.let { order ->
+                viewModel.selectedJobDetail?.let {
+                    QuestionDialogFragment
+                        .newInstance(
+                            getString(R.string.delete_job_detail_question),
+                            REQUEST_DELETE_JOB_DETAIL_KEY,
+                            ARG_ANSWER
+                        )
+                        .show(childFragmentManager, REQUEST_DELETE_JOB_DETAIL_KEY)
+                } ?: run {
+                    MessageDialogFragment.newInstance(getString(R.string.delete_job_detail_not_selected))
                         .show(childFragmentManager, null)
                 }
             }
@@ -559,7 +600,11 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         viewModel.workOrder.value?.let { order ->
             if (order.isModified) {
                 QuestionDialogFragment
-                    .newInstance(getString(R.string.data_was_changed_question), REQUEST_DATA_WAS_CHANGED_KEY, ARG_ANSWER)
+                    .newInstance(
+                        getString(R.string.data_was_changed_question),
+                        REQUEST_DATA_WAS_CHANGED_KEY,
+                        ARG_ANSWER
+                    )
                     .show(childFragmentManager, REQUEST_DATA_WAS_CHANGED_KEY)
             } else {
                 activity?.supportFragmentManager?.popBackStack()

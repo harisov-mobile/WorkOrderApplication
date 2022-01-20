@@ -249,14 +249,13 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
         viewModel.jobDetail?.let { jobdet ->
             jobdet.carJob ?: let {
                 result.isValid = false
-                result.errorMessage = result.errorMessage + getString(R.string.error_empty_working_hour) + "\n"
+                result.errorMessage = result.errorMessage + getString(R.string.error_empty_car_job) + "\n"
             }
             jobdet.workingHour ?: let {
                 result.isValid = false
-                result.errorMessage = result.errorMessage + getString(R.string.error_empty_car_job) + "\n"
+                result.errorMessage = result.errorMessage + getString(R.string.error_empty_working_hour) + "\n"
             }
         }
         return result
     }
-
 }

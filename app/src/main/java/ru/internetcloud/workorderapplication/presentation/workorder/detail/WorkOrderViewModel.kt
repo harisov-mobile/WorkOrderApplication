@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.data.repository.db.DbPartnerRepositoryImpl
 import ru.internetcloud.workorderapplication.data.repository.db.DbWorkOrderRepositoryImpl
+import ru.internetcloud.workorderapplication.domain.document.JobDetail
+import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.GetPartnerUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.AddWorkOrderUseCase
@@ -41,6 +43,8 @@ class WorkOrderViewModel : ViewModel() {
         get() = _errorInputNumber
 
     var closeOnSave: Boolean = false
+    var selectedJobDetail: JobDetail? = null
+    var selectedPerformerDetail: PerformerDetail? = null
 
     companion object {
         private const val NUMBER_PREFIX = "new"
@@ -54,18 +58,6 @@ class WorkOrderViewModel : ViewModel() {
                 _workOrder.value = it
             } ?: run {
                 createWorkOrder()
-            }
-        }
-    }
-
-    fun addWorkOrder() {
-        val areFieldsValid = validateInput()
-        if (areFieldsValid) {
-            workOrder.value?.let { order ->
-                viewModelScope.launch {
-                    addWorkOrderUseCase.addWorkOrder(order)
-                    _canFinish.value = true
-                }
             }
         }
     }
