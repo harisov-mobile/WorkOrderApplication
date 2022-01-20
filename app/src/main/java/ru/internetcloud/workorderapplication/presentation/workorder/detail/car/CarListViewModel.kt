@@ -7,14 +7,18 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.data.repository.db.DbCarRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.catalog.Car
+import ru.internetcloud.workorderapplication.domain.catalog.Partner
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.GetCarListByOwnerUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.GetCarListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.SearchCarsUseCase
 
 class CarListViewModel : ViewModel() {
     private val repository = DbCarRepositoryImpl.get()
 
-    private val getCarListUseCase = GetCarListUseCase(repository)
+    private val getCarListByOwnerUseCase = GetCarListByOwnerUseCase(repository)
     private val searchCarsUseCase = SearchCarsUseCase(repository)
+
+    var partner: Partner? = null
 
     private val _carListLiveData = MutableLiveData<List<Car>>()
     val carListLiveData: LiveData<List<Car>>
@@ -22,7 +26,9 @@ class CarListViewModel : ViewModel() {
 
     fun loadCarList() {
         viewModelScope.launch {
-            _carListLiveData.value = getCarListUseCase.getCarList()
+            partner?.let {
+                _carListLiveData.value = getCarListByOwnerUseCase.getCarListByOwner(it.id)
+            }
         }
     }
 

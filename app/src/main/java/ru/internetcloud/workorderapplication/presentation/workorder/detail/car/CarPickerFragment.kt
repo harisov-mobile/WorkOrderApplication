@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.catalog.Car
+import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import java.lang.RuntimeException
 
 class CarPickerFragment : DialogFragment() {
@@ -19,15 +20,17 @@ class CarPickerFragment : DialogFragment() {
     companion object {
 
         private const val CAR = "car"
+        private const val PARTNER = "partner"
         private const val PARENT_REQUEST_KEY = "parent_request_car_picker_key"
         private const val PARENT_CAR_ARG_NAME = "parent_car_arg_name"
 
         private const val NOT_FOUND_POSITION = -1
         private const val DIFFERENCE_POS = 5
 
-        fun newInstance(car: Car?, parentRequestKey: String, parentArgDateName: String): CarPickerFragment {
+        fun newInstance(car: Car?, partner: Partner, parentRequestKey: String, parentArgDateName: String): CarPickerFragment {
             val args = Bundle().apply {
                 putParcelable(CAR, car)
+                putParcelable(PARTNER, partner)
                 putString(PARENT_REQUEST_KEY, parentRequestKey)
                 putString(PARENT_CAR_ARG_NAME, parentArgDateName)
             }
@@ -38,6 +41,7 @@ class CarPickerFragment : DialogFragment() {
     }
 
     private var car: Car? = null
+    private lateinit var currentPartner: Partner
     private var previousSelectedCar: Car? = null
 
     private var requestKey = ""
@@ -54,6 +58,7 @@ class CarPickerFragment : DialogFragment() {
 
         arguments?.let { arg ->
             car = arg.getParcelable(CAR)
+            currentPartner = arg.getParcelable(PARTNER) ?: throw RuntimeException("There is no partner in arg")
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
             argCarName = arg.getString(PARENT_CAR_ARG_NAME, "")
         } ?: run {
@@ -103,6 +108,7 @@ class CarPickerFragment : DialogFragment() {
             }
         })
 
+        viewModel.partner = currentPartner
         viewModel.loadCarList() // самое главное!!!
 
         return alertDialogBuilder.create()

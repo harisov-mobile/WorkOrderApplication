@@ -18,6 +18,7 @@
     <string name="error_input_server">Укажите сервер</string>
     <string name="error_input_login">Укажите пользователя</string>
     <string name="error_input_password">Укажите пароль</string>
+    <string name="error_specify_partner">Укажите заказчика</string>
 
     <string name="success_saved">Информация записана</string>
 

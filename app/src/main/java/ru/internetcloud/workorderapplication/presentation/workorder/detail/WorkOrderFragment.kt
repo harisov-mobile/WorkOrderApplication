@@ -51,6 +51,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     private var screenMode: ScreenMode? = null
     private var workOrderId: String? = null
 
+    private var modifyAllowed: Boolean = true
+
     companion object {
 
         const val ARG_SCREEN_MODE = "screen_mode"
@@ -162,6 +164,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 Toast.makeText(context, getString(R.string.success_saved), Toast.LENGTH_SHORT).show()
                 activity?.supportFragmentManager?.popBackStack()
             } else {
+                viewModel.workOrder.value?.isModified = false
                 MessageDialogFragment.newInstance(getString(R.string.success_saved))
                     .show(childFragmentManager, null)
             }
@@ -247,8 +250,10 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                viewModel.workOrder.value?.number = parseText(p0?.toString())
-                viewModel.workOrder.value?.isModified = true
+                if (modifyAllowed) {
+                    viewModel.workOrder.value?.number = parseText(p0?.toString())
+                    viewModel.workOrder.value?.isModified = true
+                }
             }
         })
 
@@ -258,11 +263,13 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.workOrder.value?.mileage = parseNumber(p0?.toString()).toInt()
-                viewModel.workOrder.value?.isModified = true
             }
 
             override fun afterTextChanged(p0: Editable?) {
+                if (modifyAllowed) {
+                    viewModel.workOrder.value?.mileage = parseNumber(p0?.toString()).toInt()
+                    viewModel.workOrder.value?.isModified = true
+                }
             }
         })
 
@@ -276,8 +283,10 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                viewModel.workOrder.value?.requestReason = parseText(p0?.toString())
-                viewModel.workOrder.value?.isModified = true
+                if (modifyAllowed) {
+                    viewModel.workOrder.value?.requestReason = parseText(p0?.toString())
+                    viewModel.workOrder.value?.isModified = true
+                }
             }
         })
 
@@ -290,11 +299,12 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                viewModel.workOrder.value?.comment = parseText(p0?.toString())
-                viewModel.workOrder.value?.isModified = true
+                if (modifyAllowed) {
+                    viewModel.workOrder.value?.comment = parseText(p0?.toString())
+                    viewModel.workOrder.value?.isModified = true
+                }
             }
         })
-
     }
 
     override fun onDestroyView() {
@@ -320,37 +330,55 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         when (requestKey) {
             REQUEST_DATE_PICKER_KEY -> {
                 val date = result.getSerializable(ARG_DATE) as Date
-                binding.dateTextView.text = DateConverter.getDateString(date)
-                viewModel.workOrder.value?.date = date
+                viewModel.workOrder.value?.let { order ->
+                    if (order.date != date) {
+                        order.date = date
+                        binding.dateTextView.text = DateConverter.getDateString(date)
+                        order.isModified = true
+                    }
+                }
             }
             REQUEST_PARTNER_PICKER_KEY -> {
                 val partner: Partner? = result.getParcelable(ARG_PARTNER)
                 viewModel.workOrder.value?.let { order ->
-                    order.partner = partner
-                    binding.partnerTextView.text = partner?.name ?: ""
+                    if (order.partner != partner) {
+                        order.partner = partner
+                        binding.partnerTextView.text = partner?.name ?: ""
+                        order.isModified = true
+                    }
                 }
             }
+
             REQUEST_CAR_PICKER_KEY -> {
                 val car: Car? = result.getParcelable(ARG_CAR)
                 viewModel.workOrder.value?.let { order ->
-                    order.car = car
-                    binding.carTextView.text = car?.name ?: ""
+                    if (order.car != car) {
+                        order.car = car
+                        binding.carTextView.text = car?.name ?: ""
+                        order.isModified = true
+                    }
                 }
             }
 
             REQUEST_REPAIR_TYPE_PICKER_KEY -> {
                 val repairType: RepairType? = result.getParcelable(ARG_REPAIR_TYPE)
                 viewModel.workOrder.value?.let { order ->
-                    order.repairType = repairType
-                    binding.repairTypeTextView.text = repairType?.name ?: ""
+                    if (order.repairType != repairType) {
+                        order.repairType = repairType
+                        binding.repairTypeTextView.text = repairType?.name ?: ""
+                        order.isModified = true
+                    }
                 }
             }
 
             REQUEST_DEPARTMENT_PICKER_KEY -> {
                 val department: Department? = result.getParcelable(ARG_DEPARTMENT)
                 viewModel.workOrder.value?.let { order ->
-                    order.department = department
-                    binding.departmentTextView.text = department?.name ?: ""
+                    if (order.department != department) {
+                        order.department = department
+                        binding.departmentTextView.text = department?.name ?: ""
+                        order.isModified = true
+                    }
                 }
             }
 
@@ -370,6 +398,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         }
                         jobdet.isSelected = true
                         jobDetailListAdapter.notifyItemChanged(order.jobDetails.indexOf(jobdet), Unit)
+                        order.isModified = true
                     }
                 }
             }
@@ -426,11 +455,19 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         binding.carSelectButton.setOnClickListener {
             viewModel.workOrder.value?.let { order ->
-                order.car?.isSelected = true
 
-                CarPickerFragment
-                    .newInstance(order.car, REQUEST_CAR_PICKER_KEY, ARG_CAR)
-                    .show(childFragmentManager, REQUEST_CAR_PICKER_KEY)
+                order.partner?.let { partner ->
+                    order.car?.isSelected = true
+
+                    CarPickerFragment
+                        .newInstance(order.car, partner, REQUEST_CAR_PICKER_KEY, ARG_CAR)
+                        .show(childFragmentManager, REQUEST_CAR_PICKER_KEY)
+
+                } ?: let {
+                    MessageDialogFragment.newInstance(getString(R.string.error_specify_partner))
+                        .show(childFragmentManager, null)
+                }
+
             }
         }
 
@@ -495,6 +532,9 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     }
 
     private fun updateUI(order: WorkOrder) {
+
+        modifyAllowed = false
+
         binding.numberEditText.setText(order.number)
         binding.dateTextView.text = DateConverter.getDateString(order.date)
         binding.partnerTextView.text = order.partner?.name
@@ -511,6 +551,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         // Табличная часть Работы:
         setupJobDetailListRecyclerView(order.jobDetails)
+
+        modifyAllowed = true
     }
 
     private fun onExitWorkOrder() {
