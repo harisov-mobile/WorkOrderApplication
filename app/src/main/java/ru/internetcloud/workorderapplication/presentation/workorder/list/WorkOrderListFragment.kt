@@ -5,13 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.WorkOrderFragment
 
-class WorkOrderListFragment : Fragment() {
+class WorkOrderListFragment : Fragment(), FragmentResultListener  {
 
     // интерфейс обратного вызова
     interface Callbacks {
@@ -27,6 +31,10 @@ class WorkOrderListFragment : Fragment() {
     private lateinit var workOrderListAdapter: WorkOrderListAdapter
     private lateinit var addFloatingActionButton: FloatingActionButton
 
+    private val REQUEST_EXIT_QUESTION_KEY = "exit_question_key"
+    private val ARG_ANSWER = "answer"
+
+
     companion object {
         fun newInstance(): WorkOrderListFragment {
             return WorkOrderListFragment()
@@ -37,6 +45,16 @@ class WorkOrderListFragment : Fragment() {
         super.onAttach(context)
 
         hostActivity = context as Callbacks
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                onExitWorkOrderList()
+            }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,6 +82,8 @@ class WorkOrderListFragment : Fragment() {
                 workOrderListAdapter.submitList(it)
             }
         )
+
+        childFragmentManager.setFragmentResultListener(REQUEST_EXIT_QUESTION_KEY, viewLifecycleOwner, this)
     }
 
     override fun onDetach() {
@@ -83,6 +103,27 @@ class WorkOrderListFragment : Fragment() {
     private fun setupClickListener() {
         workOrderListAdapter.onWorkOrderClickListener = { workOrder ->
             hostActivity?.onEditWorkOrder(workOrder.id)
+        }
+    }
+
+    private fun onExitWorkOrderList() {
+        QuestionDialogFragment
+            .newInstance(
+                getString(R.string.exit_from_app_question, getString(R.string.app_name)),
+                REQUEST_EXIT_QUESTION_KEY,
+                ARG_ANSWER
+            )
+            .show(childFragmentManager, REQUEST_EXIT_QUESTION_KEY)
+    }
+
+    override fun onFragmentResult(requestKey: String, result: Bundle) {
+        when (requestKey) {
+            REQUEST_EXIT_QUESTION_KEY -> {
+                val exit: Boolean = result.getBoolean(ARG_ANSWER, false)
+                if (exit) {
+                    activity?.finish()
+                }
+            }
         }
     }
 }
