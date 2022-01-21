@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.FragmentLogonBinding
 import ru.internetcloud.workorderapplication.domain.common.AuthorizationPreferences
+import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 
 class LogonFragment : Fragment() {
 
@@ -162,8 +163,11 @@ class LogonFragment : Fragment() {
 
         viewModel.errorAuthorization.observe(viewLifecycleOwner) {
             // показать AlertDialog об ошибке авторизации!!!
-            // Toast.makeText(context, "Ошибка! Неправильный логин или пароль!", Toast.LENGTH_LONG).show()
-            Toast.makeText(context, viewModel.errorMessage.value, Toast.LENGTH_LONG).show()
+            // Toast.makeText(context, viewModel.errorMessage.value, Toast.LENGTH_LONG).show()
+            val errorMessage = viewModel.errorMessage.value ?: ""
+            MessageDialogFragment
+                .newInstance(errorMessage)
+                .show(childFragmentManager, null)
             binding.enterButton.isEnabled = true
         }
 
@@ -181,7 +185,6 @@ class LogonFragment : Fragment() {
                     }
                 }
                 viewModel.resetCanContinue()
-                // hostActivity?.onLaunchWorkOrderList()
                 hostActivity?.onLaunchDataSynchronization() // запустить фрагмент, где будет сихнронизация данных из 1С
             }
         }

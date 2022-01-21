@@ -68,4 +68,21 @@ class JobDetailMapper {
 
         return result
     }
+
+    fun fromListEntityToListDbModel(list: List<JobDetail>, workOrderId: String) = list.map {
+        fromEntityToDbModel(it, workOrderId)
+    }
+
+    fun fromEntityToDbModel(jobDetail: JobDetail, workOrderId: String): JobDetailDbModel {
+        return JobDetailDbModel(
+            id = jobDetail.id,
+            lineNumber = jobDetail.lineNumber,
+            carJobId = jobDetail.carJob?.id ?: "",
+            quantity = jobDetail.quantity,
+            timeNorm = jobDetail.timeNorm,
+            workingHourId = jobDetail.workingHour?.id ?: "",
+            sum = jobDetail.sum,
+            workOrderId = workOrderId
+        )
+    }
 }

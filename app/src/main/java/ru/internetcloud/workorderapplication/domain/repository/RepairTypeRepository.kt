@@ -8,6 +8,8 @@ interface RepairTypeRepository {
 
     suspend fun addRepairType(repairType: RepairType)
 
+    suspend fun addRepairTypeList(repairTypeList: List<RepairType>)
+
     suspend fun getRepairType(id: String): RepairType?
 
     suspend fun deleteAllRepairTypes()

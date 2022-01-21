@@ -3,6 +3,7 @@ package ru.internetcloud.workorderapplication.data.repository.db
 import android.app.Application
 import ru.internetcloud.workorderapplication.data.database.AppDatabase
 import ru.internetcloud.workorderapplication.data.mapper.RepairTypeMapper
+import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.repository.RepairTypeRepository
 
@@ -32,6 +33,10 @@ class DbRepairTypeRepositoryImpl private constructor(application: Application) :
 
     override suspend fun addRepairType(repairType: RepairType) {
         appDao.addRepairType(repairTypeMapper.fromEntityToDbModel(repairType))
+    }
+
+    override suspend fun addRepairTypeList(repairTypeList: List<RepairType>) {
+            appDao.addRepairTypeList(repairTypeMapper.fromListEntityToListDbModel(repairTypeList))
     }
 
     override suspend fun getRepairType(id: String): RepairType? {

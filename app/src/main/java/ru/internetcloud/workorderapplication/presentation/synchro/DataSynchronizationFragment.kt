@@ -52,7 +52,7 @@ class DataSynchronizationFragment : Fragment() {
         }
 
         binding.exitButton.setOnClickListener {
-            activity?.onBackPressed() // это аналог finish для фрагмента
+            activity?.onBackPressed() // это finish - закрыть приложение
         }
 
         observeViewModel()

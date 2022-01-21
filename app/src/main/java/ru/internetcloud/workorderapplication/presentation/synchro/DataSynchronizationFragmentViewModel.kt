@@ -25,6 +25,7 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.emp
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.AddPartnerListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.DeletePartnerListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.GetPartnerListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.AddRepairTypeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.AddRepairTypeUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.DeleteRepairTypesUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetRepairTypeListUseCase
@@ -61,7 +62,8 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
     private val getRemoteRepairTypeListUseCase = GetRepairTypeListUseCase(remoteRepairTypeRepository)
     private val getDbRepairTypeListUseCase = GetRepairTypeListUseCase(dbRepairTypeRepository)
-    private val addDbRepairTypeUseCase = AddRepairTypeUseCase(dbRepairTypeRepository)
+    //private val addDbRepairTypeUseCase = AddRepairTypeUseCase(dbRepairTypeRepository)
+    private val addRepairTypeListUseCase = AddRepairTypeListUseCase(dbRepairTypeRepository)
     private val deleteRepairTypesUseCase = DeleteRepairTypesUseCase(dbRepairTypeRepository)
 
     private val getRemoteCarJobListUseCase = GetCarJobListUseCase(remoteCarJobRepository)
@@ -136,9 +138,10 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
                 }
             } else {
                 deleteRepairTypesUseCase.deleteAllRepairTypes()
-                remoteRepairTypeList.forEach {
-                    addDbRepairTypeUseCase.addRepairType(it)
-                }
+//                remoteRepairTypeList.forEach {
+//                    addDbRepairTypeUseCase.addRepairType(it)
+//                }
+                addRepairTypeListUseCase.addRepairTypeList(remoteRepairTypeList)
 
                 refreshPartner()
                 refreshEmployee()

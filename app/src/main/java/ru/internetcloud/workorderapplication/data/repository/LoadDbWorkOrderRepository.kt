@@ -40,6 +40,14 @@ class LoadDbWorkOrderRepository private constructor(application: Application) {
         appDao.deleteAllWorkOrders()
     }
 
+    suspend fun deleteAllJobDetails() {
+        appDao.deleteAllJobDetails()
+    }
+
+    suspend fun deleteAllPerformers() {
+        appDao.deleteAllPerformers()
+    }
+
     suspend fun addJobDetailList(jobDetails: List<JobDetailDTO>) {
 
         val jobDetailDbModelList: MutableList<JobDetailDbModel> = mutableListOf()

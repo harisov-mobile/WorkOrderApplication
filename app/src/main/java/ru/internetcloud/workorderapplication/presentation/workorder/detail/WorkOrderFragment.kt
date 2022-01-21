@@ -422,10 +422,16 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 if (delete) {
                     viewModel.workOrder.value?.let { order ->
                         val removedPosition = order.jobDetails.indexOf(viewModel.selectedJobDetail)
-                        Toast.makeText(context, "indexOf = " + removedPosition.toString(), Toast.LENGTH_SHORT).show()
                         order.jobDetails.remove(viewModel.selectedJobDetail)
                         viewModel.selectedJobDetail = null
-                        jobDetailListAdapter.notifyItemRemoved(removedPosition)
+
+                        var pos = 0
+                        order.jobDetails.forEach {
+                            pos++
+                            it.lineNumber = pos
+                        }
+
+                        jobDetailListAdapter.notifyDataSetChanged()
                         order.isModified = true
                     }
                 }

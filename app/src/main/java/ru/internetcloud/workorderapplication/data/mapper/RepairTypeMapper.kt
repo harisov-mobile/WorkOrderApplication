@@ -2,6 +2,7 @@ package ru.internetcloud.workorderapplication.data.mapper
 
 import ru.internetcloud.workorderapplication.data.entity.RepairTypeDbModel
 import ru.internetcloud.workorderapplication.data.network.dto.RepairTypeDTO
+import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 
 class RepairTypeMapper {
@@ -44,5 +45,9 @@ class RepairTypeMapper {
             id = repairType.id,
             name = repairType.name
         )
+    }
+
+    fun fromListEntityToListDbModel(list: List<RepairType>) = list.map {
+        fromEntityToDbModel(it)
     }
 }

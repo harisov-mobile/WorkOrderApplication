@@ -41,7 +41,10 @@ class LoadWorkOrderRepositoryImpl private constructor(
         }
 
         if (success) {
+            loadDbWorkOrderRepository.deleteAllJobDetails()
             loadDbWorkOrderRepository.addJobDetailList(workOrderResponse.jobDetails)
+
+            loadDbWorkOrderRepository.deleteAllPerformers()
             loadDbWorkOrderRepository.addPerformersList(workOrderResponse.performerDetails)
 
             loadDbWorkOrderRepository.deleteAllWorkOrders()

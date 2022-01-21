@@ -11,7 +11,8 @@ import ru.internetcloud.workorderapplication.presentation.workorder.list.WorkOrd
 
 class MainActivity : AppCompatActivity(),
     WorkOrderListFragment.Callbacks,
-    LogonFragment.Callbacks, DataSynchronizationFragment.Callbacks {
+    LogonFragment.Callbacks,
+    DataSynchronizationFragment.Callbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

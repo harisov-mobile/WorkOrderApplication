@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import ru.internetcloud.workorderapplication.data.database.AppDatabase
+import ru.internetcloud.workorderapplication.data.mapper.JobDetailMapper
 import ru.internetcloud.workorderapplication.data.mapper.WorkOrderMapper
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
@@ -12,6 +13,7 @@ class DbWorkOrderRepositoryImpl private constructor(application: Application) : 
 
     private val workOrderDao = AppDatabase.getInstance(application).appDao()
     private val workOrderMapper = WorkOrderMapper()
+    private val jobDetailMapper = JobDetailMapper()
 
     companion object {
         private var instance: DbWorkOrderRepositoryImpl? = null
@@ -34,6 +36,12 @@ class DbWorkOrderRepositoryImpl private constructor(application: Application) : 
     override suspend fun updateWorkOrder(workOrder: WorkOrder) {
         // т.к. onConflict = OnConflictStrategy.REPLACE, то это будет и UPDATE тоже
         workOrderDao.addWorkOrder(workOrderMapper.fromEntityToDbModel(workOrder))
+
+        // сначала удалим ТЧ Работы, относящиеся к данному ордеру
+        workOrderDao.deleteJobDetailsByWorkOrder(workOrder.id)
+
+        // потом перезапишем
+        workOrderDao.addJobDetailList(jobDetailMapper.fromListEntityToListDbModel(list = workOrder.jobDetails, workOrderId = workOrder.id))
     }
 
     override fun getWorkOrderList(): LiveData<List<WorkOrder>> {

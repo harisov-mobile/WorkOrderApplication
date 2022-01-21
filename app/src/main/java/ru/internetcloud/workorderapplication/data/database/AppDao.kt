@@ -24,6 +24,12 @@ interface AppDao {
     @Query("DELETE FROM work_orders")
     suspend fun deleteAllWorkOrders()
 
+    @Query("DELETE FROM job_details")
+    suspend fun deleteAllJobDetails()
+
+    @Query("DELETE FROM performer_details")
+    suspend fun deleteAllPerformers()
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addJobDetailList(jobDetailDbModelList: List<JobDetailDbModel>)
 
@@ -38,6 +44,9 @@ interface AppDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addRepairType(repairTypeDbModel: RepairTypeDbModel)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addRepairTypeList(repairTypeDbModelList: List<RepairTypeDbModel>)
 
     @Query("DELETE FROM repair_types")
     suspend fun deleteAllRepairTypes()
@@ -154,4 +163,9 @@ interface AppDao {
 
     @Query("SELECT * FROM working_hours WHERE name LIKE :searchText")
     suspend fun searhWorkingHours(searchText: String): List<WorkingHourDbModel>
+
+    // --------------------------------------------------------------------------------
+    @Query("DELETE FROM job_details WHERE workOrderId = :workOrderId")
+    suspend fun deleteJobDetailsByWorkOrder(workOrderId: String)
+
 }
