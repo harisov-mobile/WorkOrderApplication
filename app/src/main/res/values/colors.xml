@@ -17,15 +17,20 @@
     <color name="gray_900">#3C3C3C</color>
     <color name="gray_850">#4C4C4C</color>
     <color name="gray_800">#606060</color>
+    <color name="gray_100">#F5F5F5</color>
 
     <color name="light_blue_900">#01579B</color>
     <color name="light_blue_800">#0277BD</color>
     <color name="light_blue_A200">#40C4FF</color>
     <color name="light_blue_200">#81D4FA</color>
     <color name="light_blue_50">#E1F5FE</color>
+
     <color name="light_blue_100">#B3E5FC</color>
 
     <color name="red_100">#FFCDD2</color>
     <color name="green_100">#C8E6C9</color>
+
+    <color name="light_green_200">#C5E1A5</color>
+    <color name="teal_100">#B2DFDB</color>
 
 </resources>

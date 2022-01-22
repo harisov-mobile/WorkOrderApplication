@@ -23,6 +23,7 @@
     <string name="success_saved">Информация записана</string>
 
     <string name="save_button">Записать</string>
+    <string name="close_button">Закрыть</string>
     <string name="exit_button">Закрыть</string>
 
     <string name="work_order_presentation">Заказ-наряд № %s от %s</string>

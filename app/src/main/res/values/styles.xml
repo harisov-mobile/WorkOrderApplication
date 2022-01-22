@@ -56,4 +56,8 @@
         <item name="android:textColor">?attr/colorPrimary</item>
     </style>
 
+    <style name="text_input_edit_text">
+        <item name="android:background">@color/gray_100</item>
+    </style>
+
 </resources>

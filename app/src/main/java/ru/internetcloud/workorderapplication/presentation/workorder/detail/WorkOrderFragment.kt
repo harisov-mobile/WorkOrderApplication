@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
@@ -98,7 +99,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                onExitWorkOrder()
+                onCloseWorkOrder()
             }
         })
     }
@@ -445,22 +446,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             viewModel.updateWorkOrder()
         }
 
-        binding.exitButton.setOnClickListener {
-            viewModel.workOrder.value?.let { order ->
-                if (order.isModified) {
-                    QuestionDialogFragment
-                        .newInstance(
-                            getString(R.string.data_was_changed_question),
-                            REQUEST_DATA_WAS_CHANGED_KEY,
-                            ARG_ANSWER
-                        )
-                        .show(childFragmentManager, REQUEST_DATA_WAS_CHANGED_KEY)
-                } else {
-                    activity?.supportFragmentManager?.popBackStack()
-                }
-            } ?: let {
-                activity?.supportFragmentManager?.popBackStack()
-            }
+        binding.closeButton.setOnClickListener {
+            onCloseWorkOrder()
         }
 
         binding.dateSelectButton.setOnClickListener {
@@ -600,11 +587,43 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         setupJobDetailListRecyclerView(order.jobDetails)
 
         modifyAllowed = true
+
+        if (order.posted) {
+            context?.let {
+                binding.mainContainer.setBackgroundColor(ContextCompat.getColor(it, R.color.light_green_200))
+
+                binding.numberEditText.setEnabled(false)
+                binding.numberEditText.setTextColor(ContextCompat.getColor(it, R.color.gray_850))
+
+                binding.mileageEditText.setEnabled(false)
+                binding.mileageEditText.setTextColor(ContextCompat.getColor(it, R.color.gray_850))
+
+                binding.requestReasonEditText.setEnabled(false)
+                binding.requestReasonEditText.setTextColor(ContextCompat.getColor(it, R.color.gray_850))
+
+                binding.commentEditText.setEnabled(false)
+                binding.commentEditText.setTextColor(ContextCompat.getColor(it, R.color.gray_850))
+            }
+
+            binding.saveButton.visibility = View.INVISIBLE
+            binding.dateSelectButton.visibility = View.INVISIBLE
+            binding.partnerSelectButton.visibility = View.INVISIBLE
+            binding.carSelectButton.visibility = View.INVISIBLE
+            binding.repairTypeSelectButton.visibility = View.INVISIBLE
+            binding.departmentSelectButton.visibility = View.INVISIBLE
+            binding.addPerformerDetailButton.visibility = View.INVISIBLE
+            binding.editPerformerDetailButton.visibility = View.INVISIBLE
+            binding.deletePerformerDetailButton.visibility = View.INVISIBLE
+            binding.addJobDetailButton.visibility = View.INVISIBLE
+            binding.deleteJobDetailButton.visibility = View.INVISIBLE
+            binding.editJobDetailButton.visibility = View.INVISIBLE
+
+        }
     }
 
-    private fun onExitWorkOrder() {
+    private fun onCloseWorkOrder() {
         viewModel.workOrder.value?.let { order ->
-            if (order.isModified) {
+            if (!order.posted && order.isModified) {
                 QuestionDialogFragment
                     .newInstance(
                         getString(R.string.data_was_changed_question),
