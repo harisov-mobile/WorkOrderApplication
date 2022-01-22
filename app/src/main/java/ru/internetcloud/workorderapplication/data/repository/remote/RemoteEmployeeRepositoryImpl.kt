@@ -52,4 +52,8 @@ class RemoteEmployeeRepositoryImpl private constructor(application: Application)
     override suspend fun deleteAllEmployees() {
         throw RuntimeException("Error - method deleteAllEmployees is restricted in RemoteEmployeeRepositoryImpl")
     }
+
+    override suspend fun searchEmployees(searchText: String): List<Employee> {
+        throw RuntimeException("Error - method searchEmployees is restricted in RemoteEmployeeRepositoryImpl")
+    }
 }

@@ -22,7 +22,7 @@ data class WorkOrder(
     var mileage: Int = 0, // Пробег (наработка)
     var isNew: Boolean = false,
     var isModified: Boolean = false,
-    var performers: List<PerformerDetail> = emptyList(), // исполнители (табличная часть)
+    var performers: MutableList<PerformerDetail> = mutableListOf(), // исполнители (табличная часть)
     var performersString: String = "", // исполнители строкой
-    var jobDetails: MutableList<JobDetail> = mutableListOf() // emptyList() // Работы (табличная часть)
+    var jobDetails: MutableList<JobDetail> = mutableListOf() // Работы (табличная часть)
 )

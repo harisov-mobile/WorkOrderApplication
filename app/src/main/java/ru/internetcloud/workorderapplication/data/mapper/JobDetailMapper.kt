@@ -23,22 +23,6 @@ class JobDetailMapper {
         )
     }
 
-    fun fromDbToEntityWithNull(jobDetailWithRequisities: JobDetailWithRequisities?): JobDetail? {
-        var result: JobDetail? = null
-        jobDetailWithRequisities?.let {
-            result = JobDetail(
-                id = jobDetailWithRequisities.jobDetailDbModel.id,
-                lineNumber = jobDetailWithRequisities.jobDetailDbModel.lineNumber,
-                carJob = carJobMapper.fromDbModelToEntityWithNull(jobDetailWithRequisities.carJob),
-                quantity = jobDetailWithRequisities.jobDetailDbModel.quantity,
-                timeNorm = jobDetailWithRequisities.jobDetailDbModel.timeNorm,
-                workingHour = workingHourMapper.fromDbModelToEntityWithNull(jobDetailWithRequisities.workingHour),
-                sum = jobDetailWithRequisities.jobDetailDbModel.sum
-            )
-        }
-        return result
-    }
-
     fun fromDbToEntity(jobDetailWithRequisities: JobDetailWithRequisities): JobDetail {
             return JobDetail(
                 id = jobDetailWithRequisities.jobDetailDbModel.id,
@@ -49,10 +33,6 @@ class JobDetailMapper {
                 workingHour = workingHourMapper.fromDbModelToEntityWithNull(jobDetailWithRequisities.workingHour),
                 sum = jobDetailWithRequisities.jobDetailDbModel.sum
             )
-    }
-
-    fun fromListDbToListEntityWithNull(list: List<JobDetailWithRequisities?>) = list.map {
-        fromDbToEntityWithNull(it)
     }
 
     fun fromListDbToListEntity(list: List<JobDetailWithRequisities>): MutableList<JobDetail> {

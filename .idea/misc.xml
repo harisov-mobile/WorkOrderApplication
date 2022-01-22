@@ -16,6 +16,7 @@
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_logon.xml" value="0.3697916666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_logon2.xml" value="0.25" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_partner_picker.xml" value="0.1" />
+        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_performer_detail.xml" value="0.35999999219721035" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_picker.xml" value="0.2760416666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_repair_type_picker.xml" value="0.2760416666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_wor_order2.xml" value="0.3697916666666667" />
@@ -23,12 +24,14 @@
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_work_order2.xml" value="0.3697916666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_work_order3.xml" value="0.16944444444444445" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/fragment_work_order_list.xml" value="0.2760416666666667" />
-        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_car_job_list.xml" value="0.1" />
+        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_car_job_list.xml" value="0.2727272668160684" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_car_job_list_selected.xml" value="0.3697916666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_car_list.xml" value="0.2760416666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_car_list_selected.xml" value="0.2760416666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_department_list.xml" value="0.2760416666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_department_list_selected.xml" value="0.2760416666666667" />
+        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_employee_list.xml" value="0.2760416666666667" />
+        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_employee_list_selected.xml" value="0.2760416666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_job_detail_list.xml" value="0.25" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_job_detail_list_selected.xml" value="0.5454545336321368" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_partner_list.xml" value="0.7309090750670634" />

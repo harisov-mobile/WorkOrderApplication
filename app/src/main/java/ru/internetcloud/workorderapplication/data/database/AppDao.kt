@@ -109,6 +109,9 @@ interface AppDao {
     @Query("SELECT * FROM employees WHERE id=:id LIMIT 1")
     suspend fun getEmployee(id: String): EmployeeDbModel?
 
+    @Query("SELECT * FROM employees WHERE name LIKE :searchText")
+    suspend fun searchEmployees(searchText: String): List<EmployeeDbModel>
+
     // ----------------------------------------------------------------------
     @Query("SELECT * FROM partners")
     suspend fun getPartnerList(): List<PartnerDbModel>
@@ -167,5 +170,9 @@ interface AppDao {
     // --------------------------------------------------------------------------------
     @Query("DELETE FROM job_details WHERE workOrderId = :workOrderId")
     suspend fun deleteJobDetailsByWorkOrder(workOrderId: String)
+
+    // --------------------------------------------------------------------------------
+    @Query("DELETE FROM performer_details WHERE workOrderId = :workOrderId")
+    suspend fun deletePerformersDetailsByWorkOrder(workOrderId: String)
 
 }

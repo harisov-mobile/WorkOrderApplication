@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import ru.internetcloud.workorderapplication.data.database.AppDatabase
 import ru.internetcloud.workorderapplication.data.mapper.JobDetailMapper
+import ru.internetcloud.workorderapplication.data.mapper.PerformerDetailMapper
 import ru.internetcloud.workorderapplication.data.mapper.WorkOrderMapper
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
@@ -14,6 +15,7 @@ class DbWorkOrderRepositoryImpl private constructor(application: Application) : 
     private val workOrderDao = AppDatabase.getInstance(application).appDao()
     private val workOrderMapper = WorkOrderMapper()
     private val jobDetailMapper = JobDetailMapper()
+    private val performerDetailMapper = PerformerDetailMapper()
 
     companion object {
         private var instance: DbWorkOrderRepositoryImpl? = null
@@ -39,9 +41,13 @@ class DbWorkOrderRepositoryImpl private constructor(application: Application) : 
 
         // сначала удалим ТЧ Работы, относящиеся к данному ордеру
         workOrderDao.deleteJobDetailsByWorkOrder(workOrder.id)
-
-        // потом перезапишем
+        // потом перезапишем Работы
         workOrderDao.addJobDetailList(jobDetailMapper.fromListEntityToListDbModel(list = workOrder.jobDetails, workOrderId = workOrder.id))
+
+        // сначала удалим ТЧ Исполнители, относящиеся к данному ордеру
+        workOrderDao.deletePerformersDetailsByWorkOrder(workOrder.id)
+        // потом перезапишем Исполнители
+        workOrderDao.addPerformerDetailList(performerDetailMapper.fromListEntityToListDbModel(list = workOrder.performers, workOrderId = workOrder.id))
     }
 
     override fun getWorkOrderList(): LiveData<List<WorkOrder>> {

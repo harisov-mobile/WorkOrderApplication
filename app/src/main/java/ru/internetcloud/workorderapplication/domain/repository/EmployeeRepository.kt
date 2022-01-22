@@ -13,4 +13,6 @@ interface EmployeeRepository {
     suspend fun getEmployee(id: String): Employee?
 
     suspend fun deleteAllEmployees()
+
+    suspend fun searchEmployees(searchText: String): List<Employee>
 }

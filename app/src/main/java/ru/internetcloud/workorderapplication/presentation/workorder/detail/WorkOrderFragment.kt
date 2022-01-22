@@ -30,6 +30,7 @@ import ru.internetcloud.workorderapplication.presentation.workorder.detail.depar
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailListAdapter
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerPickerFragment
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailListAdapter
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.repairtype.RepairTypePickerFragment
 import java.util.*
@@ -70,10 +71,13 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         private val ARG_DEPARTMENT = "department_picker"
 
         private val REQUEST_JOB_DETAIL_PICKER_KEY = "request_job_detail_picker_key"
+        private val REQUEST_PERFORMER_DETAIL_PICKER_KEY = "request_performer_detail_picker_key"
         private val ARG_JOB_DETAIL = "job_detail_picker"
+        private val ARG_PERFORMER_DETAIL = "performer_detail_picker"
 
         private val REQUEST_DATA_WAS_CHANGED_KEY = "data_was_changed_key"
         private val REQUEST_DELETE_JOB_DETAIL_KEY = "delete_job_detail_key"
+        private val REQUEST_DELETE_PERFORMER_DETAIL_KEY = "delete_performer_detail_key"
         private val ARG_ANSWER = "answer"
 
         fun newInstanceAddWorkOrder(): WorkOrderFragment {
@@ -135,8 +139,10 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         childFragmentManager.setFragmentResultListener(REQUEST_REPAIR_TYPE_PICKER_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_DEPARTMENT_PICKER_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_JOB_DETAIL_PICKER_KEY, viewLifecycleOwner, this)
+        childFragmentManager.setFragmentResultListener(REQUEST_PERFORMER_DETAIL_PICKER_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_DATA_WAS_CHANGED_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_DELETE_JOB_DETAIL_KEY, viewLifecycleOwner, this)
+        childFragmentManager.setFragmentResultListener(REQUEST_DELETE_PERFORMER_DETAIL_KEY, viewLifecycleOwner, this)
 
         setupClickListeners()
     }
@@ -408,6 +414,31 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 }
             }
 
+            REQUEST_PERFORMER_DETAIL_PICKER_KEY -> {
+                val performerDetail: PerformerDetail? = result.getParcelable(ARG_PERFORMER_DETAIL)
+                performerDetail?.let { currentPerformerDetail ->
+                    viewModel.workOrder.value?.let { order ->
+                        val foundPerformerDetail = order.performers.find { it.lineNumber == currentPerformerDetail.lineNumber }
+                        foundPerformerDetail ?: let {
+                            // это новая строка, добавленная в ТЧ
+                            order.performers.add(currentPerformerDetail)
+                            binding.performerDetailsRecyclerView.scrollToPosition(order.performers.indexOf(currentPerformerDetail))
+                        }
+                        order.performers.forEach {
+                            it.isSelected = false
+                        }
+                        viewModel.selectedPerformerDetail = currentPerformerDetail
+                        viewModel.selectedPerformerDetail?.isSelected = true
+
+                        performerDetailListAdapter.notifyItemChanged(
+                            order.performers.indexOf(viewModel.selectedPerformerDetail),
+                            Unit
+                        )
+                        order.isModified = true
+                    }
+                }
+            }
+
             REQUEST_DATA_WAS_CHANGED_KEY -> {
                 val needSaveData: Boolean = result.getBoolean(ARG_ANSWER, false)
                 if (needSaveData) {
@@ -433,6 +464,26 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         }
 
                         jobDetailListAdapter.notifyDataSetChanged()
+                        order.isModified = true
+                    }
+                }
+            }
+
+            REQUEST_DELETE_PERFORMER_DETAIL_KEY -> {
+                val delete: Boolean = result.getBoolean(ARG_ANSWER, false)
+                if (delete) {
+                    viewModel.workOrder.value?.let { order ->
+                        val removedPosition = order.performers.indexOf(viewModel.selectedPerformerDetail)
+                        order.performers.remove(viewModel.selectedPerformerDetail)
+                        viewModel.selectedPerformerDetail = null
+
+                        var pos = 0
+                        order.performers.forEach {
+                            pos++
+                            it.lineNumber = pos
+                        }
+
+                        performerDetailListAdapter.notifyDataSetChanged()
                         order.isModified = true
                     }
                 }
@@ -556,6 +607,48 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 }
             }
         }
+
+        binding.addPerformerDetailButton.setOnClickListener {
+            viewModel.workOrder.value?.let { order ->
+                PerformerDetailFragment
+                    .newInstance(
+                        getNewPerformerDetail(order),
+                        REQUEST_PERFORMER_DETAIL_PICKER_KEY,
+                        ARG_PERFORMER_DETAIL
+                    ) // здесь надо подумать как правильно создавать новую строку ТЧ
+                    .show(childFragmentManager, REQUEST_PERFORMER_DETAIL_PICKER_KEY)
+            }
+        }
+
+        binding.editPerformerDetailButton.setOnClickListener {
+            viewModel.workOrder.value?.let { order ->
+                viewModel.selectedPerformerDetail?.let {
+                    PerformerDetailFragment
+                        .newInstance(it, REQUEST_PERFORMER_DETAIL_PICKER_KEY, ARG_PERFORMER_DETAIL)
+                        .show(childFragmentManager, REQUEST_PERFORMER_DETAIL_PICKER_KEY)
+                } ?: run {
+                    MessageDialogFragment.newInstance(getString(R.string.edit_performer_detail_not_selected))
+                        .show(childFragmentManager, null)
+                }
+            }
+        }
+
+        binding.deletePerformerDetailButton.setOnClickListener {
+            viewModel.workOrder.value?.let { order ->
+                viewModel.selectedPerformerDetail?.let {
+                    QuestionDialogFragment
+                        .newInstance(
+                            getString(R.string.delete_performer_detail_question),
+                            REQUEST_DELETE_PERFORMER_DETAIL_KEY,
+                            ARG_ANSWER
+                        )
+                        .show(childFragmentManager, REQUEST_DELETE_PERFORMER_DETAIL_KEY)
+                } ?: run {
+                    MessageDialogFragment.newInstance(getString(R.string.delete_performer_detail_not_selected))
+                        .show(childFragmentManager, null)
+                }
+            }
+        }
     }
 
     private fun getNewJobDetail(order: WorkOrder): JobDetail {
@@ -563,6 +656,13 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         lineNumber++
         val id = order.id + "_" + lineNumber.toString()
         return JobDetail(id = id, lineNumber = lineNumber)
+    }
+
+    private fun getNewPerformerDetail(order: WorkOrder): PerformerDetail {
+        var lineNumber = order.performers.size
+        lineNumber++
+        val id = order.id + "_" + lineNumber.toString()
+        return PerformerDetail(id = id, lineNumber = lineNumber)
     }
 
     private fun updateUI(order: WorkOrder) {

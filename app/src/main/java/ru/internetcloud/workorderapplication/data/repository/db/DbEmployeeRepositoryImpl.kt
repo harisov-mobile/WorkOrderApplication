@@ -52,4 +52,8 @@ class DbEmployeeRepositoryImpl private constructor(application: Application) : E
     override suspend fun deleteAllEmployees() {
         appDao.deleteAllEmployees()
     }
+
+    override suspend fun searchEmployees(searchText: String): List<Employee> {
+        return employeeMapper.fromListDbModelToListEntity(appDao.searchEmployees("%$searchText%"))
+    }
 }

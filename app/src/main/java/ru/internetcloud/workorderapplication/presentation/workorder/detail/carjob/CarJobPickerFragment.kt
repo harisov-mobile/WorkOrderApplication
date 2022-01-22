@@ -81,8 +81,8 @@ class CarJobPickerFragment : DialogFragment() {
         setupCarJobListRecyclerView(container)
 
         viewModel = ViewModelProvider(this).get(CarJobListViewModel::class.java)
-        viewModel.carJobListLiveData.observe(this, { partners ->
-            carJobListAdapter = CarJobListAdapter(partners)
+        viewModel.carJobListLiveData.observe(this, { carJobs ->
+            carJobListAdapter = CarJobListAdapter(carJobs)
             carJobListRecyclerView.adapter = carJobListAdapter
             setupClickListeners()
 
@@ -97,7 +97,7 @@ class CarJobPickerFragment : DialogFragment() {
             carJobListRecyclerView.scrollToPosition(scrollPosition)
 
             if (currentPosition != NOT_FOUND_POSITION) {
-                partners[currentPosition].isSelected = true
+                carJobs[currentPosition].isSelected = true
                 carJobListAdapter.notifyItemChanged(currentPosition, Unit)
             }
         })
