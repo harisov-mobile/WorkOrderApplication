@@ -10,6 +10,7 @@ data class WorkOrderDbModel(
     var id: String = "",
     var number: String = "", // номер документа
     var date: Date = Date(), // дата документа
+    var posted: Boolean = false, // проведен
     var partnerId: String = "", // заказчик
     var carId: String = "", // схт
     var repairTypeId: String = "", // вид ремонта

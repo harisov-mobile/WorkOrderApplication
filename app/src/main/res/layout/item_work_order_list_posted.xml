@@ -38,7 +38,7 @@
                 app:layout_constraintStart_toEndOf="@id/start_guideline"
                 app:layout_constraintTop_toTopOf="parent"
 
-                app:srcCompat="@android:drawable/checkbox_off_background" />
+                app:srcCompat="@android:drawable/checkbox_on_background" />
 
 
             <TextView

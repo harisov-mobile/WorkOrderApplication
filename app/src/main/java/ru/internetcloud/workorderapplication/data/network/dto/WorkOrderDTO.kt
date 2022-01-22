@@ -12,6 +12,9 @@ data class WorkOrderDTO(
     @SerializedName("date")
     val dateString: String,
 
+    @SerializedName("posted")
+    var posted: Boolean,
+
     @SerializedName("partner_id")
     val partnerId: String,
 

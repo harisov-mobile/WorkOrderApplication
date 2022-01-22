@@ -12,8 +12,7 @@ import ru.internetcloud.workorderapplication.domain.document.JobDetail
 class JobDetailListAdapter : ListAdapter<JobDetail, JobDetailListViewHolder>(JobDetailDiffCallback()) {
 
     // для отработки нажатий на элемент списка - переменная, которая будет хранить лямбда-функцию,
-    // на вход лямбда-функции в качестве параметра будет передан workOrder: WorkOrder,
-    // лямбда-функция ничего не возрващает (то есть Unit)
+    // на вход лямбда-функции в качестве параметра будет передан jobDetail: JobDetail,
     // а первоначально переменная содержит null
     var onJobDetailClickListener: ((jobDetail: JobDetail) -> Unit)? = null
 
