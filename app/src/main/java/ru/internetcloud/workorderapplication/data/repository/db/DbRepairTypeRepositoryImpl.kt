@@ -3,7 +3,6 @@ package ru.internetcloud.workorderapplication.data.repository.db
 import android.app.Application
 import ru.internetcloud.workorderapplication.data.database.AppDatabase
 import ru.internetcloud.workorderapplication.data.mapper.RepairTypeMapper
-import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.repository.RepairTypeRepository
 

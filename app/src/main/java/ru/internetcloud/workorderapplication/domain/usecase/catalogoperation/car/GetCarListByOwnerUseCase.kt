@@ -8,4 +8,3 @@ class GetCarListByOwnerUseCase(private val carRepository: CarRepository) {
         return carRepository.getCarListByOwner(ownerId)
     }
 }
-

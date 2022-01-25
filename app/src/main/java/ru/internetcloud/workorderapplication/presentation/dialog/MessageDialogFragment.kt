@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import ru.internetcloud.workorderapplication.R
 
-class MessageDialogFragment: DialogFragment() {
+class MessageDialogFragment : DialogFragment() {
 
     companion object {
 

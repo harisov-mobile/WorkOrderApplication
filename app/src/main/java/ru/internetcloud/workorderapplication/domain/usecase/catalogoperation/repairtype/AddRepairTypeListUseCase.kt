@@ -8,5 +8,3 @@ class AddRepairTypeListUseCase(private val repairTypeRepository: RepairTypeRepos
         return repairTypeRepository.addRepairTypeList(repairTypeList)
     }
 }
-
-

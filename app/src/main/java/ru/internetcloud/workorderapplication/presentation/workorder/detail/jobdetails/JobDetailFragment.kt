@@ -19,7 +19,6 @@ import ru.internetcloud.workorderapplication.domain.common.ValidateInputResult
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.carjob.CarJobPickerFragment
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.workinghour.WorkingHourPickerFragment
 import java.math.BigDecimal
 

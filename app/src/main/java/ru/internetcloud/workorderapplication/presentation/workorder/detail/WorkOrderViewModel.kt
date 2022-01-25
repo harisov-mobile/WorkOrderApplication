@@ -10,7 +10,6 @@ import ru.internetcloud.workorderapplication.data.repository.db.DbWorkOrderRepos
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.GetPartnerUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.AddWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.UpdateWorkOrderUseCase

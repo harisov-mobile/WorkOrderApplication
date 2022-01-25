@@ -21,8 +21,6 @@ class LoadDbWorkOrderRepository private constructor(application: Application) {
 
     companion object {
 
-        private const val WORK_ORDER_ID_SIZE = 36
-
         private var instance: LoadDbWorkOrderRepository? = null
 
         fun initialize(application: Application) {
@@ -77,5 +75,9 @@ class LoadDbWorkOrderRepository private constructor(application: Application) {
 
     suspend fun getModifiedWorkOrders(): List<WorkOrderWithDetails> {
         return appDao.getModifiedWorkOrders()
+    }
+
+    suspend fun getModifiedWorkOrdersQuantity(): Int {
+        return appDao.getModifiedWorkOrders().size
     }
 }

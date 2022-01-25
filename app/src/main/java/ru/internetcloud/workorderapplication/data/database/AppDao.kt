@@ -174,5 +174,4 @@ interface AppDao {
     // --------------------------------------------------------------------------------
     @Query("DELETE FROM performer_details WHERE workOrderId = :workOrderId")
     suspend fun deletePerformersDetailsByWorkOrder(workOrderId: String)
-
 }

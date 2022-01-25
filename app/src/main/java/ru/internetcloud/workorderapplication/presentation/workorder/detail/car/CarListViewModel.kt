@@ -9,7 +9,6 @@ import ru.internetcloud.workorderapplication.data.repository.db.DbCarRepositoryI
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.GetCarListByOwnerUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.GetCarListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.SearchCarsUseCase
 
 class CarListViewModel : ViewModel() {

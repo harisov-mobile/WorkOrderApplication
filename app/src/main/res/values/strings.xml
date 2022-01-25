@@ -100,4 +100,9 @@
     <string name="delete_performer_detail_question">Удалить строку исполнителей?</string>
     <string name="exit_from_app_question">Выйти из %1$s?</string>
 
+    <string name="search_menu_item">Поиск</string>
+    <string name="synchronize_data_menu_item">Синхронизировать данные</string>
+    <string name="settings_menu_item">Настройки</string>
+    <string name="exit_menu_item">Выход</string>
+
 </resources>

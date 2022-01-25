@@ -2,9 +2,7 @@ package ru.internetcloud.workorderapplication.presentation.workorder.list
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
@@ -13,15 +11,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.WorkOrderFragment
 
-class WorkOrderListFragment : Fragment(), FragmentResultListener  {
+class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
     // интерфейс обратного вызова
     interface Callbacks {
         fun onAddWorkOrder()
 
         fun onEditWorkOrder(workOrderId: String)
+
+        fun onLaunchDataSynchronization()
     }
 
     private var hostActivity: Callbacks? = null
@@ -33,7 +32,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener  {
 
     private val REQUEST_EXIT_QUESTION_KEY = "exit_question_key"
     private val ARG_ANSWER = "answer"
-
 
     companion object {
         fun newInstance(): WorkOrderListFragment {
@@ -55,6 +53,8 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener  {
                 onExitWorkOrderList()
             }
         })
+
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -84,6 +84,31 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener  {
         )
 
         childFragmentManager.setFragmentResultListener(REQUEST_EXIT_QUESTION_KEY, viewLifecycleOwner, this)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        inflater.inflate(R.menu.work_order_list_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.exit_menu_item -> {
+                onExitWorkOrderList()
+                return true
+            }
+
+            R.id.synchronize_data_menu_item -> {
+                hostActivity?.onLaunchDataSynchronization() // запустить фрагмент, где будет сихнронизация данных из 1С
+                return true
+            }
+
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     override fun onDetach() {

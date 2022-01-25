@@ -7,14 +7,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import ru.internetcloud.workorderapplication.R
 
-class QuestionDialogFragment: DialogFragment() {
+class QuestionDialogFragment : DialogFragment() {
 
     companion object {
 
         private const val QUESTION_ARG = "question_arg"
         private const val PARENT_REQUEST_KEY = "parent_request_key"
         private const val PARENT_ANSWER_ARG_NAME = "parent_answer_arg_name"
-
 
         fun newInstance(question: String, parentRequestKey: String, parentAnswerArgName: String): QuestionDialogFragment {
             val args = Bundle().apply {

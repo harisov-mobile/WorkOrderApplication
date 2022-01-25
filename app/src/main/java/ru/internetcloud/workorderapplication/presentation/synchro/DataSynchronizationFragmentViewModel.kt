@@ -26,12 +26,14 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.par
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.DeletePartnerListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.GetPartnerListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.AddRepairTypeListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.AddRepairTypeUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.DeleteRepairTypesUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetRepairTypeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.AddWorkingHourListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.DeleteWorkingHourListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.GetWorkingHourListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.GetModifiedWorkOrdersQuantityUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadWorkOrdersUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.UploadWorkOrdersUseCase
 
 class DataSynchronizationFragmentViewModel : ViewModel() {
 
@@ -57,12 +59,12 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     private val remoteWorkingHourRepository = RemoteWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
     private val dbWorkingHourRepository = DbWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
 
-    private val loadWorkOrderRepositoryImpl = LoadWorkOrderRepositoryImpl.get() // требуется инъекция зависимостей!!!
+    private val loadWorkOrderRepositoryImpl = SynchroRepositoryImpl.get() // требуется инъекция зависимостей!!!
+    private val synchroRepositoryImpl = SynchroRepositoryImpl.get() // требуется инъекция зависимостей!!!
 
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
     private val getRemoteRepairTypeListUseCase = GetRepairTypeListUseCase(remoteRepairTypeRepository)
     private val getDbRepairTypeListUseCase = GetRepairTypeListUseCase(dbRepairTypeRepository)
-    //private val addDbRepairTypeUseCase = AddRepairTypeUseCase(dbRepairTypeRepository)
     private val addRepairTypeListUseCase = AddRepairTypeListUseCase(dbRepairTypeRepository)
     private val deleteRepairTypesUseCase = DeleteRepairTypesUseCase(dbRepairTypeRepository)
 
@@ -90,10 +92,9 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     private val addDbWorkingHourListUseCase = AddWorkingHourListUseCase(dbWorkingHourRepository)
     private val deleteWorkingHoursUseCase = DeleteWorkingHourListUseCase(dbWorkingHourRepository)
 
-//    private val getRemoteWorkOrderListUseCase = GetWorkOrderListUseCase(remoteWorkOrderRepository)
-//    private val getDbWorkOrderListUseCase = GetWorkOrderListUseCase(dbWorkOrderRepository)
-//    private val addDbWorkOrderListUseCase = AddWorkOrderListUseCase(dbWorkOrderRepository)
-//    private val deleteWorkOrdersUseCase = DeleteWorkOrderListUseCase(dbWorkOrderRepository)
+    private val getModifiedWorkOrdersQuantityUseCase = GetModifiedWorkOrdersQuantityUseCase(synchroRepositoryImpl)
+    private val uploadWorkOrdersUseCase = UploadWorkOrdersUseCase(synchroRepositoryImpl)
+    private val loadWorkOrdersUseCase = LoadWorkOrdersUseCase(synchroRepositoryImpl)
 
     // ЛивДаты
     private val _canContinue = MutableLiveData<Boolean>()
@@ -119,10 +120,13 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     fun synchonizeData() {
         viewModelScope.launch {
 
-            // послать новые или измененные заказ-наряды в 1С
-            val result = uploadWorkOrders()
-            result?.let {
-                _uploadResult.value = it
+            val quantity = getModifiedWorkOrdersQuantity()
+            if (quantity > 0) {
+                // послать новые или измененные заказ-наряды в 1С
+                val result = uploadWorkOrders()
+                result?.let {
+                    _uploadResult.value = it
+                }
             }
 
             val remoteRepairTypeList = getRemoteRepairTypeListUseCase.getRepairTypeList()
@@ -138,9 +142,6 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
                 }
             } else {
                 deleteRepairTypesUseCase.deleteAllRepairTypes()
-//                remoteRepairTypeList.forEach {
-//                    addDbRepairTypeUseCase.addRepairType(it)
-//                }
                 addRepairTypeListUseCase.addRepairTypeList(remoteRepairTypeList)
 
                 refreshPartner()
@@ -222,15 +223,20 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
 
     suspend fun refreshWorkOrder() {
         _currentSituation.value = "Получение документов Заказ-наряд из 1С"
-        val success = loadWorkOrderRepositoryImpl.loadWorkOrderList()
+        val success = loadWorkOrdersUseCase.loadWorkOrders()
         Log.i("rustam", "success = " + success.toString())
     }
 
     suspend fun uploadWorkOrders(): FunctionResult {
 
         _currentSituation.value = "Отправка документов Заказ-наряд в 1С"
-        val functionResult = loadWorkOrderRepositoryImpl.uploadWorkOrderList()
+        val functionResult = uploadWorkOrdersUseCase.uploadWorkOrders()
 
         return functionResult
+    }
+
+    suspend fun getModifiedWorkOrdersQuantity(): Int {
+        // надо через юз кейс делать !!!
+        return getModifiedWorkOrdersQuantityUseCase.getModifiedWorkOrdersQuantity()
     }
 }

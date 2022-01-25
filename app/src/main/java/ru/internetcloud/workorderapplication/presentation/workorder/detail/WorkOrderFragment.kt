@@ -528,12 +528,10 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                     CarPickerFragment
                         .newInstance(order.car, partner, REQUEST_CAR_PICKER_KEY, ARG_CAR)
                         .show(childFragmentManager, REQUEST_CAR_PICKER_KEY)
-
                 } ?: let {
                     MessageDialogFragment.newInstance(getString(R.string.error_specify_partner))
                         .show(childFragmentManager, null)
                 }
-
             }
         }
 
@@ -717,7 +715,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             binding.addJobDetailButton.visibility = View.INVISIBLE
             binding.deleteJobDetailButton.visibility = View.INVISIBLE
             binding.editJobDetailButton.visibility = View.INVISIBLE
-
         }
     }
 

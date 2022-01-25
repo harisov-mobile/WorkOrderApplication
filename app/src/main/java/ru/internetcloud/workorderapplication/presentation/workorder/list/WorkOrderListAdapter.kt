@@ -4,14 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
-import ru.internetcloud.workorderapplication.databinding.ItemJobDetailListBinding
-import ru.internetcloud.workorderapplication.databinding.ItemJobDetailListSelectedBinding
 import ru.internetcloud.workorderapplication.databinding.ItemWorkOrderListBinding
 import ru.internetcloud.workorderapplication.databinding.ItemWorkOrderListPostedBinding
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailListAdapter
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailListViewHolder
 
 class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(WorkOrderDiffCallback()) {
 
@@ -38,7 +34,6 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
             throw RuntimeException("Unknown viewType : $viewType")
         }
         return WorkOrderListViewHolder(binding)
-
     }
 
     override fun onBindViewHolder(holder: WorkOrderListViewHolder, position: Int) {

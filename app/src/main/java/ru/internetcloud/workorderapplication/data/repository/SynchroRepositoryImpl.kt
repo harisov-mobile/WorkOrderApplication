@@ -5,28 +5,32 @@ import android.util.Log
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.WorkOrderResponse
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
-import ru.internetcloud.workorderapplication.domain.repository.LoadWorkOrderRepository
+import ru.internetcloud.workorderapplication.domain.repository.SynchroRepository
 
-class LoadWorkOrderRepositoryImpl private constructor(
+class SynchroRepositoryImpl private constructor(
     application: Application,
     private val loadDbWorkOrderRepository: LoadDbWorkOrderRepository
-) : LoadWorkOrderRepository {
+) : SynchroRepository {
 
     companion object {
-        private var instance: LoadWorkOrderRepositoryImpl? = null
+        private var instance: SynchroRepositoryImpl? = null
 
         fun initialize(application: Application, loadDbWorkOrderRepository: LoadDbWorkOrderRepository) {
             if (instance == null) {
-                instance = LoadWorkOrderRepositoryImpl(application, loadDbWorkOrderRepository)
+                instance = SynchroRepositoryImpl(application, loadDbWorkOrderRepository)
             }
         }
 
-        fun get(): LoadWorkOrderRepositoryImpl {
-            return instance ?: throw RuntimeException("LoadWorkOrderRepositoryImpl must be initialized.")
+        fun get(): SynchroRepositoryImpl {
+            return instance ?: throw RuntimeException("SynchroRepositoryImpl must be initialized.")
         }
     }
 
-    override suspend fun loadWorkOrderList(): Boolean {
+    override suspend fun getModifiedWorkOrdersQuantity(): Int {
+        return loadDbWorkOrderRepository.getModifiedWorkOrdersQuantity()
+    }
+
+    override suspend fun loadWorkOrders(): Boolean {
 
         var success = false
 
@@ -53,7 +57,7 @@ class LoadWorkOrderRepositoryImpl private constructor(
         return success
     }
 
-    override suspend fun uploadWorkOrderList(): FunctionResult {
+    override suspend fun uploadWorkOrders(): FunctionResult {
 
         val result = FunctionResult()
 
