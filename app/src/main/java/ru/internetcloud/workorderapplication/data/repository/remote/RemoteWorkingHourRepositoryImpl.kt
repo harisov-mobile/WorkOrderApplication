@@ -8,14 +8,14 @@ import ru.internetcloud.workorderapplication.data.network.dto.WorkingHourRespons
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.repository.WorkingHourRepository
 
-class RemoteWorkingHourRepositoryImpl private constructor(application: Application) : WorkingHourRepository {
+class RemoteWorkingHourRepositoryImpl private constructor() : WorkingHourRepository {
 
     companion object {
         private var instance: RemoteWorkingHourRepositoryImpl? = null
 
-        fun initialize(application: Application) {
+        fun initialize() {
             if (instance == null) {
-                instance = RemoteWorkingHourRepositoryImpl(application)
+                instance = RemoteWorkingHourRepositoryImpl()
             }
         }
 
@@ -45,7 +45,6 @@ class RemoteWorkingHourRepositoryImpl private constructor(application: Applicati
 
     override suspend fun getWorkingHour(id: String): WorkingHour? {
         throw RuntimeException("Error - method getWorkingHour is restricted in RemoteWorkingHourRepositoryImpl")
-        return null
     }
 
     override suspend fun deleteAllWorkingHours() {

@@ -7,14 +7,14 @@ import ru.internetcloud.workorderapplication.data.network.dto.CarJobResponse
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
 import ru.internetcloud.workorderapplication.domain.repository.CarJobRepository
 
-class RemoteCarJobRepositoryImpl private constructor(application: Application) : CarJobRepository {
+class RemoteCarJobRepositoryImpl private constructor() : CarJobRepository {
 
     companion object {
         private var instance: RemoteCarJobRepositoryImpl? = null
 
-        fun initialize(application: Application) {
+        fun initialize() {
             if (instance == null) {
-                instance = RemoteCarJobRepositoryImpl(application)
+                instance = RemoteCarJobRepositoryImpl()
             }
         }
 
@@ -46,7 +46,6 @@ class RemoteCarJobRepositoryImpl private constructor(application: Application) :
 
     override suspend fun getCarJob(id: String): CarJob? {
         throw RuntimeException("Error - method getCarJob is restricted in RemoteCarJobRepositoryImpl")
-        return null
     }
 
     override suspend fun deleteAllCarJobs() {

@@ -8,4 +8,3 @@ class SearchEmployeesUseCase(private val employeeRepository: EmployeeRepository)
         return employeeRepository.searchEmployees(searchText)
     }
 }
-

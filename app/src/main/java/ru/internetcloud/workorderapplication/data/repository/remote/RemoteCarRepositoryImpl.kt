@@ -8,14 +8,14 @@ import ru.internetcloud.workorderapplication.data.network.dto.CarResponse
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.repository.CarRepository
 
-class RemoteCarRepositoryImpl private constructor(application: Application) : CarRepository {
+class RemoteCarRepositoryImpl private constructor() : CarRepository {
 
     companion object {
         private var instance: RemoteCarRepositoryImpl? = null
 
-        fun initialize(application: Application) {
+        fun initialize() {
             if (instance == null) {
-                instance = RemoteCarRepositoryImpl(application)
+                instance = RemoteCarRepositoryImpl()
             }
         }
 

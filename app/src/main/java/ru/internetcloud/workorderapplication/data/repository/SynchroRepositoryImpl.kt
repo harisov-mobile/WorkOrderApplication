@@ -1,6 +1,5 @@
 package ru.internetcloud.workorderapplication.data.repository
 
-import android.app.Application
 import android.util.Log
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.WorkOrderResponse
@@ -8,16 +7,15 @@ import ru.internetcloud.workorderapplication.domain.common.FunctionResult
 import ru.internetcloud.workorderapplication.domain.repository.SynchroRepository
 
 class SynchroRepositoryImpl private constructor(
-    application: Application,
     private val loadDbWorkOrderRepository: LoadDbWorkOrderRepository
 ) : SynchroRepository {
 
     companion object {
         private var instance: SynchroRepositoryImpl? = null
 
-        fun initialize(application: Application, loadDbWorkOrderRepository: LoadDbWorkOrderRepository) {
+        fun initialize(loadDbWorkOrderRepository: LoadDbWorkOrderRepository) {
             if (instance == null) {
-                instance = SynchroRepositoryImpl(application, loadDbWorkOrderRepository)
+                instance = SynchroRepositoryImpl(loadDbWorkOrderRepository)
             }
         }
 

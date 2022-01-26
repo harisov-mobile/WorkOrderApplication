@@ -7,14 +7,14 @@ import ru.internetcloud.workorderapplication.data.network.dto.DepartmentResponse
 import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.repository.DepartmentRepository
 
-class RemoteDepartmentRepositoryImpl private constructor(application: Application) : DepartmentRepository {
+class RemoteDepartmentRepositoryImpl private constructor() : DepartmentRepository {
 
     companion object {
         private var instance: RemoteDepartmentRepositoryImpl? = null
 
-        fun initialize(application: Application) {
+        fun initialize() {
             if (instance == null) {
-                instance = RemoteDepartmentRepositoryImpl(application)
+                instance = RemoteDepartmentRepositoryImpl()
             }
         }
 
@@ -43,7 +43,6 @@ class RemoteDepartmentRepositoryImpl private constructor(application: Applicatio
 
     override suspend fun getDepartment(id: String): Department? {
         throw RuntimeException("Error - method getDepartment is restricted in RemoteDepartmentRepositoryImpl")
-        return null
     }
 
     override suspend fun deleteAllDepartments() {

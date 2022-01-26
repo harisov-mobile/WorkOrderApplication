@@ -7,14 +7,14 @@ import ru.internetcloud.workorderapplication.data.network.dto.EmployeeResponse
 import ru.internetcloud.workorderapplication.domain.catalog.Employee
 import ru.internetcloud.workorderapplication.domain.repository.EmployeeRepository
 
-class RemoteEmployeeRepositoryImpl private constructor(application: Application) : EmployeeRepository {
+class RemoteEmployeeRepositoryImpl private constructor() : EmployeeRepository {
 
     companion object {
         private var instance: RemoteEmployeeRepositoryImpl? = null
 
-        fun initialize(application: Application) {
+        fun initialize() {
             if (instance == null) {
-                instance = RemoteEmployeeRepositoryImpl(application)
+                instance = RemoteEmployeeRepositoryImpl()
             }
         }
 
@@ -46,7 +46,6 @@ class RemoteEmployeeRepositoryImpl private constructor(application: Application)
 
     override suspend fun getEmployee(id: String): Employee? {
         throw RuntimeException("Error - method getEmployee is restricted in RemoteEmployeeRepositoryImpl")
-        return null
     }
 
     override suspend fun deleteAllEmployees() {

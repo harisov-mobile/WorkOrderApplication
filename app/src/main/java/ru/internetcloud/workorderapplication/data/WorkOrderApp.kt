@@ -13,13 +13,13 @@ class WorkOrderApp : Application() {
         // инициализация синглтонов-репозиториев
         AuthRepositoryImpl.initialize(this)
 
-        RemoteRepairTypeRepositoryImpl.initialize(this)
-        RemoteCarJobRepositoryImpl.initialize(this)
-        RemoteDepartmentRepositoryImpl.initialize(this)
-        RemoteEmployeeRepositoryImpl.initialize(this)
-        RemotePartnerRepositoryImpl.initialize(this)
-        RemoteCarRepositoryImpl.initialize(this)
-        RemoteWorkingHourRepositoryImpl.initialize(this)
+        RemoteRepairTypeRepositoryImpl.initialize()
+        RemoteCarJobRepositoryImpl.initialize()
+        RemoteDepartmentRepositoryImpl.initialize()
+        RemoteEmployeeRepositoryImpl.initialize()
+        RemotePartnerRepositoryImpl.initialize()
+        RemoteCarRepositoryImpl.initialize()
+        RemoteWorkingHourRepositoryImpl.initialize()
 
         DbRepairTypeRepositoryImpl.initialize(this)
         DbCarJobRepositoryImpl.initialize(this)
@@ -30,7 +30,7 @@ class WorkOrderApp : Application() {
         DbWorkingHourRepositoryImpl.initialize(this)
 
         LoadDbWorkOrderRepository.initialize(this)
-        SynchroRepositoryImpl.initialize(this, LoadDbWorkOrderRepository.get())
+        SynchroRepositoryImpl.initialize(LoadDbWorkOrderRepository.get())
 
         DbWorkOrderRepositoryImpl.initialize(this)
     }

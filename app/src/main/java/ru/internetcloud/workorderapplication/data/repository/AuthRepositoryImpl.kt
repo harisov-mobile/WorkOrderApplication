@@ -16,8 +16,6 @@ class AuthRepositoryImpl private constructor(private val application: Applicatio
     private var authParameters: AuthParameters = AuthParameters()
 
     companion object {
-        private const val DATABASE_NAME = "work_order.db"
-
         private var instance: AuthRepositoryImpl? = null
 
         fun initialize(application: Application) {
@@ -27,7 +25,7 @@ class AuthRepositoryImpl private constructor(private val application: Applicatio
         }
 
         fun get(): AuthRepositoryImpl {
-            return instance ?: throw RuntimeException("LocalAuthRepositoryImpl must be initialized.")
+            return instance ?: throw RuntimeException("AuthRepositoryImpl must be initialized.")
         }
     }
 

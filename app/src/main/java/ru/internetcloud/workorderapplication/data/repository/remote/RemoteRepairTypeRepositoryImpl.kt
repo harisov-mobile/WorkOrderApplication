@@ -8,14 +8,14 @@ import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.repository.RepairTypeRepository
 
 // это класс-синглтон, единственный экземпляр этого репозитория создается при запуске приложения
-class RemoteRepairTypeRepositoryImpl private constructor(application: Application) : RepairTypeRepository {
+class RemoteRepairTypeRepositoryImpl private constructor() : RepairTypeRepository {
 
     companion object {
         private var instance: RemoteRepairTypeRepositoryImpl? = null
 
-        fun initialize(application: Application) {
+        fun initialize() {
             if (instance == null) {
-                instance = RemoteRepairTypeRepositoryImpl(application)
+                instance = RemoteRepairTypeRepositoryImpl()
             }
         }
 
@@ -49,7 +49,6 @@ class RemoteRepairTypeRepositoryImpl private constructor(application: Applicatio
 
     override suspend fun getRepairType(id: String): RepairType? {
         throw RuntimeException("Error - method getRepairType is restricted in RemoteRepairTypeRepositoryImpl")
-        return null
     }
 
     override suspend fun deleteAllRepairTypes() {

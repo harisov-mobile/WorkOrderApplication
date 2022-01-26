@@ -7,14 +7,14 @@ import ru.internetcloud.workorderapplication.data.network.dto.PartnerResponse
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.repository.PartnerRepository
 
-class RemotePartnerRepositoryImpl private constructor(application: Application) : PartnerRepository {
+class RemotePartnerRepositoryImpl private constructor() : PartnerRepository {
 
     companion object {
         private var instance: RemotePartnerRepositoryImpl? = null
 
-        fun initialize(application: Application) {
+        fun initialize() {
             if (instance == null) {
-                instance = RemotePartnerRepositoryImpl(application)
+                instance = RemotePartnerRepositoryImpl()
             }
         }
 
@@ -43,7 +43,6 @@ class RemotePartnerRepositoryImpl private constructor(application: Application) 
 
     override suspend fun getPartner(id: String): Partner? {
         throw RuntimeException("Error - method getPartner is restricted in RemotePartnerRepositoryImpl")
-        return null
     }
 
     override suspend fun deleteAllPartners() {
