@@ -156,8 +156,24 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 null
             }
             binding.numberTextInputLayout.error = message
-            if (isError) {
-                MessageDialogFragment.newInstance(getString(R.string.error_input_number))
+        }
+
+        viewModel.showErrorMessage.observe(viewLifecycleOwner) { show ->
+            if (show) {
+                var errorMessage = ""
+                viewModel.errorInputNumber.value?.let { isError ->
+                    if (isError) {
+                        errorMessage = errorMessage + getString(R.string.error_input_number) + "\n"
+                    }
+                }
+
+                if (viewModel.errorInputPerformer) {
+                    errorMessage = errorMessage + getString(R.string.error_input_performer) + "\n"
+                }
+
+                viewModel.resetShowErrorMessage()
+
+                MessageDialogFragment.newInstance(errorMessage)
                     .show(childFragmentManager, null)
             }
         }

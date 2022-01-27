@@ -14,7 +14,8 @@
 
     <string name="add_work_order_fab_description">Add work order</string>
 
-    <string name="error_input_number">Неправильно указан номер</string>
+    <string name="error_input_number">Ошибка! Неправильно указан номер</string>
+    <string name="error_input_performer">Ошибка! Не указан исполнитель</string>
     <string name="error_input_server">Укажите сервер</string>
     <string name="error_input_login">Укажите пользователя</string>
     <string name="error_input_password">Укажите пароль</string>
