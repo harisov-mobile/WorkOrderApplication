@@ -27,6 +27,9 @@ interface AppDao {
     @Query("DELETE FROM job_details")
     suspend fun deleteAllJobDetails()
 
+    @Query("DELETE FROM default_work_order_settings")
+    suspend fun deleteAllDefaultWorkOrderSettings()
+
     @Query("DELETE FROM performer_details")
     suspend fun deleteAllPerformers()
 
@@ -174,4 +177,11 @@ interface AppDao {
     // --------------------------------------------------------------------------------
     @Query("DELETE FROM performer_details WHERE workOrderId = :workOrderId")
     suspend fun deletePerformersDetailsByWorkOrder(workOrderId: String)
+
+    // ----------------------------------------
+    @Query("SELECT * FROM default_work_order_settings LIMIT 1")
+    suspend fun getDefaultWorkOrderSettings(): DefaultWorkOrderSettingsDbModel?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addDefaultWorkOrderSettingsList(jobDetailDbModelList: List<DefaultWorkOrderSettingsDbModel>)
 }

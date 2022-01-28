@@ -8,4 +8,6 @@ interface SynchroRepository {
     suspend fun loadWorkOrders(): Boolean // из сервера 1С
 
     suspend fun uploadWorkOrders(): FunctionResult // на сервер 1С выгрузить
+
+    suspend fun loadDefaultWorkOrderSettings(): Boolean // из сервера 1С
 }

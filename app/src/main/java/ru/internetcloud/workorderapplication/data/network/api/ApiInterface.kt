@@ -40,6 +40,9 @@ interface ApiInterface {
     @GET(PUB_NAME + "/hs/rest/document/workorder/all")
     suspend fun getWorkOrders(): WorkOrderResponse
 
+    @GET(PUB_NAME + "/hs/rest/work_order_settings")
+    suspend fun getDefaultWorkOrderSettings(): DefaultWorkOrderSettingsResponse
+
     @POST(PUB_NAME + "/hs/rest/document/workorder/upload")
     suspend fun uploadWorkOrders(@Body listWO: List<WorkOrderWithDetails>): UploadWorkOrderResponse
 }

@@ -5,10 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.data.repository.db.DbPartnerRepositoryImpl
 import ru.internetcloud.workorderapplication.data.repository.db.DbWorkOrderRepositoryImpl
-import ru.internetcloud.workorderapplication.domain.common.ValidateInputResult
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder

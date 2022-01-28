@@ -1,31 +1,41 @@
 package ru.internetcloud.workorderapplication.data.repository
 
+import android.app.Application
 import android.util.Log
+import ru.internetcloud.workorderapplication.data.database.AppDatabase
+import ru.internetcloud.workorderapplication.data.entity.DefaultWorkOrderSettingsDbModel
+import ru.internetcloud.workorderapplication.data.entity.JobDetailDbModel
+import ru.internetcloud.workorderapplication.data.entity.PerformerDetailDbModel
+import ru.internetcloud.workorderapplication.data.entity.WorkOrderWithDetails
+import ru.internetcloud.workorderapplication.data.mapper.DefaultWorkOrderSettingsMapper
+import ru.internetcloud.workorderapplication.data.mapper.JobDetailMapper
+import ru.internetcloud.workorderapplication.data.mapper.PerformerDetailMapper
+import ru.internetcloud.workorderapplication.data.mapper.WorkOrderMapper
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
-import ru.internetcloud.workorderapplication.data.network.dto.WorkOrderResponse
+import ru.internetcloud.workorderapplication.data.network.dto.*
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
 import ru.internetcloud.workorderapplication.domain.repository.SynchroRepository
 
-class SynchroRepositoryImpl private constructor(
-    private val loadDbWorkOrderRepository: LoadDbWorkOrderRepository
-) : SynchroRepository {
+class SynchroRepositoryImpl private constructor(application: Application) : SynchroRepository {
+
+    private val appDao = AppDatabase.getInstance(application).appDao()
+    private val jobDetailMapper = JobDetailMapper()
+    private val performerDetailMapper = PerformerDetailMapper()
+    private val workOrderMapper = WorkOrderMapper()
+    private val defaultWorkOrderSettingsMapper = DefaultWorkOrderSettingsMapper()
 
     companion object {
         private var instance: SynchroRepositoryImpl? = null
 
-        fun initialize(loadDbWorkOrderRepository: LoadDbWorkOrderRepository) {
+        fun initialize(application: Application) {
             if (instance == null) {
-                instance = SynchroRepositoryImpl(loadDbWorkOrderRepository)
+                instance = SynchroRepositoryImpl(application)
             }
         }
 
         fun get(): SynchroRepositoryImpl {
             return instance ?: throw RuntimeException("SynchroRepositoryImpl must be initialized.")
         }
-    }
-
-    override suspend fun getModifiedWorkOrdersQuantity(): Int {
-        return loadDbWorkOrderRepository.getModifiedWorkOrdersQuantity()
     }
 
     override suspend fun loadWorkOrders(): Boolean {
@@ -43,14 +53,34 @@ class SynchroRepositoryImpl private constructor(
         }
 
         if (success) {
-            loadDbWorkOrderRepository.deleteAllJobDetails()
-            loadDbWorkOrderRepository.addJobDetailList(workOrderResponse.jobDetails)
+            deleteAllJobDetails()
+            addJobDetailList(workOrderResponse.jobDetails)
 
-            loadDbWorkOrderRepository.deleteAllPerformers()
-            loadDbWorkOrderRepository.addPerformersList(workOrderResponse.performerDetails)
+            deleteAllPerformers()
+            addPerformersList(workOrderResponse.performerDetails)
 
-            loadDbWorkOrderRepository.deleteAllWorkOrders()
-            loadDbWorkOrderRepository.addWorkOrderList(workOrderResponse.workOrders)
+            deleteAllWorkOrders()
+            addWorkOrderList(workOrderResponse.workOrders)
+        }
+        return success
+    }
+
+    override suspend fun loadDefaultWorkOrderSettings(): Boolean {
+        var success = false
+
+        var defResponse = DefaultWorkOrderSettingsResponse(emptyList())
+
+        try {
+            defResponse = ApiClient.getInstance().client.getDefaultWorkOrderSettings()
+            success = true
+        } catch (e: Exception) {
+            // ничего не делаю
+            Log.i("rustam", "ошибка при загрузке настроек заполнения заказ-наряда" + e.toString())
+        }
+
+        if (success) {
+            deleteAllDefaultWorkOrderSettings()
+            addDefaultWorkOrderSettingsList(defResponse.settings)
         }
         return success
     }
@@ -59,7 +89,7 @@ class SynchroRepositoryImpl private constructor(
 
         val result = FunctionResult()
 
-        val listWO = loadDbWorkOrderRepository.getModifiedWorkOrders()
+        val listWO = getModifiedWorkOrders()
         if (listWO.isEmpty()) {
             result.isSuccess = true
         } else {
@@ -83,5 +113,67 @@ class SynchroRepositoryImpl private constructor(
         }
 
         return result
+    }
+
+    suspend fun deleteAllWorkOrders() {
+        appDao.deleteAllWorkOrders()
+    }
+
+    suspend fun deleteAllJobDetails() {
+        appDao.deleteAllJobDetails()
+    }
+
+    suspend fun deleteAllDefaultWorkOrderSettings() {
+        appDao.deleteAllDefaultWorkOrderSettings()
+    }
+
+    suspend fun deleteAllPerformers() {
+        appDao.deleteAllPerformers()
+    }
+
+    suspend fun addJobDetailList(jobDetails: List<JobDetailDTO>) {
+
+        val jobDetailDbModelList: MutableList<JobDetailDbModel> = mutableListOf()
+
+        jobDetails.forEach { jobDetail ->
+            jobDetailDbModelList.add(jobDetailMapper.fromDtoToDbModel(jobDetail))
+        }
+
+        appDao.addJobDetailList(jobDetailDbModelList)
+    }
+
+    suspend fun addDefaultWorkOrderSettingsList(defDTOList: List<DefaultWorkOrderSettingsDTO>) {
+
+        val defDbModelList: MutableList<DefaultWorkOrderSettingsDbModel> = mutableListOf()
+
+        defDTOList.forEach { defDTO ->
+            defDbModelList.add(defaultWorkOrderSettingsMapper.fromDtoToDbModel(defDTO))
+        }
+
+        appDao.addDefaultWorkOrderSettingsList(defDbModelList)
+    }
+
+    suspend fun addPerformersList(performerDetails: List<PerformerDetailDTO>) {
+
+        val performerDetailDbModelList: MutableList<PerformerDetailDbModel> = mutableListOf()
+
+        performerDetails.forEach { performerDetail ->
+            // вырезать идентификатор
+            performerDetailDbModelList.add(performerDetailMapper.fromDtoToDbModel(performerDetail))
+        }
+
+        appDao.addPerformerDetailList(performerDetailDbModelList)
+    }
+
+    suspend fun addWorkOrderList(workOrders: List<WorkOrderDTO>) {
+        appDao.addWorkOrderList(workOrderMapper.fromListDtoToListDboModel(workOrders))
+    }
+
+    suspend fun getModifiedWorkOrders(): List<WorkOrderWithDetails> {
+        return appDao.getModifiedWorkOrders()
+    }
+
+    override suspend fun getModifiedWorkOrdersQuantity(): Int {
+        return appDao.getModifiedWorkOrders().size
     }
 }

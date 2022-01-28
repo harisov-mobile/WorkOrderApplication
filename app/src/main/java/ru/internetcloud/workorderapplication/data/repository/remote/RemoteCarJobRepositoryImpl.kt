@@ -1,6 +1,5 @@
 package ru.internetcloud.workorderapplication.data.repository.remote
 
-import android.app.Application
 import ru.internetcloud.workorderapplication.data.mapper.CarJobMapper
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.CarJobResponse

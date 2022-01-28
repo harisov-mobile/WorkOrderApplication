@@ -29,8 +29,7 @@ class WorkOrderApp : Application() {
         DbCarRepositoryImpl.initialize(this)
         DbWorkingHourRepositoryImpl.initialize(this)
 
-        LoadDbWorkOrderRepository.initialize(this)
-        SynchroRepositoryImpl.initialize(LoadDbWorkOrderRepository.get())
+        SynchroRepositoryImpl.initialize(this)
 
         DbWorkOrderRepositoryImpl.initialize(this)
     }

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.data.repository.*
+import ru.internetcloud.workorderapplication.data.repository.SynchroRepositoryImpl
 import ru.internetcloud.workorderapplication.data.repository.db.*
 import ru.internetcloud.workorderapplication.data.repository.remote.*
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
@@ -32,6 +32,7 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.wor
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.DeleteWorkingHourListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.GetWorkingHourListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.GetModifiedWorkOrdersQuantityUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadDefaultWorkOrderSettingsUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadWorkOrdersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.UploadWorkOrdersUseCase
 
@@ -59,7 +60,6 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     private val remoteWorkingHourRepository = RemoteWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
     private val dbWorkingHourRepository = DbWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
 
-    private val loadWorkOrderRepositoryImpl = SynchroRepositoryImpl.get() // требуется инъекция зависимостей!!!
     private val synchroRepositoryImpl = SynchroRepositoryImpl.get() // требуется инъекция зависимостей!!!
 
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
@@ -95,6 +95,8 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     private val getModifiedWorkOrdersQuantityUseCase = GetModifiedWorkOrdersQuantityUseCase(synchroRepositoryImpl)
     private val uploadWorkOrdersUseCase = UploadWorkOrdersUseCase(synchroRepositoryImpl)
     private val loadWorkOrdersUseCase = LoadWorkOrdersUseCase(synchroRepositoryImpl)
+
+    private val loadDefaultWorkOrderSettingsUseCase = LoadDefaultWorkOrderSettingsUseCase(synchroRepositoryImpl)
 
     // ЛивДаты
     private val _canContinue = MutableLiveData<Boolean>()
@@ -150,6 +152,7 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
                 refreshCar()
                 refreshDepartment()
                 refreshWorkingHour()
+                refreshDefaultWorkOrderSettings()
                 refreshWorkOrder()
 
                 _currentSituation.value = ""
@@ -170,6 +173,7 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
 
     suspend fun refreshDepartment() {
         _currentSituation.value = "Получение справочника Цеха из 1С"
+        Log.i("rustam", "Получение справочника Цеха из 1С")
         val remoteDepartmentList = getRemoteDepartmentListUseCase.getDepartmentList()
         if (!remoteDepartmentList.isEmpty()) {
             deleteDepartmentsUseCase.deleteAllDepartments()
@@ -213,6 +217,7 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
 
     suspend fun refreshWorkingHour() {
         _currentSituation.value = "Получение справочника Нормочасы из 1С"
+        Log.i("rustam", "Получение справочника Нормочасы из 1С")
         val remoteWorkingHourList = getRemoteWorkingHourListUseCase.getWorkingHourList()
         if (!remoteWorkingHourList.isEmpty()) {
             deleteWorkingHoursUseCase.deleteAllWorkingHours()
@@ -221,10 +226,18 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
         }
     }
 
+    suspend fun refreshDefaultWorkOrderSettings() {
+        _currentSituation.value = "Получение настроек заполнения из 1С"
+        Log.i("rustam", "Получение настроек заполнения из 1С")
+        val success = loadDefaultWorkOrderSettingsUseCase.loadDefaultWorkOrderSettings()
+        Log.i("rustam", "loadDefaultWorkOrderSettings success = " + success.toString())
+    }
+
     suspend fun refreshWorkOrder() {
         _currentSituation.value = "Получение документов Заказ-наряд из 1С"
+        Log.i("rustam", "Получение документов из 1С")
         val success = loadWorkOrdersUseCase.loadWorkOrders()
-        Log.i("rustam", "success = " + success.toString())
+        Log.i("rustam", "loadWorkOrders success = " + success.toString())
     }
 
     suspend fun uploadWorkOrders(): FunctionResult {
