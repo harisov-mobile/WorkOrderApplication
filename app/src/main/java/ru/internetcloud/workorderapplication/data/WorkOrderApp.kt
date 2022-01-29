@@ -32,5 +32,6 @@ class WorkOrderApp : Application() {
         SynchroRepositoryImpl.initialize(this)
 
         DbWorkOrderRepositoryImpl.initialize(this)
+        DbDefaultWorkOrderSettingsRepositoryImpl.initialize(this)
     }
 }

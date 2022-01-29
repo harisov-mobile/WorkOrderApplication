@@ -19,7 +19,7 @@ interface AppDao {
     suspend fun addWorkOrder(workOrderDbModel: WorkOrderDbModel)
 
     @Query("SELECT * FROM work_orders WHERE id=:workOrderId LIMIT 1")
-    suspend fun getWorkOrder(workOrderId: String): WorkOrderWithDetails // Андрей Сумин почему-то не Лив дату возвращает...
+    suspend fun getWorkOrder(workOrderId: String): WorkOrderWithDetails? // Андрей Сумин почему-то не Лив дату возвращает...
 
     @Query("DELETE FROM work_orders")
     suspend fun deleteAllWorkOrders()
@@ -180,7 +180,7 @@ interface AppDao {
 
     // ----------------------------------------
     @Query("SELECT * FROM default_work_order_settings LIMIT 1")
-    suspend fun getDefaultWorkOrderSettings(): DefaultWorkOrderSettingsDbModel?
+    suspend fun getDefaultWorkOrderSettings(): DefaultWorkOrderSettingsWithRequisities?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addDefaultWorkOrderSettingsList(jobDetailDbModelList: List<DefaultWorkOrderSettingsDbModel>)

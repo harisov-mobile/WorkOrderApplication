@@ -5,5 +5,6 @@ import ru.internetcloud.workorderapplication.domain.catalog.Employee
 
 data class DefaultWorkOrderSettings(
     var department: Department? = null, // цех
+    var employee: Employee? = null, // сам сотрудник
     var master: Employee? = null // мастер (бригадир)
 )

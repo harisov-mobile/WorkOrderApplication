@@ -4,7 +4,7 @@ import ru.internetcloud.workorderapplication.domain.document.DefaultWorkOrderSet
 import ru.internetcloud.workorderapplication.domain.repository.DefaultWorkOrderSettingsRepository
 
 class GetDefaultWorkOrderSettingsUseCase(private val settingsRepository: DefaultWorkOrderSettingsRepository) {
-    suspend fun getDefaultWorkOrderSettings(): DefaultWorkOrderSettings {
+    suspend fun getDefaultWorkOrderSettings(): DefaultWorkOrderSettings? {
         return settingsRepository.getDefaultWorkOrderSettings()
     }
 }

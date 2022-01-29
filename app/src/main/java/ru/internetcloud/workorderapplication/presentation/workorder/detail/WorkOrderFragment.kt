@@ -14,10 +14,7 @@ import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
-import ru.internetcloud.workorderapplication.domain.catalog.Car
-import ru.internetcloud.workorderapplication.domain.catalog.Department
-import ru.internetcloud.workorderapplication.domain.catalog.Partner
-import ru.internetcloud.workorderapplication.domain.catalog.RepairType
+import ru.internetcloud.workorderapplication.domain.catalog.*
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
@@ -27,6 +24,7 @@ import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFr
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.car.CarPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentPickerFragment
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.employee.EmployeePickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailListAdapter
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerPickerFragment
@@ -66,6 +64,9 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         private val REQUEST_REPAIR_TYPE_PICKER_KEY = "request_repair_type_picker_key"
         private val ARG_REPAIR_TYPE = "repair_type_picker"
+
+        private val REQUEST_MASTER_PICKER_KEY = "request_master_picker_key"
+        private val ARG_MASTER = "master_picker"
 
         private val REQUEST_DEPARTMENT_PICKER_KEY = "request_department_picker_key"
         private val ARG_DEPARTMENT = "department_picker"
@@ -143,7 +144,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         childFragmentManager.setFragmentResultListener(REQUEST_DATA_WAS_CHANGED_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_DELETE_JOB_DETAIL_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_DELETE_PERFORMER_DETAIL_KEY, viewLifecycleOwner, this)
-
+        childFragmentManager.setFragmentResultListener(REQUEST_MASTER_PICKER_KEY, viewLifecycleOwner, this)
         setupClickListeners()
     }
 
@@ -394,6 +395,17 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 }
             }
 
+            REQUEST_MASTER_PICKER_KEY -> {
+                val master: Employee? = result.getParcelable(ARG_MASTER)
+                viewModel.workOrder.value?.let { order ->
+                    if (order.master != master) {
+                        order.master = master
+                        binding.masterTextView.text = master?.name ?: ""
+                        order.isModified = true
+                    }
+                }
+            }
+
             REQUEST_DEPARTMENT_PICKER_KEY -> {
                 val department: Department? = result.getParcelable(ARG_DEPARTMENT)
                 viewModel.workOrder.value?.let { order ->
@@ -561,6 +573,16 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             }
         }
 
+        binding.masterSelectButton.setOnClickListener {
+            viewModel.workOrder.value?.let { order ->
+                order.master?.isSelected = true
+
+                EmployeePickerFragment
+                    .newInstance(order.master, REQUEST_MASTER_PICKER_KEY, ARG_MASTER)
+                    .show(childFragmentManager, REQUEST_MASTER_PICKER_KEY)
+            }
+        }
+
         binding.departmentSelectButton.setOnClickListener {
             viewModel.workOrder.value?.let { order ->
                 order.department?.isSelected = true
@@ -626,7 +648,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             viewModel.workOrder.value?.let { order ->
                 PerformerDetailFragment
                     .newInstance(
-                        getNewPerformerDetail(order),
+                        PerformerDetail.getNewPerformerDetail(order),
                         REQUEST_PERFORMER_DETAIL_PICKER_KEY,
                         ARG_PERFORMER_DETAIL
                     ) // здесь надо подумать как правильно создавать новую строку ТЧ
@@ -672,13 +694,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         return JobDetail(id = id, lineNumber = lineNumber)
     }
 
-    private fun getNewPerformerDetail(order: WorkOrder): PerformerDetail {
-        var lineNumber = order.performers.size
-        lineNumber++
-        val id = order.id + "_" + lineNumber.toString()
-        return PerformerDetail(id = id, lineNumber = lineNumber)
-    }
-
     private fun updateUI(order: WorkOrder) {
 
         modifyAllowed = false
@@ -689,6 +704,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         binding.carTextView.text = order.car?.name
         binding.repairTypeTextView.text = order.repairType?.name
         binding.departmentTextView.text = order.department?.name
+        binding.masterTextView.text = order.master?.name
 
         binding.mileageEditText.setText(order.mileage.toString())
         binding.requestReasonEditText.setText(order.requestReason)
@@ -731,6 +747,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             binding.addJobDetailButton.visibility = View.INVISIBLE
             binding.deleteJobDetailButton.visibility = View.INVISIBLE
             binding.editJobDetailButton.visibility = View.INVISIBLE
+            binding.masterSelectButton.visibility = View.INVISIBLE
         }
     }
 

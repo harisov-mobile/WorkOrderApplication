@@ -11,4 +11,14 @@ data class PerformerDetail(
     var lineNumber: Int = 0,
     var employee: Employee? = null,
     var isSelected: Boolean = false
-) : Parcelable
+) : Parcelable {
+
+    companion object {
+        fun getNewPerformerDetail(order: WorkOrder): PerformerDetail {
+            var lineNumber = order.performers.size
+            lineNumber++
+            val id = order.id + "_" + lineNumber.toString()
+            return PerformerDetail(id = id, lineNumber = lineNumber)
+        }
+    }
+}

@@ -14,7 +14,7 @@
 
     <string name="add_work_order_fab_description">Add work order</string>
 
-    <string name="error_input_number">Ошибка! Неправильно указан номер</string>
+    <string name="error_input_number">Ошибка! Не указан номер</string>
     <string name="error_input_performer">Ошибка! Не указан исполнитель</string>
     <string name="error_input_server">Укажите сервер</string>
     <string name="error_input_login">Укажите пользователя</string>
@@ -55,6 +55,7 @@
     <string name="choose_label">...</string>
     <string name="car_label">СХТ:</string>
     <string name="repair_type_label">Вид ремонта:</string>
+    <string name="master_type_label">Бригадир:</string>
     <string name="department_label">Цех:</string>
     <string name="performer_details_label">Исполнители:</string>
     <string name="job_detals_label">Работы:</string>

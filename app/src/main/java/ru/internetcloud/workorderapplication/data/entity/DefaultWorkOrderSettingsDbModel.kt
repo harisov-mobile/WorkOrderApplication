@@ -8,5 +8,6 @@ data class DefaultWorkOrderSettingsDbModel(
     @PrimaryKey(autoGenerate = true)
     val id: Long? = null,
     val departmentId: String,
+    val employeeId: String,
     val masterId: String
 )

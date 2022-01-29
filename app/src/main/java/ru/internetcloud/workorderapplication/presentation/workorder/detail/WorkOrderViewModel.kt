@@ -5,26 +5,25 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.data.repository.db.DbPartnerRepositoryImpl
+import ru.internetcloud.workorderapplication.data.repository.db.DbDefaultWorkOrderSettingsRepositoryImpl
 import ru.internetcloud.workorderapplication.data.repository.db.DbWorkOrderRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.AddWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.UpdateWorkOrderUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.settingsoperation.GetDefaultWorkOrderSettingsUseCase
 import java.util.*
 
 class WorkOrderViewModel : ViewModel() {
 
-    // private val repository = LocalWorkOrderRepositoryImpl // требуется инъекция зависимостей!!!
     private val workOrderRepository = DbWorkOrderRepositoryImpl.get()
-    private val partnerRepository = DbPartnerRepositoryImpl.get()
+    private val defaultWorkOrderSettingsRepository = DbDefaultWorkOrderSettingsRepositoryImpl.get()
 
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
     private val getWorkOrderUseCase = GetWorkOrderUseCase(workOrderRepository)
-    private val addWorkOrderUseCase = AddWorkOrderUseCase(workOrderRepository)
     private val updateWorkOrderUseCase = UpdateWorkOrderUseCase(workOrderRepository)
+    private val getDefaultWorkOrderSettingsUseCase = GetDefaultWorkOrderSettingsUseCase(defaultWorkOrderSettingsRepository)
 
     // LiveData-объекты, с помощью которых будет отображение данных в элементах управления:
     private val _workOrder = MutableLiveData<WorkOrder>()
@@ -111,9 +110,23 @@ class WorkOrderViewModel : ViewModel() {
     }
 
     fun createWorkOrder() {
-        _workOrder.value = WorkOrder(
-            id = NUMBER_PREFIX + UUID.randomUUID().toString(),
-            isNew = true)
+        viewModelScope.launch {
+            val newWorkOrder = WorkOrder(
+                id = NUMBER_PREFIX + UUID.randomUUID().toString(),
+                isNew = true)
+
+            val defSettings = getDefaultWorkOrderSettingsUseCase.getDefaultWorkOrderSettings()
+            defSettings?.let { settings ->
+                newWorkOrder.department = settings.department
+                newWorkOrder.master = settings.master
+                settings.employee?.let { newEmployee ->
+                    val newPerformerDetail = PerformerDetail.getNewPerformerDetail(newWorkOrder)
+                    newPerformerDetail.employee = newEmployee
+                    newWorkOrder.performers.add(newPerformerDetail)
+                }
+            }
+            _workOrder.value = newWorkOrder
+        }
     }
 
     fun getPerformersString(order: WorkOrder): String {

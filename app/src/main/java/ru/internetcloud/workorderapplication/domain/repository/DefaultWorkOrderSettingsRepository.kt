@@ -4,7 +4,5 @@ import ru.internetcloud.workorderapplication.domain.document.DefaultWorkOrderSet
 
 interface DefaultWorkOrderSettingsRepository {
 
-    suspend fun getDefaultWorkOrderListSettings(): List<DefaultWorkOrderSettings>
-
-    suspend fun getDefaultWorkOrderSettings(): DefaultWorkOrderSettings
+    suspend fun getDefaultWorkOrderSettings(): DefaultWorkOrderSettings?
 }
