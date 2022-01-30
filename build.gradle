@@ -50,6 +50,6 @@ ext {
 
     daggerVersion = "2.40.1"
 
-    coroutinesCoreVersion = "1.3.9"
-    coroutinesAndroidVersion = "1.3.0"
+    coroutinesCoreVersion = "1.4.1"
+    coroutinesAndroidVersion = "1.4.1"
 }
