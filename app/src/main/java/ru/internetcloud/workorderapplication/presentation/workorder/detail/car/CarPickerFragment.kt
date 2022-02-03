@@ -3,6 +3,7 @@ package ru.internetcloud.workorderapplication.presentation.workorder.detail.car
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -40,10 +41,6 @@ class CarPickerFragment : DialogFragment() {
         }
     }
 
-    private var car: Car? = null
-    private lateinit var currentPartner: Partner
-    private var previousSelectedCar: Car? = null
-
     private var requestKey = ""
     private var argCarName = ""
 
@@ -56,9 +53,13 @@ class CarPickerFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
+        viewModel = ViewModelProvider(this).get(CarListViewModel::class.java)
+
         arguments?.let { arg ->
-            car = arg.getParcelable(CAR)
-            currentPartner = arg.getParcelable(PARTNER) ?: throw RuntimeException("There is no partner in arg")
+            viewModel.selectedCar?: let {
+                viewModel.selectedCar = arg.getParcelable(CAR)
+            }
+            viewModel.partner = arg.getParcelable(PARTNER) ?: throw RuntimeException("There is no partner in arg")
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
             argCarName = arg.getString(PARENT_CAR_ARG_NAME, "")
         } ?: run {
@@ -81,34 +82,32 @@ class CarPickerFragment : DialogFragment() {
         alertDialogBuilder.setNegativeButton(R.string.cancel_button, null) // для негативного ответа ничего не делаем
 
         alertDialogBuilder.setPositiveButton(R.string.ok_button) { dialog, which ->
-            sendResultToFragment(car)
+            sendResultToFragment(viewModel.selectedCar)
         }
 
         setupCarListRecyclerView(container)
 
-        viewModel = ViewModelProvider(this).get(CarListViewModel::class.java)
         viewModel.carListLiveData.observe(this, { cars ->
             carListAdapter = CarListAdapter(cars)
             carListRecyclerView.adapter = carListAdapter
             setupClickListeners()
 
-            val currentPosition = getCurrentPosition(car)
+            val currentPosition = getPosition(viewModel.selectedCar, cars)
 
-            val scrollPosition = if (currentPosition > (carListAdapter.getItemCount() - CarPickerFragment.DIFFERENCE_POS)) {
-                carListAdapter.getItemCount() - 1
-            } else {
-                currentPosition
-            }
-
-            carListRecyclerView.scrollToPosition(scrollPosition)
-
-            if (currentPosition != CarPickerFragment.NOT_FOUND_POSITION) {
+            if (currentPosition != NOT_FOUND_POSITION) {
                 cars[currentPosition].isSelected = true
+
+                val scrollPosition = if (currentPosition > (carListAdapter.getItemCount() - DIFFERENCE_POS)) {
+                    carListAdapter.getItemCount() - 1
+                } else {
+                    currentPosition
+                }
+
+                carListRecyclerView.scrollToPosition(scrollPosition)
                 carListAdapter.notifyItemChanged(currentPosition, Unit)
             }
         })
 
-        viewModel.partner = currentPartner
         viewModel.loadCarList() // самое главное!!!
 
         return alertDialogBuilder.create()
@@ -123,10 +122,11 @@ class CarPickerFragment : DialogFragment() {
 
     private fun setupClickListeners() {
         carListAdapter.onCarClickListener = { currentCar ->
-            car = currentCar
-            previousSelectedCar?.isSelected = false
-            car?.isSelected = true
-            previousSelectedCar = car
+            carListAdapter.cars.forEach {
+                it.isSelected = false // снимем пометку у всех
+            }
+            viewModel.selectedCar = currentCar
+            viewModel.selectedCar?.isSelected = true
         }
 
         carListAdapter.onCarLongClickListener = { currentCar ->
@@ -139,20 +139,28 @@ class CarPickerFragment : DialogFragment() {
             if (searchText.isEmpty()) {
                 viewModel.loadCarList()
             } else {
-                viewModel.searchCars(searchText)
+                viewModel.partner?.let { partner ->
+                    viewModel.searchCarsByOwner(searchText, partner.id)
+                }
             }
         }
     }
 
-    private fun getCurrentPosition(searchedCar: Car?): Int {
+    private fun sendResultToFragment(result: Car?) {
+        val bundle = Bundle().apply {
+            putParcelable(argCarName, result)
+        }
+        setFragmentResult(requestKey, bundle)
+    }
+
+    private fun getPosition(searchedCar: Car?, carList: List<Car>): Int {
         var currentPosition = NOT_FOUND_POSITION
         searchedCar?.let {
             var isFound = false
-            for (currentPartner in carListAdapter.cars) {
+            for (currentCar in carList) {
                 currentPosition++
-                if (currentPartner.id == searchedCar.id) {
+                if (currentCar.id == searchedCar.id) {
                     isFound = true
-                    previousSelectedCar = currentPartner
                     break
                 }
             }
@@ -161,12 +169,5 @@ class CarPickerFragment : DialogFragment() {
             }
         }
         return currentPosition
-    }
-
-    private fun sendResultToFragment(result: Car?) {
-        val bundle = Bundle().apply {
-            putParcelable(argCarName, result)
-        }
-        setFragmentResult(requestKey, bundle)
     }
 }

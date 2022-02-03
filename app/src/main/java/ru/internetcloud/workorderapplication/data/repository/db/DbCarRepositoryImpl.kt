@@ -53,7 +53,7 @@ class DbCarRepositoryImpl private constructor(application: Application) : CarRep
         appDao.deleteAllCars()
     }
 
-    override suspend fun searchCars(searchText: String): List<Car> {
-        return carMapper.fromListCarWithOwnerToListEntity(appDao.searhCars("%$searchText%"))
+    override suspend fun searchCarsByOwner(searchText: String, ownerId: String): List<Car> {
+        return carMapper.fromListCarWithOwnerToListEntity(appDao.searhCarsByOwner("%$searchText%", ownerId))
     }
 }

@@ -151,8 +151,8 @@ interface AppDao {
     suspend fun getCar(id: String): CarWithOwner?
 
     @Transaction
-    @Query("SELECT * FROM cars WHERE name LIKE :searchText OR manufacturer LIKE :searchText")
-    suspend fun searhCars(searchText: String): List<CarWithOwner>
+    @Query("SELECT * FROM cars WHERE ownerId=:ownerId AND (name LIKE :searchText OR manufacturer LIKE :searchText)")
+    suspend fun searhCarsByOwner(searchText: String, ownerId: String): List<CarWithOwner>
 
     // ----------------------------------------------------------------------
     @Query("SELECT * FROM working_hours")

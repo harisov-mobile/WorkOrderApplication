@@ -14,5 +14,5 @@ interface CarRepository {
 
     suspend fun deleteAllCars()
 
-    suspend fun searchCars(searchText: String): List<Car>
+    suspend fun searchCarsByOwner(searchText: String, ownerId: String): List<Car>
 }

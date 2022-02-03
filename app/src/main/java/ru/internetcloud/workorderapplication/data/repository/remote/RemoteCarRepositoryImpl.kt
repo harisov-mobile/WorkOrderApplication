@@ -55,7 +55,7 @@ class RemoteCarRepositoryImpl private constructor() : CarRepository {
         throw RuntimeException("Error - method deleteAllCars is restricted in RemoteCarModelRepositoryImpl")
     }
 
-    override suspend fun searchCars(searchText: String): List<Car> {
+    override suspend fun searchCarsByOwner(searchText: String, ownerId: String): List<Car> {
         throw RuntimeException("Error - method searchCars is restricted in RemoteCarModelRepositoryImpl")
     }
 }

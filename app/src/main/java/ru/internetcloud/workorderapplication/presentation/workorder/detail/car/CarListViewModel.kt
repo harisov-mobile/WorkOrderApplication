@@ -9,15 +9,16 @@ import ru.internetcloud.workorderapplication.data.repository.db.DbCarRepositoryI
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.GetCarListByOwnerUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.SearchCarsUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.SearchCarsByOwnerUseCase
 
 class CarListViewModel : ViewModel() {
     private val repository = DbCarRepositoryImpl.get()
 
     private val getCarListByOwnerUseCase = GetCarListByOwnerUseCase(repository)
-    private val searchCarsUseCase = SearchCarsUseCase(repository)
+    private val searchCarsByOwnerUseCase = SearchCarsByOwnerUseCase(repository)
 
     var partner: Partner? = null
+    var selectedCar: Car? = null
 
     private val _carListLiveData = MutableLiveData<List<Car>>()
     val carListLiveData: LiveData<List<Car>>
@@ -31,9 +32,9 @@ class CarListViewModel : ViewModel() {
         }
     }
 
-    fun searchCars(searchText: String) {
+    fun searchCarsByOwner(searchText: String, ownerId: String) {
         viewModelScope.launch {
-            _carListLiveData.value = searchCarsUseCase.searchCars(searchText)
+            _carListLiveData.value = searchCarsByOwnerUseCase.searchCarsByOwner(searchText, ownerId)
         }
     }
 }
