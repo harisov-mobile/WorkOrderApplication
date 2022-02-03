@@ -11,6 +11,9 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.dep
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.SearchDepartmentsUseCase
 
 class DepartmentListViewModel : ViewModel() {
+
+    var selectedDepartment: Department? = null
+
     private val repository = DbDepartmentRepositoryImpl.get()
 
     private val getDepartmentListUseCase = GetDepartmentListUseCase(repository)

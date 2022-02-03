@@ -11,6 +11,9 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.SearchCarJobsUseCase
 
 class CarJobListViewModel : ViewModel() {
+
+    var selectedCarJob: CarJob? = null
+
     private val repository = DbCarJobRepositoryImpl.get()
 
     private val getCarJobListUseCase = GetCarJobListUseCase(repository)

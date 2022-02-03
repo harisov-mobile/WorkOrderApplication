@@ -36,9 +36,6 @@ class CarJobPickerFragment : DialogFragment() {
         }
     }
 
-    private var carJob: CarJob? = null
-    private var previousSelectedCarJob: CarJob? = null
-
     private var requestKey = ""
     private var argCarJobName = ""
 
@@ -51,8 +48,13 @@ class CarJobPickerFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
+        viewModel = ViewModelProvider(this).get(CarJobListViewModel::class.java)
+
         arguments?.let { arg ->
-            carJob = arg.getParcelable(CAR_JOB)
+            viewModel.selectedCarJob ?: let {
+                viewModel.selectedCarJob = arg.getParcelable(CAR_JOB)
+            }
+
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
             argCarJobName = arg.getString(PARENT_CAR_JOB_ARG_NAME, "")
         } ?: run {
@@ -75,29 +77,28 @@ class CarJobPickerFragment : DialogFragment() {
         alertDialogBuilder.setNegativeButton(R.string.cancel_button, null) // для негативного ответа ничего не делаем
 
         alertDialogBuilder.setPositiveButton(R.string.ok_button) { dialog, which ->
-            sendResultToFragment(carJob)
+            sendResultToFragment(viewModel.selectedCarJob)
         }
 
         setupCarJobListRecyclerView(container)
 
-        viewModel = ViewModelProvider(this).get(CarJobListViewModel::class.java)
         viewModel.carJobListLiveData.observe(this, { carJobs ->
             carJobListAdapter = CarJobListAdapter(carJobs)
             carJobListRecyclerView.adapter = carJobListAdapter
             setupClickListeners()
 
-            val currentPosition = getCurrentPosition(carJob)
-
-            val scrollPosition = if (currentPosition > (carJobListAdapter.getItemCount() - DIFFERENCE_POS)) {
-                carJobListAdapter.getItemCount() - 1
-            } else {
-                currentPosition
-            }
-
-            carJobListRecyclerView.scrollToPosition(scrollPosition)
+            val currentPosition = getPosition(viewModel.selectedCarJob, carJobListAdapter.carJobs)
 
             if (currentPosition != NOT_FOUND_POSITION) {
                 carJobs[currentPosition].isSelected = true
+
+                val scrollPosition = if (currentPosition > (carJobListAdapter.getItemCount() - DIFFERENCE_POS)) {
+                    carJobListAdapter.getItemCount() - 1
+                } else {
+                    currentPosition
+                }
+
+                carJobListRecyclerView.scrollToPosition(scrollPosition)
                 carJobListAdapter.notifyItemChanged(currentPosition, Unit)
             }
         })
@@ -116,10 +117,11 @@ class CarJobPickerFragment : DialogFragment() {
 
     private fun setupClickListeners() {
         carJobListAdapter.onCarJobClickListener = { currentCarJob ->
-            carJob = currentCarJob
-            previousSelectedCarJob?.isSelected = false
-            carJob?.isSelected = true
-            previousSelectedCarJob = carJob
+            carJobListAdapter.carJobs.forEach {
+                it.isSelected = false // снимем пометку у всех
+            }
+            viewModel.selectedCarJob = currentCarJob
+            viewModel.selectedCarJob?.isSelected = true
         }
 
         carJobListAdapter.onCarJobLongClickListener = { currentCarJob ->
@@ -137,15 +139,14 @@ class CarJobPickerFragment : DialogFragment() {
         }
     }
 
-    private fun getCurrentPosition(searchedCarJob: CarJob?): Int {
+    private fun getPosition(searchedCarJob: CarJob?, carJobList: List<CarJob>): Int {
         var currentPosition = NOT_FOUND_POSITION
         searchedCarJob?.let {
             var isFound = false
-            for (currentCarJob in carJobListAdapter.carJobs) {
+            for (currentCarJob in carJobList) {
                 currentPosition++
                 if (currentCarJob.id == searchedCarJob.id) {
                     isFound = true
-                    previousSelectedCarJob = currentCarJob
                     break
                 }
             }

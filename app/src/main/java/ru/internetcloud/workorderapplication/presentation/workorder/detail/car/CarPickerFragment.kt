@@ -3,7 +3,6 @@ package ru.internetcloud.workorderapplication.presentation.workorder.detail.car
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
-import java.lang.RuntimeException
 
 class CarPickerFragment : DialogFragment() {
 
@@ -56,7 +54,7 @@ class CarPickerFragment : DialogFragment() {
         viewModel = ViewModelProvider(this).get(CarListViewModel::class.java)
 
         arguments?.let { arg ->
-            viewModel.selectedCar?: let {
+            viewModel.selectedCar ?: let {
                 viewModel.selectedCar = arg.getParcelable(CAR)
             }
             viewModel.partner = arg.getParcelable(PARTNER) ?: throw RuntimeException("There is no partner in arg")

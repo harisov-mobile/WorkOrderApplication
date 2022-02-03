@@ -6,13 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.data.repository.db.DbRepairTypeRepositoryImpl
-import ru.internetcloud.workorderapplication.di.ContextModule
-import ru.internetcloud.workorderapplication.di.DaggerApplicationComponent
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
-import ru.internetcloud.workorderapplication.domain.repository.RepairTypeRepository
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetRepairTypeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.SearchRepairTypesUseCase
-import javax.inject.Inject
 
 class RepairTypeListViewModel : ViewModel() {
     private val repository = DbRepairTypeRepositoryImpl.get()

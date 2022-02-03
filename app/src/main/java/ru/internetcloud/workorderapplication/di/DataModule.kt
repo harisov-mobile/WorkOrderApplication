@@ -20,6 +20,6 @@ class DataModule {
 
     @Provides
     fun provideRepairTypeRepository(): RepairTypeRepository {
-        return DbRepairTypeRepositoryImpl.get();
+        return DbRepairTypeRepositoryImpl.get()
     }
 }

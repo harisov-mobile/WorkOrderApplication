@@ -36,9 +36,6 @@ class DepartmentPickerFragment : DialogFragment() {
         }
     }
 
-    private var department: Department? = null
-    private var previousSelectedDepartment: Department? = null
-
     private var requestKey = ""
     private var argDepartmentName = ""
 
@@ -51,8 +48,13 @@ class DepartmentPickerFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
+        viewModel = ViewModelProvider(this).get(DepartmentListViewModel::class.java)
+
         arguments?.let { arg ->
-            department = arg.getParcelable(DEPARTMENT)
+            viewModel.selectedDepartment ?: let {
+                viewModel.selectedDepartment = arg.getParcelable(DEPARTMENT)
+            }
+
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
             argDepartmentName = arg.getString(PARENT_DEPARTMENT_ARG_NAME, "")
         } ?: run {
@@ -75,29 +77,28 @@ class DepartmentPickerFragment : DialogFragment() {
         alertDialogBuilder.setNegativeButton(R.string.cancel_button, null) // для негативного ответа ничего не делаем
 
         alertDialogBuilder.setPositiveButton(R.string.ok_button) { dialog, which ->
-            sendResultToFragment(department)
+            sendResultToFragment(viewModel.selectedDepartment)
         }
 
         setupDepartmentListRecyclerView(container)
 
-        viewModel = ViewModelProvider(this).get(DepartmentListViewModel::class.java)
         viewModel.departmentListLiveData.observe(this, { departments ->
             departmentListAdapter = DepartmentListAdapter(departments)
             departmentListRecyclerView.adapter = departmentListAdapter
             setupClickListeners()
 
-            val currentPosition = getCurrentPosition(department)
-
-            val scrollPosition = if (currentPosition > (departmentListAdapter.getItemCount() - DIFFERENCE_POS)) {
-                departmentListAdapter.getItemCount() - 1
-            } else {
-                currentPosition
-            }
-
-            departmentListRecyclerView.scrollToPosition(scrollPosition)
+            val currentPosition = getPosition(viewModel.selectedDepartment, departmentListAdapter.departments)
 
             if (currentPosition != NOT_FOUND_POSITION) {
                 departments[currentPosition].isSelected = true
+
+                val scrollPosition = if (currentPosition > (departmentListAdapter.getItemCount() - DIFFERENCE_POS)) {
+                    departmentListAdapter.getItemCount() - 1
+                } else {
+                    currentPosition
+                }
+
+                departmentListRecyclerView.scrollToPosition(scrollPosition)
                 departmentListAdapter.notifyItemChanged(currentPosition, Unit)
             }
         })
@@ -116,10 +117,11 @@ class DepartmentPickerFragment : DialogFragment() {
 
     private fun setupClickListeners() {
         departmentListAdapter.onDepartmentClickListener = { currentDepartment ->
-            department = currentDepartment
-            previousSelectedDepartment?.isSelected = false
-            department?.isSelected = true
-            previousSelectedDepartment = department
+            departmentListAdapter.departments.forEach {
+                it.isSelected = false // снимем пометку у всех
+            }
+            viewModel.selectedDepartment = currentDepartment
+            viewModel.selectedDepartment?.isSelected = true
         }
 
         departmentListAdapter.onDepartmentLongClickListener = { currentDepartment ->
@@ -137,15 +139,14 @@ class DepartmentPickerFragment : DialogFragment() {
         }
     }
 
-    private fun getCurrentPosition(searchedDepartment: Department?): Int {
+    private fun getPosition(searchedDepartment: Department?, departmentList: List<Department>): Int {
         var currentPosition = NOT_FOUND_POSITION
         searchedDepartment?.let {
             var isFound = false
-            for (currentPartner in departmentListAdapter.departments) {
+            for (currentDepartment in departmentList) {
                 currentPosition++
-                if (currentPartner.id == searchedDepartment.id) {
+                if (currentDepartment.id == searchedDepartment.id) {
                     isFound = true
-                    previousSelectedDepartment = currentPartner
                     break
                 }
             }
