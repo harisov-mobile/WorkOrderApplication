@@ -422,16 +422,19 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 jobDetail?.let { jobdet ->
                     viewModel.workOrder.value?.let { order ->
                         val foundJobDetail = order.jobDetails.find { it.lineNumber == jobdet.lineNumber }
-                        foundJobDetail ?: let {
+                        foundJobDetail?.let {
+                            it.copyFields(jobdet)
+                        } ?: let {
                             // это новая строка, добавленная в ТЧ
+                            order.jobDetails.forEach {
+                                it.isSelected = false
+                            }
+
                             order.jobDetails.add(jobdet)
+                            viewModel.selectedJobDetail = jobdet
+                            viewModel.selectedJobDetail?.isSelected = true
                             binding.jobDetailsRecyclerView.scrollToPosition(order.jobDetails.indexOf(jobdet))
                         }
-                        order.jobDetails.forEach {
-                            it.isSelected = false
-                        }
-                        viewModel.selectedJobDetail = jobdet
-                        viewModel.selectedJobDetail?.isSelected = true
 
                         jobDetailListAdapter.notifyItemChanged(
                             order.jobDetails.indexOf(viewModel.selectedJobDetail),

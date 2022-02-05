@@ -27,7 +27,11 @@ class PerformerDetailFragment : DialogFragment(), FragmentResultListener {
         private val REQUEST_EMPLOYEE_PICKER_KEY = "request_employee_picker_key"
         private val ARG_EMPLOYEE = "employee_picker"
 
-        fun newInstance(performerDetail: PerformerDetail?, parentRequestKey: String, parentArgName: String): PerformerDetailFragment {
+        fun newInstance(
+            performerDetail: PerformerDetail?,
+            parentRequestKey: String,
+            parentArgName: String
+        ): PerformerDetailFragment {
             val args = Bundle().apply {
                 putParcelable(PERFORMER_DETAIL, performerDetail)
                 putString(PARENT_REQUEST_KEY, parentRequestKey)
@@ -39,7 +43,6 @@ class PerformerDetailFragment : DialogFragment(), FragmentResultListener {
         }
     }
 
-    private var performerDetail: PerformerDetail? = null
     private var requestKey = ""
     private var argPerformerDetailName = ""
 
@@ -52,20 +55,27 @@ class PerformerDetailFragment : DialogFragment(), FragmentResultListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
+        viewModel = ViewModelProvider(this).get(PerformerDetailViewModel::class.java)
+
         arguments?.let { arg ->
-            performerDetail = arg.getParcelable(PERFORMER_DETAIL)
+            savedInstanceState ?: let {
+                val performerDetail: PerformerDetail? = arg.getParcelable(PERFORMER_DETAIL)
+                performerDetail ?: let {
+                    throw RuntimeException("performerDetail is Null in PerformerDetailFragment")
+                }
+                viewModel.performerDetail = PerformerDetail(
+                    id = performerDetail.id,
+                    lineNumber = performerDetail.lineNumber,
+                    employee = performerDetail.employee,
+                    isSelected = performerDetail.isSelected
+                )
+            }
+
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
             argPerformerDetailName = arg.getString(PARENT_PERFORMER_DETAIL_ARG_NAME, "")
         } ?: run {
             throw RuntimeException("There are not arguments in PerformerDetailFragment")
         }
-
-        performerDetail ?: let {
-            throw RuntimeException("performerDetail is Null in PerformerDetailFragment")
-        }
-
-        viewModel = ViewModelProvider(this).get(PerformerDetailViewModel::class.java)
-        viewModel.performerDetail = performerDetail
 
         val alertDialogBuilder = AlertDialog.Builder(activity)
         alertDialogBuilder.setTitle(R.string.performer_detail_title)
@@ -111,7 +121,7 @@ class PerformerDetailFragment : DialogFragment(), FragmentResultListener {
         okButton.setOnClickListener {
             val validateInputResult = validateInput()
             if (validateInputResult.isValid) {
-                sendResultToFragment(performerDetail)
+                sendResultToFragment(viewModel.performerDetail)
                 dialog?.dismiss()
             } else {
                 MessageDialogFragment.newInstance(validateInputResult.errorMessage)

@@ -17,8 +17,10 @@ import ru.internetcloud.workorderapplication.domain.catalog.CarJob
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.common.ValidateInputResult
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
+import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.carjob.CarJobPickerFragment
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.workinghour.WorkingHourPickerFragment
 import java.math.BigDecimal
 
@@ -48,7 +50,6 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
         }
     }
 
-    private var jobDetail: JobDetail? = null
     private var requestKey = ""
     private var argJobDetailName = ""
 
@@ -66,20 +67,25 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
+        viewModel = ViewModelProvider(this).get(JobDetailViewModel::class.java)
+
         arguments?.let { arg ->
-            jobDetail = arg.getParcelable(JOB_DETAIL)
+            savedInstanceState ?: let {
+                val jobDetail: JobDetail? = arg.getParcelable(JOB_DETAIL)
+                jobDetail ?: let {
+                    throw RuntimeException("jobDetail is Null in JobDetailFragment")
+                }
+
+                viewModel.jobDetail = jobDetail.copy() // надо копию экземпляра класса, специально чтобы при изменении
+            // копии не пострадал оригинал, если пользователь нажмет "Отмена"
+            }
+
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
             argJobDetailName = arg.getString(PARENT_JOB_DETAIL_ARG_NAME, "")
         } ?: run {
             throw RuntimeException("There are not arguments in JobDetailFragment")
         }
 
-        jobDetail ?: let {
-            throw RuntimeException("jobDetail is Null in JobDetailFragment")
-        }
-
-        viewModel = ViewModelProvider(this).get(JobDetailViewModel::class.java)
-        viewModel.jobDetail = jobDetail
 
         val alertDialogBuilder = AlertDialog.Builder(activity)
         alertDialogBuilder.setTitle(R.string.job_detail_title)
@@ -173,7 +179,7 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
         okButton.setOnClickListener {
             val validateInputResult = validateInput()
             if (validateInputResult.isValid) {
-                sendResultToFragment(jobDetail)
+                sendResultToFragment(viewModel.jobDetail)
                 dialog?.dismiss()
             } else {
                 MessageDialogFragment.newInstance(validateInputResult.errorMessage)

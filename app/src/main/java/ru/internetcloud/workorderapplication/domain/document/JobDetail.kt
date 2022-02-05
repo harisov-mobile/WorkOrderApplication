@@ -17,4 +17,16 @@ data class JobDetail(
     var workingHour: WorkingHour? = null, // нормо-часы
     var sum: BigDecimal = BigDecimal.ZERO,
     var isSelected: Boolean = false
-) : Parcelable
+) : Parcelable {
+
+    fun copyFields(anotherJobDetail: JobDetail) {
+        this.id = anotherJobDetail.id
+        this.lineNumber = anotherJobDetail.lineNumber
+        this.carJob = anotherJobDetail.carJob
+        this.quantity = anotherJobDetail.quantity
+        this.timeNorm = anotherJobDetail.timeNorm
+        this.workingHour = anotherJobDetail.workingHour
+        this.sum = anotherJobDetail.sum
+        this.isSelected = anotherJobDetail.isSelected
+    }
+}
