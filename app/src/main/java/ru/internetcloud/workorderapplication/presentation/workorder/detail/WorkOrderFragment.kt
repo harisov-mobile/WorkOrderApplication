@@ -450,16 +450,19 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 performerDetail?.let { currentPerformerDetail ->
                     viewModel.workOrder.value?.let { order ->
                         val foundPerformerDetail = order.performers.find { it.lineNumber == currentPerformerDetail.lineNumber }
-                        foundPerformerDetail ?: let {
+                        foundPerformerDetail?.let {
+                            it.copyFields(currentPerformerDetail)
+                        } ?: let {
                             // это новая строка, добавленная в ТЧ
+                            order.performers.forEach {
+                                it.isSelected = false
+                            }
+
                             order.performers.add(currentPerformerDetail)
+                            viewModel.selectedPerformerDetail = currentPerformerDetail
+                            viewModel.selectedPerformerDetail?.isSelected = true
                             binding.performerDetailsRecyclerView.scrollToPosition(order.performers.indexOf(currentPerformerDetail))
                         }
-                        order.performers.forEach {
-                            it.isSelected = false
-                        }
-                        viewModel.selectedPerformerDetail = currentPerformerDetail
-                        viewModel.selectedPerformerDetail?.isSelected = true
 
                         performerDetailListAdapter.notifyItemChanged(
                             order.performers.indexOf(viewModel.selectedPerformerDetail),
@@ -600,7 +603,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             viewModel.workOrder.value?.let { order ->
                 JobDetailFragment
                     .newInstance(
-                        getNewJobDetail(order),
+                        JobDetail.getNewJobDetail(order),
                         REQUEST_JOB_DETAIL_PICKER_KEY,
                         ARG_JOB_DETAIL
                     ) // здесь надо подумать как правильно создавать новую строку ТЧ
@@ -688,13 +691,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 }
             }
         }
-    }
-
-    private fun getNewJobDetail(order: WorkOrder): JobDetail {
-        var lineNumber = order.jobDetails.size
-        lineNumber++
-        val id = order.id + "_" + lineNumber.toString()
-        return JobDetail(id = id, lineNumber = lineNumber)
     }
 
     private fun updateUI(order: WorkOrder) {

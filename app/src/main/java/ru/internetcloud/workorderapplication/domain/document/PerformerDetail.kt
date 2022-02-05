@@ -21,4 +21,11 @@ data class PerformerDetail(
             return PerformerDetail(id = id, lineNumber = lineNumber)
         }
     }
+
+    fun copyFields(anotherPerformerDetail: PerformerDetail) {
+        this.id = anotherPerformerDetail.id
+        this.lineNumber = anotherPerformerDetail.lineNumber
+        this.employee = anotherPerformerDetail.employee
+        this.isSelected = anotherPerformerDetail.isSelected
+    }
 }

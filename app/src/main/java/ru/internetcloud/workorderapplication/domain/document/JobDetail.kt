@@ -19,6 +19,15 @@ data class JobDetail(
     var isSelected: Boolean = false
 ) : Parcelable {
 
+    companion object {
+        fun getNewJobDetail(order: WorkOrder): JobDetail {
+            var lineNumber = order.jobDetails.size
+            lineNumber++
+            val id = order.id + "_" + lineNumber.toString()
+            return JobDetail(id = id, lineNumber = lineNumber)
+        }
+    }
+
     fun copyFields(anotherJobDetail: JobDetail) {
         this.id = anotherJobDetail.id
         this.lineNumber = anotherJobDetail.lineNumber
