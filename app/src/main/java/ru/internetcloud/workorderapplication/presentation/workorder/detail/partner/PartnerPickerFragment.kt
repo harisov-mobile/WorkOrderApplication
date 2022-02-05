@@ -36,9 +36,6 @@ class PartnerPickerFragment : DialogFragment() {
         }
     }
 
-    private var partner: Partner? = null
-    private var previousSelectedPartner: Partner? = null
-
     private var requestKey = ""
     private var argPartnerName = ""
 
@@ -51,8 +48,12 @@ class PartnerPickerFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
+        viewModel = ViewModelProvider(this).get(PartnerListViewModel::class.java)
+
         arguments?.let { arg ->
-            partner = arg.getParcelable(PARTNER)
+            viewModel.selectedPartner ?: let {
+                viewModel.selectedPartner = arg.getParcelable(PARTNER)
+            }
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
             argPartnerName = arg.getString(PARENT_PARTNER_ARG_NAME, "")
         } ?: run {
@@ -75,34 +76,38 @@ class PartnerPickerFragment : DialogFragment() {
         alertDialogBuilder.setNegativeButton(R.string.cancel_button, null) // для негативного ответа ничего не делаем
 
         alertDialogBuilder.setPositiveButton(R.string.ok_button) { dialog, which ->
-            sendResultToFragment(partner)
+            sendResultToFragment(viewModel.selectedPartner)
         }
 
         setupPartnerListRecyclerView(container)
 
-        viewModel = ViewModelProvider(this).get(PartnerListViewModel::class.java)
         viewModel.partnerListLiveData.observe(this, { partners ->
             partnerListAdapter = PartnerListAdapter(partners)
             partnerListRecyclerView.adapter = partnerListAdapter
             setupClickListeners()
 
-            val currentPosition = getCurrentPosition(partner)
+            val currentPosition = getPosition(viewModel.selectedPartner, partnerListAdapter.partners)
 
-            val scrollPosition = if (currentPosition > (partnerListAdapter.getItemCount() - DIFFERENCE_POS)) {
-                partnerListAdapter.getItemCount() - 1
+            if (currentPosition == NOT_FOUND_POSITION) {
+                viewModel.selectedPartner = null
             } else {
-                currentPosition
-            }
+                viewModel.selectedPartner = partners[currentPosition]
+                viewModel.selectedPartner?.isSelected = true
 
-            partnerListRecyclerView.scrollToPosition(scrollPosition)
+                val scrollPosition = if (currentPosition > (partnerListAdapter.getItemCount() - DIFFERENCE_POS)) {
+                    partnerListAdapter.getItemCount() - 1
+                } else {
+                    currentPosition
+                }
 
-            if (currentPosition != NOT_FOUND_POSITION) {
-                partners[currentPosition].isSelected = true
+                partnerListRecyclerView.scrollToPosition(scrollPosition)
                 partnerListAdapter.notifyItemChanged(currentPosition, Unit)
             }
         })
 
-        viewModel.loadPartnerList() // самое главное!!!
+        savedInstanceState ?:let {
+            viewModel.loadPartnerList() // самое главное!!! если это создание нового фрагмента
+        }
 
         return alertDialogBuilder.create()
     }
@@ -116,10 +121,9 @@ class PartnerPickerFragment : DialogFragment() {
 
     private fun setupClickListeners() {
         partnerListAdapter.onPartnerClickListener = { currentPartner ->
-            partner = currentPartner
-            previousSelectedPartner?.isSelected = false
-            partner?.isSelected = true
-            previousSelectedPartner = partner
+            viewModel.selectedPartner?.isSelected = false // предыдущий отмеченный - снимаем пометку
+            viewModel.selectedPartner = currentPartner
+            viewModel.selectedPartner?.isSelected = true
         }
 
         partnerListAdapter.onPartnerLongClickListener = { currentPartner ->
@@ -137,15 +141,14 @@ class PartnerPickerFragment : DialogFragment() {
         }
     }
 
-    private fun getCurrentPosition(searchedPartner: Partner?): Int {
+    private fun getPosition(searchedPartner: Partner?, partnerList: List<Partner>): Int {
         var currentPosition = NOT_FOUND_POSITION
         searchedPartner?.let {
             var isFound = false
-            for (currentPartner in partnerListAdapter.partners) {
+            for (currentPartner in partnerList) {
                 currentPosition++
                 if (currentPartner.id == searchedPartner.id) {
                     isFound = true
-                    previousSelectedPartner = currentPartner
                     break
                 }
             }

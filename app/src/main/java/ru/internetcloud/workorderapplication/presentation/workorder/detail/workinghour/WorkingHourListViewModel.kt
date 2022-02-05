@@ -11,6 +11,9 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.wor
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.SearchWorkingHoursUseCase
 
 class WorkingHourListViewModel : ViewModel() {
+
+    var selectedWorkingHour: WorkingHour? = null
+
     private val repository = DbWorkingHourRepositoryImpl.get()
 
     private val getWorkingHourListUseCase = GetWorkingHourListUseCase(repository)

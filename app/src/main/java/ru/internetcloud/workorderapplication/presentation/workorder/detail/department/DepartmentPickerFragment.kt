@@ -89,8 +89,11 @@ class DepartmentPickerFragment : DialogFragment() {
 
             val currentPosition = getPosition(viewModel.selectedDepartment, departmentListAdapter.departments)
 
-            if (currentPosition != NOT_FOUND_POSITION) {
-                departments[currentPosition].isSelected = true
+            if (currentPosition == NOT_FOUND_POSITION) {
+                viewModel.selectedDepartment = null
+            } else {
+                viewModel.selectedDepartment = departments[currentPosition]
+                viewModel.selectedDepartment?.isSelected = true
 
                 val scrollPosition = if (currentPosition > (departmentListAdapter.getItemCount() - DIFFERENCE_POS)) {
                     departmentListAdapter.getItemCount() - 1
@@ -103,7 +106,9 @@ class DepartmentPickerFragment : DialogFragment() {
             }
         })
 
-        viewModel.loadDepartmentList() // самое главное!!!
+        savedInstanceState ?:let {
+            viewModel.loadDepartmentList() // самое главное!!! если это создание нового фрагмента
+        }
 
         return alertDialogBuilder.create()
     }
@@ -117,9 +122,7 @@ class DepartmentPickerFragment : DialogFragment() {
 
     private fun setupClickListeners() {
         departmentListAdapter.onDepartmentClickListener = { currentDepartment ->
-            departmentListAdapter.departments.forEach {
-                it.isSelected = false // снимем пометку у всех
-            }
+            viewModel.selectedDepartment?.isSelected = false // предыдущий отмеченный - снимаем пометку
             viewModel.selectedDepartment = currentDepartment
             viewModel.selectedDepartment?.isSelected = true
         }

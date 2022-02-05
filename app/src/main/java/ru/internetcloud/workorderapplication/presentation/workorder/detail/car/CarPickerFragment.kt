@@ -57,7 +57,11 @@ class CarPickerFragment : DialogFragment() {
             viewModel.selectedCar ?: let {
                 viewModel.selectedCar = arg.getParcelable(CAR)
             }
-            viewModel.partner = arg.getParcelable(PARTNER) ?: throw RuntimeException("There is no partner in arg")
+
+            viewModel.partner ?: let {
+                viewModel.partner = arg.getParcelable(PARTNER) ?: throw RuntimeException("There is no partner in arg")
+            }
+
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
             argCarName = arg.getString(PARENT_CAR_ARG_NAME, "")
         } ?: run {
@@ -92,8 +96,11 @@ class CarPickerFragment : DialogFragment() {
 
             val currentPosition = getPosition(viewModel.selectedCar, cars)
 
-            if (currentPosition != NOT_FOUND_POSITION) {
-                cars[currentPosition].isSelected = true
+            if (currentPosition == NOT_FOUND_POSITION) {
+                viewModel.selectedCar = null
+            } else {
+                viewModel.selectedCar = cars[currentPosition]
+                viewModel.selectedCar?.isSelected = true
 
                 val scrollPosition = if (currentPosition > (carListAdapter.getItemCount() - DIFFERENCE_POS)) {
                     carListAdapter.getItemCount() - 1
@@ -106,7 +113,9 @@ class CarPickerFragment : DialogFragment() {
             }
         })
 
-        viewModel.loadCarList() // самое главное!!!
+        savedInstanceState ?:let {
+            viewModel.loadCarList() // самое главное!!! если это создание нового фрагмента
+        }
 
         return alertDialogBuilder.create()
     }

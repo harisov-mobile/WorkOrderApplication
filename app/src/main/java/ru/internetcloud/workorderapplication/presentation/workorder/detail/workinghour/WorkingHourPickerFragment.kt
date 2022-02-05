@@ -17,27 +17,24 @@ class WorkingHourPickerFragment : DialogFragment() {
 
     companion object {
 
-        private const val WORKING_FRAGMENT = "working_fragment"
-        private const val PARENT_REQUEST_KEY = "parent_request_working_fragment_picker_key"
-        private const val PARENT_WORKING_FRAGMENT_ARG_NAME = "parent_working_fragment_arg_name"
+        private const val WORKING_HOUR = "working_hour"
+        private const val PARENT_REQUEST_KEY = "parent_request_working_hour_picker_key"
+        private const val PARENT_WORKING_HOUR_ARG_NAME = "parent_working_hour_arg_name"
 
         private const val NOT_FOUND_POSITION = -1
         private const val DIFFERENCE_POS = 5
 
         fun newInstance(workingHour: WorkingHour?, parentRequestKey: String, parentArgDateName: String): WorkingHourPickerFragment {
             val args = Bundle().apply {
-                putParcelable(WORKING_FRAGMENT, workingHour)
+                putParcelable(WORKING_HOUR, workingHour)
                 putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_WORKING_FRAGMENT_ARG_NAME, parentArgDateName)
+                putString(PARENT_WORKING_HOUR_ARG_NAME, parentArgDateName)
             }
             return WorkingHourPickerFragment().apply {
                 arguments = args
             }
         }
     }
-
-    private var workingHour: WorkingHour? = null
-    private var previousSelectedWorkingHour: WorkingHour? = null
 
     private var requestKey = ""
     private var argWorkingHourName = ""
@@ -51,10 +48,15 @@ class WorkingHourPickerFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
+        viewModel = ViewModelProvider(this).get(WorkingHourListViewModel::class.java)
+
         arguments?.let { arg ->
-            workingHour = arg.getParcelable(WORKING_FRAGMENT)
+            viewModel.selectedWorkingHour ?: let {
+                viewModel.selectedWorkingHour = arg.getParcelable(WORKING_HOUR)
+            }
+
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
-            argWorkingHourName = arg.getString(PARENT_WORKING_FRAGMENT_ARG_NAME, "")
+            argWorkingHourName = arg.getString(PARENT_WORKING_HOUR_ARG_NAME, "")
         } ?: run {
             throw RuntimeException("There are not arguments in WorkingHourPickerFragment")
         }
@@ -75,34 +77,38 @@ class WorkingHourPickerFragment : DialogFragment() {
         alertDialogBuilder.setNegativeButton(R.string.cancel_button, null) // для негативного ответа ничего не делаем
 
         alertDialogBuilder.setPositiveButton(R.string.ok_button) { dialog, which ->
-            sendResultToFragment(workingHour)
+            sendResultToFragment(viewModel.selectedWorkingHour)
         }
 
         setupWorkingHourListRecyclerView(container)
 
-        viewModel = ViewModelProvider(this).get(WorkingHourListViewModel::class.java)
-        viewModel.workingHourListLiveData.observe(this, { partners ->
-            workingHourListAdapter = WorkingHourListAdapter(partners)
+        viewModel.workingHourListLiveData.observe(this, { workingHours ->
+            workingHourListAdapter = WorkingHourListAdapter(workingHours)
             workingHourListRecyclerView.adapter = workingHourListAdapter
             setupClickListeners()
 
-            val currentPosition = getCurrentPosition(workingHour)
+            val currentPosition = getPosition(viewModel.selectedWorkingHour, workingHourListAdapter.workingHours)
 
-            val scrollPosition = if (currentPosition > (workingHourListAdapter.getItemCount() - DIFFERENCE_POS)) {
-                workingHourListAdapter.getItemCount() - 1
+            if (currentPosition == NOT_FOUND_POSITION) {
+                viewModel.selectedWorkingHour = null
             } else {
-                currentPosition
-            }
+                viewModel.selectedWorkingHour = workingHours[currentPosition]
+                viewModel.selectedWorkingHour?.isSelected = true
 
-            workingHourListRecyclerView.scrollToPosition(scrollPosition)
+                val scrollPosition = if (currentPosition > (workingHourListAdapter.getItemCount() - DIFFERENCE_POS)) {
+                    workingHourListAdapter.getItemCount() - 1
+                } else {
+                    currentPosition
+                }
 
-            if (currentPosition != NOT_FOUND_POSITION) {
-                partners[currentPosition].isSelected = true
+                workingHourListRecyclerView.scrollToPosition(scrollPosition)
                 workingHourListAdapter.notifyItemChanged(currentPosition, Unit)
             }
         })
 
-        viewModel.loadWorkingHourList() // самое главное!!!
+        savedInstanceState ?:let {
+            viewModel.loadWorkingHourList() // самое главное!!! если это создание нового фрагмента
+        }
 
         return alertDialogBuilder.create()
     }
@@ -116,10 +122,9 @@ class WorkingHourPickerFragment : DialogFragment() {
 
     private fun setupClickListeners() {
         workingHourListAdapter.onWorkingHourClickListener = { currentWorkingHour ->
-            workingHour = currentWorkingHour
-            previousSelectedWorkingHour?.isSelected = false
-            workingHour?.isSelected = true
-            previousSelectedWorkingHour = workingHour
+            viewModel.selectedWorkingHour?.isSelected = false // предыдущий отмеченный - снимаем пометку
+            viewModel.selectedWorkingHour = currentWorkingHour
+            viewModel.selectedWorkingHour?.isSelected = true
         }
 
         workingHourListAdapter.onWorkingHourLongClickListener = { currentWorkingHour ->
@@ -137,15 +142,14 @@ class WorkingHourPickerFragment : DialogFragment() {
         }
     }
 
-    private fun getCurrentPosition(searchedWorkingHour: WorkingHour?): Int {
+    private fun getPosition(searchedWorkingHour: WorkingHour?, workingHourList: List<WorkingHour>): Int {
         var currentPosition = NOT_FOUND_POSITION
         searchedWorkingHour?.let {
             var isFound = false
-            for (currentWorkingHour in workingHourListAdapter.workingHours) {
+            for (currentWorkingHour in workingHourList) {
                 currentPosition++
                 if (currentWorkingHour.id == searchedWorkingHour.id) {
                     isFound = true
-                    previousSelectedWorkingHour = currentWorkingHour
                     break
                 }
             }

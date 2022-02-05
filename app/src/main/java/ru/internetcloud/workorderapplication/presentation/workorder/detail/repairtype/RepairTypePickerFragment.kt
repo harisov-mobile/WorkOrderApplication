@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
-import java.lang.RuntimeException
 
 class RepairTypePickerFragment : DialogFragment() {
 
@@ -37,9 +36,6 @@ class RepairTypePickerFragment : DialogFragment() {
         }
     }
 
-    private var repairType: RepairType? = null
-    private var previousSelectedRepairType: RepairType? = null
-
     private var requestKey = ""
     private var argRepairTypeName = ""
 
@@ -52,8 +48,13 @@ class RepairTypePickerFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
+        viewModel = ViewModelProvider(this).get(RepairTypeListViewModel::class.java)
+
         arguments?.let { arg ->
-            repairType = arg.getParcelable(REPAIR_TYPE)
+            viewModel.selectedRepairType ?: let {
+                viewModel.selectedRepairType = arg.getParcelable(REPAIR_TYPE)
+            }
+
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
             argRepairTypeName = arg.getString(PARENT_REPAIR_TYPE_ARG_NAME, "")
         } ?: run {
@@ -76,34 +77,38 @@ class RepairTypePickerFragment : DialogFragment() {
         alertDialogBuilder.setNegativeButton(R.string.cancel_button, null) // для негативного ответа ничего не делаем
 
         alertDialogBuilder.setPositiveButton(R.string.ok_button) { dialog, which ->
-            sendResultToFragment(repairType)
+            sendResultToFragment(viewModel.selectedRepairType)
         }
 
         setupRepairTypeListRecyclerView(container)
 
-        viewModel = ViewModelProvider(this).get(RepairTypeListViewModel::class.java)
         viewModel.repairTypeListLiveData.observe(this, { repairTypes ->
             repairTypeListAdapter = RepairTypeListAdapter(repairTypes)
             repairTypeListRecyclerView.adapter = repairTypeListAdapter
             setupClickListeners()
 
-            val currentPosition = getCurrentPosition(repairType)
+            val currentPosition = getPosition(viewModel.selectedRepairType, repairTypeListAdapter.repairTypes)
 
-            val scrollPosition = if (currentPosition > (repairTypeListAdapter.getItemCount() - RepairTypePickerFragment.DIFFERENCE_POS)) {
-                repairTypeListAdapter.getItemCount() - 1
+            if (currentPosition == NOT_FOUND_POSITION) {
+                viewModel.selectedRepairType = null
             } else {
-                currentPosition
-            }
+                viewModel.selectedRepairType = repairTypes[currentPosition]
+                viewModel.selectedRepairType?.isSelected = true
 
-            repairTypeListRecyclerView.scrollToPosition(scrollPosition)
+                val scrollPosition = if (currentPosition > (repairTypeListAdapter.getItemCount() - DIFFERENCE_POS)) {
+                    repairTypeListAdapter.getItemCount() - 1
+                } else {
+                    currentPosition
+                }
 
-            if (currentPosition != NOT_FOUND_POSITION) {
-                repairTypes[currentPosition].isSelected = true
+                repairTypeListRecyclerView.scrollToPosition(scrollPosition)
                 repairTypeListAdapter.notifyItemChanged(currentPosition, Unit)
             }
         })
 
-        viewModel.loadRepairTypeList() // самое главное!!!
+        savedInstanceState ?:let {
+            viewModel.loadRepairTypeList() // самое главное!!! если это создание нового фрагмента
+        }
 
         return alertDialogBuilder.create()
     }
@@ -117,10 +122,9 @@ class RepairTypePickerFragment : DialogFragment() {
 
     private fun setupClickListeners() {
         repairTypeListAdapter.onRepairTypeClickListener = { currentRepairType ->
-            repairType = currentRepairType
-            previousSelectedRepairType?.isSelected = false
-            repairType?.isSelected = true
-            previousSelectedRepairType = repairType
+            viewModel.selectedRepairType?.isSelected = false // предыдущий отмеченный - снимаем пометку
+            viewModel.selectedRepairType = currentRepairType
+            viewModel.selectedRepairType?.isSelected = true
         }
 
         repairTypeListAdapter.onRepairTypeLongClickListener = { currentRepairType ->
@@ -138,15 +142,14 @@ class RepairTypePickerFragment : DialogFragment() {
         }
     }
 
-    private fun getCurrentPosition(searchedRepairType: RepairType?): Int {
+    private fun getPosition(searchedRepairType: RepairType?, repairTypeList: List<RepairType>): Int {
         var currentPosition = NOT_FOUND_POSITION
         searchedRepairType?.let {
             var isFound = false
-            for (currentRepairType in repairTypeListAdapter.repairTypes) {
+            for (currentRepairType in repairTypeList) {
                 currentPosition++
                 if (currentRepairType.id == searchedRepairType.id) {
                     isFound = true
-                    previousSelectedRepairType = currentRepairType
                     break
                 }
             }

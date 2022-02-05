@@ -89,8 +89,11 @@ class CarJobPickerFragment : DialogFragment() {
 
             val currentPosition = getPosition(viewModel.selectedCarJob, carJobListAdapter.carJobs)
 
-            if (currentPosition != NOT_FOUND_POSITION) {
-                carJobs[currentPosition].isSelected = true
+            if (currentPosition == NOT_FOUND_POSITION) {
+                viewModel.selectedCarJob = null
+            } else {
+                viewModel.selectedCarJob = carJobs[currentPosition]
+                viewModel.selectedCarJob?.isSelected = true
 
                 val scrollPosition = if (currentPosition > (carJobListAdapter.getItemCount() - DIFFERENCE_POS)) {
                     carJobListAdapter.getItemCount() - 1
@@ -103,7 +106,9 @@ class CarJobPickerFragment : DialogFragment() {
             }
         })
 
-        viewModel.loadCarJobList() // самое главное!!!
+        savedInstanceState ?:let {
+            viewModel.loadCarJobList() // самое главное!!! если это создание нового фрагмента
+        }
 
         return alertDialogBuilder.create()
     }

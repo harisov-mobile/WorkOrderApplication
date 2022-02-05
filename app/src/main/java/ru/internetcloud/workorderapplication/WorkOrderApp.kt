@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.data
+package ru.internetcloud.workorderapplication
 
 import android.app.Application
 import ru.internetcloud.workorderapplication.data.repository.*

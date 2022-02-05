@@ -36,9 +36,6 @@ class EmployeePickerFragment : DialogFragment() {
         }
     }
 
-    private var employee: Employee? = null
-    private var previousSelectedEmployee: Employee? = null
-
     private var requestKey = ""
     private var argEmployeeName = ""
 
@@ -51,8 +48,13 @@ class EmployeePickerFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
+        viewModel = ViewModelProvider(this).get(EmployeeListViewModel::class.java)
+
         arguments?.let { arg ->
-            employee = arg.getParcelable(EMPLOYEE)
+            viewModel.selectedEmployee ?: let {
+                viewModel.selectedEmployee = arg.getParcelable(EMPLOYEE)
+            }
+
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
             argEmployeeName = arg.getString(PARENT_EMPLOYEE_ARG_NAME, "")
         } ?: run {
@@ -75,34 +77,39 @@ class EmployeePickerFragment : DialogFragment() {
         alertDialogBuilder.setNegativeButton(R.string.cancel_button, null) // для негативного ответа ничего не делаем
 
         alertDialogBuilder.setPositiveButton(R.string.ok_button) { dialog, which ->
-            sendResultToFragment(employee)
+            sendResultToFragment(viewModel.selectedEmployee)
         }
 
         setupEmployeeListRecyclerView(container)
 
-        viewModel = ViewModelProvider(this).get(EmployeeListViewModel::class.java)
+
         viewModel.employeeListLiveData.observe(this, { employees ->
             employeeListAdapter = EmployeeListAdapter(employees)
             employeeListRecyclerView.adapter = employeeListAdapter
             setupClickListeners()
 
-            val currentPosition = getCurrentPosition(employee)
+            val currentPosition = getPosition(viewModel.selectedEmployee, employeeListAdapter.employees)
 
-            val scrollPosition = if (currentPosition > (employeeListAdapter.getItemCount() - DIFFERENCE_POS)) {
-                employeeListAdapter.getItemCount() - 1
+            if (currentPosition == NOT_FOUND_POSITION) {
+                viewModel.selectedEmployee = null
             } else {
-                currentPosition
-            }
+                viewModel.selectedEmployee = employees[currentPosition]
+                viewModel.selectedEmployee?.isSelected = true
 
-            employeeListRecyclerView.scrollToPosition(scrollPosition)
+                val scrollPosition = if (currentPosition > (employeeListAdapter.getItemCount() - DIFFERENCE_POS)) {
+                    employeeListAdapter.getItemCount() - 1
+                } else {
+                    currentPosition
+                }
 
-            if (currentPosition != NOT_FOUND_POSITION) {
-                employees[currentPosition].isSelected = true
+                employeeListRecyclerView.scrollToPosition(scrollPosition)
                 employeeListAdapter.notifyItemChanged(currentPosition, Unit)
             }
         })
 
-        viewModel.loadEmployeeList() // самое главное!!!
+        savedInstanceState ?:let {
+            viewModel.loadEmployeeList() // самое главное!!! если это создание нового фрагмента
+        }
 
         return alertDialogBuilder.create()
     }
@@ -116,10 +123,9 @@ class EmployeePickerFragment : DialogFragment() {
 
     private fun setupClickListeners() {
         employeeListAdapter.onEmployeeClickListener = { currentEmployee ->
-            employee = currentEmployee
-            previousSelectedEmployee?.isSelected = false
-            employee?.isSelected = true
-            previousSelectedEmployee = employee
+            viewModel.selectedEmployee?.isSelected = false // предыдущий отмеченный - снимаем пометку
+            viewModel.selectedEmployee = currentEmployee
+            viewModel.selectedEmployee?.isSelected = true
         }
 
         employeeListAdapter.onEmployeeLongClickListener = { currentEmployee ->
@@ -137,15 +143,14 @@ class EmployeePickerFragment : DialogFragment() {
         }
     }
 
-    private fun getCurrentPosition(searchedEmployee: Employee?): Int {
+    private fun getPosition(searchedEmployee: Employee?, employeeList: List<Employee>): Int {
         var currentPosition = NOT_FOUND_POSITION
         searchedEmployee?.let {
             var isFound = false
-            for (currentEmployee in employeeListAdapter.employees) {
+            for (currentEmployee in employeeList) {
                 currentPosition++
                 if (currentEmployee.id == searchedEmployee.id) {
                     isFound = true
-                    previousSelectedEmployee = currentEmployee
                     break
                 }
             }
@@ -155,6 +160,7 @@ class EmployeePickerFragment : DialogFragment() {
         }
         return currentPosition
     }
+
 
     private fun sendResultToFragment(result: Employee?) {
         val bundle = Bundle().apply {

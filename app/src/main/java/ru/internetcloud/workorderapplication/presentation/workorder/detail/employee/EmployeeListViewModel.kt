@@ -6,11 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.data.repository.db.DbEmployeeRepositoryImpl
+import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.catalog.Employee
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.GetEmployeeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.SearchEmployeesUseCase
 
 class EmployeeListViewModel : ViewModel() {
+
+    var selectedEmployee: Employee? = null
+
     private val repository = DbEmployeeRepositoryImpl.get()
 
     private val getEmployeeListUseCase = GetEmployeeListUseCase(repository)
