@@ -463,7 +463,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/master_text_view">
@@ -476,6 +476,45 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/comment_hint" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/send_to_email_button"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/send_to_email_label"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/comment_text_input_layout" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/email_text_input_layout"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+
+                    app:layout_constraintStart_toEndOf="@+id/send_to_email_button"
+                    app:layout_constraintTop_toBottomOf="@+id/comment_text_input_layout">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/email_edit_text"
+
+                        style="@style/text_input_edit_text"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:hint="@string/email_hint" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

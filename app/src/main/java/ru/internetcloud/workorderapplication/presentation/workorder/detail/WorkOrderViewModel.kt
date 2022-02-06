@@ -1,5 +1,6 @@
 package ru.internetcloud.workorderapplication.presentation.workorder.detail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -49,6 +50,10 @@ class WorkOrderViewModel : ViewModel() {
     var closeOnSave: Boolean = false
     var selectedJobDetail: JobDetail? = null
     var selectedPerformerDetail: PerformerDetail? = null
+
+    init {
+        Log.i("rustam", "сработал блок init в WorkOrderViewModel")
+    }
 
     companion object {
         private const val NUMBER_PREFIX = "new"

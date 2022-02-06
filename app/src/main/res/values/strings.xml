@@ -4,6 +4,7 @@
     <string name="date_hint">Дата</string>
     <string name="request_reason_hint">Причина обращения</string>
     <string name="comment_hint">Комментарий</string>
+    <string name="email_hint">Адрес эл.почты</string>
     <string name="mileage_hint">Наработка</string>
 
     <string name="cancel_button">Отмена</string>
@@ -53,6 +54,7 @@
     <string name="fail_upload_work_orders">Ошибка при выгрузке заказ-нарядов: </string>
     <string name="partner_label">Заказчик:</string>
     <string name="choose_label">...</string>
+    <string name="send_to_email_label">Отправить заказ-наряд на эл.почту</string>
     <string name="car_label">СХТ:</string>
     <string name="repair_type_label">Вид ремонта:</string>
     <string name="master_type_label">Бригадир:</string>
