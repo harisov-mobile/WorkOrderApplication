@@ -14,6 +14,7 @@ import ru.internetcloud.workorderapplication.data.mapper.WorkOrderMapper
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.*
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
+import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.SynchroRepository
 
 class SynchroRepositoryImpl private constructor(application: Application) : SynchroRepository {
@@ -85,6 +86,10 @@ class SynchroRepositoryImpl private constructor(application: Application) : Sync
         return success
     }
 
+    override suspend fun sendWorkOrderByEmail(workOrder: WorkOrder): FunctionResult {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun uploadWorkOrders(): FunctionResult {
 
         val result = FunctionResult()
@@ -113,6 +118,10 @@ class SynchroRepositoryImpl private constructor(application: Application) : Sync
         }
 
         return result
+    }
+
+    override suspend fun uploadWorkOrderById(id: String): FunctionResult {
+        TODO("Not yet implemented")
     }
 
     suspend fun deleteAllWorkOrders() {

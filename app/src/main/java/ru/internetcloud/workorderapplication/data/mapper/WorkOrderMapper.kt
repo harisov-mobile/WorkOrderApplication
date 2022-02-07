@@ -52,7 +52,9 @@ class WorkOrderMapper {
             performersString = workOrderWithDetails.workOrder.performersString,
             mileage = workOrderWithDetails.workOrder.mileage,
             performers = performerDetailMapper.fromListDbToListEntity(workOrderWithDetails.performers),
-            jobDetails = jobDetailMapper.fromListDbToListEntity(workOrderWithDetails.jobDetails)
+            jobDetails = jobDetailMapper.fromListDbToListEntity(workOrderWithDetails.jobDetails),
+            isNew = workOrderWithDetails.workOrder.isNew,
+            isModified = workOrderWithDetails.workOrder.isModified
         )
     }
 

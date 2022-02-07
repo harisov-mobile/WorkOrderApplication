@@ -185,7 +185,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 Toast.makeText(context, getString(R.string.success_saved), Toast.LENGTH_SHORT).show()
                 activity?.supportFragmentManager?.popBackStack()
             } else {
-                viewModel.workOrder.value?.isModified = false
+                viewModel.isChanged = false
                 MessageDialogFragment.newInstance(getString(R.string.success_saved))
                     .show(childFragmentManager, null)
             }
@@ -272,6 +272,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 if (modifyAllowed) {
                     viewModel.workOrder.value?.number = parseText(p0?.toString())
                     viewModel.workOrder.value?.isModified = true
+                    viewModel.isChanged = true
                 }
             }
         })
@@ -288,6 +289,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 if (modifyAllowed) {
                     viewModel.workOrder.value?.mileage = parseNumber(p0?.toString()).toInt()
                     viewModel.workOrder.value?.isModified = true
+                    viewModel.isChanged = true
                 }
             }
         })
@@ -305,6 +307,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 if (modifyAllowed) {
                     viewModel.workOrder.value?.requestReason = parseText(p0?.toString())
                     viewModel.workOrder.value?.isModified = true
+                    viewModel.isChanged = true
                 }
             }
         })
@@ -321,6 +324,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 if (modifyAllowed) {
                     viewModel.workOrder.value?.comment = parseText(p0?.toString())
                     viewModel.workOrder.value?.isModified = true
+                    viewModel.isChanged = true
                 }
             }
         })
@@ -354,6 +358,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         order.date = date
                         binding.dateTextView.text = DateConverter.getDateString(date)
                         order.isModified = true
+                        viewModel.isChanged = true
                     }
                 }
             }
@@ -365,6 +370,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         order.partner = partner
                         binding.partnerTextView.text = partner?.name ?: ""
                         order.isModified = true
+                        viewModel.isChanged = true
 
                         // т.к. изменили Заказчика надо очистить СХТ, .т.к. СХТ от другого заказчика
                         order.car = null
@@ -380,6 +386,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         order.car = car
                         binding.carTextView.text = car?.name ?: ""
                         order.isModified = true
+                        viewModel.isChanged = true
                     }
                 }
             }
@@ -391,6 +398,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         order.repairType = repairType
                         binding.repairTypeTextView.text = repairType?.name ?: ""
                         order.isModified = true
+                        viewModel.isChanged = true
                     }
                 }
             }
@@ -402,6 +410,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         order.master = master
                         binding.masterTextView.text = master?.name ?: ""
                         order.isModified = true
+                        viewModel.isChanged = true
                     }
                 }
             }
@@ -413,6 +422,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         order.department = department
                         binding.departmentTextView.text = department?.name ?: ""
                         order.isModified = true
+                        viewModel.isChanged = true
                     }
                 }
             }
@@ -441,6 +451,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                             Unit
                         )
                         order.isModified = true
+                        viewModel.isChanged = true
                     }
                 }
             }
@@ -469,6 +480,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                             Unit
                         )
                         order.isModified = true
+                        viewModel.isChanged = true
                     }
                 }
             }
@@ -499,6 +511,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
                         jobDetailListAdapter.notifyDataSetChanged()
                         order.isModified = true
+                        viewModel.isChanged = true
                     }
                 }
             }
@@ -519,6 +532,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
                         performerDetailListAdapter.notifyDataSetChanged()
                         order.isModified = true
+                        viewModel.isChanged = true
                     }
                 }
             }
@@ -691,6 +705,17 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 }
             }
         }
+
+        binding.sendToEmailButton.setOnClickListener {
+            viewModel.workOrder.value?.let { order ->
+                if (viewModel.isChanged) {
+                    MessageDialogFragment.newInstance(getString(R.string.save_work_order_before))
+                        .show(childFragmentManager, null)
+                } else {
+                    TODO("Отправить заказ-наряд")
+                }
+            }
+        }
     }
 
     private fun updateUI(order: WorkOrder) {
@@ -752,7 +777,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
     private fun onCloseWorkOrder() {
         viewModel.workOrder.value?.let { order ->
-            if (!order.posted && order.isModified) {
+            if (!order.posted && viewModel.isChanged) {
                 QuestionDialogFragment
                     .newInstance(
                         getString(R.string.data_was_changed_question),

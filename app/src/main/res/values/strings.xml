@@ -23,6 +23,7 @@
     <string name="error_specify_partner">Укажите заказчика</string>
 
     <string name="success_saved">Информация записана</string>
+    <string name="save_work_order_before">Заказ-наряд изменен. Перед отправкой необходимо записать заказ-наряд.</string>
 
     <string name="save_button">Записать</string>
     <string name="close_button">Закрыть</string>

@@ -51,6 +51,8 @@ class WorkOrderViewModel : ViewModel() {
     var selectedJobDetail: JobDetail? = null
     var selectedPerformerDetail: PerformerDetail? = null
 
+    var isChanged: Boolean = false
+
     init {
         Log.i("rustam", "сработал блок init в WorkOrderViewModel")
     }
