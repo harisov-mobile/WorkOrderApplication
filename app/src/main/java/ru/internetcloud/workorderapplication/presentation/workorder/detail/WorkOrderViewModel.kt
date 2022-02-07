@@ -1,34 +1,39 @@
 package ru.internetcloud.workorderapplication.presentation.workorder.detail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.data.repository.DatabaseWorkOrderRepositoryImpl
+import ru.internetcloud.workorderapplication.data.repository.db.DbDefaultWorkOrderSettingsRepositoryImpl
+import ru.internetcloud.workorderapplication.data.repository.db.DbWorkOrderRepositoryImpl
+import ru.internetcloud.workorderapplication.domain.document.JobDetail
+import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.domain.usecase.AddWorkOrderUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.GetWorkOrderUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.UpdateWorkOrderUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.UpdateWorkOrderUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.settingsoperation.GetDefaultWorkOrderSettingsUseCase
+import java.util.*
 
 class WorkOrderViewModel : ViewModel() {
 
-    //private val repository = LocalWorkOrderRepositoryImpl // требуется инъекция зависимостей!!!
-    private val repository = DatabaseWorkOrderRepositoryImpl.get()
+    private val workOrderRepository = DbWorkOrderRepositoryImpl.get()
+    private val defaultWorkOrderSettingsRepository = DbDefaultWorkOrderSettingsRepositoryImpl.get()
 
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
-    private val getWorkOrderUseCase = GetWorkOrderUseCase(repository)
-    private val addWorkOrderUseCase = AddWorkOrderUseCase(repository)
-    private val updateWorkOrderUseCase = UpdateWorkOrderUseCase(repository)
+    private val getWorkOrderUseCase = GetWorkOrderUseCase(workOrderRepository)
+    private val updateWorkOrderUseCase = UpdateWorkOrderUseCase(workOrderRepository)
+    private val getDefaultWorkOrderSettingsUseCase = GetDefaultWorkOrderSettingsUseCase(defaultWorkOrderSettingsRepository)
 
     // LiveData-объекты, с помощью которых будет отображение данных в элементах управления:
     private val _workOrder = MutableLiveData<WorkOrder>()
     val workOrder: LiveData<WorkOrder>
         get() = _workOrder
 
-    // можно ли завершить (или закрыть)?
-    private val _canFinish = MutableLiveData<Unit>()
-    val canFinish: LiveData<Unit>
+    // можно ли завершить (или закрыть)
+    private val _canFinish = MutableLiveData<Boolean>()
+    val canFinish: LiveData<Boolean>
         get() = _canFinish
 
     // для обработки ошибок:
@@ -36,56 +41,129 @@ class WorkOrderViewModel : ViewModel() {
     val errorInputNumber: LiveData<Boolean>
         get() = _errorInputNumber
 
+    var errorInputPerformer: Boolean = false
+
+    private val _showErrorMessage = MutableLiveData<Boolean>()
+    val showErrorMessage: LiveData<Boolean>
+        get() = _showErrorMessage
+
+    var closeOnSave: Boolean = false
+    var selectedJobDetail: JobDetail? = null
+    var selectedPerformerDetail: PerformerDetail? = null
+
+    var isChanged: Boolean = false
+
+    init {
+        Log.i("rustam", "сработал блок init в WorkOrderViewModel")
+    }
+
+    companion object {
+        private const val NUMBER_PREFIX = "new"
+        private const val SPACE_SYMBOL = " "
+        private const val NOT_FOUND = -1
+    }
+
     // -------------------------------------------------------------------------------
-    fun loadWorkOrder(workOrderId: Int) {
+    fun loadWorkOrder(workOrderId: String) {
         viewModelScope.launch {
             val order = getWorkOrderUseCase.getWorkOrder(workOrderId)
             order?.let {
                 _workOrder.value = it
+            } ?: run {
+                createWorkOrder()
             }
         }
     }
 
-    fun addWorkOrder(inputNumber: String?) {
-        val number = parseNumber(inputNumber)
-        val areFieldsValid = validateInput(number)
+    fun updateWorkOrder() {
+        val areFieldsValid = validateInput()
         if (areFieldsValid) {
-            viewModelScope.launch {
-                val order = WorkOrder(number = number)
-                addWorkOrderUseCase.addWorkOrder(order)
-                _canFinish.value = Unit
-            }
-        }
-    }
-
-    fun updateWorkOrder(inputNumber: String?) {
-        val number = parseNumber(inputNumber)
-        val areFieldsValid = validateInput(number)
-        if (areFieldsValid) {
-            _workOrder.value?.let {
+            _workOrder.value?.let { order ->
                 viewModelScope.launch {
-                    it.number = number
-                    updateWorkOrderUseCase.updateWorkOrder(it)
-                    _canFinish.value = Unit
+                    updatePerformersString(order)
+                    updateWorkOrderUseCase.updateWorkOrder(order)
+                    _canFinish.value = true
                 }
             }
+        } else {
+            _showErrorMessage.value = true
         }
     }
 
-    private fun parseNumber(inputNumber: String?): String {
-        return inputNumber?.trim() ?: ""
-    }
-
-    private fun validateInput(number: String): Boolean {
+    private fun validateInput(): Boolean {
         var result = true
-        if (number.isBlank()) {
-            _errorInputNumber.value = true
-            result = false
+        workOrder.value?.let { order ->
+            if (order.number.isBlank()) {
+                _errorInputNumber.value = true
+                closeOnSave = false
+                result = false
+            }
+
+            if (order.performers.isEmpty()) {
+                errorInputPerformer = true
+                closeOnSave = false
+                result = false
+            }
         }
         return result
     }
 
     fun resetErrorInputNumber() {
         _errorInputNumber.value = false
+    }
+
+    fun resetShowErrorMessage() {
+        _showErrorMessage.value = false
+    }
+
+    fun createWorkOrder() {
+        viewModelScope.launch {
+            val newWorkOrder = WorkOrder(
+                id = NUMBER_PREFIX + UUID.randomUUID().toString(),
+                isNew = true)
+
+            val defSettings = getDefaultWorkOrderSettingsUseCase.getDefaultWorkOrderSettings()
+            defSettings?.let { settings ->
+                newWorkOrder.department = settings.department
+                newWorkOrder.master = settings.master
+                settings.employee?.let { newEmployee ->
+                    val newPerformerDetail = PerformerDetail.getNewPerformerDetail(newWorkOrder)
+                    newPerformerDetail.employee = newEmployee
+                    newWorkOrder.performers.add(newPerformerDetail)
+                }
+            }
+            _workOrder.value = newWorkOrder
+        }
+    }
+
+    fun getPerformersString(order: WorkOrder): String {
+        var performersString = ""
+        for (performer in order.performers) {
+            performer.employee?.let {
+                performersString = performersString + "; " + getShortName(it.name)
+            }
+        }
+        val performerLength = performersString.length
+        if (performerLength > 2) {
+            performersString = performersString.substring(2)
+        }
+        return performersString
+    }
+
+    fun getShortName(name: String): String {
+        var shortName = ""
+
+        val firstSpacePos = name.indexOf(SPACE_SYMBOL)
+        val secondSpacePos = name.indexOf(SPACE_SYMBOL, firstSpacePos + 1)
+
+        if (secondSpacePos != NOT_FOUND) {
+            shortName = name.substring(0, secondSpacePos)
+        }
+
+        return shortName
+    }
+
+    fun updatePerformersString(order: WorkOrder) {
+        order.performersString = getPerformersString(order)
     }
 }

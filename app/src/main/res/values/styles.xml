@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <style name="picker_text_view">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/gray_850</item>
+        <item name="android:background">@drawable/text_view_border</item>
+    </style>
+
+    <style name="detail_text_view">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/gray_850</item>
+        <item name="android:background">@drawable/text_view_border</item>
+    </style>
+
+    <style name="work_order_recycler_view">
+        <item name="android:background">@color/light_blue_100</item>
+    </style>
+
+    <style name="item_list_text_view">
+        <item name="android:textColor">@color/gray_850</item>
+    </style>
+
+    <style name="picker_recycler_view">
+        <item name="android:background">@color/light_blue_100</item>
+    </style>
+
+    <style name="detail_image_button">
+        <item name="android:background">@drawable/round_outline_image_button</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="ErrorDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/red_100</item>
+    </style>
+
+    <style name="SuccessDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/green_100</item>
+    </style>
+
+    <style name="InfoDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="dialog_button">
+        <item name="android:background">@drawable/dialog_button_shape</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="text_input_edit_text">
+        <item name="android:background">@color/white</item>
+    </style>
+
+</resources>

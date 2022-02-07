@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/label_right_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="right"
+            app:constraint_referenced_ids="line_number_label_text_view, employee_label_text_view" />
+
+        <TextView
+            android:id="@+id/line_number_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="18dp"
+            android:text="@string/line_number_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/line_number_text_view"
+            style="@style/detail_text_view"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
+
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="line_number" />
+
+        <TextView
+            android:id="@+id/employee_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="18dp"
+            android:text="@string/employee_label"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/line_number_text_view"
+
+            />
+
+        <TextView
+            android:id="@+id/employee_text_view"
+            style="@style/detail_text_view"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+
+            app:layout_constraintEnd_toStartOf="@+id/employee_select_button"
+            app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
+            app:layout_constraintTop_toBottomOf="@+id/line_number_text_view"
+
+            tools:text="employee" />
+
+        <Button
+            android:id="@+id/employee_select_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+
+            android:minWidth="40dp"
+            android:text="@string/choose_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/line_number_text_view" />
+
+        <Button
+            android:id="@+id/ok_button"
+            style="@style/dialog_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="8dp"
+
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:minWidth="0dp"
+
+            android:minHeight="0dp"
+            android:text="@string/ok_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/employee_text_view" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            style="@style/dialog_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+
+            android:layout_marginBottom="16dp"
+            android:minWidth="0dp"
+
+            android:minHeight="0dp"
+
+            android:text="@string/cancel_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ok_button"
+            app:layout_constraintTop_toBottomOf="@+id/employee_text_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</FrameLayout>

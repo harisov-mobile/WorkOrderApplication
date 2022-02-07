@@ -1,7 +1,15 @@
 package ru.internetcloud.workorderapplication.domain.catalog
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+// спр-к Автоработы в 1С
+
+@Parcelize
 data class CarJob(
-    var id: String = "",
-    var code1C: String = "",
-    var name: String = ""
-)
+    val id: String = "",
+    val code1C: String = "",
+    val name: String = "",
+    val folder: String = "",
+    var isSelected: Boolean = false
+) : Parcelable

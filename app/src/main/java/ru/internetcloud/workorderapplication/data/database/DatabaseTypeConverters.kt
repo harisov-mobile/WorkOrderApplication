@@ -1,6 +1,7 @@
 package ru.internetcloud.workorderapplication.data.database
 
 import androidx.room.TypeConverter
+import java.math.BigDecimal
 import java.util.Date
 
 class DatabaseTypeConverters {
@@ -15,5 +16,15 @@ class DatabaseTypeConverters {
         return millisec?.let {
             Date(it)
         }
+    }
+
+    @TypeConverter
+    fun fromBigDecimal(value: BigDecimal?): String {
+        return value.toString()
+    }
+
+    @TypeConverter
+    fun toBigDecimal(value: String): BigDecimal {
+        return value.toBigDecimal()
     }
 }
