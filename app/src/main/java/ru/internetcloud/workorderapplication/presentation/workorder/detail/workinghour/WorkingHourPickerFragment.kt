@@ -106,7 +106,7 @@ class WorkingHourPickerFragment : DialogFragment() {
             }
         })
 
-        savedInstanceState ?:let {
+        savedInstanceState ?: let {
             viewModel.loadWorkingHourList() // самое главное!!! если это создание нового фрагмента
         }
 

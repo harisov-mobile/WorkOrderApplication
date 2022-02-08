@@ -41,6 +41,10 @@ class WorkOrderViewModel : ViewModel() {
     val errorInputNumber: LiveData<Boolean>
         get() = _errorInputNumber
 
+    private val _errorInputEmail = MutableLiveData<Boolean>()
+    val errorInputEmail: LiveData<Boolean>
+        get() = _errorInputEmail
+
     var errorInputPerformer: Boolean = false
 
     private val _showErrorMessage = MutableLiveData<Boolean>()
@@ -112,6 +116,10 @@ class WorkOrderViewModel : ViewModel() {
         _errorInputNumber.value = false
     }
 
+    fun resetErrorInputEmail() {
+        _errorInputEmail.value = false
+    }
+
     fun resetShowErrorMessage() {
         _showErrorMessage.value = false
     }
@@ -165,5 +173,9 @@ class WorkOrderViewModel : ViewModel() {
 
     fun updatePerformersString(order: WorkOrder) {
         order.performersString = getPerformersString(order)
+    }
+
+    fun setErrorEmailValue(value: Boolean) {
+        _errorInputEmail.value = value
     }
 }

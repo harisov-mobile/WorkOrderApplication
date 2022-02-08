@@ -106,7 +106,7 @@ class RepairTypePickerFragment : DialogFragment() {
             }
         })
 
-        savedInstanceState ?:let {
+        savedInstanceState ?: let {
             viewModel.loadRepairTypeList() // самое главное!!! если это создание нового фрагмента
         }
 

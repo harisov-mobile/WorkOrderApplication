@@ -120,9 +120,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         workOrderRecyclerView = view.findViewById<RecyclerView>(R.id.work_order_recycler_view)
         workOrderListAdapter = WorkOrderListAdapter()
         workOrderRecyclerView.adapter = workOrderListAdapter
-//        workOrderListAdapter.onWorkOrderClickListener = {
-//            Toast.makeText(context, "клик ${it.number}", Toast.LENGTH_SHORT).show()
-//        }
     }
 
     private fun setupClickListener() {

@@ -82,7 +82,6 @@ class EmployeePickerFragment : DialogFragment() {
 
         setupEmployeeListRecyclerView(container)
 
-
         viewModel.employeeListLiveData.observe(this, { employees ->
             employeeListAdapter = EmployeeListAdapter(employees)
             employeeListRecyclerView.adapter = employeeListAdapter
@@ -107,7 +106,7 @@ class EmployeePickerFragment : DialogFragment() {
             }
         })
 
-        savedInstanceState ?:let {
+        savedInstanceState ?: let {
             viewModel.loadEmployeeList() // самое главное!!! если это создание нового фрагмента
         }
 
@@ -160,7 +159,6 @@ class EmployeePickerFragment : DialogFragment() {
         }
         return currentPosition
     }
-
 
     private fun sendResultToFragment(result: Employee?) {
         val bundle = Bundle().apply {

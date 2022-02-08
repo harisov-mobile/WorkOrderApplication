@@ -105,7 +105,7 @@ class PartnerPickerFragment : DialogFragment() {
             }
         })
 
-        savedInstanceState ?:let {
+        savedInstanceState ?: let {
             viewModel.loadPartnerList() // самое главное!!! если это создание нового фрагмента
         }
 

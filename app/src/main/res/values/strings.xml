@@ -23,7 +23,7 @@
     <string name="error_specify_partner">Укажите заказчика</string>
 
     <string name="success_saved">Информация записана</string>
-    <string name="save_work_order_before">Заказ-наряд изменен. Перед отправкой необходимо записать заказ-наряд.</string>
+    <string name="save_work_order_before">Заказ-наряд изменен. Перед отправкой на электронную почту необходимо записать заказ-наряд.</string>
 
     <string name="save_button">Записать</string>
     <string name="close_button">Закрыть</string>
@@ -44,6 +44,7 @@
 
     <string name="error_network_wrong_server">Невозможно подключиться к серверу 1С, возможно, неправильно указан сервер.</string>
     <string name="synchro_data_label">Синхронизация данных</string>
+    <string name="send_to_email_caption_label">Отправка заказ-наряда на эл.почту</string>
 
     <string name="success_synchronization">Синхронизация данных произведена успешно.</string>
     <string name="success_autonomus">Синхронизация данных не произведена, но можно продолжить работу в автономном режиме.</string>
@@ -109,5 +110,11 @@
     <string name="synchronize_data_menu_item">Синхронизировать данные</string>
     <string name="settings_menu_item">Настройки</string>
     <string name="exit_menu_item">Выход</string>
+
+    <string name="wait">Ждите...</string>
+    <string name="fill_in_email">Укажите адрес электронной почты.</string>
+    <string name="wrong_email">Адрес эл.почты - неправильный.</string>
+    <string name="fail_send_work_order">Произошла ошибка при отправке: </string>
+    <string name="success_send_work_order">Успешно отправлено</string>
 
 </resources>

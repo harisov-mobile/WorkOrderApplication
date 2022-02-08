@@ -86,9 +86,11 @@ class SynchroRepositoryImpl private constructor(application: Application) : Sync
         return success
     }
 
-    override suspend fun sendWorkOrderByEmail(workOrder: WorkOrder): FunctionResult {
-        TODO("Not yet implemented")
+    override suspend fun sendWorkOrderToEmail(id: String): FunctionResult {
+        // TODO("Not yet implemented")
+        return FunctionResult()
     }
+
 
     override suspend fun uploadWorkOrders(): FunctionResult {
 
@@ -121,7 +123,36 @@ class SynchroRepositoryImpl private constructor(application: Application) : Sync
     }
 
     override suspend fun uploadWorkOrderById(id: String): FunctionResult {
-        TODO("Not yet implemented")
+        val result = FunctionResult()
+
+        val modifiedWorkOrder: WorkOrderWithDetails? = getModifiedWorkOrderById(id)
+        if (modifiedWorkOrder == null) {
+            result.isSuccess = false
+            result.errorMessage = "Not found work-order by id."
+        } else {
+            Log.i("rustam", "начинаем uploadWorkOrderById")
+
+            result.amountOfModifiedWorkOrders = 1
+
+            val listWO: MutableList<WorkOrderWithDetails> = mutableListOf()
+            listWO.add(modifiedWorkOrder)
+
+            try {
+                val uploadWorkOrderResponse = ApiClient.getInstance().client.uploadWorkOrders(listWO)
+                Log.i("rustam", "id={$id} после  ApiClient.getInstance().client.uploadWorkOrders()")
+                if (uploadWorkOrderResponse.uploadResult.isSuccess) {
+                    result.isSuccess = true
+                } else {
+                    result.errorMessage = uploadWorkOrderResponse.uploadResult.errorMessage
+                }
+            } catch (e: Exception) {
+                // ничего не делаю
+                Log.i("rustam", "ошибка при выгрузке заказ-наряда по id" + e.toString())
+                result.errorMessage = e.toString()
+            }
+        }
+
+        return result
     }
 
     suspend fun deleteAllWorkOrders() {
@@ -180,6 +211,10 @@ class SynchroRepositoryImpl private constructor(application: Application) : Sync
 
     suspend fun getModifiedWorkOrders(): List<WorkOrderWithDetails> {
         return appDao.getModifiedWorkOrders()
+    }
+
+    suspend fun getModifiedWorkOrderById(id: String): WorkOrderWithDetails? {
+        return appDao.getModifiedWorkOrderById(id)
     }
 
     override suspend fun getModifiedWorkOrdersQuantity(): Int {

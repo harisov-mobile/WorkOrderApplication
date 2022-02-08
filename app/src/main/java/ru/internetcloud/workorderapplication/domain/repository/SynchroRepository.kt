@@ -14,5 +14,5 @@ interface SynchroRepository {
 
     suspend fun loadDefaultWorkOrderSettings(): Boolean // из сервера 1С
 
-    suspend fun sendWorkOrderByEmail(workOrder: WorkOrder): FunctionResult
+    suspend fun sendWorkOrderToEmail(id: String): FunctionResult
 }

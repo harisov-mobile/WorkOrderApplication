@@ -2,7 +2,9 @@ package ru.internetcloud.workorderapplication.presentation.workorder.detail
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +24,7 @@ import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
+import ru.internetcloud.workorderapplication.presentation.sendemail.SendWorkOrderByIdToEmailDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.car.CarPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.employee.EmployeePickerFragment
@@ -159,6 +162,15 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             binding.numberTextInputLayout.error = message
         }
 
+        viewModel.errorInputEmail.observe(viewLifecycleOwner) { isError ->
+            val message = if (isError) {
+                getString(R.string.wrong_email)
+            } else {
+                null
+            }
+            binding.emailTextInputLayout.error = message
+        }
+
         viewModel.showErrorMessage.observe(viewLifecycleOwner) { show ->
             if (show) {
                 var errorMessage = ""
@@ -274,6 +286,19 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                     viewModel.workOrder.value?.isModified = true
                     viewModel.isChanged = true
                 }
+            }
+        })
+
+        binding.emailEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel.resetErrorInputEmail()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
             }
         })
 
@@ -712,7 +737,25 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                     MessageDialogFragment.newInstance(getString(R.string.save_work_order_before))
                         .show(childFragmentManager, null)
                 } else {
-                    TODO("Отправить заказ-наряд")
+                    if (TextUtils.isEmpty(binding.emailEditText.text)) {
+                        viewModel.setErrorEmailValue(true)
+                        MessageDialogFragment.newInstance(getString(R.string.fill_in_email))
+                            .show(childFragmentManager, null)
+                    } else {
+                        val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(binding.emailEditText.text).matches()
+                        if (isEmailValid) {
+                            // показать фрагмент
+                            val emailAddress: String = parseText(binding.emailEditText.text?.toString())
+
+                            SendWorkOrderByIdToEmailDialogFragment
+                                .newInstance(order.id, emailAddress)
+                                .show(childFragmentManager, null)
+                        } else {
+                            viewModel.setErrorEmailValue(true)
+                            MessageDialogFragment.newInstance(getString(R.string.wrong_email))
+                            .show(childFragmentManager, null)
+                        }
+                    }
                 }
             }
         }

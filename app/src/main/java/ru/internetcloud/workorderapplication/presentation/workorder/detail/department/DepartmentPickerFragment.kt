@@ -106,7 +106,7 @@ class DepartmentPickerFragment : DialogFragment() {
             }
         })
 
-        savedInstanceState ?:let {
+        savedInstanceState ?: let {
             viewModel.loadDepartmentList() // самое главное!!! если это создание нового фрагмента
         }
 

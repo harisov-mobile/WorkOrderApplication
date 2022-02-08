@@ -106,7 +106,7 @@ class CarJobPickerFragment : DialogFragment() {
             }
         })
 
-        savedInstanceState ?:let {
+        savedInstanceState ?: let {
             viewModel.loadCarJobList() // самое главное!!! если это создание нового фрагмента
         }
 

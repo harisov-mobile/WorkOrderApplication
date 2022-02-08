@@ -17,10 +17,8 @@ import ru.internetcloud.workorderapplication.domain.catalog.CarJob
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.common.ValidateInputResult
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
-import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.carjob.CarJobPickerFragment
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.workinghour.WorkingHourPickerFragment
 import java.math.BigDecimal
 
@@ -85,7 +83,6 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
         } ?: run {
             throw RuntimeException("There are not arguments in JobDetailFragment")
         }
-
 
         val alertDialogBuilder = AlertDialog.Builder(activity)
         alertDialogBuilder.setTitle(R.string.job_detail_title)
