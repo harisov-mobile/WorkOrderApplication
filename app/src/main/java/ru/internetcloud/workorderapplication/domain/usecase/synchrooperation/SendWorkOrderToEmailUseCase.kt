@@ -5,7 +5,7 @@ import ru.internetcloud.workorderapplication.domain.repository.SynchroRepository
 
 class SendWorkOrderToEmailUseCase(private val synchroRepository: SynchroRepository) {
 
-    suspend fun sendWorkOrderToEmail(id: String): FunctionResult {
-        return synchroRepository.sendWorkOrderToEmail(id)
+    suspend fun sendWorkOrderToEmail(id: String, email: String): FunctionResult {
+        return synchroRepository.sendWorkOrderToEmail(id, email)
     }
 }

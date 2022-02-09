@@ -24,6 +24,7 @@
 
     <string name="success_saved">Информация записана</string>
     <string name="save_work_order_before">Заказ-наряд изменен. Перед отправкой на электронную почту необходимо записать заказ-наряд.</string>
+    <string name="can_not_send_work_order">Этот заказ-наряд может быть отправлен на эл.почту только после Синхронизации данных.</string>
 
     <string name="save_button">Записать</string>
     <string name="close_button">Закрыть</string>

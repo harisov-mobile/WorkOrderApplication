@@ -36,7 +36,7 @@ class SendWorkOrderByIdToEmailViewModel: ViewModel() {
     val errorMessage: LiveData<String>
         get() = _errorMessage
 
-    fun uploadWorkOrderById(id: String) {
+    fun sendWorkOrderToEmailById(id: String, email: String) {
         viewModelScope.launch {
             _errorMessage.value = ""
             _currentSituation.value = R.string.wait
@@ -44,11 +44,7 @@ class SendWorkOrderByIdToEmailViewModel: ViewModel() {
             val result = uploadWorkOrderByIdUseCase.uploadWorkOrderById(id)
 
             if (result.isSuccess) {
-                // val sendResult = sendWorkOrderToEmailUseCase.sendWorkOrderToEmail(id)
-                val sendResult = FunctionResult(errorMessage = "ReRe")
-                sendResult.isSuccess = true
-                delay(5000)
-
+                val sendResult = sendWorkOrderToEmailUseCase.sendWorkOrderToEmail(id, email)
                 if (sendResult.isSuccess) {
                     _currentSituation.value = R.string.success_send_work_order
                 } else {

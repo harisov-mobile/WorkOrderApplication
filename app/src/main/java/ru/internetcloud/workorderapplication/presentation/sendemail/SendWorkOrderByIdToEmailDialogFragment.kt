@@ -2,7 +2,9 @@ package ru.internetcloud.workorderapplication.presentation.sendemail
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
@@ -70,7 +72,7 @@ class SendWorkOrderByIdToEmailDialogFragment : DialogFragment() {
 
         observeViewModel()
 
-        viewModel.uploadWorkOrderById(viewModel.id)
+        viewModel.sendWorkOrderToEmailById(viewModel.id, viewModel.email)
 
         return alertDialogBuilder.create()
     }
@@ -94,12 +96,24 @@ class SendWorkOrderByIdToEmailDialogFragment : DialogFragment() {
 
     private fun observeViewModel() {
         viewModel.currentSituation.observe(this) { currentInt ->
+
+            var isError = false
+
             if (currentInt > 0) {
                 var errorText = ""
                 viewModel.errorMessage.value?.let {
-                    errorText = it
+                    if (!TextUtils.isEmpty(it)) {
+                        errorText = it
+                        isError = true
+                    }
                 }
-                synchroResultTextView.text = getString(currentInt) + " " + errorText
+
+                if (isError) {
+                    synchroResultTextView.setTextColor(Color.RED)
+                    synchroResultTextView.text = getString(currentInt) + "\n" + errorText
+                } else {
+                    synchroResultTextView.text = getString(currentInt)
+                }
             } else {
                 synchroResultTextView.text = ""
             }
