@@ -1,7 +1,6 @@
 package ru.internetcloud.workorderapplication.domain.repository
 
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
-import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 
 interface SynchroRepository {
     suspend fun getModifiedWorkOrdersQuantity(): Int

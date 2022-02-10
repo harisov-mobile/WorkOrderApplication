@@ -24,7 +24,7 @@
 
     <string name="success_saved">Информация записана</string>
     <string name="save_work_order_before">Заказ-наряд изменен. Перед отправкой на электронную почту необходимо записать заказ-наряд.</string>
-    <string name="can_not_send_work_order">Этот заказ-наряд может быть отправлен на эл.почту только после Синхронизации данных.</string>
+    <string name="can_not_send_work_order">Этот заказ-наряд может быть отправлен на эл.почту только после Синхронизации данных. В списке заказ-нарядов в меню выберите Синхронизировать данные.</string>
 
     <string name="save_button">Записать</string>
     <string name="close_button">Закрыть</string>
@@ -110,6 +110,7 @@
     <string name="search_menu_item">Поиск</string>
     <string name="synchronize_data_menu_item">Синхронизировать данные</string>
     <string name="settings_menu_item">Настройки</string>
+    <string name="about_menu_item">О программе</string>
     <string name="exit_menu_item">Выход</string>
 
     <string name="wait">Ждите...</string>
@@ -117,5 +118,8 @@
     <string name="wrong_email">Адрес эл.почты - неправильный.</string>
     <string name="fail_send_work_order">Произошла ошибка при отправке: </string>
     <string name="success_send_work_order">Успешно отправлено</string>
+
+    <string name="about_application">%1$s \n \n Версия 1.</string>
+    <string name="under_constraction">В разработке.</string>
 
 </resources>

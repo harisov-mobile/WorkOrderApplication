@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
 
 class WorkOrderListFragment : Fragment(), FragmentResultListener {
@@ -101,7 +102,24 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
             }
 
             R.id.synchronize_data_menu_item -> {
-                hostActivity?.onLaunchDataSynchronization() // запустить фрагмент, где будет сихнронизация данных из 1С
+                hostActivity?.onLaunchDataSynchronization() // запустить фрагмент, где будет синхронизация данных из 1С
+                return true
+            }
+
+            R.id.settings_menu_item -> {
+                MessageDialogFragment.newInstance(
+                    getString(R.string.under_constraction)
+                )
+                    .show(childFragmentManager, null)
+                return true
+            }
+
+            R.id.about_menu_item -> {
+                // запустить фрагмент, где будет о программе
+                MessageDialogFragment.newInstance(
+                    getString(R.string.about_application, getString(R.string.app_name))
+                )
+                    .show(childFragmentManager, null)
                 return true
             }
 

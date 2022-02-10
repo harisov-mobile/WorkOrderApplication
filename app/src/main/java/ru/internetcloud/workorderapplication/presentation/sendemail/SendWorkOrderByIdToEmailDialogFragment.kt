@@ -22,7 +22,6 @@ class SendWorkOrderByIdToEmailDialogFragment : DialogFragment() {
     private lateinit var emailTextView: TextView
     private lateinit var progressBar: ProgressBar
 
-
     companion object {
 
         private const val ORDER_ID = "order_id"
@@ -48,7 +47,6 @@ class SendWorkOrderByIdToEmailDialogFragment : DialogFragment() {
                 viewModel.id = arg.getString(ORDER_ID, "") ?: throw RuntimeException("Id can not be NULL.")
                 viewModel.email = arg.getString(EMAIL, "") ?: throw RuntimeException("Email can not be NULL.")
             }
-
         } ?: run {
             throw RuntimeException("There are not arguments in SendWorkOrderByIdToEmailDialogFragment")
         }
