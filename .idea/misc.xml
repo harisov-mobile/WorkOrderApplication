@@ -6,6 +6,7 @@
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/drawable-v24/ic_add_24.xml" value="0.38" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/drawable/dialog_button.xml" value="0.3859375" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/drawable/dialog_button_shape.xml" value="0.3859375" />
+        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.2921875" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/drawable/round_outline.xml" value="0.2921875" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/drawable/round_outline_image_button.xml" value="0.2921875" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/drawable/text_view_border.xml" value="0.2921875" />
@@ -47,8 +48,8 @@
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_work_order_list.xml" value="0.25" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_work_order_list_posted.xml" value="0.2760416666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_work_order_list_selected.xml" value="0.2760416666666667" />
-        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_working_hour_list.xml" value="0.3697916666666667" />
-        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_working_hour_list_selected.xml" value="0.3697916666666667" />
+        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_working_hour_list.xml" value="0.4427083333333333" />
+        <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/item_working_hour_list_selected.xml" value="0.2727272668160684" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/temp.xml" value="0.3697916666666667" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/test1.xml" value="0.2727272668160684" />
         <entry key="..\:/repo/Android/RUSTAM/WorkOrderApplication/app/src/main/res/layout/test3.xml" value="0.3697916666666667" />

@@ -38,9 +38,11 @@ class WorkingHourListAdapter(var workingHours: List<WorkingHour>) : RecyclerView
         if (workingHour.isSelected) {
             val currentBinding = binding as ItemWorkingHourListSelectedBinding
             currentBinding.nameTextView.text = workingHour.name
+            currentBinding.priceTextView.text = workingHour.price.toString()
         } else {
             val currentBinding = binding as ItemWorkingHourListBinding
             currentBinding.nameTextView.text = workingHour.name
+            currentBinding.priceTextView.text = workingHour.price.toString()
         }
 
         binding.root.setOnClickListener {

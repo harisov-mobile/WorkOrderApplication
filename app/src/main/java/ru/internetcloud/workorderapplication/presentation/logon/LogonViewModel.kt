@@ -258,10 +258,10 @@ class LogonViewModel(private val app: Application) : AndroidViewModel(app) {
         addCarJobListUseCase.addCarJobList(carJobList)
 
         val carList = mutableListOf<Car>()
-        val car1 = Car(id = "1", name = "CAR1", vin = "vin_001", manufacturer = "CLASS")
+        val car1 = Car(id = "1", name = "CAR1", vin = "vin_001", manufacturer = "CLASS", owner = partner1)
         carList.add(car1)
-        carList.add(Car(id = "2", name = "CAR2", vin = "vin_002", manufacturer = "MACDON"))
-        carList.add(Car(id = "3", name = "CAR3", vin = "vin_003", manufacturer = "AMAZONE"))
+        carList.add(Car(id = "2", name = "CAR2", vin = "vin_002", manufacturer = "MACDON", owner = partner1))
+        carList.add(Car(id = "3", name = "CAR3", vin = "vin_003", manufacturer = "AMAZONE", owner = partner1))
         addCarListUseCase.addCarList(carList)
 
         val workingHourList = mutableListOf<WorkingHour>()
