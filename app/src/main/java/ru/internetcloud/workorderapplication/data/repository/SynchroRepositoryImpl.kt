@@ -55,7 +55,7 @@ class SynchroRepositoryImpl private constructor(application: Application) : Sync
 
         if (success) {
             deleteAllJobDetails()
-            addJobDetailList(workOrderResponse.jobDetails)
+            addJobDetailListfromDTO(workOrderResponse.jobDetails)
 
             deleteAllPerformers()
             addPerformersList(workOrderResponse.performerDetails)
@@ -172,11 +172,11 @@ class SynchroRepositoryImpl private constructor(application: Application) : Sync
         return result
     }
 
-    suspend fun deleteAllWorkOrders() {
+    override suspend fun deleteAllWorkOrders() {
         appDao.deleteAllWorkOrders()
     }
 
-    suspend fun deleteAllJobDetails() {
+    override suspend fun deleteAllJobDetails() {
         appDao.deleteAllJobDetails()
     }
 
@@ -184,11 +184,11 @@ class SynchroRepositoryImpl private constructor(application: Application) : Sync
         appDao.deleteAllDefaultWorkOrderSettings()
     }
 
-    suspend fun deleteAllPerformers() {
+    override suspend fun deleteAllPerformers() {
         appDao.deleteAllPerformers()
     }
 
-    suspend fun addJobDetailList(jobDetails: List<JobDetailDTO>) {
+    suspend fun addJobDetailListfromDTO(jobDetails: List<JobDetailDTO>) {
 
         val jobDetailDbModelList: MutableList<JobDetailDbModel> = mutableListOf()
 

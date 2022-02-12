@@ -5,4 +5,6 @@ import ru.internetcloud.workorderapplication.domain.document.DefaultWorkOrderSet
 interface DefaultWorkOrderSettingsRepository {
 
     suspend fun getDefaultWorkOrderSettings(): DefaultWorkOrderSettings?
+
+    suspend fun deleteAllDefaultWorkOrderSettings()
 }

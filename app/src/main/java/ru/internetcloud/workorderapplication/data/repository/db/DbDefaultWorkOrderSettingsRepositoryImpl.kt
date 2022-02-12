@@ -37,4 +37,8 @@ class DbDefaultWorkOrderSettingsRepositoryImpl private constructor(application: 
 
         return defaultWorkOrderSettings
     }
+
+    override suspend fun deleteAllDefaultWorkOrderSettings() {
+        appDao.deleteAllDefaultWorkOrderSettings()
+    }
 }

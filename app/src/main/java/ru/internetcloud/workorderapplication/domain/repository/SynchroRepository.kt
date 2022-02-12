@@ -14,4 +14,10 @@ interface SynchroRepository {
     suspend fun loadDefaultWorkOrderSettings(): Boolean // из сервера 1С
 
     suspend fun sendWorkOrderToEmail(id: String, email: String): FunctionResult
+
+    suspend fun deleteAllJobDetails()
+
+    suspend fun deleteAllPerformers()
+
+    suspend fun deleteAllWorkOrders()
 }

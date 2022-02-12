@@ -229,7 +229,7 @@ class DataSynchronizationFragmentViewModel : ViewModel() {
     suspend fun refreshDefaultWorkOrderSettings() {
         _currentSituation.value = "Получение настроек заполнения из 1С"
         Log.i("rustam", "Получение настроек заполнения из 1С")
-        val success = loadDefaultWorkOrderSettingsUseCase.loadDefaultWorkOrderSettings()
+        val success = loadDefaultWorkOrderSettingsUseCase.loadDefaultWorkOrderSettings() // удаление происходит внутри
         Log.i("rustam", "loadDefaultWorkOrderSettings success = " + success.toString())
     }
 
