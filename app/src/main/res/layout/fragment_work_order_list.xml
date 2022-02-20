@@ -14,19 +14,21 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_work_order_list"></androidx.recyclerview.widget.RecyclerView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="40dp"
-            android:layout_marginBottom="40dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="40dp"
 
-            android:clickable="true"
-            android:contentDescription="@string/add_work_order_fab_description"
+        android:backgroundTint="@color/light_blue_300"
 
-            android:focusable="true"
+        android:clickable="true"
 
-            app:srcCompat="@drawable/ic_baseline_add_24" />
+        android:contentDescription="@string/add_work_order_fab_description"
+        android:focusable="true"
+        app:backgroundTintMode="add"
+        app:srcCompat="@drawable/ic_baseline_add_24" />
 
     </FrameLayout>

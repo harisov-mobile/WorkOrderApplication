@@ -9,7 +9,5 @@ interface WorkOrderRepository {
 
     suspend fun getWorkOrder(workOrderId: String): WorkOrder?
 
-    suspend fun addWorkOrder(workOrder: WorkOrder)
-
     suspend fun updateWorkOrder(workOrder: WorkOrder)
 }

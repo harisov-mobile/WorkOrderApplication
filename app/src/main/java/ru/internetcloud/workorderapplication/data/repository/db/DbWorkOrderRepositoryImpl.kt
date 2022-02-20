@@ -31,10 +31,6 @@ class DbWorkOrderRepositoryImpl private constructor(application: Application) : 
         }
     }
 
-    override suspend fun addWorkOrder(workOrder: WorkOrder) {
-        workOrderDao.addWorkOrder(workOrderMapper.fromEntityToDbModel(workOrder))
-    }
-
     override suspend fun updateWorkOrder(workOrder: WorkOrder) {
         // т.к. onConflict = OnConflictStrategy.REPLACE, то это будет и UPDATE тоже
         workOrderDao.addWorkOrder(workOrderMapper.fromEntityToDbModel(workOrder))

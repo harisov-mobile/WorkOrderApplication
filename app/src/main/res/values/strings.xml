@@ -1,120 +1,126 @@
 <resources>
-    <string name="app_name">WorkOrderApplication</string>
-    <string name="number_hint">Номер</string>
-    <string name="date_hint">Дата</string>
-    <string name="request_reason_hint">Причина обращения</string>
-    <string name="comment_hint">Комментарий</string>
-    <string name="email_hint">Адрес эл.почты</string>
-    <string name="mileage_hint">Наработка</string>
+    <string name="app_name">Work Orders Agro-Service</string>
+    <string name="number_hint">Number</string>
+    <string name="date_hint">Date</string>
+    <string name="request_reason_hint">Request reason</string>
+    <string name="comment_hint">Comment</string>
+    <string name="email_hint">E-mail</string>
+    <string name="mileage_hint">Mileage</string>
 
-    <string name="cancel_button">Отмена</string>
-    <string name="clear_button">Очистить</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="clear_button">Clear</string>
     <string name="ok_button">Ок</string>
-    <string name="yes_button">Да</string>
-    <string name="no_button">Нет</string>
+    <string name="yes_button">Yes</string>
+    <string name="no_button">No</string>
 
     <string name="add_work_order_fab_description">Add work order</string>
 
-    <string name="error_input_number">Ошибка! Не указан номер</string>
-    <string name="error_input_performer">Ошибка! Не указан исполнитель</string>
-    <string name="error_input_server">Укажите сервер</string>
-    <string name="error_input_login">Укажите пользователя</string>
-    <string name="error_input_password">Укажите пароль</string>
-    <string name="error_specify_partner">Укажите заказчика</string>
+    <string name="error_input_number">Error! No number specified</string>
+    <string name="error_input_performer">Error! No performer specified</string>
+    <string name="error_input_server">Specify server</string>
+    <string name="error_input_login">Specify user</string>
+    <string name="error_input_password">Enter a password</string>
+    <string name="error_specify_partner">Specify the client</string>
 
-    <string name="success_saved">Информация записана</string>
-    <string name="save_work_order_before">Заказ-наряд изменен. Перед отправкой на электронную почту необходимо записать заказ-наряд.</string>
+    <string name="success_saved">Information saved</string>
+    <string name="save_work_order_before">The work order has been changed. Before sending by e-mail, you must write down the work order.</string>
+    <string name="can_not_send_work_order">This work order can only be sent by e-mail after Data Synchronization. In the list of work orders on the menu, select Synchronize Data.</string>
 
-    <string name="save_button">Записать</string>
-    <string name="close_button">Закрыть</string>
-    <string name="exit_button">Закрыть</string>
+    <string name="save_button">Save</string>
+    <string name="close_button">Close</string>
+    <string name="exit_button">Exit</string>
 
-    <string name="work_order_presentation">Заказ-наряд № %s от %s</string>
+    <string name="work_order_presentation">Work order № %s from %s</string>
 
-    <string name="server">Сервер</string>
-    <string name="login">Пользователь</string>
-    <string name="password">Пароль</string>
+    <string name="server">Server</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
 
-    <string name="enter">Войти</string>
-    <string name="cancel">Отмена</string>
+    <string name="enter">Enter</string>
+    <string name="cancel">Cancel</string>
 
-    <string name="server_hint">Сервер</string>
-    <string name="login_hint">Пользователь</string>
-    <string name="password_hint">Пароль</string>
+    <string name="server_hint">Server</string>
+    <string name="login_hint">Login</string>
+    <string name="password_hint">Password</string>
 
-    <string name="error_network_wrong_server">Невозможно подключиться к серверу 1С, возможно, неправильно указан сервер.</string>
-    <string name="synchro_data_label">Синхронизация данных</string>
-    <string name="send_to_email_caption_label">Отправка заказ-наряда на эл.почту</string>
+    <string name="error_network_wrong_server">It is impossible to connect to the 1C server, the server may be incorrectly specified.</string>
+    <string name="synchro_data_label">Data synchronization</string>
+    <string name="send_to_email_caption_label">Sending an order by e-mail</string>
 
-    <string name="success_synchronization">Синхронизация данных произведена успешно.</string>
-    <string name="success_autonomus">Синхронизация данных не произведена, но можно продолжить работу в автономном режиме.</string>
-    <string name="fail_synchronization">Ошибка при синхронизации данных. Дальнейшая работа программы невозможна.</string>
+    <string name="success_synchronization">Data synchronization completed successfully.</string>
+    <string name="success_autonomus">The data has not been synchronized, but you can continue working offline.</string>
+    <string name="fail_synchronization">The data has not been synchronized, but you can continue working offline.</string>
 
-    <string name="success_upload_work_orders">Заказ-наряды успешно выгружены на сервер 1С.</string>
-    <string name="no_work_orders_to_upload">Нет заказ-нарядов, которые нужно выгрузить на сервер 1С.</string>
+    <string name="success_upload_work_orders">Work orders have been successfully uploaded to the 1C server.</string>
+    <string name="no_work_orders_to_upload">There are no work orders to be uploaded to the 1C server.</string>
 
-    <string name="fail_upload_work_orders">Ошибка при выгрузке заказ-нарядов: </string>
-    <string name="partner_label">Заказчик:</string>
+    <string name="fail_upload_work_orders">Error while uploading work orders:</string>
+    <string name="partner_label">Client:</string>
     <string name="choose_label">...</string>
-    <string name="send_to_email_label">Отправить заказ-наряд на эл.почту</string>
-    <string name="car_label">СХТ:</string>
-    <string name="repair_type_label">Вид ремонта:</string>
-    <string name="master_type_label">Бригадир:</string>
-    <string name="department_label">Цех:</string>
-    <string name="performer_details_label">Исполнители:</string>
-    <string name="job_detals_label">Работы:</string>
-    <string name="date_label">Дата:</string>
-    <string name="line_number_label">No строки:</string>
-    <string name="car_job_label">Работа:</string>
-    <string name="employee_label">Исполнитель:</string>
-    <string name="working_hour_label">Нормо-час:</string>
-    <string name="quantity_label">Количество:</string>
-    <string name="time_norm_label">Норма вр.:</string>
-    <string name="sum_label">Сумма:</string>
+    <string name="send_to_email_label">Send work order to e-mail</string>
+    <string name="car_label">Car:</string>
+    <string name="repair_type_label">Repair type:</string>
+    <string name="master_type_label">Master:</string>
+    <string name="department_label">Department:</string>
+    <string name="performer_details_label">Performers:</string>
+    <string name="job_detals_label">Works:</string>
+    <string name="date_label">Date:</string>
+    <string name="line_number_label">Line No.:</string>
+    <string name="car_job_label">Work:</string>
+    <string name="employee_label">Performer:</string>
+    <string name="working_hour_label">Working hour:</string>
+    <string name="quantity_label">Quantity:</string>
+    <string name="time_norm_label">Time norm:</string>
+    <string name="sum_label">Sum:</string>
 
-    <string name="partner_picker_title">Выберите заказчика</string>
-    <string name="car_job_picker_title">Выберите автоработу</string>
-    <string name="employee_picker_title">Выберите сотрудника</string>
-    <string name="working_fragment_picker_title">Выберите нормо-час</string>
-    <string name="car_picker_title">Выберите СХТ</string>
-    <string name="repair_type_picker_title">Выберите вид ремонта</string>
-    <string name="department_picker_title">Выберите цех</string>
-    <string name="search_label">Поиск</string>
-    <string name="search_button">Найти</string>
-    <string name="add_performers_button">Добавить</string>
-    <string name="delete_performers_button">Удалить</string>
+    <string name="partner_picker_title">Coose a client</string>
+    <string name="car_job_picker_title">Select auto work</string>
+    <string name="employee_picker_title">Choose an employee</string>
+    <string name="working_fragment_picker_title">Choose a working hour</string>
+    <string name="car_picker_title">Choose a car</string>
+    <string name="repair_type_picker_title">Choose a repair type</string>
+    <string name="department_picker_title">Choose a department</string>
+    <string name="search_label">Search</string>
+    <string name="search_button">Search</string>
+    <string name="add_performers_button">Add</string>
 
-    <string name="job_detail_quantity">Количество = %1$s</string>
+    <string name="job_detail_quantity">Quantity = %1$s</string>
     <string name="job_detail_line_number">No = %1$s</string>
-    <string name="job_detail_sum">Сумма = %1$s</string>
-    <string name="job_detail_time_norm">Норма времени = %1$s</string>
-    <string name="job_detail_working_hour">Нормочас = %1$s</string>
-    <string name="error_empty_working_hour">Ошибка! Не заполнен нормо-час</string>
-    <string name="error_empty_car_job">Ошибка! Не заполнена работа</string>
-    <string name="error_empty_employee">Ошибка! Не заполнен исполнитель</string>
+    <string name="job_detail_sum">Sum = %1$s</string>
+    <string name="job_detail_time_norm">Time norm = %1$s</string>
+    <string name="job_detail_working_hour">Working hour = %1$s</string>
+    <string name="error_empty_working_hour">Error! The working hour is not filled.</string>
+    <string name="error_empty_car_job">Error! The work is not filled.</string>
+    <string name="error_empty_employee">Error! The performer is not filled.</string>
 
-    <string name="job_detail_title">Работы</string>
-    <string name="edit_job_detail_not_selected">Не выбрана строка работ для редактирования.</string>
-    <string name="delete_job_detail_not_selected">Не выбрана строка работ для удаления.</string>
+    <string name="job_detail_title">Works</string>
+    <string name="edit_job_detail_not_selected">Job line not selected for editing.</string>
+    <string name="delete_job_detail_not_selected">Job line not selected for deletion.</string>
 
-    <string name="performer_detail_title">Исполнители</string>
-    <string name="edit_performer_detail_not_selected">Не выбрана строка исполнителей для редактирования.</string>
-    <string name="delete_performer_detail_not_selected">Не выбрана строка исполнителей для удаления.</string>
+    <string name="performer_detail_title">Performers</string>
+    <string name="edit_performer_detail_not_selected">There is no performer selected for editing.</string>
+    <string name="delete_performer_detail_not_selected">There is no performer selected for deletion.</string>
 
-    <string name="data_was_changed_question">Данные были изменены. Сохранить изменения?</string>
-    <string name="delete_job_detail_question">Удалить строку работ?</string>
-    <string name="delete_performer_detail_question">Удалить строку исполнителей?</string>
-    <string name="exit_from_app_question">Выйти из %1$s?</string>
+    <string name="data_was_changed_question">The data has been changed. Save changes?</string>
+    <string name="delete_job_detail_question">Delete line of works?</string>
+    <string name="delete_performer_detail_question">Delete line of performers?</string>
+    <string name="exit_from_app_question">Do you want to exit the %1$s?</string>
 
-    <string name="search_menu_item">Поиск</string>
-    <string name="synchronize_data_menu_item">Синхронизировать данные</string>
-    <string name="settings_menu_item">Настройки</string>
-    <string name="exit_menu_item">Выход</string>
+    <string name="search_menu_item">Search</string>
+    <string name="synchronize_data_menu_item">Synchronize data</string>
+    <string name="settings_menu_item">Settings</string>
+    <string name="about_menu_item">About</string>
+    <string name="exit_menu_item">Exit</string>
 
-    <string name="wait">Ждите...</string>
-    <string name="fill_in_email">Укажите адрес электронной почты.</string>
-    <string name="wrong_email">Адрес эл.почты - неправильный.</string>
-    <string name="fail_send_work_order">Произошла ошибка при отправке: </string>
-    <string name="success_send_work_order">Успешно отправлено</string>
+    <string name="wait">Wait...</string>
+    <string name="fill_in_email">Enter an email address.</string>
+    <string name="wrong_email">Email address is incorrect.</string>
+    <string name="fail_send_work_order">An error occurred while sending:</string>
+    <string name="success_send_work_order">Successfully sent</string>
+
+    <string name="about_application">%1$s \n \n Version 1.</string>
+    <string name="under_constraction">Under construction.</string>
+    <string name="delete_performers_button">Delete</string>
+    <string name="total_sum_label">Total:</string>
 
 </resources>

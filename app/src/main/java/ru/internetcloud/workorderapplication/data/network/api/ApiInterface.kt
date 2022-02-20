@@ -5,12 +5,13 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import ru.internetcloud.workorderapplication.data.entity.WorkOrderWithDetails
 import ru.internetcloud.workorderapplication.data.network.dto.*
+import ru.internetcloud.workorderapplication.domain.common.SendRequest
 
 interface ApiInterface {
 
     companion object {
-        private const val PUB_NAME = "alpha2"
-        // private const val PUB_NAME = "test"
+        // private const val PUB_NAME = "alpha2"
+        private const val PUB_NAME = "rabota"
     }
 
     @GET(PUB_NAME + "/hs/rest/auth/check")
@@ -44,5 +45,8 @@ interface ApiInterface {
     suspend fun getDefaultWorkOrderSettings(): DefaultWorkOrderSettingsResponse
 
     @POST(PUB_NAME + "/hs/rest/document/workorder/upload")
-    suspend fun uploadWorkOrders(@Body listWO: List<WorkOrderWithDetails>): UploadWorkOrderResponse
+    suspend fun uploadWorkOrders(@Body listWO: List<WorkOrderWithDetails>): UploadResponse
+
+    @POST(PUB_NAME + "/hs/rest/send_work_order_to_email")
+    suspend fun sendWorkOrderToEmail(@Body sendRequest: SendRequest): UploadResponse
 }

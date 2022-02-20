@@ -38,10 +38,35 @@
 
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/second_guideline"
                 app:layout_constraintStart_toEndOf="@id/start_guideline"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="name" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/second_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="210dp" />
+
+            <TextView
+                android:id="@+id/price_text_view"
+                style="@style/item_list_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/second_guideline"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="price" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

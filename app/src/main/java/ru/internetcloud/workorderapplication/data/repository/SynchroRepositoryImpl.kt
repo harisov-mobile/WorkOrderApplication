@@ -14,7 +14,7 @@ import ru.internetcloud.workorderapplication.data.mapper.WorkOrderMapper
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.*
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
-import ru.internetcloud.workorderapplication.domain.document.WorkOrder
+import ru.internetcloud.workorderapplication.domain.common.SendRequest
 import ru.internetcloud.workorderapplication.domain.repository.SynchroRepository
 
 class SynchroRepositoryImpl private constructor(application: Application) : SynchroRepository {
@@ -55,7 +55,7 @@ class SynchroRepositoryImpl private constructor(application: Application) : Sync
 
         if (success) {
             deleteAllJobDetails()
-            addJobDetailList(workOrderResponse.jobDetails)
+            addJobDetailListfromDTO(workOrderResponse.jobDetails)
 
             deleteAllPerformers()
             addPerformersList(workOrderResponse.performerDetails)
@@ -86,11 +86,28 @@ class SynchroRepositoryImpl private constructor(application: Application) : Sync
         return success
     }
 
-    override suspend fun sendWorkOrderToEmail(id: String): FunctionResult {
-        // TODO("Not yet implemented")
-        return FunctionResult()
-    }
+    override suspend fun sendWorkOrderToEmail(id: String, email: String): FunctionResult {
 
+        val result = FunctionResult()
+
+        val sendRequest = SendRequest(id = id, email = email)
+
+        try {
+            val uploadResponse = ApiClient.getInstance().client.sendWorkOrderToEmail(sendRequest)
+            Log.i("rustam", "id={$id} после  ApiClient.getInstance().client.sendWorkOrderToEmail()")
+            if (uploadResponse.uploadResult.isSuccess) {
+                result.isSuccess = true
+            } else {
+                result.errorMessage = uploadResponse.uploadResult.errorMessage
+            }
+        } catch (e: Exception) {
+            // ничего не делаю
+            Log.i("rustam", "ошибка при отправке заказ-наряда на эл.почту по id" + e.toString())
+            result.errorMessage = e.toString()
+        }
+
+        return result
+    }
 
     override suspend fun uploadWorkOrders(): FunctionResult {
 
@@ -127,8 +144,8 @@ class SynchroRepositoryImpl private constructor(application: Application) : Sync
 
         val modifiedWorkOrder: WorkOrderWithDetails? = getModifiedWorkOrderById(id)
         if (modifiedWorkOrder == null) {
-            result.isSuccess = false
-            result.errorMessage = "Not found work-order by id."
+            // не надо отправлять заказ-наряд на сервер 1С. так как в него не вносились изменения
+            result.isSuccess = true
         } else {
             Log.i("rustam", "начинаем uploadWorkOrderById")
 
@@ -155,11 +172,11 @@ class SynchroRepositoryImpl private constructor(application: Application) : Sync
         return result
     }
 
-    suspend fun deleteAllWorkOrders() {
+    override suspend fun deleteAllWorkOrders() {
         appDao.deleteAllWorkOrders()
     }
 
-    suspend fun deleteAllJobDetails() {
+    override suspend fun deleteAllJobDetails() {
         appDao.deleteAllJobDetails()
     }
 
@@ -167,11 +184,11 @@ class SynchroRepositoryImpl private constructor(application: Application) : Sync
         appDao.deleteAllDefaultWorkOrderSettings()
     }
 
-    suspend fun deleteAllPerformers() {
+    override suspend fun deleteAllPerformers() {
         appDao.deleteAllPerformers()
     }
 
-    suspend fun addJobDetailList(jobDetails: List<JobDetailDTO>) {
+    suspend fun addJobDetailListfromDTO(jobDetails: List<JobDetailDTO>) {
 
         val jobDetailDbModelList: MutableList<JobDetailDbModel> = mutableListOf()
 

@@ -19,6 +19,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/about_menu_item"
+        android:title="@string/about_menu_item"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/exit_menu_item"
         android:title="@string/exit_menu_item"
         app:showAsAction="never" />

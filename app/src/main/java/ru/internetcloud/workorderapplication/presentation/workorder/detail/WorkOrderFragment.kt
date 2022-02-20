@@ -34,6 +34,7 @@ import ru.internetcloud.workorderapplication.presentation.workorder.detail.partn
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailListAdapter
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.repairtype.RepairTypePickerFragment
+import java.math.BigDecimal
 import java.util.*
 
 class WorkOrderFragment : Fragment(), FragmentResultListener {
@@ -477,6 +478,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         )
                         order.isModified = true
                         viewModel.isChanged = true
+
+                        refreshTotalSum()
                     }
                 }
             }
@@ -485,7 +488,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 val performerDetail: PerformerDetail? = result.getParcelable(ARG_PERFORMER_DETAIL)
                 performerDetail?.let { currentPerformerDetail ->
                     viewModel.workOrder.value?.let { order ->
-                        val foundPerformerDetail = order.performers.find { it.lineNumber == currentPerformerDetail.lineNumber }
+                        val foundPerformerDetail =
+                            order.performers.find { it.lineNumber == currentPerformerDetail.lineNumber }
                         foundPerformerDetail?.let {
                             it.copyFields(currentPerformerDetail)
                         } ?: let {
@@ -497,7 +501,11 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                             order.performers.add(currentPerformerDetail)
                             viewModel.selectedPerformerDetail = currentPerformerDetail
                             viewModel.selectedPerformerDetail?.isSelected = true
-                            binding.performerDetailsRecyclerView.scrollToPosition(order.performers.indexOf(currentPerformerDetail))
+                            binding.performerDetailsRecyclerView.scrollToPosition(
+                                order.performers.indexOf(
+                                    currentPerformerDetail
+                                )
+                            )
                         }
 
                         performerDetailListAdapter.notifyItemChanged(
@@ -537,6 +545,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         jobDetailListAdapter.notifyDataSetChanged()
                         order.isModified = true
                         viewModel.isChanged = true
+
+                        refreshTotalSum()
                     }
                 }
             }
@@ -737,23 +747,28 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                     MessageDialogFragment.newInstance(getString(R.string.save_work_order_before))
                         .show(childFragmentManager, null)
                 } else {
-                    if (TextUtils.isEmpty(binding.emailEditText.text)) {
-                        viewModel.setErrorEmailValue(true)
-                        MessageDialogFragment.newInstance(getString(R.string.fill_in_email))
+                    if (order.isNew) {
+                        MessageDialogFragment.newInstance(getString(R.string.can_not_send_work_order))
                             .show(childFragmentManager, null)
                     } else {
-                        val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(binding.emailEditText.text).matches()
-                        if (isEmailValid) {
-                            // показать фрагмент
-                            val emailAddress: String = parseText(binding.emailEditText.text?.toString())
-
-                            SendWorkOrderByIdToEmailDialogFragment
-                                .newInstance(order.id, emailAddress)
+                        if (TextUtils.isEmpty(binding.emailEditText.text)) {
+                            viewModel.setErrorEmailValue(true)
+                            MessageDialogFragment.newInstance(getString(R.string.fill_in_email))
                                 .show(childFragmentManager, null)
                         } else {
-                            viewModel.setErrorEmailValue(true)
-                            MessageDialogFragment.newInstance(getString(R.string.wrong_email))
-                            .show(childFragmentManager, null)
+                            val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(binding.emailEditText.text).matches()
+                            if (isEmailValid) {
+                                // показать фрагмент
+                                val emailAddress: String = parseText(binding.emailEditText.text?.toString())
+
+                                SendWorkOrderByIdToEmailDialogFragment
+                                    .newInstance(order.id, emailAddress)
+                                    .show(childFragmentManager, null)
+                            } else {
+                                viewModel.setErrorEmailValue(true)
+                                MessageDialogFragment.newInstance(getString(R.string.wrong_email))
+                                    .show(childFragmentManager, null)
+                            }
                         }
                     }
                 }
@@ -782,6 +797,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         // Табличная часть Работы:
         setupJobDetailListRecyclerView(order.jobDetails)
+
+        refreshTotalSum()
 
         modifyAllowed = true
 
@@ -833,6 +850,21 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             }
         } ?: let {
             activity?.supportFragmentManager?.popBackStack()
+        }
+    }
+
+    private fun getSumFromJobDetail(jobDetails: List<JobDetail>): BigDecimal {
+        var sum = BigDecimal.ZERO
+        for (jobDet in jobDetails) {
+            sum = sum + jobDet.sum
+        }
+        return sum
+    }
+
+    private fun refreshTotalSum() {
+        // показать итоговую сумму:
+        viewModel.workOrder.value?.let { order ->
+            binding.totalSumTextView.setText(getSumFromJobDetail(order.jobDetails).toString())
         }
     }
 }

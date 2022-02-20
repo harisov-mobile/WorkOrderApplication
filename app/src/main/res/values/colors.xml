@@ -21,6 +21,7 @@
 
     <color name="light_blue_900">#01579B</color>
     <color name="light_blue_800">#0277BD</color>
+    <color name="light_blue_500">#03A9F4</color>
     <color name="light_blue_A200">#40C4FF</color>
     <color name="light_blue_200">#81D4FA</color>
     <color name="light_blue_50">#E1F5FE</color>
@@ -32,5 +33,6 @@
 
     <color name="light_green_200">#C5E1A5</color>
     <color name="teal_100">#B2DFDB</color>
+    <color name="light_blue_300">#4FC3F7</color>
 
 </resources>

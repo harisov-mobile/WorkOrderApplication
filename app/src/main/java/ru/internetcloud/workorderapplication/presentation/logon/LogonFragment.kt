@@ -19,6 +19,8 @@ class LogonFragment : Fragment() {
     // интерфейс обратного вызова
     interface Callbacks {
         fun onLaunchDataSynchronization()
+
+        fun onLaunchWorkOrderList()
     }
 
     private var hostActivity: Callbacks? = null
@@ -185,6 +187,21 @@ class LogonFragment : Fragment() {
                 }
                 viewModel.resetCanContinue()
                 hostActivity?.onLaunchDataSynchronization() // запустить фрагмент, где будет сихнронизация данных из 1С
+            }
+        }
+
+        // демо-режим:
+        viewModel.demoMode.observe(viewLifecycleOwner) {
+            if (it) {
+                viewModel.resetCanContinue()
+                viewModel.loadDemoData()
+            }
+        }
+
+        // демо-режим - переход в список Заказ-нарядов:
+        viewModel.canContinueDemoMode.observe(viewLifecycleOwner) {
+            if (it) {
+                hostActivity?.onLaunchWorkOrderList() // запустить фрагмент, где будет сихнронизация данных из 1С
             }
         }
     }

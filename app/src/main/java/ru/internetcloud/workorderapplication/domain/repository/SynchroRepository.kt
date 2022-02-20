@@ -1,7 +1,6 @@
 package ru.internetcloud.workorderapplication.domain.repository
 
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
-import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 
 interface SynchroRepository {
     suspend fun getModifiedWorkOrdersQuantity(): Int
@@ -14,5 +13,11 @@ interface SynchroRepository {
 
     suspend fun loadDefaultWorkOrderSettings(): Boolean // из сервера 1С
 
-    suspend fun sendWorkOrderToEmail(id: String): FunctionResult
+    suspend fun sendWorkOrderToEmail(id: String, email: String): FunctionResult
+
+    suspend fun deleteAllJobDetails()
+
+    suspend fun deleteAllPerformers()
+
+    suspend fun deleteAllWorkOrders()
 }
