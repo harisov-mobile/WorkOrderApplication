@@ -34,6 +34,7 @@ import ru.internetcloud.workorderapplication.presentation.workorder.detail.partn
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailListAdapter
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.repairtype.RepairTypePickerFragment
+import java.math.BigDecimal
 import java.util.*
 
 class WorkOrderFragment : Fragment(), FragmentResultListener {
@@ -477,6 +478,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         )
                         order.isModified = true
                         viewModel.isChanged = true
+
+                        refreshTotalSum()
                     }
                 }
             }
@@ -542,6 +545,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         jobDetailListAdapter.notifyDataSetChanged()
                         order.isModified = true
                         viewModel.isChanged = true
+
+                        refreshTotalSum()
                     }
                 }
             }
@@ -793,6 +798,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         // Табличная часть Работы:
         setupJobDetailListRecyclerView(order.jobDetails)
 
+        refreshTotalSum()
+
         modifyAllowed = true
 
         if (order.posted) {
@@ -843,6 +850,21 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             }
         } ?: let {
             activity?.supportFragmentManager?.popBackStack()
+        }
+    }
+
+    private fun getSumFromJobDetail(jobDetails: List<JobDetail>): BigDecimal {
+        var sum = BigDecimal.ZERO
+        for (jobDet in jobDetails) {
+            sum = sum + jobDet.sum
+        }
+        return sum
+    }
+
+    private fun refreshTotalSum() {
+        // показать итоговую сумму:
+        viewModel.workOrder.value?.let { order ->
+            binding.totalSumTextView.setText(getSumFromJobDetail(order.jobDetails).toString())
         }
     }
 }

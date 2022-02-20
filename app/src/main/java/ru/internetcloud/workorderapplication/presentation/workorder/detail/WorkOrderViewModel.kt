@@ -164,7 +164,7 @@ class WorkOrderViewModel : ViewModel() {
         val firstSpacePos = name.indexOf(SPACE_SYMBOL)
         val secondSpacePos = name.indexOf(SPACE_SYMBOL, firstSpacePos + 1)
 
-        if (secondSpacePos ==  NOT_FOUND) {
+        if (secondSpacePos == NOT_FOUND) {
             shortName = name
         } else {
             shortName = name.substring(0, secondSpacePos)

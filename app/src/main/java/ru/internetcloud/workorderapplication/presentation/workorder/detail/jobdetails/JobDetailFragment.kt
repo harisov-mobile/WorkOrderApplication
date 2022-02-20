@@ -188,6 +188,24 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
         cancelButton.setOnClickListener {
             dialog?.cancel()
         }
+
+        quantityEditText.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                val currentValue = quantityEditText.text.toString()
+                if (currentValue.equals("0")) {
+                    quantityEditText.setText("")
+                }
+            }
+        }
+
+        timeNormEditText.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                val currentValue = timeNormEditText.text.toString()
+                if (currentValue.equals("0")) {
+                    timeNormEditText.setText("")
+                }
+            }
+        }
     }
 
     private fun calculateSum() {

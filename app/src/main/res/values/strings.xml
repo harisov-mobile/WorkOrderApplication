@@ -63,7 +63,7 @@
     <string name="master_type_label">Master:</string>
     <string name="department_label">Department:</string>
     <string name="performer_details_label">Performers:</string>
-    <string name="job_detals_label">Work:</string>
+    <string name="job_detals_label">Works:</string>
     <string name="date_label">Date:</string>
     <string name="line_number_label">Line No.:</string>
     <string name="car_job_label">Work:</string>
@@ -121,5 +121,6 @@
     <string name="about_application">%1$s \n \n Version 1.</string>
     <string name="under_constraction">Under construction.</string>
     <string name="delete_performers_button">Delete</string>
+    <string name="total_sum_label">Total:</string>
 
 </resources>

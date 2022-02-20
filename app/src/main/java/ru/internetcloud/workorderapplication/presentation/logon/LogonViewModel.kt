@@ -292,7 +292,7 @@ class LogonViewModel(private val app: Application) : AndroidViewModel(app) {
                 quantity = quantity,
                 timeNorm = timeNorm,
                 workingHour = wh1,
-                sum = sum,
+                sum = sum
             )
         )
 

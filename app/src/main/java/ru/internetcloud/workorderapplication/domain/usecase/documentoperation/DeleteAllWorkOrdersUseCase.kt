@@ -8,4 +8,3 @@ class DeleteAllWorkOrdersUseCase(private val synchroRepository: SynchroRepositor
         return synchroRepository.deleteAllWorkOrders()
     }
 }
-

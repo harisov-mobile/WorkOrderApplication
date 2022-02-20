@@ -101,4 +101,5 @@
     <string name="about_application">"%1$s \n \n Версия 1."</string>
     <string name="under_constraction">В разработке.</string>
     <string name="choose_label">...</string>
+    <string name="total_sum_label">Итого:</string>
 </resources>

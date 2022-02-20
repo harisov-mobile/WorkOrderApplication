@@ -7,4 +7,3 @@ class DeleteAllDefaultWorkOrderSettingsUseCase(private val settingsRepository: D
         return settingsRepository.deleteAllDefaultWorkOrderSettings()
     }
 }
-

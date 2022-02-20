@@ -420,6 +420,34 @@
                     tools:listitem="@layout/item_job_detail_list" />
 
                 <TextView
+                    android:id="@+id/total_sum_label_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/total_sum_label"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/job_details_recycler_view" />
+
+                <TextView
+                    android:id="@+id/total_sum_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:text=""
+                    android:textStyle="bold"
+
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/job_details_recycler_view" />
+
+
+                <TextView
                     android:id="@+id/master_label_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -427,7 +455,7 @@
                     android:layout_marginTop="18dp"
                     android:text="@string/master_type_label"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/job_details_recycler_view" />
+                    app:layout_constraintTop_toBottomOf="@+id/total_sum_label_text_view" />
 
                 <TextView
                     android:id="@+id/master_text_view"
@@ -438,7 +466,7 @@
 
                     app:layout_constraintEnd_toStartOf="@+id/master_select_button"
                     app:layout_constraintStart_toEndOf="@+id/master_label_text_view"
-                    app:layout_constraintTop_toBottomOf="@+id/job_details_recycler_view"
+                    app:layout_constraintTop_toBottomOf="@+id/total_sum_label_text_view"
 
                     tools:text="master" />
 
@@ -452,7 +480,7 @@
 
                     android:text="@string/choose_label"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/job_details_recycler_view" />
+                    app:layout_constraintTop_toBottomOf="@+id/total_sum_label_text_view" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
