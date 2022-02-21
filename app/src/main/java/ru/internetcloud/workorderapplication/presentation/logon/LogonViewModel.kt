@@ -1,10 +1,9 @@
 package ru.internetcloud.workorderapplication.presentation.logon
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.data.repository.AuthRepositoryImpl
@@ -28,14 +27,41 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.rep
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.DeleteRepairTypesUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.AddWorkingHourListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.DeleteWorkingHourListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.*
+import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.DeleteAllJobDetailsUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.DeleteAllPerformersUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.DeleteAllWorkOrdersUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.UpdateWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.CheckAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.SetAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.settingsoperation.DeleteAllDefaultWorkOrderSettingsUseCase
 import java.math.BigDecimal
 import java.util.*
+import javax.inject.Inject
 
-class LogonViewModel(private val app: Application) : AndroidViewModel(app) {
+class LogonViewModel @Inject constructor(
+    private val setAuthParametersUseCase: SetAuthParametersUseCase,
+    private val checkAuthParametersUseCase: CheckAuthParametersUseCase,
+    private val deleteRepairTypesUseCase: DeleteRepairTypesUseCase,
+    private val deletePartnersUseCase: DeletePartnerListUseCase,
+    private val deleteCarJobsUseCase: DeleteCarJobsUseCase,
+    private val deleteDepartmentsUseCase: DeleteDepartmentsUseCase,
+    private val deleteEmployeesUseCase: DeleteEmployeesUseCase,
+    private val deleteCarsUseCase: DeleteCarListUseCase,
+    private val deleteWorkingHoursUseCase: DeleteWorkingHourListUseCase,
+    private val deleteAllDefaultWorkOrderSettingsUseCase: DeleteAllDefaultWorkOrderSettingsUseCase,
+    private val deleteAllJobDetailsUseCase: DeleteAllJobDetailsUseCase,
+    private val deleteAllPerformersUseCase: DeleteAllPerformersUseCase,
+    private val deleteAllWorkOrdersUseCase: DeleteAllWorkOrdersUseCase,
+
+    private val addRepairTypeListUseCase: AddRepairTypeListUseCase,
+    private val addPartnerListUseCase: AddPartnerListUseCase,
+    private val addEmployeeListUseCase: AddEmployeeListUseCase,
+    private val addCarJobListUseCase: AddCarJobListUseCase,
+    private val addCarListUseCase: AddCarListUseCase,
+    private val addDepartmentUseCase: AddDepartmentUseCase,
+    private val addWorkingHourListUseCase: AddWorkingHourListUseCase,
+    private val updateWorkOrderUseCase: UpdateWorkOrderUseCase
+) : ViewModel() {
 
     companion object {
         private const val BEGIN_SIZE = 4
@@ -46,43 +72,43 @@ class LogonViewModel(private val app: Application) : AndroidViewModel(app) {
     }
 
     // Репозитории
-    private val repository = AuthRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbRepairTypeRepository = DbRepairTypeRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbCarJobRepository = DbCarJobRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbDepartmentRepository = DbDepartmentRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbEmployeeRepository = DbEmployeeRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbPartnerRepository = DbPartnerRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbCarRepository = DbCarRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbWorkingHourRepository = DbWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbDefaultWorkOrderSettingsRepository =
-        DbDefaultWorkOrderSettingsRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val synchroRepository = SynchroRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbWorkOrderRepository = DbWorkOrderRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val repository = AuthRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbRepairTypeRepository = DbRepairTypeRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbCarJobRepository = DbCarJobRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbDepartmentRepository = DbDepartmentRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbEmployeeRepository = DbEmployeeRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbPartnerRepository = DbPartnerRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbCarRepository = DbCarRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbWorkingHourRepository = DbWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbDefaultWorkOrderSettingsRepository =
+//        DbDefaultWorkOrderSettingsRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val synchroRepository = SynchroRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbWorkOrderRepository = DbWorkOrderRepositoryImpl.get() // требуется инъекция зависимостей!!!
 
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
-    private val setAuthParametersUseCase = SetAuthParametersUseCase(repository)
-    private val checkAuthParametersUseCase = CheckAuthParametersUseCase(repository)
-    private val deleteRepairTypesUseCase = DeleteRepairTypesUseCase(dbRepairTypeRepository)
-    private val deletePartnersUseCase = DeletePartnerListUseCase(dbPartnerRepository)
-    private val deleteCarJobsUseCase = DeleteCarJobsUseCase(dbCarJobRepository)
-    private val deleteDepartmentsUseCase = DeleteDepartmentsUseCase(dbDepartmentRepository)
-    private val deleteEmployeesUseCase = DeleteEmployeesUseCase(dbEmployeeRepository)
-    private val deleteCarsUseCase = DeleteCarListUseCase(dbCarRepository)
-    private val deleteWorkingHoursUseCase = DeleteWorkingHourListUseCase(dbWorkingHourRepository)
-    private val deleteAllDefaultWorkOrderSettingsUseCase =
-        DeleteAllDefaultWorkOrderSettingsUseCase(dbDefaultWorkOrderSettingsRepository)
-    private val deleteAllJobDetailsUseCase = DeleteAllJobDetailsUseCase(synchroRepository)
-    private val deleteAllPerformersUseCase = DeleteAllPerformersUseCase(synchroRepository)
-    private val deleteAllWorkOrdersUseCase = DeleteAllWorkOrdersUseCase(synchroRepository)
-
-    private val addRepairTypeListUseCase = AddRepairTypeListUseCase(dbRepairTypeRepository)
-    private val addPartnerListUseCase = AddPartnerListUseCase(dbPartnerRepository)
-    private val addEmployeeListUseCase = AddEmployeeListUseCase(dbEmployeeRepository)
-    private val addCarJobListUseCase = AddCarJobListUseCase(dbCarJobRepository)
-    private val addCarListUseCase = AddCarListUseCase(dbCarRepository)
-    private val addDepartmentUseCase = AddDepartmentUseCase(dbDepartmentRepository)
-    private val addWorkingHourListUseCase = AddWorkingHourListUseCase(dbWorkingHourRepository)
-    private val updateWorkOrderUseCase = UpdateWorkOrderUseCase(dbWorkOrderRepository)
+//    private val setAuthParametersUseCase = SetAuthParametersUseCase(repository)
+//    private val checkAuthParametersUseCase = CheckAuthParametersUseCase(repository)
+//    private val deleteRepairTypesUseCase = DeleteRepairTypesUseCase(dbRepairTypeRepository)
+//    private val deletePartnersUseCase = DeletePartnerListUseCase(dbPartnerRepository)
+//    private val deleteCarJobsUseCase = DeleteCarJobsUseCase(dbCarJobRepository)
+//    private val deleteDepartmentsUseCase = DeleteDepartmentsUseCase(dbDepartmentRepository)
+//    private val deleteEmployeesUseCase = DeleteEmployeesUseCase(dbEmployeeRepository)
+//    private val deleteCarsUseCase = DeleteCarListUseCase(dbCarRepository)
+//    private val deleteWorkingHoursUseCase = DeleteWorkingHourListUseCase(dbWorkingHourRepository)
+//    private val deleteAllDefaultWorkOrderSettingsUseCase =
+//        DeleteAllDefaultWorkOrderSettingsUseCase(dbDefaultWorkOrderSettingsRepository)
+//    private val deleteAllJobDetailsUseCase = DeleteAllJobDetailsUseCase(synchroRepository)
+//    private val deleteAllPerformersUseCase = DeleteAllPerformersUseCase(synchroRepository)
+//    private val deleteAllWorkOrdersUseCase = DeleteAllWorkOrdersUseCase(synchroRepository)
+//
+//    private val addRepairTypeListUseCase = AddRepairTypeListUseCase(dbRepairTypeRepository)
+//    private val addPartnerListUseCase = AddPartnerListUseCase(dbPartnerRepository)
+//    private val addEmployeeListUseCase = AddEmployeeListUseCase(dbEmployeeRepository)
+//    private val addCarJobListUseCase = AddCarJobListUseCase(dbCarJobRepository)
+//    private val addCarListUseCase = AddCarListUseCase(dbCarRepository)
+//    private val addDepartmentUseCase = AddDepartmentUseCase(dbDepartmentRepository)
+//    private val addWorkingHourListUseCase = AddWorkingHourListUseCase(dbWorkingHourRepository)
+//    private val updateWorkOrderUseCase = UpdateWorkOrderUseCase(dbWorkOrderRepository)
 
     private val _canContinue = MutableLiveData<Boolean>()
     val canContinue: LiveData<Boolean>

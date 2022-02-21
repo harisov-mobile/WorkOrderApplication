@@ -10,8 +10,9 @@ import ru.internetcloud.workorderapplication.domain.common.AuthParameters
 import ru.internetcloud.workorderapplication.domain.common.AuthResult
 import ru.internetcloud.workorderapplication.domain.common.AuthorizationPreferences
 import ru.internetcloud.workorderapplication.domain.repository.AuthRepository
+import javax.inject.Inject
 
-class AuthRepositoryImpl private constructor(private val application: Application) : AuthRepository {
+class AuthRepositoryImpl @Inject constructor(private val application: Application) : AuthRepository {
 
     private var authParameters: AuthParameters = AuthParameters()
 
