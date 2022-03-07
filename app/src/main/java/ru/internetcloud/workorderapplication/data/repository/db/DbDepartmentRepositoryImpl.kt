@@ -1,28 +1,29 @@
 package ru.internetcloud.workorderapplication.data.repository.db
 
-import android.app.Application
-import ru.internetcloud.workorderapplication.data.database.AppDatabase
+import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.mapper.DepartmentMapper
 import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.repository.DepartmentRepository
+import javax.inject.Inject
 
-class DbDepartmentRepositoryImpl private constructor(application: Application) : DepartmentRepository {
-
-    private val appDao = AppDatabase.getInstance(application).appDao()
-    private val departmentMapper = DepartmentMapper()
+class DbDepartmentRepositoryImpl @Inject constructor(
+    // application: Application
+    private val appDao: AppDao,
+    private val departmentMapper: DepartmentMapper
+) : DepartmentRepository {
 
     companion object {
-        private var instance: DbDepartmentRepositoryImpl? = null
-
-        fun initialize(application: Application) {
-            if (instance == null) {
-                instance = DbDepartmentRepositoryImpl(application)
-            }
-        }
-
-        fun get(): DbDepartmentRepositoryImpl {
-            return instance ?: throw RuntimeException("DbDepartmentRepositoryImpl must be initialized.")
-        }
+//        private var instance: DbDepartmentRepositoryImpl? = null
+//
+//        fun initialize(application: Application) {
+//            if (instance == null) {
+//                instance = DbDepartmentRepositoryImpl(application)
+//            }
+//        }
+//
+//        fun get(): DbDepartmentRepositoryImpl {
+//            return instance ?: throw RuntimeException("DbDepartmentRepositoryImpl must be initialized.")
+//        }
     }
 
     override suspend fun getDepartmentList(): List<Department> {

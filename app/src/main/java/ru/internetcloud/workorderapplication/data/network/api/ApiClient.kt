@@ -14,9 +14,8 @@ class ApiClient private constructor(private val authParameters: AuthParameters) 
         private var instance: ApiClient? = null
 
         fun initialize(authParameters: AuthParameters) {
-            if (instance == null) {
-                instance = ApiClient(authParameters)
-            }
+            // каждый раз надо новый экземпляр класса создавать со своими новыми параметрами
+            instance = ApiClient(authParameters)
         }
 
         fun getInstance(): ApiClient {
@@ -36,6 +35,10 @@ class ApiClient private constructor(private val authParameters: AuthParameters) 
                 .build()
         }
 
+    // необходимо эту переменную поместить ниже, чем okHttpClient
+    // т.к. сначала должна пройти инициализация переменной okHttpClient
+    val client: ApiInterface = getRetrofit().create(ApiInterface::class.java)
+
     private fun getRetrofit(): Retrofit {
         val gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()
         val retrofit = Retrofit.Builder()
@@ -45,6 +48,4 @@ class ApiClient private constructor(private val authParameters: AuthParameters) 
             .build()
         return retrofit
     }
-
-    val client: ApiInterface = getRetrofit().create(ApiInterface::class.java)
 }

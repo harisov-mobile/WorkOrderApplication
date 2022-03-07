@@ -4,11 +4,12 @@ import ru.internetcloud.workorderapplication.data.entity.JobDetailDbModel
 import ru.internetcloud.workorderapplication.data.entity.JobDetailWithRequisities
 import ru.internetcloud.workorderapplication.data.network.dto.JobDetailDTO
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
+import javax.inject.Inject
 
-class JobDetailMapper {
-
-    private val carJobMapper = CarJobMapper()
-    private val workingHourMapper = WorkingHourMapper()
+class JobDetailMapper @Inject constructor(
+    private val carJobMapper: CarJobMapper,
+    private val workingHourMapper: WorkingHourMapper
+) {
 
     fun fromDtoToDbModel(jobDetailDTO: JobDetailDTO): JobDetailDbModel {
         return JobDetailDbModel(
@@ -24,15 +25,15 @@ class JobDetailMapper {
     }
 
     fun fromDbToEntity(jobDetailWithRequisities: JobDetailWithRequisities): JobDetail {
-            return JobDetail(
-                id = jobDetailWithRequisities.jobDetailDbModel.id,
-                lineNumber = jobDetailWithRequisities.jobDetailDbModel.lineNumber,
-                carJob = carJobMapper.fromDbModelToEntityWithNull(jobDetailWithRequisities.carJob),
-                quantity = jobDetailWithRequisities.jobDetailDbModel.quantity,
-                timeNorm = jobDetailWithRequisities.jobDetailDbModel.timeNorm,
-                workingHour = workingHourMapper.fromDbModelToEntityWithNull(jobDetailWithRequisities.workingHour),
-                sum = jobDetailWithRequisities.jobDetailDbModel.sum
-            )
+        return JobDetail(
+            id = jobDetailWithRequisities.jobDetailDbModel.id,
+            lineNumber = jobDetailWithRequisities.jobDetailDbModel.lineNumber,
+            carJob = carJobMapper.fromDbModelToEntityWithNull(jobDetailWithRequisities.carJob),
+            quantity = jobDetailWithRequisities.jobDetailDbModel.quantity,
+            timeNorm = jobDetailWithRequisities.jobDetailDbModel.timeNorm,
+            workingHour = workingHourMapper.fromDbModelToEntityWithNull(jobDetailWithRequisities.workingHour),
+            sum = jobDetailWithRequisities.jobDetailDbModel.sum
+        )
     }
 
     fun fromListDbToListEntity(list: List<JobDetailWithRequisities>): MutableList<JobDetail> {

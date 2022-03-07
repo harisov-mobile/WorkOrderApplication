@@ -3,8 +3,9 @@ package ru.internetcloud.workorderapplication.data.mapper
 import ru.internetcloud.workorderapplication.data.entity.PartnerDbModel
 import ru.internetcloud.workorderapplication.data.network.dto.PartnerDTO
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
+import javax.inject.Inject
 
-class PartnerMapper {
+class PartnerMapper @Inject constructor() {
 
     fun fromDtoToEntity(partnerDTO: PartnerDTO): Partner {
         return Partner(

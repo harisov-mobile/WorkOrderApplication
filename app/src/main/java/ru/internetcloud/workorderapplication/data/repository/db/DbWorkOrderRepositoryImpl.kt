@@ -1,34 +1,35 @@
 package ru.internetcloud.workorderapplication.data.repository.db
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import ru.internetcloud.workorderapplication.data.database.AppDatabase
+import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.mapper.JobDetailMapper
 import ru.internetcloud.workorderapplication.data.mapper.PerformerDetailMapper
 import ru.internetcloud.workorderapplication.data.mapper.WorkOrderMapper
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
+import javax.inject.Inject
 
-class DbWorkOrderRepositoryImpl private constructor(application: Application) : WorkOrderRepository {
-
-    private val workOrderDao = AppDatabase.getInstance(application).appDao()
-    private val workOrderMapper = WorkOrderMapper()
-    private val jobDetailMapper = JobDetailMapper()
-    private val performerDetailMapper = PerformerDetailMapper()
+class DbWorkOrderRepositoryImpl @Inject constructor(
+    // application: Application
+    private val workOrderDao: AppDao,
+    private val workOrderMapper: WorkOrderMapper,
+    private val jobDetailMapper: JobDetailMapper,
+    private val performerDetailMapper: PerformerDetailMapper
+) : WorkOrderRepository {
 
     companion object {
-        private var instance: DbWorkOrderRepositoryImpl? = null
-
-        fun initialize(application: Application) {
-            if (instance == null) {
-                instance = DbWorkOrderRepositoryImpl(application)
-            }
-        }
-
-        fun get(): DbWorkOrderRepositoryImpl {
-            return instance ?: throw RuntimeException("DbWorkOrderRepositoryImpl must be initialized.")
-        }
+//        private var instance: DbWorkOrderRepositoryImpl? = null
+//
+//        fun initialize(application: Application) {
+//            if (instance == null) {
+//                instance = DbWorkOrderRepositoryImpl(application)
+//            }
+//        }
+//
+//        fun get(): DbWorkOrderRepositoryImpl {
+//            return instance ?: throw RuntimeException("DbWorkOrderRepositoryImpl must be initialized.")
+//        }
     }
 
     override suspend fun updateWorkOrder(workOrder: WorkOrder) {
@@ -38,12 +39,22 @@ class DbWorkOrderRepositoryImpl private constructor(application: Application) : 
         // сначала удалим ТЧ Работы, относящиеся к данному ордеру
         workOrderDao.deleteJobDetailsByWorkOrder(workOrder.id)
         // потом перезапишем Работы
-        workOrderDao.addJobDetailList(jobDetailMapper.fromListEntityToListDbModel(list = workOrder.jobDetails, workOrderId = workOrder.id))
+        workOrderDao.addJobDetailList(
+            jobDetailMapper.fromListEntityToListDbModel(
+                list = workOrder.jobDetails,
+                workOrderId = workOrder.id
+            )
+        )
 
         // сначала удалим ТЧ Исполнители, относящиеся к данному ордеру
         workOrderDao.deletePerformersDetailsByWorkOrder(workOrder.id)
         // потом перезапишем Исполнители
-        workOrderDao.addPerformerDetailList(performerDetailMapper.fromListEntityToListDbModel(list = workOrder.performers, workOrderId = workOrder.id))
+        workOrderDao.addPerformerDetailList(
+            performerDetailMapper.fromListEntityToListDbModel(
+                list = workOrder.performers,
+                workOrderId = workOrder.id
+            )
+        )
     }
 
     override fun getWorkOrderList(): LiveData<List<WorkOrder>> {

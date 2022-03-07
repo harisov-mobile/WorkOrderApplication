@@ -3,8 +3,9 @@ package ru.internetcloud.workorderapplication.data.mapper
 import ru.internetcloud.workorderapplication.data.entity.CarJobDbModel
 import ru.internetcloud.workorderapplication.data.network.dto.CarJobDTO
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
+import javax.inject.Inject
 
-class CarJobMapper {
+class CarJobMapper @Inject constructor() {
 
     fun fromDtoToEntity(carJobDTO: CarJobDTO): CarJob {
         return CarJob(

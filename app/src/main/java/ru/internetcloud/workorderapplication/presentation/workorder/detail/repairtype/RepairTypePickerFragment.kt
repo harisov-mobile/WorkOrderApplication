@@ -11,7 +11,10 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
+import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
+import javax.inject.Inject
 
 class RepairTypePickerFragment : DialogFragment() {
 
@@ -36,6 +39,14 @@ class RepairTypePickerFragment : DialogFragment() {
         }
     }
 
+    // даггер:
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as WorkOrderApp).component
+    }
+
     private var requestKey = ""
     private var argRepairTypeName = ""
 
@@ -47,8 +58,10 @@ class RepairTypePickerFragment : DialogFragment() {
     private lateinit var searchEditText: EditText
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        // даггер:
+        component.inject(this)
 
-        viewModel = ViewModelProvider(this).get(RepairTypeListViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(RepairTypeListViewModel::class.java)
 
         arguments?.let { arg ->
             viewModel.selectedRepairType ?: let {

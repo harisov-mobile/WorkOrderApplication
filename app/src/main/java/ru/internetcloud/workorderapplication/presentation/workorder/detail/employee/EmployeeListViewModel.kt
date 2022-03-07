@@ -5,19 +5,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.data.repository.db.DbEmployeeRepositoryImpl
+import ru.internetcloud.workorderapplication.di.qualifiers.usecase.DbGetEmployeeListUseCaseQualifier
 import ru.internetcloud.workorderapplication.domain.catalog.Employee
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.GetEmployeeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.SearchEmployeesUseCase
+import javax.inject.Inject
 
-class EmployeeListViewModel : ViewModel() {
+class EmployeeListViewModel @Inject constructor(
+    @DbGetEmployeeListUseCaseQualifier
+    private val getEmployeeListUseCase: GetEmployeeListUseCase,
+    private val searchEmployeesUseCase: SearchEmployeesUseCase
+) : ViewModel() {
 
     var selectedEmployee: Employee? = null
 
-    private val repository = DbEmployeeRepositoryImpl.get()
-
-    private val getEmployeeListUseCase = GetEmployeeListUseCase(repository)
-    private val searchEmployeesUseCase = SearchEmployeesUseCase(repository)
+    // private val repository = DbEmployeeRepositoryImpl.get()
 
     private val _employeeListLiveData = MutableLiveData<List<Employee>>()
     val employeeListLiveData: LiveData<List<Employee>>

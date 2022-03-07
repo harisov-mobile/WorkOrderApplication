@@ -5,24 +5,25 @@ import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.EmployeeResponse
 import ru.internetcloud.workorderapplication.domain.catalog.Employee
 import ru.internetcloud.workorderapplication.domain.repository.EmployeeRepository
+import javax.inject.Inject
 
-class RemoteEmployeeRepositoryImpl private constructor() : EmployeeRepository {
+class RemoteEmployeeRepositoryImpl @Inject constructor(
+    private val employeeMapper: EmployeeMapper
+) : EmployeeRepository {
 
     companion object {
-        private var instance: RemoteEmployeeRepositoryImpl? = null
-
-        fun initialize() {
-            if (instance == null) {
-                instance = RemoteEmployeeRepositoryImpl()
-            }
-        }
-
-        fun get(): RemoteEmployeeRepositoryImpl {
-            return instance ?: throw RuntimeException("RemoteEmployeeRepositoryImpl must be initialized.")
-        }
+//        private var instance: RemoteEmployeeRepositoryImpl? = null
+//
+//        fun initialize() {
+//            if (instance == null) {
+//                instance = RemoteEmployeeRepositoryImpl()
+//            }
+//        }
+//
+//        fun get(): RemoteEmployeeRepositoryImpl {
+//            return instance ?: throw RuntimeException("RemoteEmployeeRepositoryImpl must be initialized.")
+//        }
     }
-
-    private val employeeMapper = EmployeeMapper()
 
     override suspend fun getEmployeeList(): List<Employee> {
         var employeeResponse = EmployeeResponse(emptyList())

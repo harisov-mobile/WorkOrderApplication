@@ -6,24 +6,25 @@ import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.DepartmentResponse
 import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.repository.DepartmentRepository
+import javax.inject.Inject
 
-class RemoteDepartmentRepositoryImpl private constructor() : DepartmentRepository {
+class RemoteDepartmentRepositoryImpl @Inject constructor(
+    private val departmentMapper: DepartmentMapper
+) : DepartmentRepository {
 
     companion object {
-        private var instance: RemoteDepartmentRepositoryImpl? = null
-
-        fun initialize() {
-            if (instance == null) {
-                instance = RemoteDepartmentRepositoryImpl()
-            }
-        }
-
-        fun get(): RemoteDepartmentRepositoryImpl {
-            return instance ?: throw RuntimeException("RemoteDepartmentRepositoryImpl must be initialized.")
-        }
+//        private var instance: RemoteDepartmentRepositoryImpl? = null
+//
+//        fun initialize() {
+//            if (instance == null) {
+//                instance = RemoteDepartmentRepositoryImpl()
+//            }
+//        }
+//
+//        fun get(): RemoteDepartmentRepositoryImpl {
+//            return instance ?: throw RuntimeException("RemoteDepartmentRepositoryImpl must be initialized.")
+//        }
     }
-
-    private val departmentMapper = DepartmentMapper()
 
     override suspend fun getDepartmentList(): List<Department> {
         var departmentResponse = DepartmentResponse(emptyList())

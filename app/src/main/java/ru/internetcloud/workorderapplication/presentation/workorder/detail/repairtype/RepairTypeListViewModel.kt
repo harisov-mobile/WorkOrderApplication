@@ -5,28 +5,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.data.repository.db.DbRepairTypeRepositoryImpl
+import ru.internetcloud.workorderapplication.di.qualifiers.usecase.DbGetRepairTypeListUseCaseQualifier
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetRepairTypeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.SearchRepairTypesUseCase
+import javax.inject.Inject
 
-class RepairTypeListViewModel : ViewModel() {
+class RepairTypeListViewModel @Inject constructor(
+    @DbGetRepairTypeListUseCaseQualifier
+    private val getRepairTypeListUseCase: GetRepairTypeListUseCase,
+    private val searchRepairTypesUseCase: SearchRepairTypesUseCase
+
+) : ViewModel() {
 
     var selectedRepairType: RepairType? = null
 
-    private val repository = DbRepairTypeRepositoryImpl.get()
-
-//    @Inject
-//    lateinit var repository: RepairTypeRepository
-
-//    private val component by lazy {
-//        DaggerApplicationComponent.builder()
-//            .contextModule(ContextModule(application))
-//            .build()
-//    }
-
-    private val getRepairTypeListUseCase = GetRepairTypeListUseCase(repository)
-    private val searchRepairTypesUseCase = SearchRepairTypesUseCase(repository)
+    // private val repository = DbRepairTypeRepositoryImpl.get()
 
     private val _repairTypeListLiveData = MutableLiveData<List<RepairType>>()
     val repairTypeListLiveData: LiveData<List<RepairType>>

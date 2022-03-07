@@ -4,11 +4,12 @@ import ru.internetcloud.workorderapplication.data.entity.DefaultWorkOrderSetting
 import ru.internetcloud.workorderapplication.data.entity.DefaultWorkOrderSettingsWithRequisities
 import ru.internetcloud.workorderapplication.data.network.dto.DefaultWorkOrderSettingsDTO
 import ru.internetcloud.workorderapplication.domain.document.DefaultWorkOrderSettings
+import javax.inject.Inject
 
-class DefaultWorkOrderSettingsMapper {
-
-    private val departmentMapper = DepartmentMapper()
-    private val employeeMapper = EmployeeMapper()
+class DefaultWorkOrderSettingsMapper @Inject constructor(
+    private val departmentMapper: DepartmentMapper,
+    private val employeeMapper: EmployeeMapper
+) {
 
     fun fromDtoToDbModel(defDTO: DefaultWorkOrderSettingsDTO): DefaultWorkOrderSettingsDbModel {
         return DefaultWorkOrderSettingsDbModel(

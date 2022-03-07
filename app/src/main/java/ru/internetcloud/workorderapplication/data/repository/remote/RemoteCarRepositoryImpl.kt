@@ -6,24 +6,25 @@ import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.CarResponse
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.repository.CarRepository
+import javax.inject.Inject
 
-class RemoteCarRepositoryImpl private constructor() : CarRepository {
+class RemoteCarRepositoryImpl @Inject constructor(
+    private val carMapper: CarMapper
+) : CarRepository {
 
     companion object {
-        private var instance: RemoteCarRepositoryImpl? = null
-
-        fun initialize() {
-            if (instance == null) {
-                instance = RemoteCarRepositoryImpl()
-            }
-        }
-
-        fun get(): RemoteCarRepositoryImpl {
-            return instance ?: throw RuntimeException("RemoteCarRepositoryImpl must be initialized.")
-        }
+//        private var instance: RemoteCarRepositoryImpl? = null
+//
+//        fun initialize() {
+//            if (instance == null) {
+//                instance = RemoteCarRepositoryImpl()
+//            }
+//        }
+//
+//        fun get(): RemoteCarRepositoryImpl {
+//            return instance ?: throw RuntimeException("RemoteCarRepositoryImpl must be initialized.")
+//        }
     }
-
-    private val carMapper = CarMapper()
 
     override suspend fun getCarList(): List<Car> {
         var carResponse = CarResponse(emptyList())

@@ -1,28 +1,29 @@
 package ru.internetcloud.workorderapplication.data.repository.db
 
-import android.app.Application
-import ru.internetcloud.workorderapplication.data.database.AppDatabase
+import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.mapper.EmployeeMapper
 import ru.internetcloud.workorderapplication.domain.catalog.Employee
 import ru.internetcloud.workorderapplication.domain.repository.EmployeeRepository
+import javax.inject.Inject
 
-class DbEmployeeRepositoryImpl private constructor(application: Application) : EmployeeRepository {
-
-    private val appDao = AppDatabase.getInstance(application).appDao()
-    private val employeeMapper = EmployeeMapper()
+class DbEmployeeRepositoryImpl @Inject constructor(
+    // application: Application
+    private val appDao: AppDao,
+    private val employeeMapper: EmployeeMapper
+) : EmployeeRepository {
 
     companion object {
-        private var instance: DbEmployeeRepositoryImpl? = null
-
-        fun initialize(application: Application) {
-            if (instance == null) {
-                instance = DbEmployeeRepositoryImpl(application)
-            }
-        }
-
-        fun get(): DbEmployeeRepositoryImpl {
-            return instance ?: throw RuntimeException("DbEmployeeRepositoryImpl must be initialized.")
-        }
+//        private var instance: DbEmployeeRepositoryImpl? = null
+//
+//        fun initialize(application: Application) {
+//            if (instance == null) {
+//                instance = DbEmployeeRepositoryImpl(application)
+//            }
+//        }
+//
+//        fun get(): DbEmployeeRepositoryImpl {
+//            return instance ?: throw RuntimeException("DbEmployeeRepositoryImpl must be initialized.")
+//        }
     }
 
     override suspend fun getEmployeeList(): List<Employee> {

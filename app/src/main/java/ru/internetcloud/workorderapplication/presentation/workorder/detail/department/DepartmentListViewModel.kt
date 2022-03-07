@@ -5,19 +5,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.data.repository.db.DbDepartmentRepositoryImpl
+import ru.internetcloud.workorderapplication.di.qualifiers.usecase.DbGetDepartmentListUseCaseQualifier
 import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.GetDepartmentListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.SearchDepartmentsUseCase
+import javax.inject.Inject
 
-class DepartmentListViewModel : ViewModel() {
+class DepartmentListViewModel @Inject constructor(
+    @DbGetDepartmentListUseCaseQualifier
+    private val getDepartmentListUseCase: GetDepartmentListUseCase,
+
+    private val searchDepartmentsUseCase: SearchDepartmentsUseCase
+) : ViewModel() {
 
     var selectedDepartment: Department? = null
 
-    private val repository = DbDepartmentRepositoryImpl.get()
-
-    private val getDepartmentListUseCase = GetDepartmentListUseCase(repository)
-    private val searchDepartmentsUseCase = SearchDepartmentsUseCase(repository)
+    // private val repository = DbDepartmentRepositoryImpl.get()
 
     private val _departmentListLiveData = MutableLiveData<List<Department>>()
     val departmentListLiveData: LiveData<List<Department>>

@@ -1,29 +1,15 @@
 package ru.internetcloud.workorderapplication.data.repository.db
 
-import android.app.Application
-import ru.internetcloud.workorderapplication.data.database.AppDatabase
+import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.mapper.CarJobMapper
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
 import ru.internetcloud.workorderapplication.domain.repository.CarJobRepository
+import javax.inject.Inject
 
-class DbCarJobRepositoryImpl private constructor(application: Application) : CarJobRepository {
-
-    private val appDao = AppDatabase.getInstance(application).appDao()
-    private val carJobMapper = CarJobMapper()
-
-    companion object {
-        private var instance: DbCarJobRepositoryImpl? = null
-
-        fun initialize(application: Application) {
-            if (instance == null) {
-                instance = DbCarJobRepositoryImpl(application)
-            }
-        }
-
-        fun get(): DbCarJobRepositoryImpl {
-            return instance ?: throw RuntimeException("DbCarJobRepositoryImpl must be initialized.")
-        }
-    }
+class DbCarJobRepositoryImpl @Inject constructor(
+    private val appDao: AppDao,
+    private val carJobMapper: CarJobMapper
+) : CarJobRepository {
 
     override suspend fun getCarJobList(): List<CarJob> {
         return carJobMapper.fromListDbModelToListEntity(appDao.getCarJobList())

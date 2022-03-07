@@ -1,14 +1,12 @@
 package ru.internetcloud.workorderapplication.presentation.workorder.list
 
 import androidx.lifecycle.ViewModel
-import ru.internetcloud.workorderapplication.data.repository.db.DbWorkOrderRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderListUseCase
+import javax.inject.Inject
 
-class WorkOrderListViewModel : ViewModel() {
-
-    private val repository = DbWorkOrderRepositoryImpl.get()
-
-    private val getWorkOrderListUseCase = GetWorkOrderListUseCase(repository)
+class WorkOrderListViewModel @Inject constructor(
+    private val getWorkOrderListUseCase: GetWorkOrderListUseCase
+) : ViewModel() {
 
     val workOrderListLiveData = getWorkOrderListUseCase.getWorkOrderList()
 }

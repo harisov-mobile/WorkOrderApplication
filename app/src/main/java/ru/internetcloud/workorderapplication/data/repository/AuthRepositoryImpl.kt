@@ -2,32 +2,20 @@ package ru.internetcloud.workorderapplication.data.repository
 
 import android.app.Application
 import android.util.Log
-import java.net.SocketTimeoutException
-import java.security.MessageDigest
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.AuthResponse
 import ru.internetcloud.workorderapplication.domain.common.AuthParameters
 import ru.internetcloud.workorderapplication.domain.common.AuthResult
 import ru.internetcloud.workorderapplication.domain.common.AuthorizationPreferences
 import ru.internetcloud.workorderapplication.domain.repository.AuthRepository
+import java.net.SocketTimeoutException
+import java.security.MessageDigest
+import javax.inject.Inject
 
-class AuthRepositoryImpl private constructor(private val application: Application) : AuthRepository {
-
-    private var authParameters: AuthParameters = AuthParameters()
-
-    companion object {
-        private var instance: AuthRepositoryImpl? = null
-
-        fun initialize(application: Application) {
-            if (instance == null) {
-                instance = AuthRepositoryImpl(application)
-            }
-        }
-
-        fun get(): AuthRepositoryImpl {
-            return instance ?: throw RuntimeException("AuthRepositoryImpl must be initialized.")
-        }
-    }
+class AuthRepositoryImpl @Inject constructor(
+    private val application: Application,
+    private var authParameters: AuthParameters
+) : AuthRepository {
 
     override fun getAuthParameters(): AuthParameters {
         return authParameters

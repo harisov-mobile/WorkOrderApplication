@@ -5,16 +5,17 @@ import ru.internetcloud.workorderapplication.data.entity.WorkOrderWithDetails
 import ru.internetcloud.workorderapplication.data.network.dto.WorkOrderDTO
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
+import javax.inject.Inject
 
-class WorkOrderMapper {
-
-    private val partnerMapper = PartnerMapper()
-    private val carMapper = CarMapper()
-    private val repairTypeMapper = RepairTypeMapper()
-    private val departmentMapper = DepartmentMapper()
-    private val employeeMapper = EmployeeMapper()
-    private val performerDetailMapper = PerformerDetailMapper()
-    private val jobDetailMapper = JobDetailMapper()
+class WorkOrderMapper @Inject constructor(
+    private val partnerMapper: PartnerMapper,
+    private val carMapper: CarMapper,
+    private val repairTypeMapper: RepairTypeMapper,
+    private val departmentMapper: DepartmentMapper,
+    private val employeeMapper: EmployeeMapper,
+    private val performerDetailMapper: PerformerDetailMapper,
+    private val jobDetailMapper: JobDetailMapper
+) {
 
     fun fromEntityToDbModel(workOrder: WorkOrder): WorkOrderDbModel {
         return WorkOrderDbModel(
