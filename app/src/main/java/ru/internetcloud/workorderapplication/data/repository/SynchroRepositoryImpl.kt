@@ -23,7 +23,6 @@ class SynchroRepositoryImpl @Inject constructor(
     private val performerDetailMapper: PerformerDetailMapper,
     private val workOrderMapper: WorkOrderMapper,
     private val defaultWorkOrderSettingsMapper: DefaultWorkOrderSettingsMapper
-
 ) : SynchroRepository {
 
     override suspend fun loadWorkOrders(): Boolean {

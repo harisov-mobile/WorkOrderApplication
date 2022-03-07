@@ -11,9 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
+import ru.internetcloud.workorderapplication.domain.catalog.Partner
+import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerPickerFragment
 import javax.inject.Inject
 
 class WorkOrderListFragment : Fragment(), FragmentResultListener {
@@ -46,6 +49,8 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
     private val ARG_ANSWER = "answer"
 
     companion object {
+        private const val NOT_FOUND_POSITION = -1
+
         fun newInstance(): WorkOrderListFragment {
             return WorkOrderListFragment()
         }
@@ -78,6 +83,7 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
         addFloatingActionButton = view.findViewById(R.id.add_fab)
         addFloatingActionButton.setOnClickListener {
+            viewModel.selectedWorkOrder = null
             hostActivity?.onAddWorkOrder()
         }
 
@@ -93,8 +99,13 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         viewModel = ViewModelProvider(this, viewModelFactory).get(WorkOrderListViewModel::class.java)
         viewModel.workOrderListLiveData.observe(
             viewLifecycleOwner,
-            {
-                workOrderListAdapter.submitList(it)
+            { list ->
+                workOrderListAdapter.submitList(list)
+
+                viewModel.selectedWorkOrder?:let {
+                    val scrollPosition = workOrderListAdapter.itemCount - 1
+                    workOrderRecyclerView.scrollToPosition(scrollPosition)
+                }
             }
         )
 
@@ -156,6 +167,7 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
     private fun setupClickListener() {
         workOrderListAdapter.onWorkOrderClickListener = { workOrder ->
+            viewModel.selectedWorkOrder = workOrder
             hostActivity?.onEditWorkOrder(workOrder.id)
         }
     }
@@ -179,5 +191,23 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
                 }
             }
         }
+    }
+
+    private fun getPosition(searchedWorkOrder: WorkOrder?, workOrderList: List<WorkOrder>): Int {
+        var currentPosition = NOT_FOUND_POSITION
+        searchedWorkOrder?.let {
+            var isFound = false
+            for (currentWorkOrder in workOrderList) {
+                currentPosition++
+                if (currentWorkOrder.id == searchedWorkOrder.id) {
+                    isFound = true
+                    break
+                }
+            }
+            if (!isFound) {
+                currentPosition = NOT_FOUND_POSITION
+            }
+        }
+        return currentPosition
     }
 }

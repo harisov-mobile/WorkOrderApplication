@@ -14,9 +14,5 @@ class WorkOrderApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
-//        // инициализация синглтонов-репозиториев
-//        AuthRepositoryImpl.initialize(this)
-//
     }
 }
