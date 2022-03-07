@@ -10,13 +10,24 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentDataSynchronizationBinding
+import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
+import javax.inject.Inject
 
 class DataSynchronizationFragment : Fragment() {
 
     // интерфейс обратного вызова
     interface Callbacks {
         fun onLaunchWorkOrderList()
+    }
+
+    // даггер:
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as WorkOrderApp).component
     }
 
     private var hostActivity: Callbacks? = null
@@ -35,6 +46,9 @@ class DataSynchronizationFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         hostActivity = context as Callbacks
+
+        // даггер:
+        component.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,7 +59,7 @@ class DataSynchronizationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(DataSynchronizationFragmentViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(DataSynchronizationFragmentViewModel::class.java)
 
         binding.okButton.setOnClickListener {
             hostActivity?.onLaunchWorkOrderList() // запустить фрагмент, где будет список заказ-нарядов

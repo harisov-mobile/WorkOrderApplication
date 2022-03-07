@@ -1,8 +1,7 @@
 package ru.internetcloud.workorderapplication.data.repository
 
-import android.app.Application
 import android.util.Log
-import ru.internetcloud.workorderapplication.data.database.AppDatabase
+import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.entity.DefaultWorkOrderSettingsDbModel
 import ru.internetcloud.workorderapplication.data.entity.JobDetailDbModel
 import ru.internetcloud.workorderapplication.data.entity.PerformerDetailDbModel
@@ -16,28 +15,16 @@ import ru.internetcloud.workorderapplication.data.network.dto.*
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
 import ru.internetcloud.workorderapplication.domain.common.SendRequest
 import ru.internetcloud.workorderapplication.domain.repository.SynchroRepository
+import javax.inject.Inject
 
-class SynchroRepositoryImpl private constructor(application: Application) : SynchroRepository {
+class SynchroRepositoryImpl @Inject constructor(
+    private val appDao: AppDao,
+    private val jobDetailMapper: JobDetailMapper,
+    private val performerDetailMapper: PerformerDetailMapper,
+    private val workOrderMapper: WorkOrderMapper,
+    private val defaultWorkOrderSettingsMapper: DefaultWorkOrderSettingsMapper
 
-    private val appDao = AppDatabase.getInstance(application).appDao()
-    private val jobDetailMapper = JobDetailMapper()
-    private val performerDetailMapper = PerformerDetailMapper()
-    private val workOrderMapper = WorkOrderMapper()
-    private val defaultWorkOrderSettingsMapper = DefaultWorkOrderSettingsMapper()
-
-    companion object {
-        private var instance: SynchroRepositoryImpl? = null
-
-        fun initialize(application: Application) {
-            if (instance == null) {
-                instance = SynchroRepositoryImpl(application)
-            }
-        }
-
-        fun get(): SynchroRepositoryImpl {
-            return instance ?: throw RuntimeException("SynchroRepositoryImpl must be initialized.")
-        }
-    }
+) : SynchroRepository {
 
     override suspend fun loadWorkOrders(): Boolean {
 

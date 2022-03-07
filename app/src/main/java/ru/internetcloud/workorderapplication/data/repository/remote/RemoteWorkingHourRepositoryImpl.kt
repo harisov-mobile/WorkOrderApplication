@@ -6,24 +6,25 @@ import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.WorkingHourResponse
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.repository.WorkingHourRepository
+import javax.inject.Inject
 
-class RemoteWorkingHourRepositoryImpl private constructor() : WorkingHourRepository {
+class RemoteWorkingHourRepositoryImpl @Inject constructor(
+    private val workingHourMapper: WorkingHourMapper
+) : WorkingHourRepository {
 
     companion object {
-        private var instance: RemoteWorkingHourRepositoryImpl? = null
-
-        fun initialize() {
-            if (instance == null) {
-                instance = RemoteWorkingHourRepositoryImpl()
-            }
-        }
-
-        fun get(): RemoteWorkingHourRepositoryImpl {
-            return instance ?: throw RuntimeException("RemoteWorkingHourRepositoryImpl must be initialized.")
-        }
+//        private var instance: RemoteWorkingHourRepositoryImpl? = null
+//
+//        fun initialize() {
+//            if (instance == null) {
+//                instance = RemoteWorkingHourRepositoryImpl()
+//            }
+//        }
+//
+//        fun get(): RemoteWorkingHourRepositoryImpl {
+//            return instance ?: throw RuntimeException("RemoteWorkingHourRepositoryImpl must be initialized.")
+//        }
     }
-
-    private val workingHourMapper = WorkingHourMapper()
 
     override suspend fun getWorkingHourList(): List<WorkingHour> {
         var workingHourResponse = WorkingHourResponse(emptyList())

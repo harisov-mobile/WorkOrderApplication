@@ -3,8 +3,9 @@ package ru.internetcloud.workorderapplication.data.mapper
 import ru.internetcloud.workorderapplication.data.entity.RepairTypeDbModel
 import ru.internetcloud.workorderapplication.data.network.dto.RepairTypeDTO
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
+import javax.inject.Inject
 
-class RepairTypeMapper {
+class RepairTypeMapper @Inject constructor() {
 
     fun fromDtoToEntity(repairTypeDTO: RepairTypeDTO): RepairType {
         return RepairType(

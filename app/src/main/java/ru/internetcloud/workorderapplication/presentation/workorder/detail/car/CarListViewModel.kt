@@ -5,17 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.data.repository.db.DbCarRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.GetCarListByOwnerUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.SearchCarsByOwnerUseCase
+import javax.inject.Inject
 
-class CarListViewModel : ViewModel() {
-    private val repository = DbCarRepositoryImpl.get()
-
-    private val getCarListByOwnerUseCase = GetCarListByOwnerUseCase(repository)
-    private val searchCarsByOwnerUseCase = SearchCarsByOwnerUseCase(repository)
+class CarListViewModel @Inject constructor(
+    private val getCarListByOwnerUseCase: GetCarListByOwnerUseCase,
+    private val searchCarsByOwnerUseCase: SearchCarsByOwnerUseCase
+) : ViewModel() {
+    // private val repository = DbCarRepositoryImpl.get()
 
     var partner: Partner? = null
     var selectedCar: Car? = null

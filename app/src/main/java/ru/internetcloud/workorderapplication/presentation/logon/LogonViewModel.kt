@@ -6,9 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.data.repository.AuthRepositoryImpl
-import ru.internetcloud.workorderapplication.data.repository.SynchroRepositoryImpl
-import ru.internetcloud.workorderapplication.data.repository.db.*
 import ru.internetcloud.workorderapplication.domain.catalog.*
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
@@ -70,45 +67,6 @@ class LogonViewModel @Inject constructor(
         private const val DEMO_LOGIN = "demo"
         private const val DEMO_PASSWORD = "1"
     }
-
-    // Репозитории
-//    private val repository = AuthRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbRepairTypeRepository = DbRepairTypeRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbCarJobRepository = DbCarJobRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbDepartmentRepository = DbDepartmentRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbEmployeeRepository = DbEmployeeRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbPartnerRepository = DbPartnerRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbCarRepository = DbCarRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbWorkingHourRepository = DbWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbDefaultWorkOrderSettingsRepository =
-//        DbDefaultWorkOrderSettingsRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val synchroRepository = SynchroRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbWorkOrderRepository = DbWorkOrderRepositoryImpl.get() // требуется инъекция зависимостей!!!
-
-    // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
-//    private val setAuthParametersUseCase = SetAuthParametersUseCase(repository)
-//    private val checkAuthParametersUseCase = CheckAuthParametersUseCase(repository)
-//    private val deleteRepairTypesUseCase = DeleteRepairTypesUseCase(dbRepairTypeRepository)
-//    private val deletePartnersUseCase = DeletePartnerListUseCase(dbPartnerRepository)
-//    private val deleteCarJobsUseCase = DeleteCarJobsUseCase(dbCarJobRepository)
-//    private val deleteDepartmentsUseCase = DeleteDepartmentsUseCase(dbDepartmentRepository)
-//    private val deleteEmployeesUseCase = DeleteEmployeesUseCase(dbEmployeeRepository)
-//    private val deleteCarsUseCase = DeleteCarListUseCase(dbCarRepository)
-//    private val deleteWorkingHoursUseCase = DeleteWorkingHourListUseCase(dbWorkingHourRepository)
-//    private val deleteAllDefaultWorkOrderSettingsUseCase =
-//        DeleteAllDefaultWorkOrderSettingsUseCase(dbDefaultWorkOrderSettingsRepository)
-//    private val deleteAllJobDetailsUseCase = DeleteAllJobDetailsUseCase(synchroRepository)
-//    private val deleteAllPerformersUseCase = DeleteAllPerformersUseCase(synchroRepository)
-//    private val deleteAllWorkOrdersUseCase = DeleteAllWorkOrdersUseCase(synchroRepository)
-//
-//    private val addRepairTypeListUseCase = AddRepairTypeListUseCase(dbRepairTypeRepository)
-//    private val addPartnerListUseCase = AddPartnerListUseCase(dbPartnerRepository)
-//    private val addEmployeeListUseCase = AddEmployeeListUseCase(dbEmployeeRepository)
-//    private val addCarJobListUseCase = AddCarJobListUseCase(dbCarJobRepository)
-//    private val addCarListUseCase = AddCarListUseCase(dbCarRepository)
-//    private val addDepartmentUseCase = AddDepartmentUseCase(dbDepartmentRepository)
-//    private val addWorkingHourListUseCase = AddWorkingHourListUseCase(dbWorkingHourRepository)
-//    private val updateWorkOrderUseCase = UpdateWorkOrderUseCase(dbWorkOrderRepository)
 
     private val _canContinue = MutableLiveData<Boolean>()
     val canContinue: LiveData<Boolean>
@@ -182,7 +140,6 @@ class LogonViewModel @Inject constructor(
                         _errorAuthorization.value = true
                     }
                 }
-
             }
         }
     }

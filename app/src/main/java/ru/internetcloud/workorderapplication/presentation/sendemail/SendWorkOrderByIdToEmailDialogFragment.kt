@@ -12,8 +12,19 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.WorkOrderApp
+import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
+import javax.inject.Inject
 
 class SendWorkOrderByIdToEmailDialogFragment : DialogFragment() {
+
+    // даггер:
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as WorkOrderApp).component
+    }
 
     private lateinit var viewModel: SendWorkOrderByIdToEmailViewModel
     private lateinit var okButton: Button
@@ -39,8 +50,10 @@ class SendWorkOrderByIdToEmailDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        // даггер:
+        component.inject(this)
 
-        viewModel = ViewModelProvider(this).get(SendWorkOrderByIdToEmailViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(SendWorkOrderByIdToEmailViewModel::class.java)
 
         arguments?.let { arg ->
             savedInstanceState ?: let {

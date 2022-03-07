@@ -6,9 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.data.repository.SynchroRepositoryImpl
-import ru.internetcloud.workorderapplication.data.repository.db.*
-import ru.internetcloud.workorderapplication.data.repository.remote.*
+import ru.internetcloud.workorderapplication.di.qualifiers.usecase.*
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.AddCarListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.DeleteCarListUseCase
@@ -35,68 +33,117 @@ import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.Get
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadDefaultWorkOrderSettingsUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadWorkOrdersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.UploadWorkOrdersUseCase
+import javax.inject.Inject
 
-class DataSynchronizationFragmentViewModel : ViewModel() {
+class DataSynchronizationFragmentViewModel @Inject constructor(
+    @RemoteGetRepairTypeListUseCaseQualifier
+    private val getRemoteRepairTypeListUseCase: GetRepairTypeListUseCase,
+
+    @DbGetRepairTypeListUseCaseQualifier
+    private val getDbRepairTypeListUseCase: GetRepairTypeListUseCase,
+
+    private val addRepairTypeListUseCase: AddRepairTypeListUseCase,
+    private val deleteRepairTypesUseCase: DeleteRepairTypesUseCase,
+
+    @RemoteGetCarJobListUseCaseQualifier
+    private val getRemoteCarJobListUseCase: GetCarJobListUseCase,
+
+    private val addDbCarJobListUseCase: AddCarJobListUseCase,
+    private val deleteCarJobsUseCase: DeleteCarJobsUseCase,
+
+    @RemoteGetDepartmentListUseCaseQualifier
+    private val getRemoteDepartmentListUseCase: GetDepartmentListUseCase,
+
+    private val addDbDepartmentUseCase: AddDepartmentUseCase,
+    private val deleteDepartmentsUseCase: DeleteDepartmentsUseCase,
+
+    @RemoteGetEmployeeListUseCaseQualifier
+    private val getRemoteEmployeeListUseCase: GetEmployeeListUseCase,
+    private val addDbEmployeeListUseCase: AddEmployeeListUseCase,
+    private val deleteEmployeesUseCase: DeleteEmployeesUseCase,
+
+    @RemoteGetPartnerListUseCaseQualifier
+    private val getRemotePartnerListUseCase: GetPartnerListUseCase,
+    private val addDbPartnerListUseCase: AddPartnerListUseCase,
+    private val deletePartnersUseCase: DeletePartnerListUseCase,
+
+    @RemoteGetCarListUseCaseQualifier
+    private val getRemoteCarListUseCase: GetCarListUseCase,
+    private val addDbCarListUseCase: AddCarListUseCase,
+    private val deleteCarsUseCase: DeleteCarListUseCase,
+
+    @RemoteGetWorkingHourListUseCaseQualifier
+    private val getRemoteWorkingHourListUseCase: GetWorkingHourListUseCase,
+    private val addDbWorkingHourListUseCase: AddWorkingHourListUseCase,
+    private val deleteWorkingHoursUseCase: DeleteWorkingHourListUseCase,
+
+    private val getModifiedWorkOrdersQuantityUseCase: GetModifiedWorkOrdersQuantityUseCase,
+    private val uploadWorkOrdersUseCase: UploadWorkOrdersUseCase,
+    private val loadWorkOrdersUseCase: LoadWorkOrdersUseCase,
+
+    private val loadDefaultWorkOrderSettingsUseCase: LoadDefaultWorkOrderSettingsUseCase
+
+) : ViewModel() {
 
     // Репозитории
-    private val remoteRepairTypeRepository = RemoteRepairTypeRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbRepairTypeRepository = DbRepairTypeRepositoryImpl.get() // требуется инъекция зависимостей!!!
-
-    private val remoteCarJobRepository = RemoteCarJobRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbCarJobRepository = DbCarJobRepositoryImpl.get() // требуется инъекция зависимостей!!!
-
-    private val remoteDepartmentRepository = RemoteDepartmentRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbDepartmentRepository = DbDepartmentRepositoryImpl.get() // требуется инъекция зависимостей!!!
-
-    private val remoteEmployeeRepository = RemoteEmployeeRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbEmployeeRepository = DbEmployeeRepositoryImpl.get() // требуется инъекция зависимостей!!!
-
-    private val remotePartnerRepository = RemotePartnerRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbPartnerRepository = DbPartnerRepositoryImpl.get() // требуется инъекция зависимостей!!!
-
-    private val remoteCarRepository = RemoteCarRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbCarRepository = DbCarRepositoryImpl.get() // требуется инъекция зависимостей!!!
-
-    private val remoteWorkingHourRepository = RemoteWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
-    private val dbWorkingHourRepository = DbWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
-
-    private val synchroRepositoryImpl = SynchroRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val remoteRepairTypeRepository = RemoteRepairTypeRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbRepairTypeRepository = DbRepairTypeRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//
+//    private val remoteCarJobRepository = RemoteCarJobRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbCarJobRepository = DbCarJobRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//
+//    private val remoteDepartmentRepository = RemoteDepartmentRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbDepartmentRepository = DbDepartmentRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//
+//    private val remoteEmployeeRepository = RemoteEmployeeRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbEmployeeRepository = DbEmployeeRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//
+//    private val remotePartnerRepository = RemotePartnerRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbPartnerRepository = DbPartnerRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//
+//    private val remoteCarRepository = RemoteCarRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbCarRepository = DbCarRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//
+//    private val remoteWorkingHourRepository = RemoteWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//    private val dbWorkingHourRepository = DbWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
+//
+//    private val synchroRepositoryImpl = SynchroRepositoryImpl.get() // требуется инъекция зависимостей!!!
 
     // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
-    private val getRemoteRepairTypeListUseCase = GetRepairTypeListUseCase(remoteRepairTypeRepository)
-    private val getDbRepairTypeListUseCase = GetRepairTypeListUseCase(dbRepairTypeRepository)
-    private val addRepairTypeListUseCase = AddRepairTypeListUseCase(dbRepairTypeRepository)
-    private val deleteRepairTypesUseCase = DeleteRepairTypesUseCase(dbRepairTypeRepository)
-
-    private val getRemoteCarJobListUseCase = GetCarJobListUseCase(remoteCarJobRepository)
-    private val addDbCarJobListUseCase = AddCarJobListUseCase(dbCarJobRepository)
-    private val deleteCarJobsUseCase = DeleteCarJobsUseCase(dbCarJobRepository)
-
-    private val getRemoteDepartmentListUseCase = GetDepartmentListUseCase(remoteDepartmentRepository)
-    private val addDbDepartmentUseCase = AddDepartmentUseCase(dbDepartmentRepository)
-    private val deleteDepartmentsUseCase = DeleteDepartmentsUseCase(dbDepartmentRepository)
-
-    private val getRemoteEmployeeListUseCase = GetEmployeeListUseCase(remoteEmployeeRepository)
-    private val addDbEmployeeListUseCase = AddEmployeeListUseCase(dbEmployeeRepository)
-    private val deleteEmployeesUseCase = DeleteEmployeesUseCase(dbEmployeeRepository)
-
-    private val getRemotePartnerListUseCase = GetPartnerListUseCase(remotePartnerRepository)
-    private val addDbPartnerListUseCase = AddPartnerListUseCase(dbPartnerRepository)
-    private val deletePartnersUseCase = DeletePartnerListUseCase(dbPartnerRepository)
-
-    private val getRemoteCarListUseCase = GetCarListUseCase(remoteCarRepository)
-    private val addDbCarListUseCase = AddCarListUseCase(dbCarRepository)
-    private val deleteCarsUseCase = DeleteCarListUseCase(dbCarRepository)
-
-    private val getRemoteWorkingHourListUseCase = GetWorkingHourListUseCase(remoteWorkingHourRepository)
-    private val addDbWorkingHourListUseCase = AddWorkingHourListUseCase(dbWorkingHourRepository)
-    private val deleteWorkingHoursUseCase = DeleteWorkingHourListUseCase(dbWorkingHourRepository)
-
-    private val getModifiedWorkOrdersQuantityUseCase = GetModifiedWorkOrdersQuantityUseCase(synchroRepositoryImpl)
-    private val uploadWorkOrdersUseCase = UploadWorkOrdersUseCase(synchroRepositoryImpl)
-    private val loadWorkOrdersUseCase = LoadWorkOrdersUseCase(synchroRepositoryImpl)
-
-    private val loadDefaultWorkOrderSettingsUseCase = LoadDefaultWorkOrderSettingsUseCase(synchroRepositoryImpl)
+//    private val getRemoteRepairTypeListUseCase = GetRepairTypeListUseCase(remoteRepairTypeRepository)
+//    private val getDbRepairTypeListUseCase = GetRepairTypeListUseCase(dbRepairTypeRepository)
+//    private val addRepairTypeListUseCase = AddRepairTypeListUseCase(dbRepairTypeRepository)
+//    private val deleteRepairTypesUseCase = DeleteRepairTypesUseCase(dbRepairTypeRepository)
+//
+//    private val getRemoteCarJobListUseCase = GetCarJobListUseCase(remoteCarJobRepository)
+//    private val addDbCarJobListUseCase = AddCarJobListUseCase(dbCarJobRepository)
+//    private val deleteCarJobsUseCase = DeleteCarJobsUseCase(dbCarJobRepository)
+//
+//    private val getRemoteDepartmentListUseCase = GetDepartmentListUseCase(remoteDepartmentRepository)
+//    private val addDbDepartmentUseCase = AddDepartmentUseCase(dbDepartmentRepository)
+//    private val deleteDepartmentsUseCase = DeleteDepartmentsUseCase(dbDepartmentRepository)
+//
+//    private val getRemoteEmployeeListUseCase = GetEmployeeListUseCase(remoteEmployeeRepository)
+//    private val addDbEmployeeListUseCase = AddEmployeeListUseCase(dbEmployeeRepository)
+//    private val deleteEmployeesUseCase = DeleteEmployeesUseCase(dbEmployeeRepository)
+//
+//    private val getRemotePartnerListUseCase = GetPartnerListUseCase(remotePartnerRepository)
+//    private val addDbPartnerListUseCase = AddPartnerListUseCase(dbPartnerRepository)
+//    private val deletePartnersUseCase = DeletePartnerListUseCase(dbPartnerRepository)
+//
+//    private val getRemoteCarListUseCase = GetCarListUseCase(remoteCarRepository)
+//    private val addDbCarListUseCase = AddCarListUseCase(dbCarRepository)
+//    private val deleteCarsUseCase = DeleteCarListUseCase(dbCarRepository)
+//
+//    private val getRemoteWorkingHourListUseCase = GetWorkingHourListUseCase(remoteWorkingHourRepository)
+//    private val addDbWorkingHourListUseCase = AddWorkingHourListUseCase(dbWorkingHourRepository)
+//    private val deleteWorkingHoursUseCase = DeleteWorkingHourListUseCase(dbWorkingHourRepository)
+//
+//    private val getModifiedWorkOrdersQuantityUseCase = GetModifiedWorkOrdersQuantityUseCase(synchroRepositoryImpl)
+//    private val uploadWorkOrdersUseCase = UploadWorkOrdersUseCase(synchroRepositoryImpl)
+//    private val loadWorkOrdersUseCase = LoadWorkOrdersUseCase(synchroRepositoryImpl)
+//
+//    private val loadDefaultWorkOrderSettingsUseCase = LoadDefaultWorkOrderSettingsUseCase(synchroRepositoryImpl)
 
     // ЛивДаты
     private val _canContinue = MutableLiveData<Boolean>()

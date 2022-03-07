@@ -3,8 +3,9 @@ package ru.internetcloud.workorderapplication.data.mapper
 import ru.internetcloud.workorderapplication.data.entity.WorkingHourDbModel
 import ru.internetcloud.workorderapplication.data.network.dto.WorkingHourDTO
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
+import javax.inject.Inject
 
-class WorkingHourMapper {
+class WorkingHourMapper @Inject constructor() {
 
     fun fromDtoToEntity(workingHourDTO: WorkingHourDTO): WorkingHour {
         return WorkingHour(

@@ -1,35 +1,123 @@
 package ru.internetcloud.workorderapplication.di
 
+import android.app.Application
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import ru.internetcloud.workorderapplication.data.database.AppDao
+import ru.internetcloud.workorderapplication.data.database.AppDatabase
 import ru.internetcloud.workorderapplication.data.repository.AuthRepositoryImpl
-import ru.internetcloud.workorderapplication.data.repository.db.DbPartnerRepositoryImpl
-import ru.internetcloud.workorderapplication.data.repository.db.DbRepairTypeRepositoryImpl
-import ru.internetcloud.workorderapplication.domain.repository.AuthRepository
-import ru.internetcloud.workorderapplication.domain.repository.PartnerRepository
-import ru.internetcloud.workorderapplication.domain.repository.RepairTypeRepository
+import ru.internetcloud.workorderapplication.data.repository.SynchroRepositoryImpl
+import ru.internetcloud.workorderapplication.data.repository.db.*
+import ru.internetcloud.workorderapplication.data.repository.remote.*
+import ru.internetcloud.workorderapplication.di.qualifiers.repository.*
+import ru.internetcloud.workorderapplication.domain.common.AuthParameters
+import ru.internetcloud.workorderapplication.domain.repository.*
 
 @Module
 interface DataModule {
 
-//    @Provides
-//    fun provideRepairTypeRepository(impl: DbRepairTypeRepositoryImpl): RepairTypeRepository {
-//        return impl;
-//    }
-//
-//    @Provides
-//    fun provideDbRepairTypeRepositoryImpl(): DbRepairTypeRepositoryImpl {
-//        return DbRepairTypeRepositoryImpl.get();
-//    }
-
-    @Binds
-    fun bindRepairTypeRepository(impl: DbRepairTypeRepositoryImpl): RepairTypeRepository
-
+    @ApplicationScope
     @Binds
     fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
 
     // квалификатор делать
+    @DbPartnerRepositoryQualifier
+    @ApplicationScope
     @Binds
-    fun bindPartnerRepository(impl: DbPartnerRepositoryImpl): PartnerRepository
+    fun bindDbPartnerRepository(impl: DbPartnerRepositoryImpl): PartnerRepository
+
+    @RemotePartnerRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindRemotePartnerRepository(impl: RemotePartnerRepositoryImpl): PartnerRepository
+
+    @DbRepairTypeRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindDbRepairTypeRepository(impl: DbRepairTypeRepositoryImpl): RepairTypeRepository
+
+    @RemoteRepairTypeRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindRemoteRepairTypeRepository(impl: RemoteRepairTypeRepositoryImpl): RepairTypeRepository
+
+    @DbCarJobRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindDbCarJobRepository(impl: DbCarJobRepositoryImpl): CarJobRepository
+
+    @RemoteCarJobRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindRemoteCarJobRepository(impl: RemoteCarJobRepositoryImpl): CarJobRepository
+
+    @DbDepartmentRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindDbDepartmentRepository(impl: DbDepartmentRepositoryImpl): DepartmentRepository
+
+    @RemoteDepartmentRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindRemoteDepartmentRepository(impl: RemoteDepartmentRepositoryImpl): DepartmentRepository
+
+    @DbEmployeeRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindDbEmployeeRepository(impl: DbEmployeeRepositoryImpl): EmployeeRepository
+
+    @RemoteEmployeeRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindRemoteEmployeeRepository(impl: RemoteEmployeeRepositoryImpl): EmployeeRepository
+
+    @DbCarRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindDbCarRepository(impl: DbCarRepositoryImpl): CarRepository
+
+    @RemoteCarRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindRemoteCarRepository(impl: RemoteCarRepositoryImpl): CarRepository
+
+    @DbWorkingHourRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindDbWorkingHourRepository(impl: DbWorkingHourRepositoryImpl): WorkingHourRepository
+
+    @RemoteWorkingHourRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindRemoteWorkingHourRepository(impl: RemoteWorkingHourRepositoryImpl): WorkingHourRepository
+
+    @ApplicationScope
+    @Binds
+    fun bindDbDefaultWorkOrderSettingsRepository(impl: DbDefaultWorkOrderSettingsRepositoryImpl): DefaultWorkOrderSettingsRepository
+
+    @ApplicationScope
+    @Binds
+    fun bindSynchroRepository(impl: SynchroRepositoryImpl): SynchroRepository
+
+    @ApplicationScope
+    @Binds
+    fun bindWorkOrderRepository(impl: DbWorkOrderRepositoryImpl): WorkOrderRepository
+
+    companion object {
+
+        @ApplicationScope
+        @Provides
+        fun provideAppDao(
+            application: Application
+        ): AppDao {
+            return AppDatabase.getInstance(application).appDao()
+        }
+
+        @ApplicationScope
+        @Provides
+        fun provideAuthParameters(): AuthParameters {
+            return AuthParameters()
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package ru.internetcloud.workorderapplication.presentation.workorder.detail
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
 import ru.internetcloud.workorderapplication.domain.catalog.*
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
@@ -22,6 +24,7 @@ import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
+import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
 import ru.internetcloud.workorderapplication.presentation.sendemail.SendWorkOrderByIdToEmailDialogFragment
@@ -36,8 +39,17 @@ import ru.internetcloud.workorderapplication.presentation.workorder.detail.perfo
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.repairtype.RepairTypePickerFragment
 import java.math.BigDecimal
 import java.util.*
+import javax.inject.Inject
 
 class WorkOrderFragment : Fragment(), FragmentResultListener {
+
+    // даггер:
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as WorkOrderApp).component
+    }
 
     private var _binding: FragmentWorkOrderBinding? = null
     private val binding: FragmentWorkOrderBinding
@@ -103,6 +115,13 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        // даггер:
+        component.inject(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -122,7 +141,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(WorkOrderViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(WorkOrderViewModel::class.java)
 
         savedInstanceState?.let {
             viewModel.workOrder.value?.let { order ->

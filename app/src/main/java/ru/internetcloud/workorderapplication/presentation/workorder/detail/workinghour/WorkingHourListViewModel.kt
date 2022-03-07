@@ -5,23 +5,25 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.data.repository.db.DbWorkingHourRepositoryImpl
+import ru.internetcloud.workorderapplication.di.qualifiers.usecase.DbGetWorkingHourListUseCaseQualifier
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.GetWorkingHourListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.SearchWorkingHoursUseCase
+import javax.inject.Inject
 
-class WorkingHourListViewModel : ViewModel() {
+class WorkingHourListViewModel @Inject constructor(
+    @DbGetWorkingHourListUseCaseQualifier
+    private val getWorkingHourListUseCase: GetWorkingHourListUseCase,
+    private val searchWorkingHoursUseCase: SearchWorkingHoursUseCase
+) : ViewModel() {
 
     var selectedWorkingHour: WorkingHour? = null
 
-    private val repository = DbWorkingHourRepositoryImpl.get()
-
-    private val getWorkingHourListUseCase = GetWorkingHourListUseCase(repository)
-    private val searchWorkingHoursUseCase = SearchWorkingHoursUseCase(repository)
+    // private val repository = DbWorkingHourRepositoryImpl.get()
 
     private val _workingHourListLiveData = MutableLiveData<List<WorkingHour>>()
     val workingHourListLiveData: LiveData<List<WorkingHour>>
-        get() = _workingHourListLiveData
+    get() = _workingHourListLiveData
 
     fun loadWorkingHourList() {
         viewModelScope.launch {

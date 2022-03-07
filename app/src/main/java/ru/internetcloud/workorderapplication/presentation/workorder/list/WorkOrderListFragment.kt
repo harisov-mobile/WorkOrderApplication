@@ -10,8 +10,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.WorkOrderApp
+import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
+import javax.inject.Inject
 
 class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
@@ -22,6 +25,14 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         fun onEditWorkOrder(workOrderId: String)
 
         fun onLaunchDataSynchronization()
+    }
+
+    // даггер:
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as WorkOrderApp).component
     }
 
     private var hostActivity: Callbacks? = null
@@ -42,6 +53,9 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
+        // даггер:
+        component.inject(this)
 
         hostActivity = context as Callbacks
     }
@@ -76,7 +90,7 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(WorkOrderListViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(WorkOrderListViewModel::class.java)
         viewModel.workOrderListLiveData.observe(
             viewLifecycleOwner,
             {

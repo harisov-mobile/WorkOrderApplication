@@ -10,9 +10,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentLogonBinding
 import ru.internetcloud.workorderapplication.domain.common.AuthorizationPreferences
+import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
+import javax.inject.Inject
 
 class LogonFragment : Fragment() {
 
@@ -27,6 +30,14 @@ class LogonFragment : Fragment() {
 
     private lateinit var viewModel: LogonViewModel
 
+    // даггер:
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as WorkOrderApp).component
+    }
+
     private var _binding: FragmentLogonBinding? = null
     private val binding: FragmentLogonBinding
         get() = _binding ?: throw RuntimeException("Error FragmentWorkOrderBinding is NULL")
@@ -40,6 +51,9 @@ class LogonFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         hostActivity = context as Callbacks
+
+        // даггер:
+        component.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -50,7 +64,8 @@ class LogonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(LogonViewModel::class.java)
+        // вот оно!!! даггер: viewModel = ViewModelProvider(this).get(LogonViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(LogonViewModel::class.java)
 
         binding.enterButton.setOnClickListener {
             binding.enterButton.isEnabled = false
@@ -164,7 +179,6 @@ class LogonFragment : Fragment() {
 
         viewModel.errorAuthorization.observe(viewLifecycleOwner) {
             // показать AlertDialog об ошибке авторизации!!!
-            // Toast.makeText(context, viewModel.errorMessage.value, Toast.LENGTH_LONG).show()
             val errorMessage = viewModel.errorMessage.value ?: ""
             MessageDialogFragment
                 .newInstance(errorMessage)
@@ -201,7 +215,7 @@ class LogonFragment : Fragment() {
         // демо-режим - переход в список Заказ-нарядов:
         viewModel.canContinueDemoMode.observe(viewLifecycleOwner) {
             if (it) {
-                hostActivity?.onLaunchWorkOrderList() // запустить фрагмент, где будет сихнронизация данных из 1С
+                hostActivity?.onLaunchWorkOrderList() // запустить фрагмент, где будет показан список демо-заказ-нарядов
             }
         }
     }

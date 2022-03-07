@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.di.qualifiers
+package ru.internetcloud.workorderapplication.di.qualifiers.repository
 
 import javax.inject.Qualifier
 

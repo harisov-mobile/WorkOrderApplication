@@ -5,10 +5,11 @@ import ru.internetcloud.workorderapplication.data.entity.CarWithOwner
 import ru.internetcloud.workorderapplication.data.network.dto.CarDTO
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
+import javax.inject.Inject
 
-class CarMapper {
-
-    private val partnerMapper = PartnerMapper()
+class CarMapper @Inject constructor(
+    private val partnerMapper: PartnerMapper
+) {
 
     fun fromDtoToEntity(carDTO: CarDTO): Car {
         return Car(

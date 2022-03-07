@@ -11,7 +11,10 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
+import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
+import javax.inject.Inject
 
 class CarJobPickerFragment : DialogFragment() {
 
@@ -36,6 +39,14 @@ class CarJobPickerFragment : DialogFragment() {
         }
     }
 
+    // даггер:
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as WorkOrderApp).component
+    }
+
     private var requestKey = ""
     private var argCarJobName = ""
 
@@ -48,7 +59,10 @@ class CarJobPickerFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        viewModel = ViewModelProvider(this).get(CarJobListViewModel::class.java)
+        // даггер:
+        component.inject(this)
+
+        viewModel = ViewModelProvider(this, viewModelFactory).get(CarJobListViewModel::class.java)
 
         arguments?.let { arg ->
             viewModel.selectedCarJob ?: let {

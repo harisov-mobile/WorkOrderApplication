@@ -11,7 +11,10 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.domain.catalog.Department
+import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
+import javax.inject.Inject
 
 class DepartmentPickerFragment : DialogFragment() {
 
@@ -36,6 +39,14 @@ class DepartmentPickerFragment : DialogFragment() {
         }
     }
 
+    // даггер:
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as WorkOrderApp).component
+    }
+
     private var requestKey = ""
     private var argDepartmentName = ""
 
@@ -47,8 +58,10 @@ class DepartmentPickerFragment : DialogFragment() {
     private lateinit var searchEditText: EditText
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        // даггер:
+        component.inject(this)
 
-        viewModel = ViewModelProvider(this).get(DepartmentListViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(DepartmentListViewModel::class.java)
 
         arguments?.let { arg ->
             viewModel.selectedDepartment ?: let {

@@ -4,6 +4,7 @@ import ru.internetcloud.workorderapplication.domain.repository.DefaultWorkOrderS
 import javax.inject.Inject
 
 class DeleteAllDefaultWorkOrderSettingsUseCase @Inject constructor(private val settingsRepository: DefaultWorkOrderSettingsRepository) {
+
     suspend fun deleteAllDefaultWorkOrderSettings() {
         return settingsRepository.deleteAllDefaultWorkOrderSettings()
     }

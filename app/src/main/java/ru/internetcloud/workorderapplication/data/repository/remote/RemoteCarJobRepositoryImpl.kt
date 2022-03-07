@@ -5,30 +5,31 @@ import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.CarJobResponse
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
 import ru.internetcloud.workorderapplication.domain.repository.CarJobRepository
+import javax.inject.Inject
 
-class RemoteCarJobRepositoryImpl private constructor() : CarJobRepository {
+class RemoteCarJobRepositoryImpl @Inject constructor(
+    private val carJobMapper: CarJobMapper
+) : CarJobRepository {
 
     companion object {
-        private var instance: RemoteCarJobRepositoryImpl? = null
-
-        fun initialize() {
-            if (instance == null) {
-                instance = RemoteCarJobRepositoryImpl()
-            }
-        }
-
-        fun get(): RemoteCarJobRepositoryImpl {
-            return instance ?: throw RuntimeException("RemoteCarJobRepositoryImpl must be initialized.")
-        }
+//        private var instance: RemoteCarJobRepositoryImpl? = null
+//
+//        fun initialize() {
+//            if (instance == null) {
+//                instance = RemoteCarJobRepositoryImpl()
+//            }
+//        }
+//
+//        fun get(): RemoteCarJobRepositoryImpl {
+//            return instance ?: throw RuntimeException("RemoteCarJobRepositoryImpl must be initialized.")
+//        }
     }
-
-    private val carJobMapper = CarJobMapper()
 
     override suspend fun getCarJobList(): List<CarJob> {
         var carJobResponse = CarJobResponse(emptyList())
 
         try {
-            carJobResponse = ApiClient.getInstance().client.getCarJobs()
+            carJobResponse = ApiClient.getInstance().client.getCarJobs() // для даггера
         } catch (e: Exception) {
             // ничего не делаю
         }

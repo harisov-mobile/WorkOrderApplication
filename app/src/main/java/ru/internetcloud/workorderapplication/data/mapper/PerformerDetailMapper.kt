@@ -4,10 +4,11 @@ import ru.internetcloud.workorderapplication.data.entity.PerformerDetailDbModel
 import ru.internetcloud.workorderapplication.data.entity.PerformerDetailWithRequisities
 import ru.internetcloud.workorderapplication.data.network.dto.PerformerDetailDTO
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
+import javax.inject.Inject
 
-class PerformerDetailMapper {
-
-    private val employeeMapper = EmployeeMapper()
+class PerformerDetailMapper @Inject constructor(
+    private val employeeMapper: EmployeeMapper
+) {
 
     fun fromDtoToDbModel(performerDetailDTO: PerformerDetailDTO): PerformerDetailDbModel {
         return PerformerDetailDbModel(
