@@ -50,4 +50,15 @@ class RepairTypeMapper @Inject constructor() {
     fun fromListEntityToListDbModel(list: List<RepairType>) = list.map {
         fromEntityToDbModel(it)
     }
+
+    fun fromListDtoToListDboModel(list: List<RepairTypeDTO>) = list.map {
+        fromDtoToDbModel(it)
+    }
+
+    fun fromDtoToDbModel(repairTypeDTO: RepairTypeDTO): RepairTypeDbModel {
+        return RepairTypeDbModel(
+            id = repairTypeDTO.id,
+            name = repairTypeDTO.name
+        )
+    }
 }

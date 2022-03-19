@@ -18,20 +18,6 @@ class DbWorkOrderRepositoryImpl @Inject constructor(
     private val performerDetailMapper: PerformerDetailMapper
 ) : WorkOrderRepository {
 
-    companion object {
-//        private var instance: DbWorkOrderRepositoryImpl? = null
-//
-//        fun initialize(application: Application) {
-//            if (instance == null) {
-//                instance = DbWorkOrderRepositoryImpl(application)
-//            }
-//        }
-//
-//        fun get(): DbWorkOrderRepositoryImpl {
-//            return instance ?: throw RuntimeException("DbWorkOrderRepositoryImpl must be initialized.")
-//        }
-    }
-
     override suspend fun updateWorkOrder(workOrder: WorkOrder) {
         // т.к. onConflict = OnConflictStrategy.REPLACE, то это будет и UPDATE тоже
         workOrderDao.addWorkOrder(workOrderMapper.fromEntityToDbModel(workOrder))

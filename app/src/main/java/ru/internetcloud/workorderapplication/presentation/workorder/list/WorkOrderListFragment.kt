@@ -11,12 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
-import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerPickerFragment
 import javax.inject.Inject
 
 class WorkOrderListFragment : Fragment(), FragmentResultListener {
@@ -102,7 +100,7 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
             { list ->
                 workOrderListAdapter.submitList(list)
 
-                viewModel.selectedWorkOrder?:let {
+                viewModel.selectedWorkOrder ?: let {
                     val scrollPosition = workOrderListAdapter.itemCount - 1
                     workOrderRecyclerView.scrollToPosition(scrollPosition)
                 }

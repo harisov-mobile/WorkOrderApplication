@@ -18,8 +18,8 @@ data class CarDTO(
     @SerializedName("manufacturer")
     val manufacturer: String,
 
-    @SerializedName("model")
-    val model: String,
+    @SerializedName("car_model_id")
+    val carModelId: String,
 
     @SerializedName("type")
     val type: String,

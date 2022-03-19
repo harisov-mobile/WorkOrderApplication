@@ -1,19 +1,23 @@
 package ru.internetcloud.workorderapplication.presentation.synchro
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.di.qualifiers.usecase.*
+import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
+import ru.internetcloud.workorderapplication.domain.common.OperationMode
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.AddCarListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.DeleteCarListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.GetCarListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.AddCarJobListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.DeleteCarJobsUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.GetCarJobListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carmodel.AddCarModelListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carmodel.DeleteCarModelsUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carmodel.GetCarModelListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.AddDepartmentUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.DeleteDepartmentsUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.GetDepartmentListUseCase
@@ -23,33 +27,30 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.emp
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.AddPartnerListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.DeletePartnerListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.GetPartnerListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.AddRepairTypeListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.DeleteRepairTypesUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetRepairTypeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.AddWorkingHourListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.DeleteWorkingHourListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.GetWorkingHourListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.GetModifiedWorkOrdersQuantityUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadDefaultWorkOrderSettingsUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadWorkOrdersUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.UploadWorkOrdersUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.*
 import javax.inject.Inject
 
 class DataSynchronizationFragmentViewModel @Inject constructor(
-    @RemoteGetRepairTypeListUseCaseQualifier
-    private val getRemoteRepairTypeListUseCase: GetRepairTypeListUseCase,
 
-    @DbGetRepairTypeListUseCaseQualifier
-    private val getDbRepairTypeListUseCase: GetRepairTypeListUseCase,
+    private val loadRepairTypesUseCase: LoadRepairTypesUseCase,
 
-    private val addRepairTypeListUseCase: AddRepairTypeListUseCase,
-    private val deleteRepairTypesUseCase: DeleteRepairTypesUseCase,
+    @DbGetDepartmentListUseCaseQualifier
+    private val getDbDepartmentListUseCase: GetDepartmentListUseCase,
 
     @RemoteGetCarJobListUseCaseQualifier
     private val getRemoteCarJobListUseCase: GetCarJobListUseCase,
 
     private val addDbCarJobListUseCase: AddCarJobListUseCase,
     private val deleteCarJobsUseCase: DeleteCarJobsUseCase,
+
+    @RemoteGetCarModelListUseCaseQualifier
+    private val getRemoteCarModelListUseCase: GetCarModelListUseCase,
+
+    private val addDbCarModelListUseCase: AddCarModelListUseCase,
+    private val deleteCarModelsUseCase: DeleteCarModelsUseCase,
 
     @RemoteGetDepartmentListUseCaseQualifier
     private val getRemoteDepartmentListUseCase: GetDepartmentListUseCase,
@@ -85,66 +86,6 @@ class DataSynchronizationFragmentViewModel @Inject constructor(
 
 ) : ViewModel() {
 
-    // Репозитории
-//    private val remoteRepairTypeRepository = RemoteRepairTypeRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbRepairTypeRepository = DbRepairTypeRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//
-//    private val remoteCarJobRepository = RemoteCarJobRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbCarJobRepository = DbCarJobRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//
-//    private val remoteDepartmentRepository = RemoteDepartmentRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbDepartmentRepository = DbDepartmentRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//
-//    private val remoteEmployeeRepository = RemoteEmployeeRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbEmployeeRepository = DbEmployeeRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//
-//    private val remotePartnerRepository = RemotePartnerRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbPartnerRepository = DbPartnerRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//
-//    private val remoteCarRepository = RemoteCarRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbCarRepository = DbCarRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//
-//    private val remoteWorkingHourRepository = RemoteWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//    private val dbWorkingHourRepository = DbWorkingHourRepositoryImpl.get() // требуется инъекция зависимостей!!!
-//
-//    private val synchroRepositoryImpl = SynchroRepositoryImpl.get() // требуется инъекция зависимостей!!!
-
-    // ссылки на экземпляры классов Юзе-Кейсов, которые будут использоваться в Вью-Модели:
-//    private val getRemoteRepairTypeListUseCase = GetRepairTypeListUseCase(remoteRepairTypeRepository)
-//    private val getDbRepairTypeListUseCase = GetRepairTypeListUseCase(dbRepairTypeRepository)
-//    private val addRepairTypeListUseCase = AddRepairTypeListUseCase(dbRepairTypeRepository)
-//    private val deleteRepairTypesUseCase = DeleteRepairTypesUseCase(dbRepairTypeRepository)
-//
-//    private val getRemoteCarJobListUseCase = GetCarJobListUseCase(remoteCarJobRepository)
-//    private val addDbCarJobListUseCase = AddCarJobListUseCase(dbCarJobRepository)
-//    private val deleteCarJobsUseCase = DeleteCarJobsUseCase(dbCarJobRepository)
-//
-//    private val getRemoteDepartmentListUseCase = GetDepartmentListUseCase(remoteDepartmentRepository)
-//    private val addDbDepartmentUseCase = AddDepartmentUseCase(dbDepartmentRepository)
-//    private val deleteDepartmentsUseCase = DeleteDepartmentsUseCase(dbDepartmentRepository)
-//
-//    private val getRemoteEmployeeListUseCase = GetEmployeeListUseCase(remoteEmployeeRepository)
-//    private val addDbEmployeeListUseCase = AddEmployeeListUseCase(dbEmployeeRepository)
-//    private val deleteEmployeesUseCase = DeleteEmployeesUseCase(dbEmployeeRepository)
-//
-//    private val getRemotePartnerListUseCase = GetPartnerListUseCase(remotePartnerRepository)
-//    private val addDbPartnerListUseCase = AddPartnerListUseCase(dbPartnerRepository)
-//    private val deletePartnersUseCase = DeletePartnerListUseCase(dbPartnerRepository)
-//
-//    private val getRemoteCarListUseCase = GetCarListUseCase(remoteCarRepository)
-//    private val addDbCarListUseCase = AddCarListUseCase(dbCarRepository)
-//    private val deleteCarsUseCase = DeleteCarListUseCase(dbCarRepository)
-//
-//    private val getRemoteWorkingHourListUseCase = GetWorkingHourListUseCase(remoteWorkingHourRepository)
-//    private val addDbWorkingHourListUseCase = AddWorkingHourListUseCase(dbWorkingHourRepository)
-//    private val deleteWorkingHoursUseCase = DeleteWorkingHourListUseCase(dbWorkingHourRepository)
-//
-//    private val getModifiedWorkOrdersQuantityUseCase = GetModifiedWorkOrdersQuantityUseCase(synchroRepositoryImpl)
-//    private val uploadWorkOrdersUseCase = UploadWorkOrdersUseCase(synchroRepositoryImpl)
-//    private val loadWorkOrdersUseCase = LoadWorkOrdersUseCase(synchroRepositoryImpl)
-//
-//    private val loadDefaultWorkOrderSettingsUseCase = LoadDefaultWorkOrderSettingsUseCase(synchroRepositoryImpl)
-
     // ЛивДаты
     private val _canContinue = MutableLiveData<Boolean>()
     val canContinue: LiveData<Boolean>
@@ -158,8 +99,12 @@ class DataSynchronizationFragmentViewModel @Inject constructor(
     val errorSynchronization: LiveData<Boolean>
         get() = _errorSynchronization
 
-    private val _currentSituation = MutableLiveData<String>()
-    val currentSituation: LiveData<String>
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
+
+    private val _currentSituation = MutableLiveData<OperationMode>()
+    val currentSituation: LiveData<OperationMode>
         get() = _currentSituation
 
     private val _uploadResult = MutableLiveData<FunctionResult>()
@@ -169,134 +114,261 @@ class DataSynchronizationFragmentViewModel @Inject constructor(
     fun synchonizeData() {
         viewModelScope.launch {
 
+            var success = true
+
             val quantity = getModifiedWorkOrdersQuantity()
             if (quantity > 0) {
                 // послать новые или измененные заказ-наряды в 1С
                 val result = uploadWorkOrders()
-                result?.let {
-                    _uploadResult.value = it
+                _uploadResult.value = result
+                success = result.isSuccess
+                if (!success) {
+                    _canContinueWithoutSynchro.value = true // послать заказ-наряды в 1С не получилось
                 }
             }
 
-            val remoteRepairTypeList = getRemoteRepairTypeListUseCase.getRepairTypeList()
+            if (success) {
+                var result = true
+                var remoteDepartmentList = listOf<Department>()
+                try {
+                    remoteDepartmentList = getRemoteDepartmentListUseCase.getDepartmentList()
+                } catch (e: Exception) {
+                    result = false
+                    _errorMessage.value = "remoteDepartmentList: " + e.toString()
+                }
 
-            if (remoteRepairTypeList.isEmpty()) {
-                // не удалось получить данные из сервера 1С, надо проверить, есть ли данные в БД
-                val dbRepairTypeList = getDbRepairTypeListUseCase.getRepairTypeList()
+                if (!result) {
+                    // не удалось получить данные из сервера 1С, надо проверить, есть ли данные в БД
+                    val dbDepartmentList = getDbDepartmentListUseCase.getDepartmentList()
 
-                if (dbRepairTypeList.isEmpty()) {
-                    _errorSynchronization.value = true
+                    if (dbDepartmentList.isEmpty()) {
+                        _errorSynchronization.value = true
+                    } else {
+                        _canContinueWithoutSynchro.value = true
+                    }
                 } else {
-                    _canContinueWithoutSynchro.value = true
+                    if (refreshPartner() &&
+                        refreshEmployee() &&
+                        refreshCarJob() &&
+                        refreshCarModel() &&
+                        refreshCar() &&
+                        refreshDepartment() &&
+                        refreshWorkingHour() &&
+                        refreshDefaultWorkOrderSettings() &&
+                        refreshRepairType() &&
+                        refreshWorkOrder()) {
+
+                        _currentSituation.value = OperationMode.NOTHING
+                        _canContinue.value = true
+                    } else {
+                        _errorSynchronization.value = true
+                    }
                 }
-            } else {
-                deleteRepairTypesUseCase.deleteAllRepairTypes()
-                addRepairTypeListUseCase.addRepairTypeList(remoteRepairTypeList)
-
-                refreshPartner()
-                refreshEmployee()
-                refreshCarJob()
-                refreshCar()
-                refreshDepartment()
-                refreshWorkingHour()
-                refreshDefaultWorkOrderSettings()
-                refreshWorkOrder()
-
-                _currentSituation.value = ""
-                _canContinue.value = true
             }
         }
     }
 
-    suspend fun refreshCarJob() {
-        _currentSituation.value = "Получение справочника Автоработы из 1С"
-        val remoteCarJobList = getRemoteCarJobListUseCase.getCarJobList()
-        if (!remoteCarJobList.isEmpty()) {
-            deleteCarJobsUseCase.deleteAllCarJobs()
-            _currentSituation.value = "Обработка справочника Автоработы"
-            addDbCarJobListUseCase.addCarJobList(remoteCarJobList)
-        }
-    }
+    suspend fun refreshCarJob(): Boolean {
 
-    suspend fun refreshDepartment() {
-        _currentSituation.value = "Получение справочника Цеха из 1С"
-        Log.i("rustam", "Получение справочника Цеха из 1С")
-        val remoteDepartmentList = getRemoteDepartmentListUseCase.getDepartmentList()
-        if (!remoteDepartmentList.isEmpty()) {
-            deleteDepartmentsUseCase.deleteAllDepartments()
-            _currentSituation.value = "Обработка справочника Цеха"
-            remoteDepartmentList.forEach {
-                addDbDepartmentUseCase.addDepartment(it)
+        var result = true
+
+        deleteCarJobsUseCase.deleteAllCarJobs()
+
+        try {
+            _currentSituation.value = OperationMode.GET_CAR_JOB_LIST // "Получение справочника Автоработы из 1С"
+            val remoteCarJobList = getRemoteCarJobListUseCase.getCarJobList()
+            if (!remoteCarJobList.isEmpty()) {
+                _currentSituation.value = OperationMode.PREPARE_CAR_JOB_LIST // "Обработка справочника Автоработы"
+                addDbCarJobListUseCase.addCarJobList(remoteCarJobList)
             }
+        } catch (e: Exception) {
+            result = false
+            _errorMessage.value = "refreshCarJob: " + e.toString()
         }
+        return result
     }
 
-    suspend fun refreshEmployee() {
-        _currentSituation.value = "Получение справочника Сотрудники из 1С"
-        val remoteEmployeeList = getRemoteEmployeeListUseCase.getEmployeeList()
-        if (!remoteEmployeeList.isEmpty()) {
-            deleteEmployeesUseCase.deleteAllEmployees()
-            _currentSituation.value = "Обработка справочника Сотрудники"
-            addDbEmployeeListUseCase.addEmployeeList(remoteEmployeeList)
+    suspend fun refreshCarModel(): Boolean {
+
+        var result = true
+
+        deleteCarModelsUseCase.deleteAllCarModels()
+
+        try {
+            _currentSituation.value = OperationMode.GET_CAR_MODEL_LIST // "Получение справочника Модели из 1С"
+            val remoteCarModelList = getRemoteCarModelListUseCase.getCarModelList()
+            if (!remoteCarModelList.isEmpty()) {
+                _currentSituation.value = OperationMode.PREPARE_CAR_MODEL_LIST // "Обработка справочника Модели"
+                addDbCarModelListUseCase.addCarModelList(remoteCarModelList)
+            }
+        } catch (e: Exception) {
+            result = false
+            _errorMessage.value = "refreshCarModel: " + e.toString()
         }
+        return result
     }
 
-    suspend fun refreshPartner() {
-        _currentSituation.value = "Получение справочника Контрагенты из 1С"
-        val remotePartnerList = getRemotePartnerListUseCase.getPartnerList()
-        if (!remotePartnerList.isEmpty()) {
-            deletePartnersUseCase.deleteAllPartners()
-            _currentSituation.value = "Обработка справочника Контрагенты"
-            addDbPartnerListUseCase.addPartnerList(remotePartnerList)
+    suspend fun refreshDepartment(): Boolean {
+
+        var result = true
+
+        _currentSituation.value = OperationMode.GET_DEPARTMENT_LIST // "Получение справочника Цеха из 1С"
+
+        deleteDepartmentsUseCase.deleteAllDepartments()
+
+        try {
+            val remoteDepartmentList = getRemoteDepartmentListUseCase.getDepartmentList()
+            if (!remoteDepartmentList.isEmpty()) {
+                _currentSituation.value = OperationMode.PREPARE_DEPARTMENT_LIST // "Обработка справочника Цеха"
+                remoteDepartmentList.forEach {
+                    addDbDepartmentUseCase.addDepartment(it)
+                }
+            }
+        } catch (e: Exception) {
+            result = false
+            _errorMessage.value = "refreshDepartment: " + e.toString()
         }
+        return result
     }
 
-    suspend fun refreshCar() {
-        _currentSituation.value = "Получение справочника СХТ из 1С"
-        Log.i("rustam", "Получение справочника СХТ из 1С")
-        val remoteCarList = getRemoteCarListUseCase.getCarList()
-        if (!remoteCarList.isEmpty()) {
-            deleteCarsUseCase.deleteAllCars()
-            _currentSituation.value = "Обработка справочника СХТ"
-            addDbCarListUseCase.addCarList(remoteCarList)
+    suspend fun refreshEmployee(): Boolean {
+
+        var result = true
+
+        _currentSituation.value = OperationMode.GET_EMPLOYEE_LIST // "Получение справочника Сотрудники из 1С"
+
+        deleteEmployeesUseCase.deleteAllEmployees()
+
+        try {
+            val remoteEmployeeList = getRemoteEmployeeListUseCase.getEmployeeList()
+            if (!remoteEmployeeList.isEmpty()) {
+                _currentSituation.value = OperationMode.PREPARE_EMPLOYEE_LIST // "Обработка справочника Сотрудники"
+                addDbEmployeeListUseCase.addEmployeeList(remoteEmployeeList)
+            }
+        } catch (e: Exception) {
+            result = false
+            _errorMessage.value = "refreshEmployee: " + e.toString()
         }
+        return result
     }
 
-    suspend fun refreshWorkingHour() {
-        _currentSituation.value = "Получение справочника Нормочасы из 1С"
-        Log.i("rustam", "Получение справочника Нормочасы из 1С")
-        val remoteWorkingHourList = getRemoteWorkingHourListUseCase.getWorkingHourList()
-        if (!remoteWorkingHourList.isEmpty()) {
-            deleteWorkingHoursUseCase.deleteAllWorkingHours()
-            _currentSituation.value = "Обработка справочника Нормочасы"
-            addDbWorkingHourListUseCase.addWorkingHourList(remoteWorkingHourList)
+    suspend fun refreshPartner(): Boolean {
+
+        var result = true
+
+        _currentSituation.value = OperationMode.GET_PARTNER_LIST // "Получение справочника Контрагенты из 1С"
+
+        deletePartnersUseCase.deleteAllPartners()
+
+        try {
+            val remotePartnerList = getRemotePartnerListUseCase.getPartnerList()
+            if (!remotePartnerList.isEmpty()) {
+                _currentSituation.value = OperationMode.PREPARE_PARTNER_LIST // "Обработка справочника Контрагенты"
+                addDbPartnerListUseCase.addPartnerList(remotePartnerList)
+            }
+        } catch (e: Exception) {
+            result = false
+            _errorMessage.value = "refreshPartner: " + e.toString()
         }
+        return result
     }
 
-    suspend fun refreshDefaultWorkOrderSettings() {
-        _currentSituation.value = "Получение настроек заполнения из 1С"
-        Log.i("rustam", "Получение настроек заполнения из 1С")
-        val success = loadDefaultWorkOrderSettingsUseCase.loadDefaultWorkOrderSettings() // удаление происходит внутри
-        Log.i("rustam", "loadDefaultWorkOrderSettings success = " + success.toString())
+    suspend fun refreshCar(): Boolean {
+
+        var result = true
+
+        _currentSituation.value = OperationMode.GET_CAR_LIST // "Получение справочника СХТ из 1С"
+
+        deleteCarsUseCase.deleteAllCars()
+
+        try {
+            val remoteCarList = getRemoteCarListUseCase.getCarList()
+            if (!remoteCarList.isEmpty()) {
+                _currentSituation.value = OperationMode.PREPARE_CAR_LIST // "Обработка справочника СХТ"
+                addDbCarListUseCase.addCarList(remoteCarList)
+            }
+        } catch (e: Exception) {
+            result = false
+            _errorMessage.value = "refreshCar: " + e.toString()
+        }
+        return result
     }
 
-    suspend fun refreshWorkOrder() {
-        _currentSituation.value = "Получение документов Заказ-наряд из 1С"
-        Log.i("rustam", "Получение документов из 1С")
-        val success = loadWorkOrdersUseCase.loadWorkOrders()
-        Log.i("rustam", "loadWorkOrders success = " + success.toString())
+    suspend fun refreshWorkingHour(): Boolean {
+
+        var result = true
+
+        _currentSituation.value = OperationMode.GET_WORKING_HOUR_LIST // "Получение справочника Нормочасы из 1С"
+
+        deleteWorkingHoursUseCase.deleteAllWorkingHours()
+
+        try {
+            val remoteWorkingHourList = getRemoteWorkingHourListUseCase.getWorkingHourList()
+            if (!remoteWorkingHourList.isEmpty()) {
+                _currentSituation.value = OperationMode.PREPARE_WORKING_HOUR_LIST // "Обработка справочника Нормочасы"
+                addDbWorkingHourListUseCase.addWorkingHourList(remoteWorkingHourList)
+            }
+        } catch (e: Exception) {
+            result = false
+            _errorMessage.value = "refreshWorkingHour: " + e.toString()
+        }
+        return result
+    }
+
+    suspend fun refreshDefaultWorkOrderSettings(): Boolean {
+
+        var result = true
+
+        _currentSituation.value = OperationMode.GET_DEFAULT_WORK_ORDER_SETTINGS // "Получение настроек заполнения из 1С"
+
+        try {
+            loadDefaultWorkOrderSettingsUseCase.loadDefaultWorkOrderSettings() // удаление происходит внутри
+        } catch (e: Exception) {
+            result = false
+            _errorMessage.value = "refreshDefaultWorkOrderSettings: " + e.toString()
+        }
+        return result
+    }
+
+    suspend fun refreshWorkOrder(): Boolean {
+
+        var result = true
+
+        _currentSituation.value = OperationMode.LOAD_WORK_ORDERS // "Получение документов Заказ-наряд из 1С"
+
+        try {
+            loadWorkOrdersUseCase.loadWorkOrders()
+        } catch (e: Exception) {
+            result = false
+            _errorMessage.value = "refreshPartner: " + e.toString()
+        }
+        return result
+    }
+
+    suspend fun refreshRepairType(): Boolean {
+
+        var result = true
+
+        _currentSituation.value = OperationMode.LOAD_REPAIR_TYPES
+
+        try {
+            loadRepairTypesUseCase.loadRepairTypes()
+        } catch (e: Exception) {
+            result = false
+            _errorMessage.value = "refreshRepairType: " + e.toString()
+        }
+        return result
     }
 
     suspend fun uploadWorkOrders(): FunctionResult {
 
-        _currentSituation.value = "Отправка документов Заказ-наряд в 1С"
+        _currentSituation.value = OperationMode.UPLOAD_WORK_ORDERS //  "Отправка документов Заказ-наряд в 1С"
         val functionResult = uploadWorkOrdersUseCase.uploadWorkOrders()
 
         return functionResult
     }
 
     suspend fun getModifiedWorkOrdersQuantity(): Int {
-        // надо через юз кейс делать !!!
         return getModifiedWorkOrdersQuantityUseCase.getModifiedWorkOrdersQuantity()
     }
 }

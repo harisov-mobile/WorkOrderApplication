@@ -1,9 +1,7 @@
 package ru.internetcloud.workorderapplication.data.repository.remote
 
-import android.util.Log
 import ru.internetcloud.workorderapplication.data.mapper.WorkingHourMapper
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
-import ru.internetcloud.workorderapplication.data.network.dto.WorkingHourResponse
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.repository.WorkingHourRepository
 import javax.inject.Inject
@@ -12,30 +10,8 @@ class RemoteWorkingHourRepositoryImpl @Inject constructor(
     private val workingHourMapper: WorkingHourMapper
 ) : WorkingHourRepository {
 
-    companion object {
-//        private var instance: RemoteWorkingHourRepositoryImpl? = null
-//
-//        fun initialize() {
-//            if (instance == null) {
-//                instance = RemoteWorkingHourRepositoryImpl()
-//            }
-//        }
-//
-//        fun get(): RemoteWorkingHourRepositoryImpl {
-//            return instance ?: throw RuntimeException("RemoteWorkingHourRepositoryImpl must be initialized.")
-//        }
-    }
-
     override suspend fun getWorkingHourList(): List<WorkingHour> {
-        var workingHourResponse = WorkingHourResponse(emptyList())
-
-        try {
-            workingHourResponse = ApiClient.getInstance().client.getWorkingHours()
-        } catch (e: Exception) {
-            // ничего не делаю
-            Log.i("rustam", "ошибка при загрузке getWorkingHours" + e.toString())
-        }
-
+        val workingHourResponse = ApiClient.getInstance().client.getWorkingHours()
         return workingHourMapper.fromListDtoToListEntity(workingHourResponse.workingHours)
     }
 

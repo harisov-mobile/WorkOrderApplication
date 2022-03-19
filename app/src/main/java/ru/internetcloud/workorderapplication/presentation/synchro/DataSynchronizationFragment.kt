@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentDataSynchronizationBinding
+import ru.internetcloud.workorderapplication.domain.common.OperationMode
 import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
 import javax.inject.Inject
 
@@ -98,9 +99,15 @@ class DataSynchronizationFragment : Fragment() {
             }
         }
 
-        viewModel.currentSituation.observe(viewLifecycleOwner) { currentText ->
+        viewModel.currentSituation.observe(viewLifecycleOwner) { currentOperationMode ->
             context?.let { currentContext ->
-                binding.currentSituationTextView.text = currentText
+                binding.currentSituationTextView.text = getOperationText(currentOperationMode)
+            }
+        }
+
+        viewModel.errorMessage.observe(viewLifecycleOwner) { errorText ->
+            context?.let { currentContext ->
+                binding.errorMessageTextView.text = errorText
             }
         }
 
@@ -145,6 +152,30 @@ class DataSynchronizationFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private fun getOperationText(operationMode: OperationMode): String {
+        return when (operationMode) {
+            OperationMode.NOTHING -> ""
+            OperationMode.GET_CAR_JOB_LIST -> getString(R.string.get_car_job_list)
+            OperationMode.PREPARE_CAR_JOB_LIST -> getString(R.string.prepare_car_job_list)
+            OperationMode.GET_DEPARTMENT_LIST -> getString(R.string.get_department_list)
+            OperationMode.PREPARE_DEPARTMENT_LIST -> getString(R.string.prepare_department_list)
+            OperationMode.GET_EMPLOYEE_LIST -> getString(R.string.get_employee_list)
+            OperationMode.PREPARE_EMPLOYEE_LIST -> getString(R.string.prepare_employee_list)
+            OperationMode.GET_PARTNER_LIST -> getString(R.string.get_partner_list)
+            OperationMode.PREPARE_PARTNER_LIST -> getString(R.string.prepare_partner_list)
+            OperationMode.GET_CAR_LIST -> getString(R.string.get_car_list)
+            OperationMode.PREPARE_CAR_LIST -> getString(R.string.prepare_car_list)
+            OperationMode.GET_WORKING_HOUR_LIST -> getString(R.string.get_working_hour_list)
+            OperationMode.PREPARE_WORKING_HOUR_LIST -> getString(R.string.prepare_working_hour_list)
+            OperationMode.GET_DEFAULT_WORK_ORDER_SETTINGS -> getString(R.string.get_default_wo_settings_list)
+            OperationMode.LOAD_WORK_ORDERS -> getString(R.string.load_work_orders)
+            OperationMode.LOAD_REPAIR_TYPES -> getString(R.string.load_repair_types)
+            OperationMode.UPLOAD_WORK_ORDERS -> getString(R.string.upload_work_orders)
+            OperationMode.GET_CAR_MODEL_LIST -> getString(R.string.get_car_model_list)
+            OperationMode.PREPARE_CAR_MODEL_LIST -> getString(R.string.prepare_car_model_list)
         }
     }
 }

@@ -192,7 +192,7 @@ class LogonFragment : Fragment() {
                 context?.let { currentContext ->
                     val server = binding.serverEditText.text?.toString()
                     server?.let { serverAddress ->
-                        AuthorizationPreferences.setStoredServer(currentContext.applicationContext, server)
+                        AuthorizationPreferences.setStoredServer(currentContext.applicationContext, serverAddress)
                     }
                     val login = binding.loginEditText.text?.toString()
                     login?.let { loginName ->

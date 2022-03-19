@@ -6,13 +6,15 @@ interface SynchroRepository {
 
     suspend fun getModifiedWorkOrdersQuantity(): Int
 
-    suspend fun loadWorkOrders(): Boolean // из сервера 1С
+    suspend fun loadWorkOrders() // из сервера 1С
+
+    suspend fun loadRepairTypes() // из сервера 1С
 
     suspend fun uploadWorkOrders(): FunctionResult // на сервер 1С выгрузить все модифицированные ордеры
 
     suspend fun uploadWorkOrderById(id: String): FunctionResult // на сервер 1С выгрузить один ордер
 
-    suspend fun loadDefaultWorkOrderSettings(): Boolean // из сервера 1С
+    suspend fun loadDefaultWorkOrderSettings() // из сервера 1С
 
     suspend fun sendWorkOrderToEmail(id: String, email: String): FunctionResult
 
@@ -21,4 +23,6 @@ interface SynchroRepository {
     suspend fun deleteAllPerformers()
 
     suspend fun deleteAllWorkOrders()
+
+    suspend fun deleteAllDefaultRepairTypeJobDetails()
 }

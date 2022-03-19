@@ -4,11 +4,13 @@ import ru.internetcloud.workorderapplication.data.entity.CarDbModel
 import ru.internetcloud.workorderapplication.data.entity.CarWithOwner
 import ru.internetcloud.workorderapplication.data.network.dto.CarDTO
 import ru.internetcloud.workorderapplication.domain.catalog.Car
+import ru.internetcloud.workorderapplication.domain.catalog.CarModel
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import javax.inject.Inject
 
 class CarMapper @Inject constructor(
-    private val partnerMapper: PartnerMapper
+    private val partnerMapper: PartnerMapper,
+    private val carModelMapper: CarModelMapper
 ) {
 
     fun fromDtoToEntity(carDTO: CarDTO): Car {
@@ -18,7 +20,7 @@ class CarMapper @Inject constructor(
             name = carDTO.name,
             vin = carDTO.vin,
             manufacturer = carDTO.manufacturer,
-            model = carDTO.model,
+            carModel = CarModel(carDTO.carModelId), // специально псевдо-объект CarModel создаю, с единственной целью:
             type = carDTO.type,
             releaseYear = carDTO.releaseYear,
             mileage = carDTO.mileage,
@@ -34,7 +36,7 @@ class CarMapper @Inject constructor(
             name = car.name,
             vin = car.vin,
             manufacturer = car.manufacturer,
-            model = car.model,
+            carModelId = car.carModel?.id ?: "",
             type = car.type,
             releaseYear = car.releaseYear,
             mileage = car.mileage,
@@ -60,7 +62,7 @@ class CarMapper @Inject constructor(
                 name = carWithOwner.car.name,
                 vin = carWithOwner.car.vin,
                 manufacturer = carWithOwner.car.manufacturer,
-                model = carWithOwner.car.model,
+                carModel = carModelMapper.fromDbModelToEntityWithNull(carWithOwner.carModel),
                 type = carWithOwner.car.type,
                 releaseYear = carWithOwner.car.releaseYear,
                 mileage = carWithOwner.car.mileage,
@@ -77,7 +79,7 @@ class CarMapper @Inject constructor(
             name = carWithOwner.car.name,
             vin = carWithOwner.car.vin,
             manufacturer = carWithOwner.car.manufacturer,
-            model = carWithOwner.car.model,
+            carModel = carModelMapper.fromDbModelToEntityWithNull(carWithOwner.carModel),
             type = carWithOwner.car.type,
             releaseYear = carWithOwner.car.releaseYear,
             mileage = carWithOwner.car.mileage,

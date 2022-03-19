@@ -37,20 +37,25 @@ interface DataModule {
     @Binds
     fun bindDbRepairTypeRepository(impl: DbRepairTypeRepositoryImpl): RepairTypeRepository
 
-    @RemoteRepairTypeRepositoryQualifier
-    @ApplicationScope
-    @Binds
-    fun bindRemoteRepairTypeRepository(impl: RemoteRepairTypeRepositoryImpl): RepairTypeRepository
-
     @DbCarJobRepositoryQualifier
     @ApplicationScope
     @Binds
     fun bindDbCarJobRepository(impl: DbCarJobRepositoryImpl): CarJobRepository
 
+    @DbCarModelRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindDbCarModelRepository(impl: DbCarModelRepositoryImpl): CarModelRepository
+
     @RemoteCarJobRepositoryQualifier
     @ApplicationScope
     @Binds
     fun bindRemoteCarJobRepository(impl: RemoteCarJobRepositoryImpl): CarJobRepository
+
+    @RemoteCarModelRepositoryQualifier
+    @ApplicationScope
+    @Binds
+    fun bindRemoteCarModelRepository(impl: RemoteCarModelRepositoryImpl): CarModelRepository
 
     @DbDepartmentRepositoryQualifier
     @ApplicationScope

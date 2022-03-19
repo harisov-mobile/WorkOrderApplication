@@ -2,14 +2,8 @@ package ru.internetcloud.workorderapplication.data.repository
 
 import android.util.Log
 import ru.internetcloud.workorderapplication.data.database.AppDao
-import ru.internetcloud.workorderapplication.data.entity.DefaultWorkOrderSettingsDbModel
-import ru.internetcloud.workorderapplication.data.entity.JobDetailDbModel
-import ru.internetcloud.workorderapplication.data.entity.PerformerDetailDbModel
-import ru.internetcloud.workorderapplication.data.entity.WorkOrderWithDetails
-import ru.internetcloud.workorderapplication.data.mapper.DefaultWorkOrderSettingsMapper
-import ru.internetcloud.workorderapplication.data.mapper.JobDetailMapper
-import ru.internetcloud.workorderapplication.data.mapper.PerformerDetailMapper
-import ru.internetcloud.workorderapplication.data.mapper.WorkOrderMapper
+import ru.internetcloud.workorderapplication.data.entity.*
+import ru.internetcloud.workorderapplication.data.mapper.*
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.*
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
@@ -22,54 +16,60 @@ class SynchroRepositoryImpl @Inject constructor(
     private val jobDetailMapper: JobDetailMapper,
     private val performerDetailMapper: PerformerDetailMapper,
     private val workOrderMapper: WorkOrderMapper,
-    private val defaultWorkOrderSettingsMapper: DefaultWorkOrderSettingsMapper
+    private val defaultWorkOrderSettingsMapper: DefaultWorkOrderSettingsMapper,
+    private val defaultRepairTypeJobDetailMapper: DefaultRepairTypeJobDetailMapper,
+    private val repairTypeMapper: RepairTypeMapper
 ) : SynchroRepository {
 
-    override suspend fun loadWorkOrders(): Boolean {
+    override suspend fun loadWorkOrders() {
 
-        var success = false
+        deleteAllJobDetails()
+        deleteAllPerformers()
+        deleteAllWorkOrders()
 
-        var workOrderResponse = WorkOrderResponse(emptyList(), emptyList(), emptyList())
+        val workOrderResponse = ApiClient.getInstance().client.getWorkOrders()
 
-        try {
-            workOrderResponse = ApiClient.getInstance().client.getWorkOrders()
-            success = true
-        } catch (e: Exception) {
-            // ничего не делаю
-            Log.i("rustam", "ошибка при загрузке заказ-нарядов" + e.toString())
-        }
+        addJobDetailListfromDTO(workOrderResponse.jobDetails)
 
-        if (success) {
-            deleteAllJobDetails()
-            addJobDetailListfromDTO(workOrderResponse.jobDetails)
+        addPerformersList(workOrderResponse.performerDetails)
 
-            deleteAllPerformers()
-            addPerformersList(workOrderResponse.performerDetails)
-
-            deleteAllWorkOrders()
-            addWorkOrderList(workOrderResponse.workOrders)
-        }
-        return success
+        addWorkOrderList(workOrderResponse.workOrders)
     }
 
-    override suspend fun loadDefaultWorkOrderSettings(): Boolean {
-        var success = false
+    override suspend fun loadRepairTypes() {
 
-        var defResponse = DefaultWorkOrderSettingsResponse(emptyList())
+        deleteAllDefaultRepairTypeJobDetails()
 
-        try {
-            defResponse = ApiClient.getInstance().client.getDefaultWorkOrderSettings()
-            success = true
-        } catch (e: Exception) {
-            // ничего не делаю
-            Log.i("rustam", "ошибка при загрузке настроек заполнения заказ-наряда" + e.toString())
+        val repairTypeResponse = ApiClient.getInstance().client.getRepairTypes()
+
+        addDefauiltRepairJobDetailListFromDTO(repairTypeResponse.defaultJobDetails)
+
+        addRepairTypeList(repairTypeResponse.repairTypes)
+    }
+
+    override suspend fun deleteAllDefaultRepairTypeJobDetails() {
+        appDao.deleteAllDefaultRepairTypeJobDetails()
+    }
+
+    suspend fun addDefauiltRepairJobDetailListFromDTO(defaultJobDetails: List<DefaultRepairTypeJobDetailDTO>) {
+
+        val defaultJobDetailDbModelList: MutableList<DefaultRepairTypeJobDetailDbModel> = mutableListOf()
+
+        defaultJobDetails.forEach { jobDetail ->
+            defaultJobDetailDbModelList.add(defaultRepairTypeJobDetailMapper.fromDtoToDbModel(jobDetail))
         }
 
-        if (success) {
-            deleteAllDefaultWorkOrderSettings()
-            addDefaultWorkOrderSettingsList(defResponse.settings)
-        }
-        return success
+        appDao.addDefaultRepairTypeJobDetailList(defaultJobDetailDbModelList)
+    }
+
+    suspend fun addRepairTypeList(repairTypes: List<RepairTypeDTO>) {
+        appDao.addRepairTypeList(repairTypeMapper.fromListDtoToListDboModel(repairTypes))
+    }
+
+    override suspend fun loadDefaultWorkOrderSettings() {
+        val defResponse = ApiClient.getInstance().client.getDefaultWorkOrderSettings()
+        deleteAllDefaultWorkOrderSettings()
+        addDefaultWorkOrderSettingsList(defResponse.settings)
     }
 
     override suspend fun sendWorkOrderToEmail(id: String, email: String): FunctionResult {
@@ -88,7 +88,7 @@ class SynchroRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             // ничего не делаю
-            Log.i("rustam", "ошибка при отправке заказ-наряда на эл.почту по id" + e.toString())
+            Log.i("rustam", "ошибка при отправке заказ-наряда на эл.почту по id: " + e.toString())
             result.errorMessage = e.toString()
         }
 
@@ -103,13 +103,10 @@ class SynchroRepositoryImpl @Inject constructor(
         if (listWO.isEmpty()) {
             result.isSuccess = true
         } else {
-            Log.i("rustam", "начинаем uploadWorkOrderList")
-
             result.amountOfModifiedWorkOrders = listWO.size
 
             try {
                 val uploadWorkOrderResponse = ApiClient.getInstance().client.uploadWorkOrders(listWO)
-                Log.i("rustam", "после  ApiClient.getInstance().client.uploadWorkOrders()")
                 if (uploadWorkOrderResponse.uploadResult.isSuccess) {
                     result.isSuccess = true
                 } else {
@@ -117,7 +114,7 @@ class SynchroRepositoryImpl @Inject constructor(
                 }
             } catch (e: Exception) {
                 // ничего не делаю
-                Log.i("rustam", "ошибка при выгрузке заказ-нарядов" + e.toString())
+                // Log.i("rustam", "ошибка при выгрузке заказ-нарядов: " + e.toString())
                 result.errorMessage = e.toString()
             }
         }
@@ -150,7 +147,7 @@ class SynchroRepositoryImpl @Inject constructor(
                 }
             } catch (e: Exception) {
                 // ничего не делаю
-                Log.i("rustam", "ошибка при выгрузке заказ-наряда по id" + e.toString())
+                Log.i("rustam", "ошибка при выгрузке заказ-наряда по id: " + e.toString())
                 result.errorMessage = e.toString()
             }
         }

@@ -31,6 +31,9 @@ interface AppDao {
     @Query("DELETE FROM job_details")
     suspend fun deleteAllJobDetails()
 
+    @Query("DELETE FROM default_repair_type_job_details")
+    suspend fun deleteAllDefaultRepairTypeJobDetails()
+
     @Query("DELETE FROM default_work_order_settings")
     suspend fun deleteAllDefaultWorkOrderSettings()
 
@@ -39,6 +42,9 @@ interface AppDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addJobDetailList(jobDetailDbModelList: List<JobDetailDbModel>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addDefaultRepairTypeJobDetailList(defaultJobDetailDbModelList: List<DefaultRepairTypeJobDetailDbModel>)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addPerformerDetailList(performerDetailDbModelList: List<PerformerDetailDbModel>)
@@ -69,17 +75,32 @@ interface AppDao {
     @Query("SELECT * FROM car_jobs")
     suspend fun getCarJobList(): List<CarJobDbModel> // Не использовать LiveData в репозитории
 
+    @Query("SELECT * FROM car_models")
+    suspend fun getCarModelList(): List<CarModelDbModel> // Не использовать LiveData в репозитории
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addCarJob(carJobDbModel: CarJobDbModel)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addCarModel(carModelDbModel: CarModelDbModel)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addCarJobList(carJobDbModelList: List<CarJobDbModel>)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addCarModelList(carModelDbModelList: List<CarModelDbModel>)
+
     @Query("DELETE FROM car_jobs")
     suspend fun deleteAllCarJobs()
 
+    @Query("DELETE FROM car_models")
+    suspend fun deleteAllCarModels()
+
     @Query("SELECT * FROM car_jobs WHERE id=:id LIMIT 1")
     suspend fun getCarJob(id: String): CarJobDbModel?
+
+    @Query("SELECT * FROM car_models WHERE id=:id LIMIT 1")
+    suspend fun getCarModel(id: String): CarModelDbModel?
 
     @Query("SELECT * FROM car_jobs WHERE name LIKE :searchText")
     suspend fun searhCarJobs(searchText: String): List<CarJobDbModel>

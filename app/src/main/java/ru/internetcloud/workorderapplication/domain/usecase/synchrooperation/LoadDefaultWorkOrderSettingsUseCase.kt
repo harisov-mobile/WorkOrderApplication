@@ -7,7 +7,7 @@ class LoadDefaultWorkOrderSettingsUseCase @Inject constructor(
     private val synchroRepository: SynchroRepository
 ) {
 
-    suspend fun loadDefaultWorkOrderSettings(): Boolean {
-        return synchroRepository.loadDefaultWorkOrderSettings()
+    suspend fun loadDefaultWorkOrderSettings() {
+        synchroRepository.loadDefaultWorkOrderSettings()
     }
 }

@@ -98,8 +98,26 @@
     <string name="wrong_email">Адрес эл.почты - неправильный.</string>
     <string name="fail_send_work_order">"Произошла ошибка при отправке: "</string>
     <string name="success_send_work_order">Успешно отправлено</string>
-    <string name="about_application">"%1$s \n \n Версия 1."</string>
+    <string name="about_application">"%1$s \n \n Версия 2."</string>
     <string name="under_constraction">В разработке.</string>
     <string name="choose_label">...</string>
     <string name="total_sum_label">Итого:</string>
+    <string name="get_car_job_list">Получение справочника Автоработы из 1С</string>
+    <string name="prepare_car_job_list">Обработка справочника Автоработы</string>
+    <string name="get_department_list">Получение справочника Цеха из 1С</string>
+    <string name="prepare_department_list">Обработка справочника Цеха</string>
+    <string name="get_employee_list">Получение справочника Сотрудники из 1С</string>
+    <string name="prepare_employee_list">Обработка справочника Сотрудники</string>
+    <string name="get_partner_list">Получение справочника Контрагенты из 1С</string>
+    <string name="prepare_partner_list">Обработка справочника Контрагенты</string>
+    <string name="get_car_list">Получение справочника СХТ из 1С</string>
+    <string name="prepare_car_list">Обработка справочника СХТ</string>
+    <string name="get_working_hour_list">Получение справочника Нормочасы из 1С</string>
+    <string name="prepare_working_hour_list">Обработка справочника Нормочасы</string>
+    <string name="get_default_wo_settings_list">Получение настроек заполнения из 1С</string>
+    <string name="load_work_orders">Получение документов Заказ-наряд из 1С</string>
+    <string name="upload_work_orders">Отправка документов Заказ-наряд в 1С</string>
+    <string name="load_repair_types">Получение справочника Виды ремонта из 1С</string>
+    <string name="get_car_model_list">Получение справочника Модели из 1С</string>
+    <string name="prepare_car_model_list">Обработка справочника Модели</string>
 </resources>

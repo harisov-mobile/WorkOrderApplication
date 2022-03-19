@@ -1,9 +1,7 @@
 package ru.internetcloud.workorderapplication.data.repository.remote
 
-import android.util.Log
 import ru.internetcloud.workorderapplication.data.mapper.CarMapper
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
-import ru.internetcloud.workorderapplication.data.network.dto.CarResponse
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.repository.CarRepository
 import javax.inject.Inject
@@ -12,30 +10,8 @@ class RemoteCarRepositoryImpl @Inject constructor(
     private val carMapper: CarMapper
 ) : CarRepository {
 
-    companion object {
-//        private var instance: RemoteCarRepositoryImpl? = null
-//
-//        fun initialize() {
-//            if (instance == null) {
-//                instance = RemoteCarRepositoryImpl()
-//            }
-//        }
-//
-//        fun get(): RemoteCarRepositoryImpl {
-//            return instance ?: throw RuntimeException("RemoteCarRepositoryImpl must be initialized.")
-//        }
-    }
-
     override suspend fun getCarList(): List<Car> {
-        var carResponse = CarResponse(emptyList())
-
-        try {
-            carResponse = ApiClient.getInstance().client.getCars()
-        } catch (e: Exception) {
-            // ничего не делаю
-            Log.i("rustam", "ошибка при загрузке getCars" + e.toString())
-        }
-
+        val carResponse = ApiClient.getInstance().client.getCars()
         return carMapper.fromListDtoToListEntity(carResponse.cars)
     }
 

@@ -11,7 +11,7 @@ data class Car(
     var name: String = "",
     var vin: String = "",
     var manufacturer: String = "", // производитель
-    var model: String = "",
+    var carModel: CarModel? = null, // модель
     var type: String = "", // папка в спр-ке "Модели"
     var releaseYear: Int = 0, // год выпуска
     var mileage: Int = 0, // пробег
