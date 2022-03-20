@@ -1,14 +1,17 @@
 package ru.internetcloud.workorderapplication.data.repository.db
 
 import ru.internetcloud.workorderapplication.data.database.AppDao
+import ru.internetcloud.workorderapplication.data.mapper.DefaultRepairTypeJobDetailMapper
 import ru.internetcloud.workorderapplication.data.mapper.RepairTypeMapper
+import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJobDetail
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.repository.RepairTypeRepository
 import javax.inject.Inject
 
 class DbRepairTypeRepositoryImpl @Inject constructor(
     private val appDao: AppDao,
-    private val repairTypeMapper: RepairTypeMapper
+    private val repairTypeMapper: RepairTypeMapper,
+    private val defaultRepairTypeJobDetailMapper: DefaultRepairTypeJobDetailMapper
 ) : RepairTypeRepository {
 
     override suspend fun getRepairTypeList(): List<RepairType> {
@@ -42,5 +45,9 @@ class DbRepairTypeRepositoryImpl @Inject constructor(
 
     override suspend fun searchRepairTypes(searchText: String): List<RepairType> {
         return repairTypeMapper.fromListDbModelToListEntity(appDao.searhRepairTypes("%$searchText%"))
+    }
+
+    override suspend fun getDefaultRepairTypeJobDetails(repairType: RepairType): List<DefaultRepairTypeJobDetail> {
+        return defaultRepairTypeJobDetailMapper.fromListDbModelToListEntity(appDao.getDefaultRepairTypeJobDetails(repairType.id))
     }
 }

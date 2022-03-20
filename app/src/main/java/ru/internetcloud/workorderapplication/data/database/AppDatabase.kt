@@ -14,7 +14,7 @@ import ru.internetcloud.workorderapplication.data.entity.*
         EmployeeDbModel::class, PartnerDbModel::class, CarDbModel::class, WorkingHourDbModel::class,
         PerformerDetailDbModel::class, JobDetailDbModel::class, DefaultWorkOrderSettingsDbModel::class,
         CarModelDbModel::class, DefaultRepairTypeJobDetailDbModel::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(DatabaseTypeConverters::class)
@@ -40,7 +40,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     DATABASE_NAME
                 )
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                     .build()
                 Instance = db
                 return db
@@ -110,3 +110,11 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
                 ")")
     }
 }
+
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("ALTER TABLE 'default_work_order_settings' ADD COLUMN 'workingHourId' TEXT NOT NULL DEFAULT ' ' ") // default_work_order_settings  workingHourId  defaultTimeNorm
+        database.execSQL("ALTER TABLE 'default_work_order_settings' ADD COLUMN 'defaultTimeNorm' TEXT NOT NULL DEFAULT ' ' ") // default_work_order_settings  workingHourId  defaultTimeNorm
+    }
+}
+

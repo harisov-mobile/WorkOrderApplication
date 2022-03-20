@@ -140,5 +140,6 @@
     <string name="load_repair_types">Obtaining a catalog of Repair types from 1C</string>
     <string name="get_car_model_list">Obtaining a catalog of Car Models from 1C</string>
     <string name="prepare_car_model_list">Processing a catalog of Car models</string>
+    <string name="add_default_jobs_question">For the selected Repair type and the selected Car, there are jobs that need to be performed. Add jobs to Jobs list?</string>
 
 </resources>

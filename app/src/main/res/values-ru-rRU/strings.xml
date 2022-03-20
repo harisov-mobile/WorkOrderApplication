@@ -120,4 +120,5 @@
     <string name="load_repair_types">Получение справочника Виды ремонта из 1С</string>
     <string name="get_car_model_list">Получение справочника Модели из 1С</string>
     <string name="prepare_car_model_list">Обработка справочника Модели</string>
+    <string name="add_default_jobs_question">Для выбранного Вида ремонта и выбранной СХТ есть работы, которые необходимо выполнять. Добавить работы в список Работ?</string>
 </resources>

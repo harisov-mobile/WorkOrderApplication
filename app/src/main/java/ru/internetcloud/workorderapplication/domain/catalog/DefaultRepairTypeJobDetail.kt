@@ -11,10 +11,4 @@ data class DefaultRepairTypeJobDetail(
     var carModel: CarModel? = null,
     var carJob: CarJob? = null,
     var quantity: BigDecimal = BigDecimal.ZERO
-
-// это надо будет для DbModel ???
-//    var repairTypeId: String = "",
-//    var modelId: String = "",
-//    var carJobId: String = "",
-//    var quantity: BigDecimal = BigDecimal.ZERO
 ) : Parcelable

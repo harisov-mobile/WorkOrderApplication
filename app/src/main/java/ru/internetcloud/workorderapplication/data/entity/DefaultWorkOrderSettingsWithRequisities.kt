@@ -26,5 +26,12 @@ data class DefaultWorkOrderSettingsWithRequisities(
         entityColumn = "id",
         entity = EmployeeDbModel::class
     )
-    val employee: EmployeeDbModel?
+    val employee: EmployeeDbModel?,
+
+    @Relation(
+        parentColumn = "workingHourId",
+        entityColumn = "id",
+        entity = WorkingHourDbModel::class
+    )
+    val workingHour: WorkingHourDbModel?
 )

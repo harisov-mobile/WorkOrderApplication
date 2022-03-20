@@ -95,7 +95,10 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         private val REQUEST_DATA_WAS_CHANGED_KEY = "data_was_changed_key"
         private val REQUEST_DELETE_JOB_DETAIL_KEY = "delete_job_detail_key"
         private val REQUEST_DELETE_PERFORMER_DETAIL_KEY = "delete_performer_detail_key"
+        private val REQUEST_ADD_DEFAULT_JOBS_KEY = "add_default_jobs_key"
         private val ARG_ANSWER = "answer"
+
+        private val DEFAULT_TIME_NORM = "1"
 
         fun newInstanceAddWorkOrder(): WorkOrderFragment {
             val instance = WorkOrderFragment()
@@ -220,6 +223,20 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 viewModel.isChanged = false
                 MessageDialogFragment.newInstance(getString(R.string.success_saved))
                     .show(childFragmentManager, null)
+            }
+        }
+
+        // подписка на заполнение работ по-умолчанию из Вида ремонта:
+        viewModel.canFillDefaultJobs.observe(viewLifecycleOwner) { canFill ->
+            if (canFill) {
+                // спросить надо ли добавить в ТЧ "Работы":
+                QuestionDialogFragment
+                    .newInstance(
+                        getString(R.string.add_default_jobs_question),
+                        REQUEST_ADD_DEFAULT_JOBS_KEY,
+                        ARG_ANSWER
+                    )
+                    .show(childFragmentManager, WorkOrderFragment.REQUEST_ADD_DEFAULT_JOBS_KEY)
             }
         }
     }
@@ -444,6 +461,21 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         binding.repairTypeTextView.text = repairType?.name ?: ""
                         order.isModified = true
                         viewModel.isChanged = true
+
+                        // у Вида ремонта могут быть Работы по-умолчанию, надо их найти и предложить заполнить:
+                        repairType?.let {
+                            viewModel.checkDefaultRepairTypeJobDetails(repairType)
+                        }
+                    }
+                }
+            }
+
+            REQUEST_ADD_DEFAULT_JOBS_KEY -> {
+                val needAddDefaultJobs: Boolean = result.getBoolean(ARG_ANSWER, false)
+                if (needAddDefaultJobs) {
+                    viewModel.fillDefaultJobs()
+                    viewModel.workOrder.value?.let { order ->
+                        binding.jobDetailsRecyclerView.scrollToPosition(order.jobDetails.size - 1)
                     }
                 }
             }

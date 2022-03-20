@@ -12,6 +12,7 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.GetDepartmentListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.GetEmployeeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.GetPartnerListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetDefaultRepairTypeJobsUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetRepairTypeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.GetWorkingHourListUseCase
 
@@ -52,6 +53,15 @@ class DomainModule {
     ): GetEmployeeListUseCase {
 
         return GetEmployeeListUseCase(impl)
+    }
+
+    @DbGetDefaultRepairTypeJobsUseCaseQualifier
+    @Provides
+    fun provideDbGetDefaultRepairTypeJobsUseCase(
+        @DbRepairTypeRepositoryQualifier impl: RepairTypeRepository
+    ): GetDefaultRepairTypeJobsUseCase {
+
+        return GetDefaultRepairTypeJobsUseCase(impl)
     }
 
     @DbGetRepairTypeListUseCaseQualifier

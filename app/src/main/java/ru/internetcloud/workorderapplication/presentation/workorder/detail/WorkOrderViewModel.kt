@@ -1,28 +1,36 @@
 package ru.internetcloud.workorderapplication.presentation.workorder.detail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.internetcloud.workorderapplication.R
+import ru.internetcloud.workorderapplication.di.qualifiers.repository.DbCarRepositoryQualifier
+import ru.internetcloud.workorderapplication.di.qualifiers.usecase.DbGetDefaultRepairTypeJobsUseCaseQualifier
+import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJobDetail
+import ru.internetcloud.workorderapplication.domain.catalog.RepairType
+import ru.internetcloud.workorderapplication.domain.document.DefaultWorkOrderSettings
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetDefaultRepairTypeJobsUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.UpdateWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.settingsoperation.GetDefaultWorkOrderSettingsUseCase
+import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
+import java.math.BigDecimal
 import java.util.*
 import javax.inject.Inject
 
 class WorkOrderViewModel @Inject constructor(
     private val getWorkOrderUseCase: GetWorkOrderUseCase,
     private val updateWorkOrderUseCase: UpdateWorkOrderUseCase,
-    private val getDefaultWorkOrderSettingsUseCase: GetDefaultWorkOrderSettingsUseCase
-) : ViewModel() {
+    private val getDefaultWorkOrderSettingsUseCase: GetDefaultWorkOrderSettingsUseCase,
 
-//    private val workOrderRepository = DbWorkOrderRepositoryImpl.get()
-//    private val defaultWorkOrderSettingsRepository = DbDefaultWorkOrderSettingsRepositoryImpl.get()
+    @DbGetDefaultRepairTypeJobsUseCaseQualifier
+    private val getDefaultRepairTypeJobsUseCase: GetDefaultRepairTypeJobsUseCase
+) : ViewModel() {
 
     // LiveData-объекты, с помощью которых будет отображение данных в элементах управления:
     private val _workOrder = MutableLiveData<WorkOrder>()
@@ -43,6 +51,11 @@ class WorkOrderViewModel @Inject constructor(
     val errorInputEmail: LiveData<Boolean>
         get() = _errorInputEmail
 
+    private val _canFillDefaultJobs = MutableLiveData<Boolean>()
+    val canFillDefaultJobs: LiveData<Boolean>
+        get() = _canFillDefaultJobs
+
+
     var errorInputPerformer: Boolean = false
 
     private val _showErrorMessage = MutableLiveData<Boolean>()
@@ -55,8 +68,11 @@ class WorkOrderViewModel @Inject constructor(
 
     var isChanged: Boolean = false
 
+    var defaultCarJobs: List<DefaultRepairTypeJobDetail> = mutableListOf()
+    var defaultWorkOrderSettings: DefaultWorkOrderSettings? = null
+
     init {
-        Log.i("rustam", "сработал блок init в WorkOrderViewModel")
+        // Log.i("rustam", "сработал блок init в WorkOrderViewModel")
     }
 
     companion object {
@@ -68,6 +84,7 @@ class WorkOrderViewModel @Inject constructor(
     // -------------------------------------------------------------------------------
     fun loadWorkOrder(workOrderId: String) {
         viewModelScope.launch {
+            defaultWorkOrderSettings = getDefaultWorkOrderSettingsUseCase.getDefaultWorkOrderSettings()
             val order = getWorkOrderUseCase.getWorkOrder(workOrderId)
             order?.let {
                 _workOrder.value = it
@@ -129,8 +146,8 @@ class WorkOrderViewModel @Inject constructor(
                 isNew = true
             )
 
-            val defSettings = getDefaultWorkOrderSettingsUseCase.getDefaultWorkOrderSettings()
-            defSettings?.let { settings ->
+            defaultWorkOrderSettings = getDefaultWorkOrderSettingsUseCase.getDefaultWorkOrderSettings()
+            defaultWorkOrderSettings?.let { settings ->
                 newWorkOrder.department = settings.department
                 newWorkOrder.master = settings.master
                 settings.employee?.let { newEmployee ->
@@ -178,5 +195,92 @@ class WorkOrderViewModel @Inject constructor(
 
     fun setErrorEmailValue(value: Boolean) {
         _errorInputEmail.value = value
+    }
+
+    fun fillDefaultJobs() {
+        if (!defaultCarJobs.isEmpty()) {
+            workOrder.value?.let { order ->
+
+                defaultWorkOrderSettings?.let { settings ->
+
+                    settings.workingHour?.let { wh ->
+
+                        order.jobDetails.forEach {
+                            it.isSelected = false
+                        }
+
+                        val carModel = order.car?.carModel
+                        carModel?.let { model ->
+                            // когда модель заполнена: 2 случая
+                            var isModelExist = false
+                            for (currentCarJob in defaultCarJobs) {
+                                if (currentCarJob.carModel == model) {
+                                    isModelExist = true
+                                    break
+                                }
+                            }
+
+                            if (isModelExist) {
+                                for (currentCarJob in defaultCarJobs) {
+                                    if (currentCarJob.carModel == model) {
+                                        val newJobDetail = JobDetail.getNewJobDetail(order)
+                                        newJobDetail.carJob = currentCarJob.carJob
+                                        newJobDetail.quantity = currentCarJob.quantity
+                                        newJobDetail.timeNorm = settings.defaultTimeNorm
+                                        newJobDetail.workingHour = wh
+                                        newJobDetail.sum =
+                                            newJobDetail.quantity * newJobDetail.timeNorm * wh.price
+                                        order.jobDetails.add(newJobDetail)
+                                    }
+                                }
+                            } else {
+                                for (currentCarJob in defaultCarJobs) {
+                                    if (currentCarJob.carModel == null) {
+                                        val newJobDetail = JobDetail.getNewJobDetail(order)
+                                        newJobDetail.carJob = currentCarJob.carJob
+                                        newJobDetail.quantity = currentCarJob.quantity
+                                        newJobDetail.timeNorm = settings.defaultTimeNorm
+                                        newJobDetail.workingHour = wh
+                                        newJobDetail.sum =
+                                            newJobDetail.quantity * newJobDetail.timeNorm * wh.price
+                                        order.jobDetails.add(newJobDetail)
+                                    }
+                                }
+                            }
+                        } ?: let {
+                            // случай, когда модель не заполнена, заполняем все работы с незаполненной моделью:
+                            for (currentCarJob in defaultCarJobs) {
+                                if (currentCarJob.carModel == null) {
+                                    val newJobDetail = JobDetail.getNewJobDetail(order)
+                                    newJobDetail.carJob = currentCarJob.carJob
+                                    newJobDetail.quantity = currentCarJob.quantity
+                                    newJobDetail.timeNorm = settings.defaultTimeNorm
+                                    newJobDetail.workingHour = wh
+                                    newJobDetail.sum =
+                                        newJobDetail.quantity * newJobDetail.timeNorm * wh.price
+                                    order.jobDetails.add(newJobDetail)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun checkDefaultRepairTypeJobDetails(repairType: RepairType) {
+        defaultCarJobs = mutableListOf()
+        _canFillDefaultJobs.value = false
+
+        viewModelScope.launch {
+            if (repairType != null && workOrder.value?.car != null) {
+                defaultCarJobs = getDefaultRepairTypeJobsUseCase.getDefaultRepairTypeJobDetails(repairType)
+                if (!defaultCarJobs.isEmpty()) {
+
+                    _canFillDefaultJobs.value = true
+
+                }
+            }
+        }
     }
 }

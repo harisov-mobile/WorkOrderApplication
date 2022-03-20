@@ -70,6 +70,8 @@ interface AppDao {
     @Query("SELECT * FROM repair_types WHERE name LIKE :searchText")
     suspend fun searhRepairTypes(searchText: String): List<RepairTypeDbModel>
 
+    @Query("SELECT * FROM default_repair_type_job_details WHERE repairTypeId=:id")
+    suspend fun getDefaultRepairTypeJobDetails(id: String): List<DefaultRepairTypeJobDetailWithRequisities>
     // ----------------------------------------------------------------------
 
     @Query("SELECT * FROM car_jobs")
