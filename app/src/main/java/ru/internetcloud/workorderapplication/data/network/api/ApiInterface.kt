@@ -10,8 +10,8 @@ import ru.internetcloud.workorderapplication.domain.common.SendRequest
 interface ApiInterface {
 
     companion object {
-        private const val PUB_NAME = "alpha2"
-        // private const val PUB_NAME = "rabota"
+        // private const val PUB_NAME = "alpha2"
+        private const val PUB_NAME = "rabota"
     }
 
     @GET(PUB_NAME + "/hs/rest/auth/check")

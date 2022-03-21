@@ -277,8 +277,14 @@ class WorkOrderViewModel @Inject constructor(
                 defaultCarJobs = getDefaultRepairTypeJobsUseCase.getDefaultRepairTypeJobDetails(repairType)
                 if (!defaultCarJobs.isEmpty()) {
 
-                    _canFillDefaultJobs.value = true
-
+                    workOrder.value?.car?.let { car ->
+                        for (currentCarJob in defaultCarJobs) {
+                            if (currentCarJob.carModel == null || currentCarJob.carModel == car.carModel) {
+                                _canFillDefaultJobs.value = true
+                                break
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentDataSynchronizationBinding
@@ -61,6 +62,8 @@ class DataSynchronizationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(DataSynchronizationFragmentViewModel::class.java)
+
+        binding.versionTextView.text = getString(R.string.version, BuildConfig.VERSION_NAME)
 
         binding.okButton.setOnClickListener {
             hostActivity?.onLaunchWorkOrderList() // запустить фрагмент, где будет список заказ-нарядов

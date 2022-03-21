@@ -171,6 +171,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         childFragmentManager.setFragmentResultListener(REQUEST_DELETE_JOB_DETAIL_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_DELETE_PERFORMER_DETAIL_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_MASTER_PICKER_KEY, viewLifecycleOwner, this)
+        childFragmentManager.setFragmentResultListener(REQUEST_ADD_DEFAULT_JOBS_KEY, viewLifecycleOwner, this)
         setupClickListeners()
     }
 

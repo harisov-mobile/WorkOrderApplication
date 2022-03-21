@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
@@ -140,7 +141,7 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
             R.id.about_menu_item -> {
                 // запустить фрагмент, где будет о программе
                 MessageDialogFragment.newInstance(
-                    getString(R.string.about_application, getString(R.string.app_name))
+                    getString(R.string.about_application, getString(R.string.app_name), BuildConfig.VERSION_NAME)
                 )
                     .show(childFragmentManager, null)
                 return true

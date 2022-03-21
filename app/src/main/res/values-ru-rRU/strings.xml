@@ -44,7 +44,7 @@
     <string name="no_work_orders_to_upload">Нет заказ-нарядов, которые нужно выгрузить на сервер 1С.</string>
     <string name="fail_upload_work_orders">"Ошибка при выгрузке заказ-нарядов: "</string>
     <string name="partner_label">Заказчик:</string>
-    <string name="send_to_email_label">Отправить заказ-наряд на эл.почту</string>
+    <string name="send_to_email_label">Отправить заказ наряд на эл.почту</string>
     <string name="car_label">СХТ:</string>
     <string name="repair_type_label">Вид ремонта:</string>
     <string name="master_type_label">Бригадир:</string>
@@ -98,7 +98,7 @@
     <string name="wrong_email">Адрес эл.почты - неправильный.</string>
     <string name="fail_send_work_order">"Произошла ошибка при отправке: "</string>
     <string name="success_send_work_order">Успешно отправлено</string>
-    <string name="about_application">"%1$s \n \n Версия 2."</string>
+    <string name="about_application">"%1$s \n \n Версия %2$s"</string>
     <string name="under_constraction">В разработке.</string>
     <string name="choose_label">...</string>
     <string name="total_sum_label">Итого:</string>
@@ -121,4 +121,5 @@
     <string name="get_car_model_list">Получение справочника Модели из 1С</string>
     <string name="prepare_car_model_list">Обработка справочника Модели</string>
     <string name="add_default_jobs_question">Для выбранного Вида ремонта и выбранной СХТ есть работы, которые необходимо выполнять. Добавить работы в список Работ?</string>
+    <string name="version">Версия %1$s</string>
 </resources>

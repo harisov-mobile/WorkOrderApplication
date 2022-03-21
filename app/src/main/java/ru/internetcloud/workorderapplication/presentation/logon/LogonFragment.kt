@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentLogonBinding
@@ -66,6 +67,8 @@ class LogonFragment : Fragment() {
 
         // вот оно!!! даггер: viewModel = ViewModelProvider(this).get(LogonViewModel::class.java)
         viewModel = ViewModelProvider(this, viewModelFactory).get(LogonViewModel::class.java)
+
+        binding.versionTextView.text = getString(R.string.version, BuildConfig.VERSION_NAME)
 
         binding.enterButton.setOnClickListener {
             binding.enterButton.isEnabled = false

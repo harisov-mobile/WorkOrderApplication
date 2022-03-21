@@ -147,12 +147,12 @@ class DataSynchronizationFragmentViewModel @Inject constructor(
                         _canContinueWithoutSynchro.value = true
                     }
                 } else {
-                    if (refreshPartner() &&
+                    if (refreshDepartment() &&
+                        refreshPartner() &&
                         refreshEmployee() &&
                         refreshCarJob() &&
                         refreshCarModel() &&
                         refreshCar() &&
-                        refreshDepartment() &&
                         refreshWorkingHour() &&
                         refreshDefaultWorkOrderSettings() &&
                         refreshRepairType() &&
