@@ -4,7 +4,7 @@ import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJob
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.repository.RepairTypeRepository
 
-class GetDefaultRepairTypeJobsUseCase (private val repairTypeRepository: RepairTypeRepository) {
+class GetDefaultRepairTypeJobsUseCase(private val repairTypeRepository: RepairTypeRepository) {
 
     suspend fun getDefaultRepairTypeJobDetails(repairType: RepairType): List<DefaultRepairTypeJobDetail> {
         return repairTypeRepository.getDefaultRepairTypeJobDetails(repairType)

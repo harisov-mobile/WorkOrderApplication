@@ -26,6 +26,8 @@
 
         android:clickable="true"
 
+        app:tint="@null"
+
         android:contentDescription="@string/add_work_order_fab_description"
         android:focusable="true"
         app:backgroundTintMode="add"

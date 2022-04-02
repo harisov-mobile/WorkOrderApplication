@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-parcelize'
 }
 
+// чтобы ktlint использовать
 apply from: "../ktlint.gradle"
 
 android {

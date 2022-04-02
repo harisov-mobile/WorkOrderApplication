@@ -22,5 +22,4 @@ class RemoteCarModelRepositoryImpl @Inject constructor(
     override suspend fun deleteAllCarModels() {
         throw RuntimeException("Error - method deleteAllCarModels is restricted in RemoteCarModelRepositoryImpl")
     }
-
 }

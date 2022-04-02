@@ -117,4 +117,3 @@ val MIGRATION_2_3 = object : Migration(2, 3) {
         database.execSQL("ALTER TABLE 'default_work_order_settings' ADD COLUMN 'defaultTimeNorm' TEXT NOT NULL DEFAULT ' ' ") // default_work_order_settings  workingHourId  defaultTimeNorm
     }
 }
-

@@ -5,7 +5,8 @@ import ru.internetcloud.workorderapplication.domain.repository.CarModelRepositor
 import javax.inject.Inject
 
 class DeleteCarModelsUseCase @Inject constructor(
-    @DbCarModelRepositoryQualifier private val carModelRepository: CarModelRepository) {
+    @DbCarModelRepositoryQualifier private val carModelRepository: CarModelRepository
+) {
 
     suspend fun deleteAllCarModels() {
         return carModelRepository.deleteAllCarModels()

@@ -7,5 +7,4 @@ class GetCarModelListUseCase(private val carModelRepository: CarModelRepository)
     suspend fun getCarModelList(): List<CarModel> {
         return carModelRepository.getCarModelList()
     }
-
 }

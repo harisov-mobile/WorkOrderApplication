@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.di.qualifiers.repository.DbCarRepositoryQualifier
 import ru.internetcloud.workorderapplication.di.qualifiers.usecase.DbGetDefaultRepairTypeJobsUseCaseQualifier
 import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJobDetail
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
@@ -18,8 +16,6 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.rep
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.UpdateWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.settingsoperation.GetDefaultWorkOrderSettingsUseCase
-import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
-import java.math.BigDecimal
 import java.util.*
 import javax.inject.Inject
 
