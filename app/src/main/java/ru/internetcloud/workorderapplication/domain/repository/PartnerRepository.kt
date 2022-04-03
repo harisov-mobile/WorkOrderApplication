@@ -6,7 +6,7 @@ interface PartnerRepository {
 
     suspend fun getPartnerList(): List<Partner>
 
-    suspend fun addPartnerList(carJobList: List<Partner>)
+    suspend fun addPartnerList(partnerList: List<Partner>)
 
     suspend fun getPartner(id: String): Partner?
 
