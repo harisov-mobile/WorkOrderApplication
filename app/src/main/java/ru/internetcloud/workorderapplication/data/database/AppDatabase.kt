@@ -23,6 +23,8 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
 
         private const val DATABASE_NAME = "work_order.db"
+
+        @Volatile
         private var Instance: AppDatabase? = null
 
         private val Lock = Any()

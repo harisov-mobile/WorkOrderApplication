@@ -11,7 +11,6 @@ import ru.internetcloud.workorderapplication.domain.repository.WorkOrderReposito
 import javax.inject.Inject
 
 class DbWorkOrderRepositoryImpl @Inject constructor(
-    // application: Application
     private val workOrderDao: AppDao,
     private val workOrderMapper: WorkOrderMapper,
     private val jobDetailMapper: JobDetailMapper,
