@@ -67,10 +67,6 @@ class WorkOrderViewModel @Inject constructor(
     var defaultCarJobs: List<DefaultRepairTypeJobDetail> = mutableListOf()
     var defaultWorkOrderSettings: DefaultWorkOrderSettings? = null
 
-    init {
-        // Log.i("rustam", "сработал блок init в WorkOrderViewModel")
-    }
-
     companion object {
         private const val NUMBER_PREFIX = "new"
         private const val SPACE_SYMBOL = " "

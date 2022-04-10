@@ -80,7 +80,6 @@ class SynchroRepositoryImpl @Inject constructor(
 
         try {
             val uploadResponse = ApiClient.getInstance().client.sendWorkOrderToEmail(sendRequest)
-            Log.i("rustam", "id={$id} после  ApiClient.getInstance().client.sendWorkOrderToEmail()")
             if (uploadResponse.uploadResult.isSuccess) {
                 result.isSuccess = true
             } else {
@@ -88,7 +87,6 @@ class SynchroRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             // ничего не делаю
-            Log.i("rustam", "ошибка при отправке заказ-наряда на эл.почту по id: " + e.toString())
             result.errorMessage = e.toString()
         }
 
@@ -114,7 +112,6 @@ class SynchroRepositoryImpl @Inject constructor(
                 }
             } catch (e: Exception) {
                 // ничего не делаю
-                // Log.i("rustam", "ошибка при выгрузке заказ-нарядов: " + e.toString())
                 result.errorMessage = e.toString()
             }
         }
@@ -130,8 +127,6 @@ class SynchroRepositoryImpl @Inject constructor(
             // не надо отправлять заказ-наряд на сервер 1С. так как в него не вносились изменения
             result.isSuccess = true
         } else {
-            Log.i("rustam", "начинаем uploadWorkOrderById")
-
             result.amountOfModifiedWorkOrders = 1
 
             val listWO: MutableList<WorkOrderWithDetails> = mutableListOf()
@@ -139,7 +134,6 @@ class SynchroRepositoryImpl @Inject constructor(
 
             try {
                 val uploadWorkOrderResponse = ApiClient.getInstance().client.uploadWorkOrders(listWO)
-                Log.i("rustam", "id={$id} после  ApiClient.getInstance().client.uploadWorkOrders()")
                 if (uploadWorkOrderResponse.uploadResult.isSuccess) {
                     result.isSuccess = true
                 } else {
@@ -147,7 +141,6 @@ class SynchroRepositoryImpl @Inject constructor(
                 }
             } catch (e: Exception) {
                 // ничего не делаю
-                Log.i("rustam", "ошибка при выгрузке заказ-наряда по id: " + e.toString())
                 result.errorMessage = e.toString()
             }
         }
