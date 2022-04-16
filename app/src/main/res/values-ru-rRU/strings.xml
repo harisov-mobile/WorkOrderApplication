@@ -122,4 +122,5 @@
     <string name="prepare_car_model_list">Обработка справочника Модели</string>
     <string name="add_default_jobs_question">Для выбранного Вида ремонта и выбранной СХТ есть работы, которые необходимо выполнять. Добавить работы в список Работ?</string>
     <string name="version">Версия %1$s</string>
+    <string name="clear_search_text_button">X</string>
 </resources>

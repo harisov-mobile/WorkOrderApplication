@@ -3,6 +3,8 @@ package ru.internetcloud.workorderapplication.presentation.workorder.detail.work
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -54,7 +56,7 @@ class WorkingHourPickerFragment : DialogFragment() {
     private lateinit var workingHourListRecyclerView: RecyclerView
     private lateinit var workingHourListAdapter: WorkingHourListAdapter
 
-    private lateinit var searchButton: Button
+    private lateinit var clearSearchTextButton: Button
     private lateinit var searchEditText: EditText
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -78,7 +80,7 @@ class WorkingHourPickerFragment : DialogFragment() {
         alertDialogBuilder.setTitle(R.string.working_fragment_picker_title)
 
         val container = layoutInflater.inflate(R.layout.fragment_picker, null, false)
-        searchButton = container.findViewById(R.id.search_button)
+        clearSearchTextButton = container.findViewById(R.id.clear_search_text_button)
         searchEditText = container.findViewById(R.id.search_edit_text)
 
         alertDialogBuilder.setView(container)
@@ -126,6 +128,26 @@ class WorkingHourPickerFragment : DialogFragment() {
         return alertDialogBuilder.create()
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        // TextWatcher нужно навешивать здесь, а не в onCreate или onCreateView, т.к. там еще не восстановлено
+        // EditText и слушатели будут "дергаться" лишний раз
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                // viewModel.resetErrorInputNumber()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                search(p0?.toString() ?: "")
+            }
+        })
+    }
+    
     private fun setupWorkingHourListRecyclerView(view: View) {
         workingHourListRecyclerView = view.findViewById(R.id.list_recycler_view)
         workingHourListAdapter = WorkingHourListAdapter(emptyList())
@@ -145,13 +167,17 @@ class WorkingHourPickerFragment : DialogFragment() {
             dismiss()
         }
 
-        searchButton.setOnClickListener {
-            val searchText = searchEditText.text.toString()
-            if (searchText.isEmpty()) {
-                viewModel.loadWorkingHourList()
-            } else {
-                viewModel.searchWorkingHours(searchText)
-            }
+        clearSearchTextButton.setOnClickListener {
+            searchEditText.setText("")
+            viewModel.loadWorkingHourList()
+        }
+    }
+
+    private fun search(searchText: String) {
+        if (searchText.isEmpty()) {
+            viewModel.loadWorkingHourList()
+        } else {
+            viewModel.searchWorkingHours(searchText)
         }
     }
 

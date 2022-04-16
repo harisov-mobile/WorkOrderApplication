@@ -3,6 +3,8 @@ package ru.internetcloud.workorderapplication.presentation.workorder.detail.car
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -29,7 +31,12 @@ class CarPickerFragment : DialogFragment() {
         private const val NOT_FOUND_POSITION = -1
         private const val DIFFERENCE_POS = 5
 
-        fun newInstance(car: Car?, partner: Partner, parentRequestKey: String, parentArgDateName: String): CarPickerFragment {
+        fun newInstance(
+            car: Car?,
+            partner: Partner,
+            parentRequestKey: String,
+            parentArgDateName: String
+        ): CarPickerFragment {
             val args = Bundle().apply {
                 putParcelable(CAR, car)
                 putParcelable(PARTNER, partner)
@@ -49,7 +56,7 @@ class CarPickerFragment : DialogFragment() {
     private lateinit var carListRecyclerView: RecyclerView
     private lateinit var carListAdapter: CarListAdapter
 
-    private lateinit var searchButton: Button
+    private lateinit var clearSearchTextButton: Button
     private lateinit var searchEditText: EditText
 
     // даггер:
@@ -85,7 +92,7 @@ class CarPickerFragment : DialogFragment() {
         alertDialogBuilder.setTitle(R.string.car_picker_title)
 
         val container = layoutInflater.inflate(R.layout.fragment_picker, null, false)
-        searchButton = container.findViewById(R.id.search_button)
+        clearSearchTextButton = container.findViewById(R.id.clear_search_text_button)
         searchEditText = container.findViewById(R.id.search_edit_text)
 
         alertDialogBuilder.setView(container)
@@ -133,6 +140,26 @@ class CarPickerFragment : DialogFragment() {
         return alertDialogBuilder.create()
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        // TextWatcher нужно навешивать здесь, а не в onCreate или onCreateView, т.к. там еще не восстановлено
+        // EditText и слушатели будут "дергаться" лишний раз
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                // viewModel.resetErrorInputNumber()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                search(p0?.toString() ?: "")
+            }
+        })
+    }
+
     private fun setupCarListRecyclerView(view: View) {
         carListRecyclerView = view.findViewById(R.id.list_recycler_view)
         carListAdapter = CarListAdapter(emptyList())
@@ -154,14 +181,18 @@ class CarPickerFragment : DialogFragment() {
             dismiss()
         }
 
-        searchButton.setOnClickListener {
-            val searchText = searchEditText.text.toString()
-            if (searchText.isEmpty()) {
-                viewModel.loadCarList()
-            } else {
-                viewModel.partner?.let { partner ->
-                    viewModel.searchCarsByOwner(searchText, partner.id)
-                }
+        clearSearchTextButton.setOnClickListener {
+            searchEditText.setText("")
+            viewModel.loadCarList()
+        }
+    }
+
+    private fun search(searchText: String) {
+        if (searchText.isEmpty()) {
+            viewModel.loadCarList()
+        } else {
+            viewModel.partner?.let { partner ->
+                viewModel.searchCarsByOwner(searchText, partner.id)
             }
         }
     }
