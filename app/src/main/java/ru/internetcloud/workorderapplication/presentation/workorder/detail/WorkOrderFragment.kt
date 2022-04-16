@@ -247,6 +247,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         when (screenMode) {
             ScreenMode.EDIT -> launchEditMode()
             ScreenMode.ADD -> launchAddMode()
+            null -> throw IllegalStateException("screenMode is NULL")
         }
 
         viewModel.workOrder.observe(viewLifecycleOwner) { order ->
