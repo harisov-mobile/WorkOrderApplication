@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
@@ -58,6 +59,7 @@ class CarPickerFragment : DialogFragment() {
 
     private lateinit var clearSearchTextButton: Button
     private lateinit var searchEditText: EditText
+    private lateinit var titleTextView: TextView
 
     // даггер:
     @Inject
@@ -89,11 +91,14 @@ class CarPickerFragment : DialogFragment() {
         }
 
         val alertDialogBuilder = AlertDialog.Builder(activity)
-        alertDialogBuilder.setTitle(R.string.car_picker_title)
+        // alertDialogBuilder.setTitle(R.string.car_picker_title)
 
         val container = layoutInflater.inflate(R.layout.fragment_picker, null, false)
         clearSearchTextButton = container.findViewById(R.id.clear_search_text_button)
         searchEditText = container.findViewById(R.id.search_edit_text)
+
+        titleTextView = container.findViewById(R.id.title_text_view)
+        titleTextView.text = getString(R.string.car_picker_title, viewModel.partner?.name ?: "")
 
         alertDialogBuilder.setView(container)
 

@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         style="@style/work_order_recycler_view"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_work_order_list"></androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/item_work_order_list"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_fab"

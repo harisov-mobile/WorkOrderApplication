@@ -77,7 +77,7 @@
     <string name="car_job_picker_title">Select auto work</string>
     <string name="employee_picker_title">Choose an employee</string>
     <string name="working_fragment_picker_title">Choose a working hour</string>
-    <string name="car_picker_title">Choose a car</string>
+    <string name="car_picker_title">Choose a car from %1$s</string>
     <string name="repair_type_picker_title">Choose a repair type</string>
     <string name="department_picker_title">Choose a department</string>
     <string name="search_label">Search</string>

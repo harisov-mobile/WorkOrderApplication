@@ -13,7 +13,7 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
 
     // для отработки нажатий на элемент списка - переменная, которая будет хранить лямбда-функцию,
     // на вход лямбда-функции в качестве параметра будет передан workOrder: WorkOrder,
-    // лямбда-функция ничего не возрващает (то есть Unit)
+    // лямбда-функция ничего не возвращает (то есть Unit)
     // а первоначально переменная содержит null
     var onWorkOrderClickListener: ((workOrder: WorkOrder) -> Unit)? = null
 
