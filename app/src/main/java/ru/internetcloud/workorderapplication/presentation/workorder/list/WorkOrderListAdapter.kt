@@ -25,7 +25,7 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkOrderListViewHolder {
 
-        var binding: ViewBinding? = null
+        var binding: ViewBinding
         if (viewType == POSTED_ITEM_TYPE) {
             binding = ItemWorkOrderListPostedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         } else if (viewType == UNPOSTED_ITEM_TYPE) {

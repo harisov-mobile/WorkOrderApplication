@@ -30,6 +30,7 @@ class AuthRepositoryImpl @Inject constructor(
 
         var authResult = AuthResult(false, "Нет связи с сервером.")
 
+        // HTTP FAILED: java.net.UnknownHostException: Unable to resolve host "serv.promintel-agro.ru": No address associated with hostname
         // инициализировать ApiClient
         try {
             ApiClient.initialize(authParameters)
