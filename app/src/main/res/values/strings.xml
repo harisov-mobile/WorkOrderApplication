@@ -143,5 +143,7 @@
     <string name="add_default_jobs_question">For the selected Repair type and the selected Car, there are jobs that need to be performed. Add jobs to Jobs list?</string>
     <string name="version">Version %1$s</string>
     <string name="clear_search_text_button">X</string>
+    <string name="number_label">Number:</string>
+    <string name="performer_label">Performer:</string>
 
 </resources>

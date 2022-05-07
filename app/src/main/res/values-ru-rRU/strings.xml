@@ -123,4 +123,6 @@
     <string name="add_default_jobs_question">Для выбранного Вида ремонта и выбранной СХТ есть работы, которые необходимо выполнять. Добавить работы в список Работ?</string>
     <string name="version">Версия %1$s</string>
     <string name="clear_search_text_button">X</string>
+    <string name="number_label">Номер:</string>
+    <string name="performer_label">Исполнитель:</string>
 </resources>

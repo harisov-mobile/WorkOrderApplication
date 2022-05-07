@@ -315,7 +315,7 @@
                     app:layout_constraintStart_toEndOf="@+id/performer_details_label_text_view"
 
                     app:layout_constraintTop_toBottomOf="@+id/line_before_performers_view"
-                    app:srcCompat="@drawable/ic_baseline_add_24" />
+                    app:srcCompat="@drawable/ic_add" />
 
                 <ImageButton
                     android:id="@+id/delete_performer_detail_button"
@@ -324,7 +324,7 @@
                     app:layout_constraintStart_toEndOf="@+id/add_performer_detail_button"
 
                     app:layout_constraintTop_toBottomOf="@+id/line_before_performers_view"
-                    app:srcCompat="@drawable/ic_baseline_horizontal_rule_24" />
+                    app:srcCompat="@drawable/ic_rule" />
 
                 <ImageButton
                     android:id="@+id/edit_performer_detail_button"
@@ -333,7 +333,7 @@
                     app:layout_constraintStart_toEndOf="@+id/delete_performer_detail_button"
 
                     app:layout_constraintTop_toBottomOf="@+id/line_before_performers_view"
-                    app:srcCompat="@drawable/ic_baseline_edit_24" />
+                    app:srcCompat="@drawable/ic_edit" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/performer_details_recycler_view"
@@ -384,7 +384,7 @@
                     app:layout_constraintStart_toEndOf="@+id/performer_details_label_text_view"
 
                     app:layout_constraintTop_toBottomOf="@+id/line_before_job_details_view"
-                    app:srcCompat="@drawable/ic_baseline_add_24" />
+                    app:srcCompat="@drawable/ic_add" />
 
                 <ImageButton
                     android:id="@+id/delete_job_detail_button"
@@ -392,7 +392,7 @@
                     app:layout_constraintStart_toEndOf="@+id/add_job_detail_button"
 
                     app:layout_constraintTop_toBottomOf="@+id/line_before_job_details_view"
-                    app:srcCompat="@drawable/ic_baseline_horizontal_rule_24" />
+                    app:srcCompat="@drawable/ic_rule" />
 
                 <ImageButton
                     android:id="@+id/edit_job_detail_button"
@@ -400,7 +400,7 @@
                     app:layout_constraintStart_toEndOf="@+id/delete_job_detail_button"
 
                     app:layout_constraintTop_toBottomOf="@+id/line_before_job_details_view"
-                    app:srcCompat="@drawable/ic_baseline_edit_24" />
+                    app:srcCompat="@drawable/ic_edit" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/job_details_recycler_view"

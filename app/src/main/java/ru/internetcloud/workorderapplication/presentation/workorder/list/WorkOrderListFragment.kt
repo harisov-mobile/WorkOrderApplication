@@ -3,6 +3,7 @@ package ru.internetcloud.workorderapplication.presentation.workorder.list
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
@@ -43,6 +44,7 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
     private lateinit var workOrderRecyclerView: RecyclerView
     private lateinit var workOrderListAdapter: WorkOrderListAdapter
     private lateinit var addFloatingActionButton: FloatingActionButton
+    private lateinit var filterTextView: TextView
 
     private val REQUEST_EXIT_QUESTION_KEY = "exit_question_key"
     private val ARG_ANSWER = "answer"
@@ -79,6 +81,8 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.fragment_work_order_list, container, false)
+
+        filterTextView = view.findViewById(R.id.filter_text_view)
 
         addFloatingActionButton = view.findViewById(R.id.add_fab)
         addFloatingActionButton.setOnClickListener {
@@ -120,6 +124,11 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
+            R.id.search_menu_item -> {
+                onSearch()
+                return true
+            }
+
             R.id.exit_menu_item -> {
                 onExitWorkOrderList()
                 return true
@@ -151,6 +160,10 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
                 return super.onOptionsItemSelected(item)
             }
         }
+    }
+
+    private fun onSearch() {
+        filterTextView.visibility = View.VISIBLE
     }
 
     override fun onDetach() {
@@ -190,23 +203,5 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
                 }
             }
         }
-    }
-
-    private fun getPosition(searchedWorkOrder: WorkOrder?, workOrderList: List<WorkOrder>): Int {
-        var currentPosition = NOT_FOUND_POSITION
-        searchedWorkOrder?.let {
-            var isFound = false
-            for (currentWorkOrder in workOrderList) {
-                currentPosition++
-                if (currentWorkOrder.id == searchedWorkOrder.id) {
-                    isFound = true
-                    break
-                }
-            }
-            if (!isFound) {
-                currentPosition = NOT_FOUND_POSITION
-            }
-        }
-        return currentPosition
     }
 }
