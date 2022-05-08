@@ -2,7 +2,9 @@ package ru.internetcloud.workorderapplication.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 import ru.internetcloud.workorderapplication.data.entity.*
+import java.util.*
 
 @Dao
 interface AppDao {
@@ -10,6 +12,13 @@ interface AppDao {
     @Transaction
     @Query("SELECT * FROM work_orders ORDER BY date, number")
     fun getWorkOrderList(): LiveData<List<WorkOrderWithDetails>> // Не использовать LiveData в репозитории
+
+//    @Query("SELECT * FROM work_orders WHERE date > :dateFrom ORDER BY date, number")
+//    fun getFilteredWorkOrderList(dateFrom: Date): LiveData<List<WorkOrderWithDetails>> // Не использовать LiveData в репозитории
+
+    @Transaction
+    @RawQuery
+    fun getFilteredWorkOrderList(query: SupportSQLiteQuery): LiveData<List<WorkOrderWithDetails>> // Не использовать LiveData в репозитории
 
     @Transaction
     @Query("SELECT * FROM work_orders WHERE isModified")

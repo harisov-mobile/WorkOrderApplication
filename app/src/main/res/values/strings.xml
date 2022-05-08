@@ -147,5 +147,13 @@
     <string name="performer_label">Performer:</string>
     <string name="date_from_label">Date from:</string>
     <string name="date_to_label">Date to:</string>
+    <string name="filter_fragment_title">Filter</string>
+    <string name="contains">contains</string>
+    <string name="partner_hint">Client</string>
+    <string name="car_hint">Car</string>
+    <string name="performer_hint">Performer</string>
+    <string name="department_hint">Department</string>
+    <string name="date_from_hint">Date from</string>
+    <string name="date_to_hint">Date to</string>
 
 </resources>

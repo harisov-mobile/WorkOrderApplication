@@ -1,38 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    >
 
     <TextView
-        android:id="@+id/filter_text_view"
+        android:id="@+id/filter_description_text_view"
         style="@style/filter_description_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         android:padding="8dp"
+
         android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="filter_text_view" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/work_order_recycler_view"
         style="@style/work_order_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+
+        app:layout_constraintTop_toBottomOf="@+id/filter_description_text_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+
         tools:listitem="@layout/item_work_order_list" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="40dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
 
         android:backgroundTint="@color/light_blue_300"
 
@@ -45,4 +54,4 @@
         app:srcCompat="@drawable/ic_add"
         app:tint="@null" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

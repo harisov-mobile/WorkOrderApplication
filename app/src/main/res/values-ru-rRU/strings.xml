@@ -127,4 +127,12 @@
     <string name="performer_label">Исполнитель:</string>
     <string name="date_from_label">Дата с:</string>
     <string name="date_to_label">Дата по:</string>
+    <string name="filter_fragment_title">Отбор</string>
+    <string name="contains">содержит</string>
+    <string name="partner_hint">Заказчик</string>
+    <string name="car_hint">СХТ</string>
+    <string name="performer_hint">Исполнитель</string>
+    <string name="department_hint">Цех</string>
+    <string name="date_from_hint">Дата с</string>
+    <string name="date_to_hint">Дата по</string>
 </resources>

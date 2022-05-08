@@ -11,7 +11,7 @@ class DateConverter {
         private const val TIME_FORMAT = "HH : mm"
 
         fun fromStringToDate(dateString: String): Date {
-            return SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString)
+            return SimpleDateFormat(DATE_TIME_FORMAT).parse(dateString)
         }
 
         fun getDateString(date: Date?): String {

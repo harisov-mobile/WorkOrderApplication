@@ -138,6 +138,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         _binding = FragmentWorkOrderBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
