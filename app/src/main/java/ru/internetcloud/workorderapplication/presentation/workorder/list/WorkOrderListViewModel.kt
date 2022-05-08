@@ -3,6 +3,7 @@ package ru.internetcloud.workorderapplication.presentation.workorder.list
 import androidx.lifecycle.ViewModel
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderListUseCase
+import java.util.*
 import javax.inject.Inject
 
 class WorkOrderListViewModel @Inject constructor(
@@ -12,4 +13,12 @@ class WorkOrderListViewModel @Inject constructor(
     val workOrderListLiveData = getWorkOrderListUseCase.getWorkOrderList()
 
     var selectedWorkOrder: WorkOrder? = null
+
+    var filterNumberText: String = ""
+    var filterPartnerText: String = ""
+    var filterCarText: String = ""
+    var filterPerformerText: String = ""
+    var filterDepartmentText: String = ""
+    var filterDateFrom: Date? = null
+    var filterDateTo: Date? = null
 }

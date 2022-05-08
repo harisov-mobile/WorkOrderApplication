@@ -145,5 +145,7 @@
     <string name="clear_search_text_button">X</string>
     <string name="number_label">Number:</string>
     <string name="performer_label">Performer:</string>
+    <string name="date_from_label">Date from:</string>
+    <string name="date_to_label">Date to:</string>
 
 </resources>

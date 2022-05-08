@@ -125,4 +125,6 @@
     <string name="clear_search_text_button">X</string>
     <string name="number_label">Номер:</string>
     <string name="performer_label">Исполнитель:</string>
+    <string name="date_from_label">Дата с:</string>
+    <string name="date_to_label">Дата по:</string>
 </resources>
