@@ -7,6 +7,7 @@ import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
@@ -75,8 +76,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         component.inject(this)
 
         hostActivity = context as Callbacks
-
-        Log.i("rustam", "onAttach")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +90,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         })
 
         setHasOptionsMenu(true)
-        Log.i("rustam", "onCreate")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -102,14 +100,14 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
         addFloatingActionButton = view.findViewById(R.id.add_fab)
         addFloatingActionButton.setOnClickListener {
+            // TODO при добавлении нового заказ-наряда надо спозиционироваться на нем,
+            // сейчас же просто в конец списка перемещаюсь.
             viewModel.selectedWorkOrder = null
             hostActivity?.onAddWorkOrder()
         }
 
         setupWorkOrderRecyclerView(view)
         setupClickListener()
-
-        Log.i("rustam", "onCreateView")
 
         return view
     }
@@ -120,8 +118,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         observeViewModel()
         setupFilterDescription()
 
-        Log.i("rustam", "onViewCreated")
-
         childFragmentManager.setFragmentResultListener(REQUEST_EXIT_QUESTION_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_SEARCH_WO_DATA_PICKER_KEY, viewLifecycleOwner, this)
     }
@@ -130,12 +126,13 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         viewModel.workOrderListLiveData.observe(
             viewLifecycleOwner,
             { list ->
-                workOrderListAdapter.submitList(list)
-                Log.i("rustam", "submitList(list)")
-                viewModel.selectedWorkOrder ?: let {
-                    val scrollPosition = workOrderListAdapter.itemCount - 1
-                    workOrderRecyclerView.scrollToPosition(scrollPosition)
-                    Log.i("rustam", "scrollToPosition")
+                workOrderListAdapter.submitList(list) {
+                    // когда DiffCallback сделает свою работу, тогда itemCount будет выдавать правильное значение
+                    // и можно позиционироваться:
+                    viewModel.selectedWorkOrder ?: let {
+                        val scrollPosition = workOrderListAdapter.itemCount - 1
+                        workOrderRecyclerView.scrollToPosition(scrollPosition)
+                    }
                 }
             }
         )
@@ -202,33 +199,7 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
     override fun onDetach() {
         super.onDetach()
 
-        Log.i("rustam", "onDetach")
-
         hostActivity = null
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        Log.i("rustam", "onDestroyView")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        Log.i("rustam", "onDestroy")
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        Log.i("rustam", "onStart")
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        Log.i("rustam", "onStop")
     }
 
     private fun setupWorkOrderRecyclerView(view: View) {
