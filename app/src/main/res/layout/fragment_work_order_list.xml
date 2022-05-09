@@ -1,34 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:id="@+id/filter_description_text_view"
+        style="@style/filter_description_text_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+
+        android:padding="8dp"
+
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="filter_text_view" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/work_order_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         style="@style/work_order_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_work_order_list"></androidx.recyclerview.widget.RecyclerView>
+
+        app:layout_constraintTop_toBottomOf="@+id/filter_description_text_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        tools:listitem="@layout/item_work_order_list" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="40dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
 
         android:backgroundTint="@color/light_blue_300"
 
         android:clickable="true"
 
         android:contentDescription="@string/add_work_order_fab_description"
+
         android:focusable="true"
         app:backgroundTintMode="add"
-        app:srcCompat="@drawable/ic_baseline_add_24" />
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@null" />
 
-    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

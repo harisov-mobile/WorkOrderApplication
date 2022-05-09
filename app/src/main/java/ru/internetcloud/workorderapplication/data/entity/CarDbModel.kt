@@ -12,7 +12,8 @@ data class CarDbModel(
     val name: String,
     var vin: String,
     var manufacturer: String, // производитель
-    var model: String,
+    var model: String = "", // старое поле
+    var carModelId: String = "", // id модели
     var type: String, // папка в спр-ке "Модели"
     var releaseYear: Int = 0, // год выпуска
     var mileage: Int, // пробег

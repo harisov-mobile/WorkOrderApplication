@@ -2,7 +2,6 @@ package ru.internetcloud.workorderapplication.data.repository.remote
 
 import ru.internetcloud.workorderapplication.data.mapper.PartnerMapper
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
-import ru.internetcloud.workorderapplication.data.network.dto.PartnerResponse
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.repository.PartnerRepository
 import javax.inject.Inject
@@ -11,29 +10,8 @@ class RemotePartnerRepositoryImpl @Inject constructor(
     private val partnerMapper: PartnerMapper
 ) : PartnerRepository {
 
-    companion object {
-//        private var instance: RemotePartnerRepositoryImpl? = null
-//
-//        fun initialize() {
-//            if (instance == null) {
-//                instance = RemotePartnerRepositoryImpl()
-//            }
-//        }
-//
-//        fun get(): RemotePartnerRepositoryImpl {
-//            return instance ?: throw RuntimeException("RemotePartnerRepositoryImpl must be initialized.")
-//        }
-    }
-
     override suspend fun getPartnerList(): List<Partner> {
-        var partnerResponse = PartnerResponse(emptyList())
-
-        try {
-            partnerResponse = ApiClient.getInstance().client.getPartners()
-        } catch (e: Exception) {
-            // ничего не делаю
-        }
-
+        val partnerResponse = ApiClient.getInstance().client.getPartners()
         return partnerMapper.fromListDtoToListEntity(partnerResponse.partners)
     }
 

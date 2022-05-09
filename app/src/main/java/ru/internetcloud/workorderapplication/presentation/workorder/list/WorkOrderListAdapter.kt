@@ -13,7 +13,7 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
 
     // для отработки нажатий на элемент списка - переменная, которая будет хранить лямбда-функцию,
     // на вход лямбда-функции в качестве параметра будет передан workOrder: WorkOrder,
-    // лямбда-функция ничего не возрващает (то есть Unit)
+    // лямбда-функция ничего не возвращает (то есть Unit)
     // а первоначально переменная содержит null
     var onWorkOrderClickListener: ((workOrder: WorkOrder) -> Unit)? = null
 
@@ -25,7 +25,7 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkOrderListViewHolder {
 
-        var binding: ViewBinding? = null
+        var binding: ViewBinding
         if (viewType == POSTED_ITEM_TYPE) {
             binding = ItemWorkOrderListPostedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         } else if (viewType == UNPOSTED_ITEM_TYPE) {
@@ -88,4 +88,6 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
             UNPOSTED_ITEM_TYPE
         }
     }
+
+
 }

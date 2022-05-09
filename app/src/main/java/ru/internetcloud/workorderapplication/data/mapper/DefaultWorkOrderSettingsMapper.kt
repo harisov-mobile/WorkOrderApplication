@@ -8,14 +8,17 @@ import javax.inject.Inject
 
 class DefaultWorkOrderSettingsMapper @Inject constructor(
     private val departmentMapper: DepartmentMapper,
-    private val employeeMapper: EmployeeMapper
+    private val employeeMapper: EmployeeMapper,
+    private val workingHourMapper: WorkingHourMapper
 ) {
 
     fun fromDtoToDbModel(defDTO: DefaultWorkOrderSettingsDTO): DefaultWorkOrderSettingsDbModel {
         return DefaultWorkOrderSettingsDbModel(
             departmentId = defDTO.departmentId,
             employeeId = defDTO.employeeId,
-            masterId = defDTO.masterId
+            masterId = defDTO.masterId,
+            workingHourId = defDTO.workingHourId,
+            defaultTimeNorm = defDTO.defaultTimeNorm
         )
     }
 
@@ -25,7 +28,9 @@ class DefaultWorkOrderSettingsMapper @Inject constructor(
             result = DefaultWorkOrderSettings(
                 department = departmentMapper.fromDbModelToEntityWithNull(it.department),
                 employee = employeeMapper.fromDbModelToEntityWithNull(it.employee),
-                master = employeeMapper.fromDbModelToEntityWithNull(it.master)
+                master = employeeMapper.fromDbModelToEntityWithNull(it.master),
+                workingHour = workingHourMapper.fromDbModelToEntityWithNull(it.workingHour),
+                defaultTimeNorm = it.defaultWorkOrderSettingsDbModel.defaultTimeNorm
             )
         }
         return result

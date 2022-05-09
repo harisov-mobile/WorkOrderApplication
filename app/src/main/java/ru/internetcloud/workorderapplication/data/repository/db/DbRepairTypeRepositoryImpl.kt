@@ -1,40 +1,18 @@
 package ru.internetcloud.workorderapplication.data.repository.db
 
 import ru.internetcloud.workorderapplication.data.database.AppDao
+import ru.internetcloud.workorderapplication.data.mapper.DefaultRepairTypeJobDetailMapper
 import ru.internetcloud.workorderapplication.data.mapper.RepairTypeMapper
+import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJobDetail
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.repository.RepairTypeRepository
 import javax.inject.Inject
 
-// это класс-синглтон, единственный экземпляр этого репозитория создается при запуске приложения
-// class DbRepairTypeRepositoryImpl private constructor(application: Application) : RepairTypeRepository {
 class DbRepairTypeRepositoryImpl @Inject constructor(
     private val appDao: AppDao,
-    private val repairTypeMapper: RepairTypeMapper
+    private val repairTypeMapper: RepairTypeMapper,
+    private val defaultRepairTypeJobDetailMapper: DefaultRepairTypeJobDetailMapper
 ) : RepairTypeRepository {
-
-//    private val appDao = AppDatabase.getInstance(application).appDao()
-//    private val repairTypeMapper = RepairTypeMapper()
-
-//    @Inject
-//    lateinit var appDao: AppDao // = AppDatabase.getInstance(application).appDao()
-//
-//    @Inject
-//    lateinit var repairTypeMapper: RepairTypeMapper // = RepairTypeMapper()
-
-    companion object {
-//        private var instance: DbRepairTypeRepositoryImpl? = null
-//
-//        fun initialize(application: Application) {
-//            if (instance == null) {
-//                instance = DbRepairTypeRepositoryImpl(application)
-//            }
-//        }
-//
-//        fun get(): DbRepairTypeRepositoryImpl {
-//            return instance ?: throw RuntimeException("DbRepairTypeRepositoryImpl must be initialized.")
-//        }
-    }
 
     override suspend fun getRepairTypeList(): List<RepairType> {
         return repairTypeMapper.fromListDbModelToListEntity(appDao.getRepairTypeList())
@@ -67,5 +45,9 @@ class DbRepairTypeRepositoryImpl @Inject constructor(
 
     override suspend fun searchRepairTypes(searchText: String): List<RepairType> {
         return repairTypeMapper.fromListDbModelToListEntity(appDao.searhRepairTypes("%$searchText%"))
+    }
+
+    override suspend fun getDefaultRepairTypeJobDetails(repairType: RepairType): List<DefaultRepairTypeJobDetail> {
+        return defaultRepairTypeJobDetailMapper.fromListDbModelToListEntity(appDao.getDefaultRepairTypeJobDetails(repairType.id))
     }
 }

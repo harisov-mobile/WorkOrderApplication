@@ -8,5 +8,6 @@ import kotlinx.parcelize.Parcelize
 data class RepairType(
     var id: String = "",
     var name: String = "",
+    var defaultJobDetails: MutableList<DefaultRepairTypeJobDetail> = mutableListOf(), // Работы по-умолчанию (табличная часть)
     var isSelected: Boolean = false
 ) : Parcelable

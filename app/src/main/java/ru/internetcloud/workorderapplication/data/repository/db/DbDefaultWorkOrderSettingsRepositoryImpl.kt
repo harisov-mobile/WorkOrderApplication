@@ -12,20 +12,6 @@ class DbDefaultWorkOrderSettingsRepositoryImpl @Inject constructor(
     private val defaultWorkOrderSettingsMapper: DefaultWorkOrderSettingsMapper
 ) : DefaultWorkOrderSettingsRepository {
 
-    companion object {
-//        private var instance: DbDefaultWorkOrderSettingsRepositoryImpl? = null
-//
-//        fun initialize(application: Application) {
-//            if (instance == null) {
-//                instance = DbDefaultWorkOrderSettingsRepositoryImpl(application)
-//            }
-//        }
-//
-//        fun get(): DbDefaultWorkOrderSettingsRepositoryImpl {
-//            return instance ?: throw RuntimeException("DbDefaultWorkOrderSettingsRepositoryImpl must be initialized.")
-//        }
-    }
-
     override suspend fun getDefaultWorkOrderSettings(): DefaultWorkOrderSettings? {
         var defaultWorkOrderSettings: DefaultWorkOrderSettings? = null
 

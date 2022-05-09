@@ -125,9 +125,6 @@ class LogonViewModel @Inject constructor(
                     } else {
                         server = HTTP_PREFIX + server
                     }
-                    Log.i("rustam", "Имя сервера = " + server)
-                    Log.i("rustam", "Логин = " + login)
-                    Log.i("rustam", "Пароль = " + password)
 
                     setAuthParametersUseCase.setAuthParameters(server, login, password)
 

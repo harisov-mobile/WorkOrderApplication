@@ -6,8 +6,7 @@ import javax.inject.Inject
 class LoadWorkOrdersUseCase @Inject constructor(
     private val synchroRepository: SynchroRepository
 ) {
-
-    suspend fun loadWorkOrders(): Boolean {
-        return synchroRepository.loadWorkOrders()
+    suspend fun loadWorkOrders() {
+        synchroRepository.loadWorkOrders()
     }
 }

@@ -77,7 +77,7 @@
     <string name="car_job_picker_title">Select auto work</string>
     <string name="employee_picker_title">Choose an employee</string>
     <string name="working_fragment_picker_title">Choose a working hour</string>
-    <string name="car_picker_title">Choose a car</string>
+    <string name="car_picker_title">Choose a car from %1$s</string>
     <string name="repair_type_picker_title">Choose a repair type</string>
     <string name="department_picker_title">Choose a department</string>
     <string name="search_label">Search</string>
@@ -118,9 +118,42 @@
     <string name="fail_send_work_order">An error occurred while sending:</string>
     <string name="success_send_work_order">Successfully sent</string>
 
-    <string name="about_application">%1$s \n \n Version 1.</string>
+    <string name="about_application">%1$s \n \n Version %2$s</string>
     <string name="under_constraction">Under construction.</string>
     <string name="delete_performers_button">Delete</string>
     <string name="total_sum_label">Total:</string>
+    <string name="get_car_job_list">Obtaining a catalog of CarJobs from 1C</string>
+    <string name="prepare_car_job_list">Processing a catalog of CarJobs</string>
+    <string name="get_department_list">Obtaining a catalog of Departments from 1C</string>
+    <string name="prepare_department_list">Processing a catalog of Departments</string>
+    <string name="get_employee_list">Obtaining a catalog of Employees from 1C</string>
+    <string name="prepare_employee_list">Processing a catalog of Employees</string>
+    <string name="get_partner_list">Obtaining a catalog of Partners from 1C</string>
+    <string name="prepare_partner_list">Processing a catalog of Partners</string>
+    <string name="get_car_list">Obtaining a catalog of Cars from 1C</string>
+    <string name="prepare_car_list">Processing a catalog of Cars</string>
+    <string name="get_working_hour_list">Obtaining a catalog of Working hours from 1C</string>
+    <string name="prepare_working_hour_list">Processing a catalog of Working hours</string>
+    <string name="get_default_wo_settings_list">Getting filling settings from 1C</string>
+    <string name="load_work_orders">Obtaining work-orders from 1C</string>
+    <string name="upload_work_orders">Sending work-orders to 1C</string>
+    <string name="load_repair_types">Obtaining a catalog of Repair types from 1C</string>
+    <string name="get_car_model_list">Obtaining a catalog of Car Models from 1C</string>
+    <string name="prepare_car_model_list">Processing a catalog of Car models</string>
+    <string name="add_default_jobs_question">For the selected Repair type and the selected Car, there are jobs that need to be performed. Add jobs to Jobs list?</string>
+    <string name="version">Version %1$s</string>
+    <string name="clear_search_text_button">X</string>
+    <string name="number_label">Number:</string>
+    <string name="performer_label">Performer:</string>
+    <string name="date_from_label">Date from:</string>
+    <string name="date_to_label">Date to:</string>
+    <string name="filter_fragment_title">Filter</string>
+    <string name="contains">contains</string>
+    <string name="partner_hint">Client</string>
+    <string name="car_hint">Car</string>
+    <string name="performer_hint">Performer</string>
+    <string name="department_hint">Department</string>
+    <string name="date_from_hint">Date from</string>
+    <string name="date_to_hint">Date to</string>
 
 </resources>

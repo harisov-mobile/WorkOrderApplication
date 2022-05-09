@@ -19,8 +19,6 @@ class CarJobListViewModel @Inject constructor(
 
     var selectedCarJob: CarJob? = null
 
-    // private val repository = DbCarJobRepositoryImpl.get()
-
     private val _carJobListLiveData = MutableLiveData<List<CarJob>>()
     val carJobListLiveData: LiveData<List<CarJob>>
         get() = _carJobListLiveData

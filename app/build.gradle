@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-parcelize'
 }
 
+// чтобы ktlint использовать
 apply from: "../ktlint.gradle"
 
 android {
@@ -14,8 +15,8 @@ android {
         applicationId "ru.internetcloud.workorderapplication"
         minSdk 21
         targetSdk 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 6
+        versionName "6.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,13 +30,23 @@ android {
         }
 
         release {
+            // было:
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            // стало:
+//            shrinkResources true
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
     buildFeatures {
         dataBinding true
+    }
+
+    viewBinding {
+        enabled = true
     }
 
     compileOptions {

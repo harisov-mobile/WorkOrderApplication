@@ -19,8 +19,6 @@ class PartnerListViewModel @Inject constructor(
 
     var selectedPartner: Partner? = null
 
-    // private val repository = DbPartnerRepositoryImpl.get()
-
     private val _partnerListLiveData = MutableLiveData<List<Partner>>()
     val partnerListLiveData: LiveData<List<Partner>>
         get() = _partnerListLiveData

@@ -10,7 +10,7 @@ import ru.internetcloud.workorderapplication.domain.common.SendRequest
 interface ApiInterface {
 
     companion object {
-        // private const val PUB_NAME = "alpha2"
+        //private const val PUB_NAME = "alpha2"
         private const val PUB_NAME = "rabota"
     }
 
@@ -34,6 +34,9 @@ interface ApiInterface {
 
     @GET(PUB_NAME + "/hs/rest/catalog/car/all")
     suspend fun getCars(): CarResponse
+
+    @GET(PUB_NAME + "/hs/rest/catalog/carmodel/all")
+    suspend fun getCarModels(): CarModelResponse
 
     @GET(PUB_NAME + "/hs/rest/catalog/workinghour/all")
     suspend fun getWorkingHours(): WorkingHourResponse

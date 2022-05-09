@@ -3,13 +3,16 @@ package ru.internetcloud.workorderapplication.di
 import dagger.Module
 import dagger.Provides
 import ru.internetcloud.workorderapplication.di.qualifiers.repository.*
+import ru.internetcloud.workorderapplication.di.qualifiers.repository.RemoteCarModelRepositoryQualifier
 import ru.internetcloud.workorderapplication.di.qualifiers.usecase.*
 import ru.internetcloud.workorderapplication.domain.repository.*
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.GetCarListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.GetCarJobListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carmodel.GetCarModelListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.GetDepartmentListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.GetEmployeeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.GetPartnerListUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetDefaultRepairTypeJobsUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetRepairTypeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.GetWorkingHourListUseCase
 
@@ -50,6 +53,15 @@ class DomainModule {
     ): GetEmployeeListUseCase {
 
         return GetEmployeeListUseCase(impl)
+    }
+
+    @DbGetDefaultRepairTypeJobsUseCaseQualifier
+    @Provides
+    fun provideDbGetDefaultRepairTypeJobsUseCase(
+        @DbRepairTypeRepositoryQualifier impl: RepairTypeRepository
+    ): GetDefaultRepairTypeJobsUseCase {
+
+        return GetDefaultRepairTypeJobsUseCase(impl)
     }
 
     @DbGetRepairTypeListUseCaseQualifier
@@ -115,6 +127,15 @@ class DomainModule {
         return GetCarJobListUseCase(impl)
     }
 
+    @DbGetCarModelListUseCaseQualifier
+    @Provides
+    fun provideDbGetCarModelListUseCase(
+        @DbCarModelRepositoryQualifier impl: CarModelRepository
+    ): GetCarModelListUseCase {
+
+        return GetCarModelListUseCase(impl)
+    }
+
     @RemoteGetCarJobListUseCaseQualifier
     @Provides
     fun provideRemoteGetCarJobListUseCase(
@@ -122,6 +143,15 @@ class DomainModule {
     ): GetCarJobListUseCase {
 
         return GetCarJobListUseCase(impl)
+    }
+
+    @RemoteGetCarModelListUseCaseQualifier
+    @Provides
+    fun provideRemoteGetCarModelListUseCase(
+        @RemoteCarModelRepositoryQualifier impl: CarModelRepository
+    ): GetCarModelListUseCase {
+
+        return GetCarModelListUseCase(impl)
     }
 
     @DbGetCarListUseCaseQualifier
