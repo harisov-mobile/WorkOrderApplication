@@ -7,7 +7,19 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import ru.internetcloud.workorderapplication.data.entity.*
+import ru.internetcloud.workorderapplication.data.entity.CarDbModel
+import ru.internetcloud.workorderapplication.data.entity.CarJobDbModel
+import ru.internetcloud.workorderapplication.data.entity.CarModelDbModel
+import ru.internetcloud.workorderapplication.data.entity.DefaultRepairTypeJobDetailDbModel
+import ru.internetcloud.workorderapplication.data.entity.DefaultWorkOrderSettingsDbModel
+import ru.internetcloud.workorderapplication.data.entity.DepartmentDbModel
+import ru.internetcloud.workorderapplication.data.entity.EmployeeDbModel
+import ru.internetcloud.workorderapplication.data.entity.JobDetailDbModel
+import ru.internetcloud.workorderapplication.data.entity.PartnerDbModel
+import ru.internetcloud.workorderapplication.data.entity.PerformerDetailDbModel
+import ru.internetcloud.workorderapplication.data.entity.RepairTypeDbModel
+import ru.internetcloud.workorderapplication.data.entity.WorkOrderDbModel
+import ru.internetcloud.workorderapplication.data.entity.WorkingHourDbModel
 
 @Database(
     entities = [WorkOrderDbModel::class, RepairTypeDbModel::class, CarJobDbModel::class, DepartmentDbModel::class,

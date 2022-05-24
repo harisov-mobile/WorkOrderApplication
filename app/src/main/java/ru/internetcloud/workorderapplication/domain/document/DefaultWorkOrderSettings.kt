@@ -1,9 +1,9 @@
 package ru.internetcloud.workorderapplication.domain.document
 
+import java.math.BigDecimal
 import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.catalog.Employee
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
-import java.math.BigDecimal
 
 data class DefaultWorkOrderSettings(
     var department: Department? = null, // цех

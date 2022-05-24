@@ -186,7 +186,6 @@ class DepartmentPickerFragment : DialogFragment() {
         }
     }
 
-
     private fun getPosition(searchedDepartment: Department?, departmentList: List<Department>): Int {
         var currentPosition = NOT_FOUND_POSITION
         searchedDepartment?.let {

@@ -18,7 +18,11 @@ import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
-import ru.internetcloud.workorderapplication.domain.catalog.*
+import ru.internetcloud.workorderapplication.domain.catalog.Car
+import ru.internetcloud.workorderapplication.domain.catalog.Department
+import ru.internetcloud.workorderapplication.domain.catalog.Employee
+import ru.internetcloud.workorderapplication.domain.catalog.Partner
+import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
@@ -239,7 +243,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         REQUEST_ADD_DEFAULT_JOBS_KEY,
                         ARG_ANSWER
                     )
-                    .show(childFragmentManager, WorkOrderFragment.REQUEST_ADD_DEFAULT_JOBS_KEY)
+                    .show(childFragmentManager, REQUEST_ADD_DEFAULT_JOBS_KEY)
             }
         }
     }

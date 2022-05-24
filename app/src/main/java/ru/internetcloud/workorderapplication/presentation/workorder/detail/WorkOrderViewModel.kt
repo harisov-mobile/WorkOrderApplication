@@ -51,7 +51,6 @@ class WorkOrderViewModel @Inject constructor(
     val canFillDefaultJobs: LiveData<Boolean>
         get() = _canFillDefaultJobs
 
-
     var errorInputPerformer: Boolean = false
 
     private val _showErrorMessage = MutableLiveData<Boolean>()

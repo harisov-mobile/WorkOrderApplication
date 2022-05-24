@@ -157,7 +157,7 @@ class PartnerPickerFragment : DialogFragment() {
                 search(p0?.toString() ?: "")
             }
         })
-    }    
+    }
 
     private fun setupClickListeners() {
         partnerListAdapter.onPartnerClickListener = { currentPartner ->

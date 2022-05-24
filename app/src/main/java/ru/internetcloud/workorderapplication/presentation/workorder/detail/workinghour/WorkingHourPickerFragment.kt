@@ -152,7 +152,7 @@ class WorkingHourPickerFragment : DialogFragment() {
             }
         })
     }
-    
+
     private fun setupWorkingHourListRecyclerView(view: View) {
         workingHourListRecyclerView = view.findViewById(R.id.list_recycler_view)
         workingHourListAdapter = WorkingHourListAdapter(emptyList())

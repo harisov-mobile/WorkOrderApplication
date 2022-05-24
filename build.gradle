@@ -32,7 +32,11 @@ ext {
 
     runnerVersion = '1.4.0-beta01'
     rulesVersion = '1.0.1'
+
     junitVersion = '4.13.2'
+    mockitoVersion = '4.0.0'
+    mockitoKotlinVersion = '4.0.0'
+
     espressoVersion = '3.4.0-beta01'
     timberVersion = '4.7.1'
 

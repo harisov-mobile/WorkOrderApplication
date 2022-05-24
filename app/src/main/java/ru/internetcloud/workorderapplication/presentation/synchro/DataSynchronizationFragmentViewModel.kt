@@ -5,7 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.di.qualifiers.usecase.*
+import ru.internetcloud.workorderapplication.di.qualifiers.usecase.DbGetDepartmentListUseCaseQualifier
+import ru.internetcloud.workorderapplication.di.qualifiers.usecase.RemoteGetCarJobListUseCaseQualifier
+import ru.internetcloud.workorderapplication.di.qualifiers.usecase.RemoteGetCarListUseCaseQualifier
+import ru.internetcloud.workorderapplication.di.qualifiers.usecase.RemoteGetCarModelListUseCaseQualifier
+import ru.internetcloud.workorderapplication.di.qualifiers.usecase.RemoteGetDepartmentListUseCaseQualifier
+import ru.internetcloud.workorderapplication.di.qualifiers.usecase.RemoteGetEmployeeListUseCaseQualifier
+import ru.internetcloud.workorderapplication.di.qualifiers.usecase.RemoteGetPartnerListUseCaseQualifier
+import ru.internetcloud.workorderapplication.di.qualifiers.usecase.RemoteGetWorkingHourListUseCaseQualifier
 import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
 import ru.internetcloud.workorderapplication.domain.common.OperationMode
@@ -30,7 +37,11 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.par
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.AddWorkingHourListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.DeleteWorkingHourListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.GetWorkingHourListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.*
+import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.GetModifiedWorkOrdersQuantityUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadDefaultWorkOrderSettingsUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadRepairTypesUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadWorkOrdersUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.UploadWorkOrdersUseCase
 import javax.inject.Inject
 
 class DataSynchronizationFragmentViewModel @Inject constructor(

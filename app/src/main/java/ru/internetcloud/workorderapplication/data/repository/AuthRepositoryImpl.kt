@@ -1,7 +1,6 @@
 package ru.internetcloud.workorderapplication.data.repository
 
 import android.app.Application
-import android.util.Log
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.AuthResponse
 import ru.internetcloud.workorderapplication.domain.common.AuthParameters

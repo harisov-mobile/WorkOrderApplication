@@ -150,9 +150,9 @@ class EmployeePickerFragment : DialogFragment() {
             override fun afterTextChanged(p0: Editable?) {
                 search(p0?.toString() ?: "")
             }
-        })        
+        })
     }
-    
+
     private fun setupEmployeeListRecyclerView(view: View) {
         employeeListRecyclerView = view.findViewById(R.id.list_recycler_view)
         employeeListAdapter = EmployeeListAdapter(emptyList())

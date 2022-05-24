@@ -1,6 +1,5 @@
 package ru.internetcloud.workorderapplication.data.repository.db
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.sqlite.db.SimpleSQLiteQuery
@@ -13,7 +12,7 @@ import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
 import java.util.*
 import javax.inject.Inject
-
+import kotlin.collections.ArrayList
 
 class DbWorkOrderRepositoryImpl @Inject constructor(
     private val workOrderDao: AppDao,
@@ -146,7 +145,6 @@ class DbWorkOrderRepositoryImpl @Inject constructor(
             queryString += " date <= :param_date_to"
             args.add(getEndOfDay(toDate).getTime())
         }
-
 
         // End of query string
         queryString += " ORDER BY date, number;"

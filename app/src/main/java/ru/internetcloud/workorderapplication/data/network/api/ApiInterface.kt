@@ -4,13 +4,24 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import ru.internetcloud.workorderapplication.data.entity.WorkOrderWithDetails
-import ru.internetcloud.workorderapplication.data.network.dto.*
+import ru.internetcloud.workorderapplication.data.network.dto.AuthResponse
+import ru.internetcloud.workorderapplication.data.network.dto.CarJobResponse
+import ru.internetcloud.workorderapplication.data.network.dto.CarModelResponse
+import ru.internetcloud.workorderapplication.data.network.dto.CarResponse
+import ru.internetcloud.workorderapplication.data.network.dto.DefaultWorkOrderSettingsResponse
+import ru.internetcloud.workorderapplication.data.network.dto.DepartmentResponse
+import ru.internetcloud.workorderapplication.data.network.dto.EmployeeResponse
+import ru.internetcloud.workorderapplication.data.network.dto.PartnerResponse
+import ru.internetcloud.workorderapplication.data.network.dto.RepairTypeResponse
+import ru.internetcloud.workorderapplication.data.network.dto.UploadResponse
+import ru.internetcloud.workorderapplication.data.network.dto.WorkOrderResponse
+import ru.internetcloud.workorderapplication.data.network.dto.WorkingHourResponse
 import ru.internetcloud.workorderapplication.domain.common.SendRequest
 
 interface ApiInterface {
 
     companion object {
-        //private const val PUB_NAME = "alpha2"
+        // private const val PUB_NAME = "alpha2"
         private const val PUB_NAME = "rabota"
     }
 
