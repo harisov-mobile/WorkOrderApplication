@@ -57,21 +57,22 @@
             <EditText
                 android:id="@+id/number_edit_text"
                 style="@style/filter_edit_text"
-
                 android:inputType="textPersonName"
-
-                app:layout_constraintEnd_toStartOf="@+id/clear_number_button"
-
-                app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
+                app:layout_constraintEnd_toEndOf="parent"
                 tools:text="number" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/clear_number_button"
-                style="@style/small_clear_button"
+                android:layout_width="35dp"
+                android:layout_height="0dp"
+                android:background="@null"
+
                 app:layout_constraintBottom_toBottomOf="@+id/number_edit_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/number_edit_text" />
+                app:layout_constraintEnd_toEndOf="@+id/number_edit_text"
+                app:layout_constraintTop_toTopOf="@+id/number_edit_text"
+                app:srcCompat="@drawable/ic_cancel" />
 
             <TextView
                 android:id="@+id/partner_label_text_view"
@@ -90,18 +91,21 @@
 
                 android:inputType="textPersonName"
 
-                app:layout_constraintEnd_toStartOf="@+id/clear_partner_button"
-
-                app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
                 app:layout_constraintTop_toBottomOf="@+id/number_edit_text"
+                app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
+                app:layout_constraintEnd_toEndOf="parent"
                 tools:text="partner" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/clear_partner_button"
-                style="@style/small_clear_button"
+                android:layout_width="35dp"
+                android:layout_height="0dp"
+                android:background="@null"
+
                 app:layout_constraintBottom_toBottomOf="@+id/partner_edit_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/partner_edit_text" />
+                app:layout_constraintEnd_toEndOf="@+id/partner_edit_text"
+                app:layout_constraintTop_toTopOf="@+id/partner_edit_text"
+                app:srcCompat="@drawable/ic_cancel" />
 
             <TextView
                 android:id="@+id/car_label_text_view"
@@ -117,21 +121,22 @@
             <EditText
                 android:id="@+id/car_edit_text"
                 style="@style/filter_edit_text"
-
                 android:inputType="textPersonName"
-
-                app:layout_constraintEnd_toStartOf="@+id/clear_car_button"
-
-                app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
                 app:layout_constraintTop_toBottomOf="@+id/partner_edit_text"
+                app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
+                app:layout_constraintEnd_toEndOf="parent"
                 tools:text="car" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/clear_car_button"
-                style="@style/small_clear_button"
+                android:layout_width="35dp"
+                android:layout_height="0dp"
+                android:background="@null"
+
                 app:layout_constraintBottom_toBottomOf="@+id/car_edit_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/car_edit_text" />
+                app:layout_constraintEnd_toEndOf="@+id/car_edit_text"
+                app:layout_constraintTop_toTopOf="@+id/car_edit_text"
+                app:srcCompat="@drawable/ic_cancel" />
 
             <TextView
                 android:id="@+id/performer_label_text_view"
@@ -148,21 +153,22 @@
             <EditText
                 android:id="@+id/performer_edit_text"
                 style="@style/filter_edit_text"
-
                 android:inputType="textPersonName"
-
-                app:layout_constraintEnd_toStartOf="@+id/clear_performer_button"
-
-                app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
                 app:layout_constraintTop_toBottomOf="@+id/car_edit_text"
+                app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
+                app:layout_constraintEnd_toEndOf="parent"
                 tools:text="performer" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/clear_performer_button"
-                style="@style/small_clear_button"
+                android:layout_width="35dp"
+                android:layout_height="0dp"
+                android:background="@null"
+
                 app:layout_constraintBottom_toBottomOf="@+id/performer_edit_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/performer_edit_text" />
+                app:layout_constraintEnd_toEndOf="@+id/performer_edit_text"
+                app:layout_constraintTop_toTopOf="@+id/performer_edit_text"
+                app:srcCompat="@drawable/ic_cancel" />
 
             <TextView
                 android:id="@+id/department_label_text_view"
@@ -178,21 +184,22 @@
             <EditText
                 android:id="@+id/department_edit_text"
                 style="@style/filter_edit_text"
-
                 android:inputType="textPersonName"
-
-                app:layout_constraintEnd_toStartOf="@+id/clear_department_button"
-
-                app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
                 app:layout_constraintTop_toBottomOf="@+id/performer_edit_text"
+                app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
+                app:layout_constraintEnd_toEndOf="parent"
                 tools:text="department" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/clear_department_button"
-                style="@style/small_clear_button"
+                android:layout_width="35dp"
+                android:layout_height="0dp"
+                android:background="@null"
+
                 app:layout_constraintBottom_toBottomOf="@+id/department_edit_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/department_edit_text" />
+                app:layout_constraintEnd_toEndOf="@+id/department_edit_text"
+                app:layout_constraintTop_toTopOf="@+id/department_edit_text"
+                app:srcCompat="@drawable/ic_cancel" />
 
             <TextView
                 android:id="@+id/date_from_label_text_view"
@@ -215,19 +222,22 @@
                 app:layout_constraintTop_toBottomOf="@+id/department_edit_text"
                 tools:text="date from" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/clear_date_from_button"
-                style="@style/small_clear_button"
+                android:layout_width="35dp"
+                android:layout_height="0dp"
+                android:background="@null"
 
                 app:layout_constraintBottom_toBottomOf="@+id/date_from_text_view"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/date_from_text_view" />
+                app:layout_constraintEnd_toEndOf="@+id/date_from_text_view"
+                app:layout_constraintTop_toTopOf="@+id/date_from_text_view"
+                app:srcCompat="@drawable/ic_cancel" />
 
             <Button
                 android:id="@+id/date_from_select_button"
                 style="@style/small_select_button"
                 app:layout_constraintBottom_toBottomOf="@+id/date_from_text_view"
-                app:layout_constraintEnd_toStartOf="@+id/clear_date_from_button"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/date_from_text_view" />
 
             <TextView
@@ -251,21 +261,26 @@
                 app:layout_constraintTop_toBottomOf="@+id/date_from_text_view"
                 tools:text="date to" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/clear_date_to_button"
-                style="@style/small_clear_button"
+                android:layout_width="35dp"
+                android:layout_height="0dp"
+                android:background="@null"
+
                 app:layout_constraintBottom_toBottomOf="@+id/date_to_text_view"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/date_to_text_view" />
+                app:layout_constraintEnd_toEndOf="@+id/date_to_text_view"
+                app:layout_constraintTop_toTopOf="@+id/date_to_text_view"
+                app:srcCompat="@drawable/ic_cancel" />
 
             <Button
                 android:id="@+id/date_to_select_button"
                 style="@style/small_select_button"
                 app:layout_constraintBottom_toBottomOf="@+id/date_to_text_view"
-                app:layout_constraintEnd_toStartOf="@+id/clear_date_to_button"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/date_to_text_view" />
 
             <LinearLayout
+                android:id="@+id/buttons_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"

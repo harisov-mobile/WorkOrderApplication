@@ -12,5 +12,14 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <!-- чтобы применился стиль-->
     </style>
+
+
+    <style name="GlobalTextInputStyle"
+        parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+<!--                <item name="android:minWidth">12dp</item>-->
+    </style>
+
 </resources>

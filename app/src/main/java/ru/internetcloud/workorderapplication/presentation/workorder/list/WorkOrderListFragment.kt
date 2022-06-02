@@ -75,23 +75,23 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         hostActivity = context as Callbacks
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_work_order_list, container, false)
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(WorkOrderListViewModel::class.java)
 
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 onExitWorkOrderList()
             }
         })
 
         setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        val view = inflater.inflate(R.layout.fragment_work_order_list, container, false)
 
         filterDescriptionTextView = view.findViewById(R.id.filter_description_text_view)
 
@@ -105,12 +105,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
         setupWorkOrderRecyclerView(view)
         setupClickListener()
-
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         observeViewModel()
         setupFilterDescription()
