@@ -1,5 +1,4 @@
 # WorkOrderApplication
-WorkOrder
 
 Заказ-наряды Агро-Сервис
 
