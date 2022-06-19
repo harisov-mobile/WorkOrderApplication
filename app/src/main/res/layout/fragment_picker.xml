@@ -40,6 +40,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
+        android:paddingEnd="@dimen/clear_icon_width"
         android:background="@color/white"
         android:padding="4dp"
         android:ems="10"
@@ -50,14 +51,14 @@
 
     <ImageButton
         android:id="@+id/clear_search_text_button"
-        android:layout_width="35dp"
+        android:layout_width="@dimen/clear_icon_width"
         android:layout_height="0dp"
         android:background="@null"
 
         app:layout_constraintBottom_toBottomOf="@+id/search_edit_text"
         app:layout_constraintEnd_toEndOf="@+id/search_edit_text"
         app:layout_constraintTop_toTopOf="@+id/search_edit_text"
-        app:srcCompat="@drawable/ic_cancel" />
+        app:srcCompat="@drawable/ic_clear_gray" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_recycler_view"
