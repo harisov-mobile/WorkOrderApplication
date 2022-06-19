@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
@@ -57,7 +58,7 @@ class CarJobPickerFragment : DialogFragment() {
     private lateinit var carJobListRecyclerView: RecyclerView
     private lateinit var carJobListAdapter: CarJobListAdapter
 
-    private lateinit var clearSearchTextButton: Button
+    private lateinit var clearSearchTextImageButton: ImageButton
     private lateinit var searchEditText: EditText
     private lateinit var titleTextView: TextView
 
@@ -83,7 +84,7 @@ class CarJobPickerFragment : DialogFragment() {
         // alertDialogBuilder.setTitle(R.string.car_job_picker_title)
 
         val container = layoutInflater.inflate(R.layout.fragment_picker, null, false)
-        clearSearchTextButton = container.findViewById(R.id.clear_search_text_button)
+        clearSearchTextImageButton = container.findViewById(R.id.clear_search_text_button)
         searchEditText = container.findViewById(R.id.search_edit_text)
 
         titleTextView = container.findViewById(R.id.title_text_view)
@@ -175,7 +176,7 @@ class CarJobPickerFragment : DialogFragment() {
             dismiss()
         }
 
-        clearSearchTextButton.setOnClickListener {
+        clearSearchTextImageButton.setOnClickListener {
             searchEditText.setText("")
             viewModel.loadCarJobList()
         }

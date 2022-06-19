@@ -13,7 +13,4 @@ data class SearchWorkOrderData(
     var departmentText: String = "",
     var dateFrom: Date? = null,
     var dateTo: Date? = null
-) : Parcelable {
-
-
-}
+) : Parcelable

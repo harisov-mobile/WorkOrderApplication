@@ -1,7 +1,6 @@
 package ru.internetcloud.workorderapplication.data.repository
 
 import android.app.Application
-import android.util.Log
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.AuthResponse
 import ru.internetcloud.workorderapplication.domain.common.AuthParameters
@@ -30,7 +29,8 @@ class AuthRepositoryImpl @Inject constructor(
 
         var authResult = AuthResult(false, "Нет связи с сервером.")
 
-        // HTTP FAILED: java.net.UnknownHostException: Unable to resolve host "serv.promintel-agro.ru": No address associated with hostname
+        // HTTP FAILED: java.net.UnknownHostException: Unable to resolve host "serv.promintel-agro.ru":
+        // No address associated with hostname
         // инициализировать ApiClient
         try {
             ApiClient.initialize(authParameters)

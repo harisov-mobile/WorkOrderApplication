@@ -18,7 +18,11 @@ import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
-import ru.internetcloud.workorderapplication.domain.catalog.*
+import ru.internetcloud.workorderapplication.domain.catalog.Car
+import ru.internetcloud.workorderapplication.domain.catalog.Department
+import ru.internetcloud.workorderapplication.domain.catalog.Employee
+import ru.internetcloud.workorderapplication.domain.catalog.Partner
+import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
@@ -125,16 +129,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         component.inject(this)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                onCloseWorkOrder()
-            }
-        })
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         _binding = FragmentWorkOrderBinding.inflate(inflater, container, false)
@@ -175,6 +169,12 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         childFragmentManager.setFragmentResultListener(REQUEST_ADD_DEFAULT_JOBS_KEY, viewLifecycleOwner, this)
 
         setupClickListeners()
+
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                onCloseWorkOrder()
+            }
+        })
     }
 
     private fun observeViewModel() {
@@ -239,7 +239,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                         REQUEST_ADD_DEFAULT_JOBS_KEY,
                         ARG_ANSWER
                     )
-                    .show(childFragmentManager, WorkOrderFragment.REQUEST_ADD_DEFAULT_JOBS_KEY)
+                    .show(childFragmentManager, REQUEST_ADD_DEFAULT_JOBS_KEY)
             }
         }
     }

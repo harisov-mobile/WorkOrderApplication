@@ -6,7 +6,6 @@ import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetFilteredWorkOrderListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderListUseCase
-import java.util.*
 import javax.inject.Inject
 
 class WorkOrderListViewModel @Inject constructor(
@@ -29,5 +28,4 @@ class WorkOrderListViewModel @Inject constructor(
     }
 
     fun searchWorkOrderDataIsEmpty() = searchWorkOrderData == SearchWorkOrderData()
-
 }

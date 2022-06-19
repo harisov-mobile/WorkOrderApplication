@@ -1,12 +1,17 @@
 package ru.internetcloud.workorderapplication.presentation.logon
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.domain.catalog.*
+import ru.internetcloud.workorderapplication.domain.catalog.Car
+import ru.internetcloud.workorderapplication.domain.catalog.CarJob
+import ru.internetcloud.workorderapplication.domain.catalog.Department
+import ru.internetcloud.workorderapplication.domain.catalog.Employee
+import ru.internetcloud.workorderapplication.domain.catalog.Partner
+import ru.internetcloud.workorderapplication.domain.catalog.RepairType
+import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
@@ -32,7 +37,7 @@ import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.Check
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.SetAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.settingsoperation.DeleteAllDefaultWorkOrderSettingsUseCase
 import java.math.BigDecimal
-import java.util.*
+import java.util.Date
 import javax.inject.Inject
 
 class LogonViewModel @Inject constructor(

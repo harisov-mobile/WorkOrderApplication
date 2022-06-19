@@ -88,6 +88,4 @@ class WorkOrderListAdapter : ListAdapter<WorkOrder, WorkOrderListViewHolder>(Wor
             UNPOSTED_ITEM_TYPE
         }
     }
-
-
 }

@@ -6,16 +6,12 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.FragmentWoFilterBinding
-import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.DatePickerFragment

@@ -2,12 +2,14 @@ package ru.internetcloud.workorderapplication.presentation.workorder.list
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
@@ -16,16 +18,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
-import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
-import ru.internetcloud.workorderapplication.domain.document.JobDetail
-import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.WorkOrderFragment
-import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.search.SearchWorkOrderFragment
 import javax.inject.Inject
 
@@ -78,23 +75,23 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         hostActivity = context as Callbacks
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_work_order_list, container, false)
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(WorkOrderListViewModel::class.java)
 
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 onExitWorkOrderList()
             }
         })
 
         setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        val view = inflater.inflate(R.layout.fragment_work_order_list, container, false)
 
         filterDescriptionTextView = view.findViewById(R.id.filter_description_text_view)
 
@@ -108,12 +105,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
         setupWorkOrderRecyclerView(view)
         setupClickListener()
-
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         observeViewModel()
         setupFilterDescription()

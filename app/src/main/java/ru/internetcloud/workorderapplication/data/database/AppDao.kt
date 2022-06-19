@@ -1,10 +1,30 @@
 package ru.internetcloud.workorderapplication.data.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.RawQuery
+import androidx.room.Transaction
 import androidx.sqlite.db.SupportSQLiteQuery
-import ru.internetcloud.workorderapplication.data.entity.*
-import java.util.*
+import ru.internetcloud.workorderapplication.data.entity.CarDbModel
+import ru.internetcloud.workorderapplication.data.entity.CarJobDbModel
+import ru.internetcloud.workorderapplication.data.entity.CarModelDbModel
+import ru.internetcloud.workorderapplication.data.entity.CarWithOwner
+import ru.internetcloud.workorderapplication.data.entity.DefaultRepairTypeJobDetailDbModel
+import ru.internetcloud.workorderapplication.data.entity.DefaultRepairTypeJobDetailWithRequisities
+import ru.internetcloud.workorderapplication.data.entity.DefaultWorkOrderSettingsDbModel
+import ru.internetcloud.workorderapplication.data.entity.DefaultWorkOrderSettingsWithRequisities
+import ru.internetcloud.workorderapplication.data.entity.DepartmentDbModel
+import ru.internetcloud.workorderapplication.data.entity.EmployeeDbModel
+import ru.internetcloud.workorderapplication.data.entity.JobDetailDbModel
+import ru.internetcloud.workorderapplication.data.entity.PartnerDbModel
+import ru.internetcloud.workorderapplication.data.entity.PerformerDetailDbModel
+import ru.internetcloud.workorderapplication.data.entity.RepairTypeDbModel
+import ru.internetcloud.workorderapplication.data.entity.WorkOrderDbModel
+import ru.internetcloud.workorderapplication.data.entity.WorkOrderWithDetails
+import ru.internetcloud.workorderapplication.data.entity.WorkingHourDbModel
 
 @Dao
 interface AppDao {
@@ -12,9 +32,6 @@ interface AppDao {
     @Transaction
     @Query("SELECT * FROM work_orders ORDER BY date, number")
     fun getWorkOrderList(): LiveData<List<WorkOrderWithDetails>> // Не использовать LiveData в репозитории
-
-//    @Query("SELECT * FROM work_orders WHERE date > :dateFrom ORDER BY date, number")
-//    fun getFilteredWorkOrderList(dateFrom: Date): LiveData<List<WorkOrderWithDetails>> // Не использовать LiveData в репозитории
 
     @Transaction
     @RawQuery
