@@ -8,13 +8,19 @@ import ru.internetcloud.workorderapplication.domain.common.AuthResult
 import ru.internetcloud.workorderapplication.domain.common.AuthorizationPreferences
 import ru.internetcloud.workorderapplication.domain.repository.AuthRepository
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import java.security.MessageDigest
 import javax.inject.Inject
+import retrofit2.HttpException
 
 class AuthRepositoryImpl @Inject constructor(
     private val application: Application,
     private var authParameters: AuthParameters
 ) : AuthRepository {
+
+    companion object {
+        private const val HTTP_INTERNAL_SERVER_ERROR = 500
+    }
 
     override fun getAuthParameters(): AuthParameters {
         return authParameters
@@ -44,12 +50,27 @@ class AuthRepositoryImpl @Inject constructor(
         try {
             val authResponse: AuthResponse = ApiClient.getInstance().client.checkAuthorization()
             authResult.isAuthorized = authResponse.isAuthorized
+
         } catch (e: SocketTimeoutException) {
             authResult.isAuthorized = false
-            authResult.errorMessage = "Нет связи с сервером."
+            authResult.errorMessage = "Не удалось подключиться к серверу 1С!\n\nНет связи с сервером.\n\n${e.message.toString()}"
+
+        } catch (e: UnknownHostException) {
+            authResult.isAuthorized = false
+            authResult.errorMessage = "Не удалось подключиться к серверу 1С!\n\nВозможно, неправильное имя сервера!\n\n${e.message.toString()}"
+
+        } catch (e: HttpException) {
+            authResult.isAuthorized = false
+            if (e.code() == HTTP_INTERNAL_SERVER_ERROR) {
+                authResult.errorMessage = "Не удалось подключиться к серверу 1С!\n\nВнутренняя ошибка на сервере 1С!\n\n${e.message.toString()}"
+            } else {
+                authResult.errorMessage = "Не удалось подключиться к серверу 1С!\n\nВозможно, неправильный логин или пароль!\n\n${e.message.toString()}"
+            }
+
+
         } catch (e: Exception) {
             authResult.isAuthorized = false
-            authResult.errorMessage = "Неправильный логин или пароль!"
+            authResult.errorMessage = "Не удалось подключиться к серверу 1С!\n\n${e.message.toString()}"
         }
 
         if (authResult.isAuthorized) {
@@ -105,7 +126,8 @@ class AuthRepositoryImpl @Inject constructor(
                 authResult.isAuthorized = true
                 authResult.errorMessage = ""
             } else {
-                authResult.errorMessage = "Неправильный логин или пароль"
+                // authResult.errorMessage = "Неправильный логин или пароль"
+                // - уже есть сообщение о невозможности подключения от Интернет-попытки подключения!
             }
         }
 
