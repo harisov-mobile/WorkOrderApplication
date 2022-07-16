@@ -1,10 +1,10 @@
 package ru.internetcloud.workorderapplication.data.mapper
 
-import ru.internetcloud.workorderapplication.data.entity.JobDetailDbModel
-import ru.internetcloud.workorderapplication.data.entity.JobDetailWithRequisities
+import javax.inject.Inject
+import ru.internetcloud.workorderapplication.data.model.JobDetailDbModel
+import ru.internetcloud.workorderapplication.data.model.JobDetailWithRequisities
 import ru.internetcloud.workorderapplication.data.network.dto.JobDetailDTO
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
-import javax.inject.Inject
 
 class JobDetailMapper @Inject constructor(
     private val carJobMapper: CarJobMapper,
@@ -65,5 +65,9 @@ class JobDetailMapper @Inject constructor(
             sum = jobDetail.sum,
             workOrderId = workOrderId
         )
+    }
+
+    fun fromListDtoToDbModel(list: List<JobDetailDTO>): List<JobDetailDbModel> {
+        return list.map { fromDtoToDbModel(it) }
     }
 }

@@ -1,8 +1,8 @@
 package ru.internetcloud.workorderapplication.domain.document
 
 import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
+import kotlinx.parcelize.Parcelize
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
 

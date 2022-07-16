@@ -13,4 +13,7 @@ interface PartnerRepository {
     suspend fun deleteAllPartners()
 
     suspend fun searchPartners(searchText: String): List<Partner>
+
+    // переделываю:
+    // suspend fun getPartners(): List<Partner>
 }

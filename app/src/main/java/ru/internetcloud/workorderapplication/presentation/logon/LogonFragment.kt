@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import javax.inject.Inject
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
@@ -16,7 +17,6 @@ import ru.internetcloud.workorderapplication.databinding.FragmentLogonBinding
 import ru.internetcloud.workorderapplication.domain.common.AuthorizationPreferences
 import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
-import javax.inject.Inject
 
 class LogonFragment : Fragment() {
 

@@ -9,13 +9,12 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import javax.inject.Inject
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentDataSynchronizationBinding
-import ru.internetcloud.workorderapplication.domain.common.OperationMode
 import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
-import javax.inject.Inject
 
 class DataSynchronizationFragment : Fragment() {
 
@@ -75,7 +74,9 @@ class DataSynchronizationFragment : Fragment() {
 
         observeViewModel()
 
-        viewModel.synchonizeData()
+        savedInstanceState ?: let {
+            viewModel.synchonizeData()
+        }
     }
 
     override fun onDestroyView() {
@@ -89,96 +90,62 @@ class DataSynchronizationFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        // подписка на ошибку:
-        viewModel.errorSynchronization.observe(viewLifecycleOwner) {
-            if (it) {
-                context?.let { currentContext ->
-                    binding.progressBar.visibility = View.GONE
-                    binding.exitButton.visibility = View.VISIBLE
 
-                    binding.synchroResultTextView.text = getString(R.string.fail_synchronization)
-                    binding.synchroResultTextView.setTextColor(Color.RED)
+        viewModel.updateState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UpdateState.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
                 }
-            }
-        }
 
-        viewModel.currentSituation.observe(viewLifecycleOwner) { currentOperationMode ->
-            context?.let { currentContext ->
-                binding.currentSituationTextView.text = getOperationText(currentOperationMode)
-            }
-        }
-
-        viewModel.errorMessage.observe(viewLifecycleOwner) { errorText ->
-            context?.let { currentContext ->
-                binding.errorMessageTextView.text = errorText
-            }
-        }
-
-        viewModel.uploadResult.observe(viewLifecycleOwner) { result ->
-            context?.let { currentContext ->
-                if (result.isSuccess) {
-                    if (result.amountOfModifiedWorkOrders == 0) {
-                        binding.uploadResultTextView.text = getString(R.string.no_work_orders_to_upload)
-                    } else {
-                        binding.uploadResultTextView.text = getString(R.string.success_upload_work_orders)
-                    }
-                } else {
-                    binding.uploadResultTextView.text = getString(R.string.fail_upload_work_orders) + " " + result.errorMessage
-                }
-            }
-        }
-
-        // подписка на завершение экрана:
-        viewModel.canContinue.observe(viewLifecycleOwner) {
-            if (it) {
-                context?.let { currentContext ->
-                    binding.progressBar.visibility = View.GONE
-                    binding.okButton.visibility = View.VISIBLE
-
-                    binding.synchroResultTextView.text = getString(R.string.success_synchronization)
+                is UpdateState.Success -> {
                     context?.let { currentContext ->
-                        binding.synchroResultTextView.setTextColor(ContextCompat.getColor(currentContext, R.color.dark_green))
+                        binding.progressBar.visibility = View.INVISIBLE
+                        binding.okButton.visibility = View.VISIBLE
+
+                        binding.synchroResultTextView.text = getString(R.string.success_synchronization)
+                        binding.synchroResultTextView.setTextColor(
+                            ContextCompat.getColor(
+                                currentContext,
+                                R.color.dark_green
+                            )
+                        )
+                    }
+
+                    if (state.modifiedWorkOrderNumber > 0) {
+                        binding.uploadResultTextView.text =
+                            getString(R.string.success_upload_work_orders, state.modifiedWorkOrderNumber.toString())
                     }
                 }
-            }
-        }
 
-        viewModel.canContinueWithoutSynchro.observe(viewLifecycleOwner) {
-            if (it) {
-                context?.let { currentContext ->
-                    binding.progressBar.visibility = View.GONE
-                    binding.okButton.visibility = View.VISIBLE
-
-                    binding.synchroResultTextView.text = getString(R.string.success_autonomus)
+                is UpdateState.Error -> {
                     context?.let { currentContext ->
-                        binding.synchroResultTextView.setTextColor(ContextCompat.getColor(currentContext, R.color.dark_yellow))
+                        binding.progressBar.visibility = View.INVISIBLE
+                        binding.exitButton.visibility = View.VISIBLE
+
+                        binding.synchroResultTextView.text = getString(R.string.fail_synchronization)
+                        binding.synchroResultTextView.setTextColor(Color.RED)
+
+                        binding.errorMessageTextView.text = state.exception.message.toString()
+                    }
+                }
+
+                is UpdateState.ContinueWithoutSynchro -> {
+                    context?.let { currentContext ->
+                        binding.progressBar.visibility = View.INVISIBLE
+                        binding.okButton.visibility = View.VISIBLE
+
+                        binding.synchroResultTextView.text = getString(R.string.success_autonomus)
+                        binding.synchroResultTextView.setTextColor(
+                            ContextCompat.getColor(
+                                currentContext,
+                                R.color.dark_yellow
+                            )
+                        )
+
+                        binding.errorMessageTextView.text = state.exception.message.toString()
                     }
                 }
             }
-        }
-    }
-
-    private fun getOperationText(operationMode: OperationMode): String {
-        return when (operationMode) {
-            OperationMode.NOTHING -> ""
-            OperationMode.GET_CAR_JOB_LIST -> getString(R.string.get_car_job_list)
-            OperationMode.PREPARE_CAR_JOB_LIST -> getString(R.string.prepare_car_job_list)
-            OperationMode.GET_DEPARTMENT_LIST -> getString(R.string.get_department_list)
-            OperationMode.PREPARE_DEPARTMENT_LIST -> getString(R.string.prepare_department_list)
-            OperationMode.GET_EMPLOYEE_LIST -> getString(R.string.get_employee_list)
-            OperationMode.PREPARE_EMPLOYEE_LIST -> getString(R.string.prepare_employee_list)
-            OperationMode.GET_PARTNER_LIST -> getString(R.string.get_partner_list)
-            OperationMode.PREPARE_PARTNER_LIST -> getString(R.string.prepare_partner_list)
-            OperationMode.GET_CAR_LIST -> getString(R.string.get_car_list)
-            OperationMode.PREPARE_CAR_LIST -> getString(R.string.prepare_car_list)
-            OperationMode.GET_WORKING_HOUR_LIST -> getString(R.string.get_working_hour_list)
-            OperationMode.PREPARE_WORKING_HOUR_LIST -> getString(R.string.prepare_working_hour_list)
-            OperationMode.GET_DEFAULT_WORK_ORDER_SETTINGS -> getString(R.string.get_default_wo_settings_list)
-            OperationMode.LOAD_WORK_ORDERS -> getString(R.string.load_work_orders)
-            OperationMode.LOAD_REPAIR_TYPES -> getString(R.string.load_repair_types)
-            OperationMode.UPLOAD_WORK_ORDERS -> getString(R.string.upload_work_orders)
-            OperationMode.GET_CAR_MODEL_LIST -> getString(R.string.get_car_model_list)
-            OperationMode.PREPARE_CAR_MODEL_LIST -> getString(R.string.prepare_car_model_list)
         }
     }
 }

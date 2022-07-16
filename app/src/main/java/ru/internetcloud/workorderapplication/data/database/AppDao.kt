@@ -8,23 +8,23 @@ import androidx.room.Query
 import androidx.room.RawQuery
 import androidx.room.Transaction
 import androidx.sqlite.db.SupportSQLiteQuery
-import ru.internetcloud.workorderapplication.data.entity.CarDbModel
-import ru.internetcloud.workorderapplication.data.entity.CarJobDbModel
-import ru.internetcloud.workorderapplication.data.entity.CarModelDbModel
-import ru.internetcloud.workorderapplication.data.entity.CarWithOwner
-import ru.internetcloud.workorderapplication.data.entity.DefaultRepairTypeJobDetailDbModel
-import ru.internetcloud.workorderapplication.data.entity.DefaultRepairTypeJobDetailWithRequisities
-import ru.internetcloud.workorderapplication.data.entity.DefaultWorkOrderSettingsDbModel
-import ru.internetcloud.workorderapplication.data.entity.DefaultWorkOrderSettingsWithRequisities
-import ru.internetcloud.workorderapplication.data.entity.DepartmentDbModel
-import ru.internetcloud.workorderapplication.data.entity.EmployeeDbModel
-import ru.internetcloud.workorderapplication.data.entity.JobDetailDbModel
-import ru.internetcloud.workorderapplication.data.entity.PartnerDbModel
-import ru.internetcloud.workorderapplication.data.entity.PerformerDetailDbModel
-import ru.internetcloud.workorderapplication.data.entity.RepairTypeDbModel
-import ru.internetcloud.workorderapplication.data.entity.WorkOrderDbModel
-import ru.internetcloud.workorderapplication.data.entity.WorkOrderWithDetails
-import ru.internetcloud.workorderapplication.data.entity.WorkingHourDbModel
+import ru.internetcloud.workorderapplication.data.model.CarDbModel
+import ru.internetcloud.workorderapplication.data.model.CarJobDbModel
+import ru.internetcloud.workorderapplication.data.model.CarModelDbModel
+import ru.internetcloud.workorderapplication.data.model.CarWithOwner
+import ru.internetcloud.workorderapplication.data.model.DefaultRepairTypeJobDetailDbModel
+import ru.internetcloud.workorderapplication.data.model.DefaultRepairTypeJobDetailWithRequisities
+import ru.internetcloud.workorderapplication.data.model.DefaultWorkOrderSettingsDbModel
+import ru.internetcloud.workorderapplication.data.model.DefaultWorkOrderSettingsWithRequisities
+import ru.internetcloud.workorderapplication.data.model.DepartmentDbModel
+import ru.internetcloud.workorderapplication.data.model.EmployeeDbModel
+import ru.internetcloud.workorderapplication.data.model.JobDetailDbModel
+import ru.internetcloud.workorderapplication.data.model.PartnerDbModel
+import ru.internetcloud.workorderapplication.data.model.PerformerDetailDbModel
+import ru.internetcloud.workorderapplication.data.model.RepairTypeDbModel
+import ru.internetcloud.workorderapplication.data.model.WorkOrderDbModel
+import ru.internetcloud.workorderapplication.data.model.WorkOrderWithDetails
+import ru.internetcloud.workorderapplication.data.model.WorkingHourDbModel
 
 @Dao
 interface AppDao {
@@ -39,11 +39,11 @@ interface AppDao {
 
     @Transaction
     @Query("SELECT * FROM work_orders WHERE isModified")
-    suspend fun getModifiedWorkOrders(): List<WorkOrderWithDetails> // Не использовать LiveData в репозитории
+    suspend fun getModifiedWorkOrders(): List<WorkOrderWithDetails>
 
     @Transaction
     @Query("SELECT * FROM work_orders WHERE isModified AND id=:id")
-    suspend fun getModifiedWorkOrderById(id: String): WorkOrderWithDetails? // Не использовать LiveData в репозитории
+    suspend fun getModifiedWorkOrderById(id: String): WorkOrderWithDetails?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addWorkOrder(workOrderDbModel: WorkOrderDbModel)
@@ -79,7 +79,7 @@ interface AppDao {
     suspend fun addWorkOrderList(workOrderDbModelList: List<WorkOrderDbModel>)
     // ----------------------------------------------------------------------
     @Query("SELECT * FROM repair_types")
-    suspend fun getRepairTypeList(): List<RepairTypeDbModel> // Не использовать LiveData в репозитории
+    suspend fun getRepairTypeList(): List<RepairTypeDbModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addRepairType(repairTypeDbModel: RepairTypeDbModel)
@@ -101,10 +101,10 @@ interface AppDao {
     // ----------------------------------------------------------------------
 
     @Query("SELECT * FROM car_jobs")
-    suspend fun getCarJobList(): List<CarJobDbModel> // Не использовать LiveData в репозитории
+    suspend fun getCarJobList(): List<CarJobDbModel>
 
     @Query("SELECT * FROM car_models")
-    suspend fun getCarModelList(): List<CarModelDbModel> // Не использовать LiveData в репозитории
+    suspend fun getCarModelList(): List<CarModelDbModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addCarJob(carJobDbModel: CarJobDbModel)
@@ -135,7 +135,7 @@ interface AppDao {
 
     // ----------------------------------------------------------------------
     @Query("SELECT * FROM departments")
-    suspend fun getDepartmentList(): List<DepartmentDbModel> // Не использовать LiveData в репозитории
+    suspend fun getDepartmentList(): List<DepartmentDbModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addDepartment(departmentDbModel: DepartmentDbModel)
@@ -151,7 +151,7 @@ interface AppDao {
 
     // ----------------------------------------------------------------------
     @Query("SELECT * FROM employees")
-    suspend fun getEmployeeList(): List<EmployeeDbModel> // Не использовать LiveData в репозитории
+    suspend fun getEmployeeList(): List<EmployeeDbModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addEmployee(employeeDbModel: EmployeeDbModel)
@@ -187,7 +187,7 @@ interface AppDao {
     // ----------------------------------------------------------------------
     @Transaction
     @Query("SELECT * FROM cars WHERE ownerId=:ownerId ORDER BY name")
-    suspend fun getCarsByOwner(ownerId: String): List<CarWithOwner> // Не использовать LiveData в репозитории
+    suspend fun getCarsByOwner(ownerId: String): List<CarWithOwner>
 
     @Transaction
     @Query("SELECT * FROM cars")

@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import javax.inject.Inject
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
@@ -24,7 +25,6 @@ import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.search.SearchWorkOrderFragment
-import javax.inject.Inject
 
 class WorkOrderListFragment : Fragment(), FragmentResultListener {
 

@@ -3,7 +3,7 @@ package ru.internetcloud.workorderapplication.data.network.api
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-import ru.internetcloud.workorderapplication.data.entity.WorkOrderWithDetails
+import ru.internetcloud.workorderapplication.data.model.WorkOrderWithDetails
 import ru.internetcloud.workorderapplication.data.network.dto.AuthResponse
 import ru.internetcloud.workorderapplication.data.network.dto.CarJobResponse
 import ru.internetcloud.workorderapplication.data.network.dto.CarModelResponse
@@ -21,8 +21,8 @@ import ru.internetcloud.workorderapplication.domain.common.SendRequest
 interface ApiInterface {
 
     companion object {
-        // private const val PUB_NAME = "alpha2"
-        private const val PUB_NAME = "rabota"
+        private const val PUB_NAME = "alpha2"
+        // private const val PUB_NAME = "rabota"
     }
 
     @GET(PUB_NAME + "/hs/rest/auth/check")

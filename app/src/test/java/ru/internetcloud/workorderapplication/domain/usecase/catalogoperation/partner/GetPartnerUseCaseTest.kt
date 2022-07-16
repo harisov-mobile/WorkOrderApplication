@@ -30,7 +30,6 @@ class TestPartnerRepository : PartnerRepository {
     override suspend fun searchPartners(searchText: String): List<Partner> {
         TODO("Not yet implemented")
     }
-
 }
 
 class GetPartnerUseCaseTest {

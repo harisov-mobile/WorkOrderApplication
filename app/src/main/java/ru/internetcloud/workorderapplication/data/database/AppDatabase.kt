@@ -7,19 +7,19 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import ru.internetcloud.workorderapplication.data.entity.CarDbModel
-import ru.internetcloud.workorderapplication.data.entity.CarJobDbModel
-import ru.internetcloud.workorderapplication.data.entity.CarModelDbModel
-import ru.internetcloud.workorderapplication.data.entity.DefaultRepairTypeJobDetailDbModel
-import ru.internetcloud.workorderapplication.data.entity.DefaultWorkOrderSettingsDbModel
-import ru.internetcloud.workorderapplication.data.entity.DepartmentDbModel
-import ru.internetcloud.workorderapplication.data.entity.EmployeeDbModel
-import ru.internetcloud.workorderapplication.data.entity.JobDetailDbModel
-import ru.internetcloud.workorderapplication.data.entity.PartnerDbModel
-import ru.internetcloud.workorderapplication.data.entity.PerformerDetailDbModel
-import ru.internetcloud.workorderapplication.data.entity.RepairTypeDbModel
-import ru.internetcloud.workorderapplication.data.entity.WorkOrderDbModel
-import ru.internetcloud.workorderapplication.data.entity.WorkingHourDbModel
+import ru.internetcloud.workorderapplication.data.model.CarDbModel
+import ru.internetcloud.workorderapplication.data.model.CarJobDbModel
+import ru.internetcloud.workorderapplication.data.model.CarModelDbModel
+import ru.internetcloud.workorderapplication.data.model.DefaultRepairTypeJobDetailDbModel
+import ru.internetcloud.workorderapplication.data.model.DefaultWorkOrderSettingsDbModel
+import ru.internetcloud.workorderapplication.data.model.DepartmentDbModel
+import ru.internetcloud.workorderapplication.data.model.EmployeeDbModel
+import ru.internetcloud.workorderapplication.data.model.JobDetailDbModel
+import ru.internetcloud.workorderapplication.data.model.PartnerDbModel
+import ru.internetcloud.workorderapplication.data.model.PerformerDetailDbModel
+import ru.internetcloud.workorderapplication.data.model.RepairTypeDbModel
+import ru.internetcloud.workorderapplication.data.model.WorkOrderDbModel
+import ru.internetcloud.workorderapplication.data.model.WorkingHourDbModel
 
 @Database(
     entities = [WorkOrderDbModel::class, RepairTypeDbModel::class, CarJobDbModel::class, DepartmentDbModel::class,

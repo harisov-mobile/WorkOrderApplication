@@ -1,10 +1,10 @@
 package ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour
 
+import javax.inject.Inject
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
 import ru.internetcloud.workorderapplication.domain.repository.CarJobRepository
 
-class GetWorkingHourUseCase(private val carJobRepository: CarJobRepository) {
-    suspend fun getCarJob(id: String): CarJob? {
-        return carJobRepository.getCarJob(id)
-    }
+class GetWorkingHourUseCase @Inject constructor(
+    private val carJobRepository: CarJobRepository
+) {
 }
