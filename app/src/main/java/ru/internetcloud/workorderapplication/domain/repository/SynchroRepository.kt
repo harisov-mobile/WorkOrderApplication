@@ -1,7 +1,7 @@
 package ru.internetcloud.workorderapplication.domain.repository
 
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
-import ru.internetcloud.workorderapplication.presentation.synchro.UpdateState
+import ru.internetcloud.workorderapplication.domain.common.UpdateState
 
 interface SynchroRepository {
 

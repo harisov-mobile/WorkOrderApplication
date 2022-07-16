@@ -21,10 +21,6 @@ class EmployeeRepositoryImpl @Inject constructor(
         employeeLocalDataSource.addEmployee(employee)
     }
 
-    override suspend fun getEmployee(id: String): Employee? {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun deleteAllEmployees() {
         employeeLocalDataSource.deleteAllEmployees()
     }

@@ -17,10 +17,6 @@ class PartnerRepositoryImpl @Inject constructor(
         partnerLocalDataSource.addPartnerList(partnerList)
     }
 
-    override suspend fun getPartner(id: String): Partner? {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun deleteAllPartners() {
         partnerLocalDataSource.deleteAllPartners()
     }

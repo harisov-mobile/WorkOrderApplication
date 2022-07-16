@@ -14,6 +14,7 @@ import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentDataSynchronizationBinding
+import ru.internetcloud.workorderapplication.domain.common.UpdateState
 import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
 
 class DataSynchronizationFragment : Fragment() {

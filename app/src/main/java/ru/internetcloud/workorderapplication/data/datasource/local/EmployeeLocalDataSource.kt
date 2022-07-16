@@ -19,17 +19,6 @@ class EmployeeLocalDataSource @Inject constructor(
     suspend fun addEmployeeList(employeeList: List<Employee>) {
         appDao.addEmployeeList(employeeMapper.fromListEntityToListDbModel(employeeList))
     }
-    suspend fun getEmployee(id: String): Employee? {
-        var employee: Employee? = null
-
-        val employeeDbModel = appDao.getEmployee(id)
-
-        employeeDbModel?.let {
-            employee = employeeMapper.fromDbModelToEntity(it)
-        }
-
-        return employee
-    }
 
     suspend fun deleteAllEmployees() {
         appDao.deleteAllEmployees()

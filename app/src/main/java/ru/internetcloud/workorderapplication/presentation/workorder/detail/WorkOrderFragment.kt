@@ -171,8 +171,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         setupClickListeners()
 
-        Log.i("rustam", "after setupClickListeners")
-
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 onCloseWorkOrder()
@@ -313,8 +311,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     override fun onStart() {
         super.onStart()
 
-        Log.i("rustam", "onStart")
-
         // TextWatcher нужно навешивать здесь, а не в onCreate или onCreateView, т.к. там еще не восстановлено
         // EditText и слушатели будут "дергаться" лишний раз
         binding.numberEditText.addTextChangedListener(object : TextWatcher {
@@ -399,12 +395,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 }
             }
         })
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        Log.i("rustam", "onResume")
     }
 
     override fun onDestroyView() {

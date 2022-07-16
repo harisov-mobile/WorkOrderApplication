@@ -18,18 +18,6 @@ class PartnerLocalDataSource @Inject constructor(
         appDao.addPartnerList(partnerMapper.fromListEntityToListDbModel(partnerList))
     }
 
-    suspend fun getPartner(id: String): Partner? {
-        var partner: Partner? = null
-
-        val partnerDbModel = appDao.getPartner(id)
-
-        partnerDbModel?.let {
-            partner = partnerMapper.fromDbModelToEntity(it)
-        }
-
-        return partner
-    }
-
     suspend fun deleteAllPartners() {
         appDao.deleteAllPartners()
     }

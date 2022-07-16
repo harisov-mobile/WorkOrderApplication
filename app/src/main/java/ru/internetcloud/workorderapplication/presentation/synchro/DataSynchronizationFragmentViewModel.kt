@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import javax.inject.Inject
 import kotlinx.coroutines.launch
+import ru.internetcloud.workorderapplication.domain.common.UpdateState
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.UpdateDataUseCase
 
 class DataSynchronizationFragmentViewModel @Inject constructor(

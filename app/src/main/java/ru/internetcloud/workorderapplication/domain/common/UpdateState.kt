@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.presentation.synchro
+package ru.internetcloud.workorderapplication.domain.common
 
 sealed class UpdateState {
 

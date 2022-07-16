@@ -42,11 +42,11 @@ import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.common.FunctionResult
 import ru.internetcloud.workorderapplication.domain.common.SendRequest
+import ru.internetcloud.workorderapplication.domain.common.UpdateState
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.SynchroRepository
-import ru.internetcloud.workorderapplication.presentation.synchro.UpdateState
 
 class SynchroRepositoryImpl @Inject constructor(
     private val jobDetailMapper: JobDetailMapper,
