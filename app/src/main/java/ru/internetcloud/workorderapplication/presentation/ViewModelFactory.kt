@@ -2,9 +2,9 @@ package ru.internetcloud.workorderapplication.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import ru.internetcloud.workorderapplication.di.ApplicationScope
 import javax.inject.Inject
 import javax.inject.Provider
+import ru.internetcloud.workorderapplication.di.ApplicationScope
 
 @ApplicationScope
 class ViewModelFactory @Inject constructor(

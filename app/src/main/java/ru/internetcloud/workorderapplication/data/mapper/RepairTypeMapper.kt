@@ -1,9 +1,9 @@
 package ru.internetcloud.workorderapplication.data.mapper
 
-import ru.internetcloud.workorderapplication.data.entity.RepairTypeDbModel
+import javax.inject.Inject
+import ru.internetcloud.workorderapplication.data.model.RepairTypeDbModel
 import ru.internetcloud.workorderapplication.data.network.dto.RepairTypeDTO
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
-import javax.inject.Inject
 
 class RepairTypeMapper @Inject constructor() {
 

@@ -4,15 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import javax.inject.Inject
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.di.qualifiers.usecase.DbGetEmployeeListUseCaseQualifier
 import ru.internetcloud.workorderapplication.domain.catalog.Employee
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.GetEmployeeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.SearchEmployeesUseCase
-import javax.inject.Inject
 
 class EmployeeListViewModel @Inject constructor(
-    @DbGetEmployeeListUseCaseQualifier
     private val getEmployeeListUseCase: GetEmployeeListUseCase,
     private val searchEmployeesUseCase: SearchEmployeesUseCase
 ) : ViewModel() {

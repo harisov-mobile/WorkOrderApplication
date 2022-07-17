@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import java.math.BigDecimal
+import java.util.Date
+import javax.inject.Inject
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
@@ -41,9 +45,6 @@ import ru.internetcloud.workorderapplication.presentation.workorder.detail.partn
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailListAdapter
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.repairtype.RepairTypePickerFragment
-import java.math.BigDecimal
-import java.util.*
-import javax.inject.Inject
 
 class WorkOrderFragment : Fragment(), FragmentResultListener {
 

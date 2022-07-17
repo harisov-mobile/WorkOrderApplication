@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import java.util.UUID
+import javax.inject.Inject
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.di.qualifiers.usecase.DbGetDefaultRepairTypeJobsUseCaseQualifier
 import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJobDetail
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.document.DefaultWorkOrderSettings
@@ -16,15 +17,12 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.rep
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.UpdateWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.settingsoperation.GetDefaultWorkOrderSettingsUseCase
-import java.util.*
-import javax.inject.Inject
 
 class WorkOrderViewModel @Inject constructor(
     private val getWorkOrderUseCase: GetWorkOrderUseCase,
     private val updateWorkOrderUseCase: UpdateWorkOrderUseCase,
     private val getDefaultWorkOrderSettingsUseCase: GetDefaultWorkOrderSettingsUseCase,
 
-    @DbGetDefaultRepairTypeJobsUseCaseQualifier
     private val getDefaultRepairTypeJobsUseCase: GetDefaultRepairTypeJobsUseCase
 ) : ViewModel() {
 

@@ -11,8 +11,6 @@ interface RepairTypeRepository {
 
     suspend fun addRepairTypeList(repairTypeList: List<RepairType>)
 
-    suspend fun getRepairType(id: String): RepairType?
-
     suspend fun deleteAllRepairTypes()
 
     suspend fun searchRepairTypes(searchText: String): List<RepairType>

@@ -10,12 +10,12 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
+import java.util.Date
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.FragmentWoFilterBinding
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.DatePickerFragment
-import java.util.Date
 
 class SearchWorkOrderFragment : DialogFragment(), FragmentResultListener {
 

@@ -51,7 +51,7 @@
     <string name="success_autonomus">The data has not been synchronized, but you can continue working offline.</string>
     <string name="fail_synchronization">The data has not been synchronized, but you can continue working offline.</string>
 
-    <string name="success_upload_work_orders">Work orders have been successfully uploaded to the 1C server.</string>
+    <string name="success_upload_work_orders">Work orders have been successfully uploaded to the 1C server (%1$s)</string>
     <string name="no_work_orders_to_upload">There are no work orders to be uploaded to the 1C server.</string>
 
     <string name="fail_upload_work_orders">Error while uploading work orders:</string>

@@ -4,15 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import javax.inject.Inject
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.di.qualifiers.usecase.DbGetRepairTypeListUseCaseQualifier
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetRepairTypeListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.SearchRepairTypesUseCase
-import javax.inject.Inject
 
 class RepairTypeListViewModel @Inject constructor(
-    @DbGetRepairTypeListUseCaseQualifier
     private val getRepairTypeListUseCase: GetRepairTypeListUseCase,
     private val searchRepairTypesUseCase: SearchRepairTypesUseCase
 
@@ -20,15 +18,9 @@ class RepairTypeListViewModel @Inject constructor(
 
     var selectedRepairType: RepairType? = null
 
-    // private val repository = DbRepairTypeRepositoryImpl.get()
-
     private val _repairTypeListLiveData = MutableLiveData<List<RepairType>>()
     val repairTypeListLiveData: LiveData<List<RepairType>>
         get() = _repairTypeListLiveData
-
-//    init {
-//        DaggerApplicationComponent.builder().build().inject(this)
-//    }
 
     fun loadRepairTypeList() {
         viewModelScope.launch {

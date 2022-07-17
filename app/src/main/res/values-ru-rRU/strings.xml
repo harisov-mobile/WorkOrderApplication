@@ -40,7 +40,7 @@
     <string name="success_synchronization">Синхронизация данных произведена успешно.</string>
     <string name="success_autonomus">Синхронизация данных не произведена, но можно продолжить работу в автономном режиме.</string>
     <string name="fail_synchronization">Ошибка при синхронизации данных. Дальнейшая работа программы невозможна.</string>
-    <string name="success_upload_work_orders">Заказ-наряды успешно выгружены на сервер 1С.</string>
+    <string name="success_upload_work_orders">Заказ-наряды в количестве %1$s успешно выгружены на сервер 1С.</string>
     <string name="no_work_orders_to_upload">Нет заказ-нарядов, которые нужно выгрузить на сервер 1С.</string>
     <string name="fail_upload_work_orders">"Ошибка при выгрузке заказ-нарядов: "</string>
     <string name="partner_label">Заказчик:</string>

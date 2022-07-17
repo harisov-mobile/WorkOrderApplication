@@ -1,8 +1,8 @@
 package ru.internetcloud.workorderapplication.data.mapper
 
 import javax.inject.Inject
-import ru.internetcloud.workorderapplication.data.entity.CarDbModel
-import ru.internetcloud.workorderapplication.data.entity.CarWithOwner
+import ru.internetcloud.workorderapplication.data.model.CarDbModel
+import ru.internetcloud.workorderapplication.data.model.CarWithOwner
 import ru.internetcloud.workorderapplication.data.network.dto.CarDTO
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.CarModel

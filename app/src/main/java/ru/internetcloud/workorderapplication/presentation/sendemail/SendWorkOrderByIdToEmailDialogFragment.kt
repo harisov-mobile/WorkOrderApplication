@@ -11,10 +11,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import javax.inject.Inject
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
-import javax.inject.Inject
 
 class SendWorkOrderByIdToEmailDialogFragment : DialogFragment() {
 

@@ -8,8 +8,6 @@ interface PartnerRepository {
 
     suspend fun addPartnerList(partnerList: List<Partner>)
 
-    suspend fun getPartner(id: String): Partner?
-
     suspend fun deleteAllPartners()
 
     suspend fun searchPartners(searchText: String): List<Partner>

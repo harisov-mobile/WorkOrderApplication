@@ -10,7 +10,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import ru.internetcloud.workorderapplication.data.entity.PartnerDbModel
+import ru.internetcloud.workorderapplication.data.model.PartnerDbModel
 
 @RunWith(AndroidJUnit4::class)
 @MediumTest

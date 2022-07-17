@@ -1,8 +1,8 @@
 package ru.internetcloud.workorderapplication.domain.catalog
 
 import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class DefaultRepairTypeJobDetail(

@@ -10,8 +10,6 @@ interface CarJobRepository {
 
     suspend fun addCarJob(carJob: CarJob)
 
-    suspend fun getCarJob(id: String): CarJob?
-
     suspend fun deleteAllCarJobs()
 
     suspend fun searchCarJobs(searchText: String): List<CarJob>

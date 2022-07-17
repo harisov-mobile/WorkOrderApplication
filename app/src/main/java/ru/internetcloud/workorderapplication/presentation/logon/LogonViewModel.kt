@@ -4,65 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import javax.inject.Inject
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.domain.catalog.Car
-import ru.internetcloud.workorderapplication.domain.catalog.CarJob
-import ru.internetcloud.workorderapplication.domain.catalog.Department
-import ru.internetcloud.workorderapplication.domain.catalog.Employee
-import ru.internetcloud.workorderapplication.domain.catalog.Partner
-import ru.internetcloud.workorderapplication.domain.catalog.RepairType
-import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
-import ru.internetcloud.workorderapplication.domain.document.JobDetail
-import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
-import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.AddCarListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.DeleteCarListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.AddCarJobListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.carjob.DeleteCarJobsUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.AddDepartmentUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.DeleteDepartmentsUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.AddEmployeeListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee.DeleteEmployeesUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.AddPartnerListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.DeletePartnerListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.AddRepairTypeListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.DeleteRepairTypesUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.AddWorkingHourListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.DeleteWorkingHourListUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.DeleteAllJobDetailsUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.DeleteAllPerformersUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.DeleteAllWorkOrdersUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.UpdateWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.CheckAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.SetAuthParametersUseCase
-import ru.internetcloud.workorderapplication.domain.usecase.settingsoperation.DeleteAllDefaultWorkOrderSettingsUseCase
-import java.math.BigDecimal
-import java.util.Date
-import javax.inject.Inject
+import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadMockDataUseCase
 
 class LogonViewModel @Inject constructor(
     private val setAuthParametersUseCase: SetAuthParametersUseCase,
     private val checkAuthParametersUseCase: CheckAuthParametersUseCase,
-    private val deleteRepairTypesUseCase: DeleteRepairTypesUseCase,
-    private val deletePartnersUseCase: DeletePartnerListUseCase,
-    private val deleteCarJobsUseCase: DeleteCarJobsUseCase,
-    private val deleteDepartmentsUseCase: DeleteDepartmentsUseCase,
-    private val deleteEmployeesUseCase: DeleteEmployeesUseCase,
-    private val deleteCarsUseCase: DeleteCarListUseCase,
-    private val deleteWorkingHoursUseCase: DeleteWorkingHourListUseCase,
-    private val deleteAllDefaultWorkOrderSettingsUseCase: DeleteAllDefaultWorkOrderSettingsUseCase,
-    private val deleteAllJobDetailsUseCase: DeleteAllJobDetailsUseCase,
-    private val deleteAllPerformersUseCase: DeleteAllPerformersUseCase,
-    private val deleteAllWorkOrdersUseCase: DeleteAllWorkOrdersUseCase,
-
-    private val addRepairTypeListUseCase: AddRepairTypeListUseCase,
-    private val addPartnerListUseCase: AddPartnerListUseCase,
-    private val addEmployeeListUseCase: AddEmployeeListUseCase,
-    private val addCarJobListUseCase: AddCarJobListUseCase,
-    private val addCarListUseCase: AddCarListUseCase,
-    private val addDepartmentUseCase: AddDepartmentUseCase,
-    private val addWorkingHourListUseCase: AddWorkingHourListUseCase,
-    private val updateWorkOrderUseCase: UpdateWorkOrderUseCase
+    private val loadMockDataUseCase: LoadMockDataUseCase
 ) : ViewModel() {
 
     companion object {
@@ -188,114 +139,10 @@ class LogonViewModel @Inject constructor(
 
     fun loadDemoData() {
         viewModelScope.launch {
-            deleteAllData()
-            loadMockData()
+
+            loadMockDataUseCase.loadMockData()
 
             _canContinueDemoMode.value = true
         }
-    }
-
-    suspend fun deleteAllData() {
-        deleteRepairTypesUseCase.deleteAllRepairTypes()
-        deletePartnersUseCase.deleteAllPartners()
-        deleteEmployeesUseCase.deleteAllEmployees()
-        deleteCarJobsUseCase.deleteAllCarJobs()
-        deleteCarsUseCase.deleteAllCars()
-        deleteDepartmentsUseCase.deleteAllDepartments()
-        deleteWorkingHoursUseCase.deleteAllWorkingHours()
-        deleteAllDefaultWorkOrderSettingsUseCase.deleteAllDefaultWorkOrderSettings()
-        deleteAllJobDetailsUseCase.deleteAllJobDetails()
-        deleteAllPerformersUseCase.deleteAllPerformers()
-        deleteAllWorkOrdersUseCase.deleteAllWorkOrders()
-    }
-
-    suspend fun loadMockData() {
-        val repairTypeList = mutableListOf<RepairType>()
-        val repairType1 = RepairType(id = "1", "Paid repair")
-        repairTypeList.add(repairType1)
-        repairTypeList.add(RepairType(id = "2", "Maintenance"))
-        repairTypeList.add(RepairType(id = "3", "Warranty repair"))
-        addRepairTypeListUseCase.addRepairTypeList(repairTypeList)
-
-        val partnerList = mutableListOf<Partner>()
-
-        val partner1 = Partner(id = "1", name = "Company A", fullName = "Company A, Apple", inn = "00001")
-
-        partnerList.add(partner1)
-        partnerList.add(Partner(id = "2", name = "Company B", fullName = "Company B, Bridge", inn = "00002"))
-        partnerList.add(Partner(id = "3", name = "Company C", fullName = "Company C, Compex", inn = "00003"))
-        addPartnerListUseCase.addPartnerList(partnerList)
-
-        val employeeList = mutableListOf<Employee>()
-        val employee1 = Employee(id = "1", name = "John Smith")
-        val employee2 = Employee(id = "3", name = "Ivan Dragov")
-        employeeList.add(employee1)
-        employeeList.add(Employee(id = "2", name = "Lily Anderson"))
-        employeeList.add(employee2)
-        addEmployeeListUseCase.addEmployeeList(employeeList)
-
-        val carJobList = mutableListOf<CarJob>()
-        val carJob1 = CarJob(id = "1", name = "Gearbox restoration", folder = "Transmission")
-        val carJob3 = CarJob(id = "3", name = "Removing the rotor pulley.", folder = "Injection system")
-        carJobList.add(carJob1)
-        carJobList.add(CarJob(id = "2", name = "Compression measurement", folder = "Engine"))
-        carJobList.add(carJob3)
-        addCarJobListUseCase.addCarJobList(carJobList)
-
-        val carList = mutableListOf<Car>()
-        val car1 = Car(id = "1", name = "CAR1", vin = "vin_001", manufacturer = "CLASS", owner = partner1)
-        carList.add(car1)
-        carList.add(Car(id = "2", name = "CAR2", vin = "vin_002", manufacturer = "MACDON", owner = partner1))
-        carList.add(Car(id = "3", name = "CAR3", vin = "vin_003", manufacturer = "AMAZONE", owner = partner1))
-        addCarListUseCase.addCarList(carList)
-
-        val workingHourList = mutableListOf<WorkingHour>()
-        val wh1 = WorkingHour(id = "1", name = "WH1", price = BigDecimal("2.5"))
-        workingHourList.add(wh1)
-        workingHourList.add(WorkingHour(id = "2", name = "WH2", price = BigDecimal("10.99")))
-        workingHourList.add(WorkingHour(id = "3", name = "WH3", price = BigDecimal("30")))
-        addWorkingHourListUseCase.addWorkingHourList(workingHourList)
-
-        val department1 = Department(id = "1", name = "Dep1")
-        addDepartmentUseCase.addDepartment(department1)
-        addDepartmentUseCase.addDepartment(Department(id = "2", name = "Dep2"))
-        addDepartmentUseCase.addDepartment(Department(id = "3", name = "Dep3"))
-
-        val performers = mutableListOf<PerformerDetail>()
-        performers.add(PerformerDetail(id = "1", lineNumber = 1, employee = employee2))
-
-        val quantity: BigDecimal = BigDecimal("1")
-        val timeNorm: BigDecimal = BigDecimal("2")
-        val sum: BigDecimal = quantity * timeNorm * wh1.price
-
-        val jobDetails = mutableListOf<JobDetail>()
-        jobDetails.add(
-            JobDetail(
-                id = "1",
-                lineNumber = 1,
-                carJob = carJob1,
-                quantity = quantity,
-                timeNorm = timeNorm,
-                workingHour = wh1,
-                sum = sum
-            )
-        )
-
-        updateWorkOrderUseCase.updateWorkOrder(
-            WorkOrder(
-                id = "1",
-                number = "WO_0001",
-                date = Date(),
-                partner = partner1,
-                car = car1,
-                repairType = repairType1,
-                department = department1,
-                master = employee1,
-                mileage = 4500,
-                performers = performers,
-                performersString = employee2.name,
-                jobDetails = jobDetails
-            )
-        )
     }
 }
