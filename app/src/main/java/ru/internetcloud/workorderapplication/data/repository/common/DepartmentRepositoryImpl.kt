@@ -17,10 +17,6 @@ class DepartmentRepositoryImpl @Inject constructor(
         departmentLocalDataSource.addDepartment(department)
     }
 
-    override suspend fun getDepartment(id: String): Department? {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun deleteAllDepartments() {
         deleteAllDepartments()
     }

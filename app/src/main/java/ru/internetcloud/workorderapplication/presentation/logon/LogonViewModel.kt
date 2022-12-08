@@ -10,6 +10,8 @@ import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.Check
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.SetAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadMockDataUseCase
 
+// TODO Переделать многочисленные LiveData на один State
+
 class LogonViewModel @Inject constructor(
     private val setAuthParametersUseCase: SetAuthParametersUseCase,
     private val checkAuthParametersUseCase: CheckAuthParametersUseCase,

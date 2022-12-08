@@ -25,7 +25,6 @@
         style="@style/work_order_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
         app:layout_constraintTop_toBottomOf="@+id/filter_description_text_view"
         app:layout_constraintBottom_toBottomOf="parent"

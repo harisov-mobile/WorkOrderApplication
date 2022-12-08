@@ -13,6 +13,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import javax.inject.Inject
@@ -21,6 +22,7 @@ import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
+import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
@@ -104,8 +106,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         }
 
         setupWorkOrderRecyclerView(view)
-        setupClickListener()
-
         observeViewModel()
         setupFilterDescription()
 
@@ -195,15 +195,17 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
     private fun setupWorkOrderRecyclerView(view: View) {
         workOrderRecyclerView = view.findViewById<RecyclerView>(R.id.work_order_recycler_view)
-        workOrderListAdapter = WorkOrderListAdapter()
-        workOrderRecyclerView.adapter = workOrderListAdapter
-    }
 
-    private fun setupClickListener() {
-        workOrderListAdapter.onWorkOrderClickListener = { workOrder ->
-            viewModel.selectedWorkOrder = workOrder
-            hostActivity?.onEditWorkOrder(workOrder.id)
+        val workOrderListListener = object : WorkOrderListListener {
+            override fun onItemClick(workOrder: WorkOrder) {
+                hostActivity?.onEditWorkOrder(workOrder.id)
+            }
         }
+
+        workOrderListAdapter = WorkOrderListAdapter(workOrderListListener)
+        workOrderRecyclerView.adapter = workOrderListAdapter
+        // вместо app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" который был в XML
+        workOrderRecyclerView.layoutManager = LinearLayoutManager(context)
     }
 
     private fun onExitWorkOrderList() {

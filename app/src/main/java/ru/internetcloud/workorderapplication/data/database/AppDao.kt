@@ -143,9 +143,6 @@ interface AppDao {
     @Query("DELETE FROM departments")
     suspend fun deleteAllDepartments()
 
-    @Query("SELECT * FROM departments WHERE id=:id LIMIT 1")
-    suspend fun getDepartment(id: String): DepartmentDbModel?
-
     @Query("SELECT * FROM departments WHERE name LIKE :searchText")
     suspend fun searhDepartments(searchText: String): List<DepartmentDbModel>
 
@@ -198,10 +195,6 @@ interface AppDao {
 
     @Query("DELETE FROM cars")
     suspend fun deleteAllCars()
-
-    @Transaction
-    @Query("SELECT * FROM cars WHERE id=:id LIMIT 1")
-    suspend fun getCar(id: String): CarWithOwner?
 
     @Transaction
     @Query("SELECT * FROM cars WHERE ownerId=:ownerId AND (name LIKE :searchText OR manufacturer LIKE :searchText)")

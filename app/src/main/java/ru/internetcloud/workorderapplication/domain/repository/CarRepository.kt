@@ -10,8 +10,6 @@ interface CarRepository {
 
     suspend fun addCarList(carList: List<Car>)
 
-    suspend fun getCar(id: String): Car?
-
     suspend fun deleteAllCars()
 
     suspend fun searchCarsByOwner(searchText: String, ownerId: String): List<Car>
