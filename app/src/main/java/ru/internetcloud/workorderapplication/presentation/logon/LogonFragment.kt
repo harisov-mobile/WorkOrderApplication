@@ -15,7 +15,7 @@ import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentLogonBinding
 import ru.internetcloud.workorderapplication.domain.common.AuthorizationPreferences
-import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
+import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 
 class LogonFragment : Fragment() {

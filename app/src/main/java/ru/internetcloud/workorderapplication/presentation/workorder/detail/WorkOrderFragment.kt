@@ -31,7 +31,7 @@ import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
+import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
 import ru.internetcloud.workorderapplication.presentation.sendemail.SendWorkOrderByIdToEmailDialogFragment
@@ -59,7 +59,10 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     private val binding: FragmentWorkOrderBinding
         get() = _binding ?: throw RuntimeException("Error FragmentWorkOrderBinding is NULL")
 
-    private lateinit var viewModel: WorkOrderViewModel
+    private val viewModel: WorkOrderViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(WorkOrderViewModel::class.java)
+    }
+
     private lateinit var performerDetailListAdapter: PerformerDetailListAdapter
     private lateinit var jobDetailListAdapter: JobDetailListAdapter
 
@@ -136,8 +139,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel = ViewModelProvider(this, viewModelFactory).get(WorkOrderViewModel::class.java)
 
         savedInstanceState?.let {
             viewModel.workOrder.value?.let { order ->

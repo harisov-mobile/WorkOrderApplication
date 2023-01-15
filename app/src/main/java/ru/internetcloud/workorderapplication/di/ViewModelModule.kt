@@ -62,11 +62,6 @@ interface ViewModelModule {
     @Binds
     fun bindPartnerListViewModel(impl: PartnerListViewModel): ViewModel
 
-//    @IntoMap
-//    @ViewModelKey(PerformerDetailViewModel::class)
-//    @Binds
-//    fun bindPerformerDetailViewModel(impl: PerformerDetailViewModel): ViewModel
-
     @IntoMap
     @ViewModelKey(RepairTypeListViewModel::class)
     @Binds
