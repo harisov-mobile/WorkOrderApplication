@@ -9,12 +9,12 @@ plugins {
 apply from: "../ktlint.gradle"
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "ru.internetcloud.workorderapplication"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 10
         versionName "10.0"
 
