@@ -31,7 +31,8 @@ interface AppDao {
 
     @Transaction
     @Query("SELECT * FROM work_orders ORDER BY date, number")
-    fun getWorkOrderList(): LiveData<List<WorkOrderWithDetails>> // Не использовать LiveData в репозитории
+    fun getWorkOrderList(): LiveData<List<WorkOrderWithDetails>>
+    // ToDo Не использовать LiveData в репозитории, переделать на Flow
 
     @Transaction
     @RawQuery
