@@ -23,21 +23,16 @@ android {
 
     buildTypes {
         debug {
-            // buildConfigField 'String', 'BASE_URL', '""'
+            buildConfigField 'String', 'PUB_NAME_ADD_ON', '"alpha2"'
         }
         staging {
-            //buildConfigField 'String', 'BASE_URL', '""'
+            buildConfigField 'String', 'PUB_NAME_ADD_ON', '"alpha2"'
         }
 
         release {
-            // было:
+            buildConfigField 'String', 'PUB_NAME_ADD_ON', '"rabota"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-            // стало:
-//            shrinkResources true
-//            minifyEnabled true
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
