@@ -16,6 +16,8 @@ https://play.google.com/store/apps/details?id=ru.internetcloud.workorderapplicat
   <img src="/screenshots/Synchronisation.png"> 
 </kbd>
 
+<br/>
+<br/>
 
 <kbd>
   <img src="/screenshots/WorkOrderList.png"> 
@@ -25,6 +27,8 @@ https://play.google.com/store/apps/details?id=ru.internetcloud.workorderapplicat
   <img src="/screenshots/WorkOrderTop.png"> 
 </kbd>
 
+<br/>
+<br/>
 
 <kbd>
   <img src="/screenshots/WorkOrderBottom.png"> 
@@ -34,6 +38,8 @@ https://play.google.com/store/apps/details?id=ru.internetcloud.workorderapplicat
   <img src="/screenshots/InputWork.png"> 
 </kbd>
 
+<br/>
+<br/>
 
 <kbd>
   <img src="/screenshots/Filter.png"> 
@@ -42,3 +48,6 @@ https://play.google.com/store/apps/details?id=ru.internetcloud.workorderapplicat
 <kbd>
   <img src="/screenshots/FilteredList.png"> 
 </kbd>
+
+<br/>
+<br/>
