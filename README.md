@@ -8,6 +8,19 @@
 
 https://play.google.com/store/apps/details?id=ru.internetcloud.workorderapplication
 
+Стек:
+- XML-разметка
+- Single activity
+- Single module
+- Clean Architecture
+- MVVM
+- Room
+- Retrofit
+- Dagger2
+
+<br/>
+<br/>
+
 <kbd>
   <img src="/screenshots/Login.png"> 
 </kbd>
