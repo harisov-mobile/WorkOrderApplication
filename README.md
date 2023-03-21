@@ -13,11 +13,11 @@ https://play.google.com/store/apps/details?id=ru.internetcloud.workorderapplicat
 <kbd>
   <img src="/screenshots/Login.png"> 
 </kbd>
-
+&#160;&#160;&#160;
 <kbd>
   <img src="/screenshots/Synchronisation.png"> 
 </kbd>
-
+&#160;&#160;&#160;
 <kbd>
   <img src="/screenshots/screenshots.png"> 
 </kbd>
