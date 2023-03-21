@@ -21,10 +21,6 @@ class CarRepositoryImpl @Inject constructor(
         carLocalDataSource.addCarList(carList)
     }
 
-    override suspend fun getCar(id: String): Car? {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun deleteAllCars() {
         carLocalDataSource.deleteAllCars()
     }

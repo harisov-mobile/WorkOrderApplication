@@ -8,8 +8,6 @@ interface DepartmentRepository {
 
     suspend fun addDepartment(department: Department)
 
-    suspend fun getDepartment(id: String): Department?
-
     suspend fun deleteAllDepartments()
 
     suspend fun searchDepartments(searchText: String): List<Department>

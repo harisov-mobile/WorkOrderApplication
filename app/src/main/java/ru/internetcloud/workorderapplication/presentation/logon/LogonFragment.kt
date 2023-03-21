@@ -15,7 +15,7 @@ import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentLogonBinding
 import ru.internetcloud.workorderapplication.domain.common.AuthorizationPreferences
-import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
+import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 
 class LogonFragment : Fragment() {
@@ -65,7 +65,6 @@ class LogonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // вот оно!!! даггер: viewModel = ViewModelProvider(this).get(LogonViewModel::class.java)
         viewModel = ViewModelProvider(this, viewModelFactory).get(LogonViewModel::class.java)
 
         binding.versionTextView.text = getString(R.string.version, BuildConfig.VERSION_NAME)
@@ -225,7 +224,7 @@ class LogonFragment : Fragment() {
 
     private fun initTextInputEditText() {
         context?.let {
-            // presentation - слой напрямую полез в домайн - слой! разобраться...
+            // TODO presentation - слой напрямую полез в домайн - слой! разобраться...
             binding.serverEditText.setText(AuthorizationPreferences.getStoredServer(it.applicationContext))
             binding.loginEditText.setText(AuthorizationPreferences.getStoredLogin(it.applicationContext))
         }

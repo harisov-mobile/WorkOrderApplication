@@ -89,6 +89,7 @@ class WorkOrderViewModel @Inject constructor(
             _workOrder.value?.let { order ->
                 viewModelScope.launch {
                     updatePerformersString(order)
+                    // ToDo подумать над тем, если пользователь успевает нажать BACK и ничего не успеет сохраниться?
                     updateWorkOrderUseCase.updateWorkOrder(order)
                     _canFinish.value = true
                 }

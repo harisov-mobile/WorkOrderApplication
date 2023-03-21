@@ -18,7 +18,7 @@ import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
-import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
+import ru.internetcloud.workorderapplication.di.ViewModelFactory
 
 class CarPickerFragment : DialogFragment() {
 

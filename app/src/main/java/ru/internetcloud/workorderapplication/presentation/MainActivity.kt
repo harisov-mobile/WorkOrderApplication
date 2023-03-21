@@ -18,11 +18,10 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fragment)
 
-        var currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-        if (currentFragment == null) {
-            currentFragment = LogonFragment.newInstance() // фрагмент, который запускается первым
+        if (savedInstanceState == null) {
+            val fragment = LogonFragment.newInstance() // фрагмент, который запускается первым
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, currentFragment)
+                .add(R.id.fragment_container, fragment)
                 .commit()
         }
     }

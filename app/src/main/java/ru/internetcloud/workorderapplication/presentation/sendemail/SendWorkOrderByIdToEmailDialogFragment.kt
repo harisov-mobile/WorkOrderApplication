@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import javax.inject.Inject
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
-import ru.internetcloud.workorderapplication.presentation.ViewModelFactory
+import ru.internetcloud.workorderapplication.di.ViewModelFactory
 
 class SendWorkOrderByIdToEmailDialogFragment : DialogFragment() {
 

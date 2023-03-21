@@ -22,18 +22,6 @@ class CarLocalDataSource @Inject constructor(
         appDao.addCarList(carMapper.fromListEntityToListDbModel(carList))
     }
 
-    suspend fun getCar(id: String): Car? {
-        var car: Car? = null
-
-        val carWithOwner = appDao.getCar(id)
-
-        carWithOwner?.let {
-            car = carMapper.fromCarWithOwnerToEntity(it)
-        }
-
-        return car
-    }
-
     suspend fun deleteAllCars() {
         appDao.deleteAllCars()
     }

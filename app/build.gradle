@@ -9,35 +9,30 @@ plugins {
 apply from: "../ktlint.gradle"
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "ru.internetcloud.workorderapplication"
         minSdk 21
-        targetSdk 31
-        versionCode 9
-        versionName "9.0"
+        targetSdk 33
+        versionCode 10
+        versionName "10.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         debug {
-            // buildConfigField 'String', 'BASE_URL', '""'
+            buildConfigField 'String', 'PUB_NAME_ADD_ON', '"alpha2"'
         }
         staging {
-            //buildConfigField 'String', 'BASE_URL', '""'
+            buildConfigField 'String', 'PUB_NAME_ADD_ON', '"alpha2"'
         }
 
         release {
-            // было:
+            buildConfigField 'String', 'PUB_NAME_ADD_ON', '"rabota"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-            // стало:
-//            shrinkResources true
-//            minifyEnabled true
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -109,6 +104,6 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // fragment
-    implementation "androidx.fragment:fragment:1.3.0-alpha04"
-    implementation "androidx.fragment:fragment-ktx:1.3.0-alpha04"
+    implementation "androidx.fragment:fragment:1.5.4"
+    implementation "androidx.fragment:fragment-ktx:1.5.4"
 }
