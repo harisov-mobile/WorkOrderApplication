@@ -7,3 +7,5 @@
 Размещено в Гугл Плей Маркете:
 
 https://play.google.com/store/apps/details?id=ru.internetcloud.workorderapplication
+
+![alt text](screenshots/Login.png "рис.1 Логин.")
