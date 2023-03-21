@@ -8,4 +8,4 @@
 
 https://play.google.com/store/apps/details?id=ru.internetcloud.workorderapplication
 
-![alt text](screenshots/Login.png "рис.1 Логин.")
+![alt text](screenshots/Login.png "рис.1 Логин.") ![alt text](screenshots/Synchronisation.png "рис.2 Синхронизация данных.")
