@@ -19,5 +19,5 @@ https://play.google.com/store/apps/details?id=ru.internetcloud.workorderapplicat
 </kbd>
 &#160;&#160;&#160;
 <kbd>
-  <img src="/screenshots/screenshots.png"> 
+  <img src="/screenshots/WorkOrderList.png"> 
 </kbd>
