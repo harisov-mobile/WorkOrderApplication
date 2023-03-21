@@ -9,3 +9,15 @@
 https://play.google.com/store/apps/details?id=ru.internetcloud.workorderapplication
 
 ![alt text](screenshots/Login.png "рис.1 Логин.") ![alt text](screenshots/Synchronisation.png "рис.2 Синхронизация данных.") ![alt text](screenshots/WorkOrderList.png "рис.3 Список заказ-нарядов.")
+
+<kbd>
+  <img src="/screenshots/Login.png"> 
+</kbd>
+
+<kbd>
+  <img src="/screenshots/Synchronisation.png"> 
+</kbd>
+
+<kbd>
+  <img src="/screenshots/screenshots.png"> 
+</kbd>
