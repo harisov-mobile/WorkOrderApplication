@@ -17,6 +17,7 @@ https://play.google.com/store/apps/details?id=ru.internetcloud.workorderapplicat
 - Room
 - Retrofit
 - Dagger2
+- Coroutines
 
 <br/>
 <br/>
