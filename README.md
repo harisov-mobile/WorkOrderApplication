@@ -8,6 +8,9 @@
 
 https://play.google.com/store/apps/details?id=ru.internetcloud.workorderapplication
 
+<a href="https://play.google.com/store/apps/details?id=ru.internetcloud.workorderapplication">
+<img src="/screenshots/GooglePlay.png" alt="Get it on Play Market" height="70"></a>
+
 Стек:
 - XML-разметка
 - Single activity
