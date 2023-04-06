@@ -21,27 +21,6 @@ import ru.internetcloud.workorderapplication.di.ViewModelFactory
 
 class EmployeePickerFragment : DialogFragment() {
 
-    companion object {
-
-        private const val EMPLOYEE = "employee"
-        private const val PARENT_REQUEST_KEY = "parent_request_employee_picker_key"
-        private const val PARENT_EMPLOYEE_ARG_NAME = "parent_employee_arg_name"
-
-        private const val NOT_FOUND_POSITION = -1
-        private const val DIFFERENCE_POS = 5
-
-        fun newInstance(employee: Employee?, parentRequestKey: String, parentArgDateName: String): EmployeePickerFragment {
-            val args = Bundle().apply {
-                putParcelable(EMPLOYEE, employee)
-                putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_EMPLOYEE_ARG_NAME, parentArgDateName)
-            }
-            return EmployeePickerFragment().apply {
-                arguments = args
-            }
-        }
-    }
-
     // даггер:
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -209,5 +188,26 @@ class EmployeePickerFragment : DialogFragment() {
             putParcelable(argEmployeeName, result)
         }
         setFragmentResult(requestKey, bundle)
+    }
+
+    companion object {
+
+        private const val EMPLOYEE = "employee"
+        private const val PARENT_REQUEST_KEY = "parent_request_employee_picker_key"
+        private const val PARENT_EMPLOYEE_ARG_NAME = "parent_employee_arg_name"
+
+        private const val NOT_FOUND_POSITION = -1
+        private const val DIFFERENCE_POS = 5
+
+        fun newInstance(employee: Employee?, parentRequestKey: String, parentArgDateName: String): EmployeePickerFragment {
+            val args = Bundle().apply {
+                putParcelable(EMPLOYEE, employee)
+                putString(PARENT_REQUEST_KEY, parentRequestKey)
+                putString(PARENT_EMPLOYEE_ARG_NAME, parentArgDateName)
+            }
+            return EmployeePickerFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

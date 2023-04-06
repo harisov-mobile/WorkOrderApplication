@@ -71,60 +71,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
     private var modifyAllowed: Boolean = true
 
-    companion object {
-
-        const val ARG_SCREEN_MODE = "screen_mode"
-        const val ARG_WORK_ORDER_ID = "work_order_id"
-
-        private val REQUEST_DATE_PICKER_KEY = "request_date_picker_key"
-        private val ARG_DATE = "date_picker"
-
-        private val REQUEST_PARTNER_PICKER_KEY = "request_partner_picker_key"
-        private val ARG_PARTNER = "partner_picker"
-
-        private val REQUEST_CAR_PICKER_KEY = "request_car_picker_key"
-        private val ARG_CAR = "car_picker"
-
-        private val REQUEST_REPAIR_TYPE_PICKER_KEY = "request_repair_type_picker_key"
-        private val ARG_REPAIR_TYPE = "repair_type_picker"
-
-        private val REQUEST_MASTER_PICKER_KEY = "request_master_picker_key"
-        private val ARG_MASTER = "master_picker"
-
-        private val REQUEST_DEPARTMENT_PICKER_KEY = "request_department_picker_key"
-        private val ARG_DEPARTMENT = "department_picker"
-
-        private val REQUEST_JOB_DETAIL_PICKER_KEY = "request_job_detail_picker_key"
-        private val REQUEST_PERFORMER_DETAIL_PICKER_KEY = "request_performer_detail_picker_key"
-        private val ARG_JOB_DETAIL = "job_detail_picker"
-        private val ARG_PERFORMER_DETAIL = "performer_detail_picker"
-
-        private val REQUEST_DATA_WAS_CHANGED_KEY = "data_was_changed_key"
-        private val REQUEST_DELETE_JOB_DETAIL_KEY = "delete_job_detail_key"
-        private val REQUEST_DELETE_PERFORMER_DETAIL_KEY = "delete_performer_detail_key"
-        private val REQUEST_ADD_DEFAULT_JOBS_KEY = "add_default_jobs_key"
-        private val ARG_ANSWER = "answer"
-
-        private val DEFAULT_TIME_NORM = "1"
-
-        fun newInstanceAddWorkOrder(): WorkOrderFragment {
-            val instance = WorkOrderFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_SCREEN_MODE, ScreenMode.ADD)
-            instance.arguments = args
-            return instance
-        }
-
-        fun newInstanceEditWorkOrder(workOrderId: String): WorkOrderFragment {
-            val instance = WorkOrderFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_SCREEN_MODE, ScreenMode.EDIT)
-            args.putString(ARG_WORK_ORDER_ID, workOrderId)
-            instance.arguments = args
-            return instance
-        }
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -919,6 +865,60 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         // показать итоговую сумму:
         viewModel.workOrder.value?.let { order ->
             binding.totalSumTextView.setText(getSumFromJobDetail(order.jobDetails).toString())
+        }
+    }
+
+    companion object {
+
+        const val ARG_SCREEN_MODE = "screen_mode"
+        const val ARG_WORK_ORDER_ID = "work_order_id"
+
+        private val REQUEST_DATE_PICKER_KEY = "request_date_picker_key"
+        private val ARG_DATE = "date_picker"
+
+        private val REQUEST_PARTNER_PICKER_KEY = "request_partner_picker_key"
+        private val ARG_PARTNER = "partner_picker"
+
+        private val REQUEST_CAR_PICKER_KEY = "request_car_picker_key"
+        private val ARG_CAR = "car_picker"
+
+        private val REQUEST_REPAIR_TYPE_PICKER_KEY = "request_repair_type_picker_key"
+        private val ARG_REPAIR_TYPE = "repair_type_picker"
+
+        private val REQUEST_MASTER_PICKER_KEY = "request_master_picker_key"
+        private val ARG_MASTER = "master_picker"
+
+        private val REQUEST_DEPARTMENT_PICKER_KEY = "request_department_picker_key"
+        private val ARG_DEPARTMENT = "department_picker"
+
+        private val REQUEST_JOB_DETAIL_PICKER_KEY = "request_job_detail_picker_key"
+        private val REQUEST_PERFORMER_DETAIL_PICKER_KEY = "request_performer_detail_picker_key"
+        private val ARG_JOB_DETAIL = "job_detail_picker"
+        private val ARG_PERFORMER_DETAIL = "performer_detail_picker"
+
+        private val REQUEST_DATA_WAS_CHANGED_KEY = "data_was_changed_key"
+        private val REQUEST_DELETE_JOB_DETAIL_KEY = "delete_job_detail_key"
+        private val REQUEST_DELETE_PERFORMER_DETAIL_KEY = "delete_performer_detail_key"
+        private val REQUEST_ADD_DEFAULT_JOBS_KEY = "add_default_jobs_key"
+        private val ARG_ANSWER = "answer"
+
+        private val DEFAULT_TIME_NORM = "1"
+
+        fun newInstanceAddWorkOrder(): WorkOrderFragment {
+            val instance = WorkOrderFragment()
+            val args = Bundle()
+            args.putParcelable(ARG_SCREEN_MODE, ScreenMode.ADD)
+            instance.arguments = args
+            return instance
+        }
+
+        fun newInstanceEditWorkOrder(workOrderId: String): WorkOrderFragment {
+            val instance = WorkOrderFragment()
+            val args = Bundle()
+            args.putParcelable(ARG_SCREEN_MODE, ScreenMode.EDIT)
+            args.putString(ARG_WORK_ORDER_ID, workOrderId)
+            instance.arguments = args
+            return instance
         }
     }
 }

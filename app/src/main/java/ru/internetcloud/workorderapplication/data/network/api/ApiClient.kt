@@ -10,19 +10,6 @@ import ru.internetcloud.workorderapplication.domain.common.AuthParameters
 
 class ApiClient private constructor(private val authParameters: AuthParameters) {
 
-    companion object {
-        private var instance: ApiClient? = null
-
-        fun initialize(authParameters: AuthParameters) {
-            // каждый раз надо новый экземпляр класса создавать со своими новыми параметрами
-            instance = ApiClient(authParameters)
-        }
-
-        fun getInstance(): ApiClient {
-            return instance ?: throw RuntimeException("ApiClient must be initialized.")
-        }
-    }
-
     private val okHttpClient: OkHttpClient =
         if (BuildConfig.DEBUG) {
             OkHttpClient.Builder()
@@ -47,5 +34,18 @@ class ApiClient private constructor(private val authParameters: AuthParameters) 
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
         return retrofit
+    }
+
+    companion object {
+        private var instance: ApiClient? = null
+
+        fun initialize(authParameters: AuthParameters) {
+            // каждый раз надо новый экземпляр класса создавать со своими новыми параметрами
+            instance = ApiClient(authParameters)
+        }
+
+        fun getInstance(): ApiClient {
+            return instance ?: throw RuntimeException("ApiClient must be initialized.")
+        }
     }
 }

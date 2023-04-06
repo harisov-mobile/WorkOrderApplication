@@ -8,20 +8,6 @@ import ru.internetcloud.workorderapplication.R
 
 class MessageDialogFragment : DialogFragment() {
 
-    companion object {
-
-        private const val MESSAGE_ARG = "message_arg"
-
-        fun newInstance(message: String): MessageDialogFragment {
-            val args = Bundle().apply {
-                putString(MESSAGE_ARG, message)
-            }
-            return MessageDialogFragment().apply {
-                arguments = args
-            }
-        }
-    }
-
     private var message: String = ""
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -37,5 +23,19 @@ class MessageDialogFragment : DialogFragment() {
         alertDialogBuilder.setPositiveButton(R.string.ok_button, null)
 
         return alertDialogBuilder.create()
+    }
+
+    companion object {
+
+        private const val MESSAGE_ARG = "message_arg"
+
+        fun newInstance(message: String): MessageDialogFragment {
+            val args = Bundle().apply {
+                putString(MESSAGE_ARG, message)
+            }
+            return MessageDialogFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

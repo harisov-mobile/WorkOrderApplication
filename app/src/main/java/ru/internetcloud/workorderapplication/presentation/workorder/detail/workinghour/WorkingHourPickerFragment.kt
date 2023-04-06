@@ -21,27 +21,6 @@ import ru.internetcloud.workorderapplication.di.ViewModelFactory
 
 class WorkingHourPickerFragment : DialogFragment() {
 
-    companion object {
-
-        private const val WORKING_HOUR = "working_hour"
-        private const val PARENT_REQUEST_KEY = "parent_request_working_hour_picker_key"
-        private const val PARENT_WORKING_HOUR_ARG_NAME = "parent_working_hour_arg_name"
-
-        private const val NOT_FOUND_POSITION = -1
-        private const val DIFFERENCE_POS = 5
-
-        fun newInstance(workingHour: WorkingHour?, parentRequestKey: String, parentArgDateName: String): WorkingHourPickerFragment {
-            val args = Bundle().apply {
-                putParcelable(WORKING_HOUR, workingHour)
-                putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_WORKING_HOUR_ARG_NAME, parentArgDateName)
-            }
-            return WorkingHourPickerFragment().apply {
-                arguments = args
-            }
-        }
-    }
-
     // даггер:
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -209,5 +188,26 @@ class WorkingHourPickerFragment : DialogFragment() {
             putParcelable(argWorkingHourName, result)
         }
         setFragmentResult(requestKey, bundle)
+    }
+
+    companion object {
+
+        private const val WORKING_HOUR = "working_hour"
+        private const val PARENT_REQUEST_KEY = "parent_request_working_hour_picker_key"
+        private const val PARENT_WORKING_HOUR_ARG_NAME = "parent_working_hour_arg_name"
+
+        private const val NOT_FOUND_POSITION = -1
+        private const val DIFFERENCE_POS = 5
+
+        fun newInstance(workingHour: WorkingHour?, parentRequestKey: String, parentArgDateName: String): WorkingHourPickerFragment {
+            val args = Bundle().apply {
+                putParcelable(WORKING_HOUR, workingHour)
+                putString(PARENT_REQUEST_KEY, parentRequestKey)
+                putString(PARENT_WORKING_HOUR_ARG_NAME, parentArgDateName)
+            }
+            return WorkingHourPickerFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

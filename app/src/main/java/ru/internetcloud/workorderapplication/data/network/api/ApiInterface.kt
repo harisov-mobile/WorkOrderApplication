@@ -21,12 +21,6 @@ import ru.internetcloud.workorderapplication.domain.common.SendRequest
 
 interface ApiInterface {
 
-    companion object {
-        private const val PUB_NAME = BuildConfig.PUB_NAME_ADD_ON
-        //private const val PUB_NAME = "alpha2"
-        // private const val PUB_NAME = "rabota"
-    }
-
     @GET(PUB_NAME + "/hs/rest/auth/check")
     suspend fun checkAuthorization(): AuthResponse
 
@@ -65,4 +59,10 @@ interface ApiInterface {
 
     @POST(PUB_NAME + "/hs/rest/send_work_order_to_email")
     suspend fun sendWorkOrderToEmail(@Body sendRequest: SendRequest): UploadResponse
+
+    companion object {
+        private const val PUB_NAME = BuildConfig.PUB_NAME_ADD_ON
+        // private const val PUB_NAME = "alpha2"
+        // private const val PUB_NAME = "rabota"
+    }
 }

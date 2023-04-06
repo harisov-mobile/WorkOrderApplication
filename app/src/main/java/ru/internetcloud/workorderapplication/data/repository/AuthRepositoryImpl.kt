@@ -18,10 +18,6 @@ class AuthRepositoryImpl @Inject constructor(
     private var authParameters: AuthParameters
 ) : AuthRepository {
 
-    companion object {
-        private const val HTTP_INTERNAL_SERVER_ERROR = 500
-    }
-
     override fun getAuthParameters(): AuthParameters {
         return authParameters
     }
@@ -127,5 +123,9 @@ class AuthRepositoryImpl @Inject constructor(
         }
 
         return authResult
+    }
+
+    companion object {
+        private const val HTTP_INTERNAL_SERVER_ERROR = 500
     }
 }

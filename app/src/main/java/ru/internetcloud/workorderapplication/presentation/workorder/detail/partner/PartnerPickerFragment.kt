@@ -21,27 +21,6 @@ import ru.internetcloud.workorderapplication.di.ViewModelFactory
 
 class PartnerPickerFragment : DialogFragment() {
 
-    companion object {
-
-        private const val PARTNER = "partner"
-        private const val PARENT_REQUEST_KEY = "parent_request_partner_picker_key"
-        private const val PARENT_PARTNER_ARG_NAME = "parent_partner_arg_name"
-
-        private const val NOT_FOUND_POSITION = -1
-        private const val DIFFERENCE_POS = 5
-
-        fun newInstance(partner: Partner?, parentRequestKey: String, parentArgDateName: String): PartnerPickerFragment {
-            val args = Bundle().apply {
-                putParcelable(PARTNER, partner)
-                putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_PARTNER_ARG_NAME, parentArgDateName)
-            }
-            return PartnerPickerFragment().apply {
-                arguments = args
-            }
-        }
-    }
-
     // даггер:
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -208,5 +187,26 @@ class PartnerPickerFragment : DialogFragment() {
             putParcelable(argPartnerName, result)
         }
         setFragmentResult(requestKey, bundle)
+    }
+
+    companion object {
+
+        private const val PARTNER = "partner"
+        private const val PARENT_REQUEST_KEY = "parent_request_partner_picker_key"
+        private const val PARENT_PARTNER_ARG_NAME = "parent_partner_arg_name"
+
+        private const val NOT_FOUND_POSITION = -1
+        private const val DIFFERENCE_POS = 5
+
+        fun newInstance(partner: Partner?, parentRequestKey: String, parentArgDateName: String): PartnerPickerFragment {
+            val args = Bundle().apply {
+                putParcelable(PARTNER, partner)
+                putString(PARENT_REQUEST_KEY, parentRequestKey)
+                putString(PARENT_PARTNER_ARG_NAME, parentArgDateName)
+            }
+            return PartnerPickerFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

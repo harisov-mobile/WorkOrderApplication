@@ -21,27 +21,6 @@ import ru.internetcloud.workorderapplication.di.ViewModelFactory
 
 class RepairTypePickerFragment : DialogFragment() {
 
-    companion object {
-
-        private const val REPAIR_TYPE = "repair_type"
-        private const val PARENT_REQUEST_KEY = "parent_request_repair_type_picker_key"
-        private const val PARENT_REPAIR_TYPE_ARG_NAME = "parent_repair_type_arg_name"
-
-        private const val NOT_FOUND_POSITION = -1
-        private const val DIFFERENCE_POS = 5
-
-        fun newInstance(repairType: RepairType?, parentRequestKey: String, parentArgDateName: String): RepairTypePickerFragment {
-            val args = Bundle().apply {
-                putParcelable(REPAIR_TYPE, repairType)
-                putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_REPAIR_TYPE_ARG_NAME, parentArgDateName)
-            }
-            return RepairTypePickerFragment().apply {
-                arguments = args
-            }
-        }
-    }
-
     // даггер:
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -209,5 +188,26 @@ class RepairTypePickerFragment : DialogFragment() {
             putParcelable(argRepairTypeName, result)
         }
         setFragmentResult(requestKey, bundle)
+    }
+
+    companion object {
+
+        private const val REPAIR_TYPE = "repair_type"
+        private const val PARENT_REQUEST_KEY = "parent_request_repair_type_picker_key"
+        private const val PARENT_REPAIR_TYPE_ARG_NAME = "parent_repair_type_arg_name"
+
+        private const val NOT_FOUND_POSITION = -1
+        private const val DIFFERENCE_POS = 5
+
+        fun newInstance(repairType: RepairType?, parentRequestKey: String, parentArgDateName: String): RepairTypePickerFragment {
+            val args = Bundle().apply {
+                putParcelable(REPAIR_TYPE, repairType)
+                putString(PARENT_REQUEST_KEY, parentRequestKey)
+                putString(PARENT_REPAIR_TYPE_ARG_NAME, parentArgDateName)
+            }
+            return RepairTypePickerFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

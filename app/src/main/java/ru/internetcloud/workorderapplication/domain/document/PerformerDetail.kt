@@ -13,6 +13,13 @@ data class PerformerDetail(
     var isSelected: Boolean = false
 ) : Parcelable {
 
+    fun copyFields(anotherPerformerDetail: PerformerDetail) {
+        this.id = anotherPerformerDetail.id
+        this.lineNumber = anotherPerformerDetail.lineNumber
+        this.employee = anotherPerformerDetail.employee
+        this.isSelected = anotherPerformerDetail.isSelected
+    }
+
     companion object {
         fun getNewPerformerDetail(order: WorkOrder): PerformerDetail {
             var lineNumber = order.performers.size
@@ -20,12 +27,5 @@ data class PerformerDetail(
             val id = order.id + "_" + lineNumber.toString()
             return PerformerDetail(id = id, lineNumber = lineNumber)
         }
-    }
-
-    fun copyFields(anotherPerformerDetail: PerformerDetail) {
-        this.id = anotherPerformerDetail.id
-        this.lineNumber = anotherPerformerDetail.lineNumber
-        this.employee = anotherPerformerDetail.employee
-        this.isSelected = anotherPerformerDetail.isSelected
     }
 }

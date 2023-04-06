@@ -64,12 +64,6 @@ class WorkOrderViewModel @Inject constructor(
     var defaultCarJobs: List<DefaultRepairTypeJobDetail> = mutableListOf()
     var defaultWorkOrderSettings: DefaultWorkOrderSettings? = null
 
-    companion object {
-        private const val NUMBER_PREFIX = "new"
-        private const val SPACE_SYMBOL = " "
-        private const val NOT_FOUND = -1
-    }
-
     // -------------------------------------------------------------------------------
     fun loadWorkOrder(workOrderId: String) {
         viewModelScope.launch {
@@ -278,5 +272,11 @@ class WorkOrderViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    companion object {
+        private const val NUMBER_PREFIX = "new"
+        private const val SPACE_SYMBOL = " "
+        private const val NOT_FOUND = -1
     }
 }

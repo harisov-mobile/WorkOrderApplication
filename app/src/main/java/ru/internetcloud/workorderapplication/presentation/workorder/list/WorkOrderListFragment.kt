@@ -55,19 +55,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
     private lateinit var addFloatingActionButton: FloatingActionButton
     private lateinit var filterDescriptionTextView: TextView
 
-    companion object {
-
-        private val REQUEST_EXIT_QUESTION_KEY = "exit_question_key"
-        private val ARG_ANSWER = "answer"
-
-        private val REQUEST_SEARCH_WO_DATA_PICKER_KEY = "request_search_wo_data_picker_key"
-        private val ARG_SEARCH_WO_DATA = "search_wo_data_picker"
-
-        fun newInstance(): WorkOrderListFragment {
-            return WorkOrderListFragment()
-        }
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -298,5 +285,18 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         }
 
         return description
+    }
+
+    companion object {
+
+        private val REQUEST_EXIT_QUESTION_KEY = "exit_question_key"
+        private val ARG_ANSWER = "answer"
+
+        private val REQUEST_SEARCH_WO_DATA_PICKER_KEY = "request_search_wo_data_picker_key"
+        private val ARG_SEARCH_WO_DATA = "search_wo_data_picker"
+
+        fun newInstance(): WorkOrderListFragment {
+            return WorkOrderListFragment()
+        }
     }
 }

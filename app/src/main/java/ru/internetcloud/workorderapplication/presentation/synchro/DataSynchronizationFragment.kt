@@ -39,12 +39,6 @@ class DataSynchronizationFragment : Fragment() {
     private val binding: FragmentDataSynchronizationBinding
         get() = _binding ?: throw RuntimeException("Error DataSynchronizationFragmentBinding is NULL")
 
-    companion object {
-        fun newInstance(): DataSynchronizationFragment {
-            return DataSynchronizationFragment()
-        }
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         hostActivity = context as Callbacks
@@ -147,6 +141,12 @@ class DataSynchronizationFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    companion object {
+        fun newInstance(): DataSynchronizationFragment {
+            return DataSynchronizationFragment()
         }
     }
 }

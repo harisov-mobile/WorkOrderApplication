@@ -12,11 +12,6 @@ class RepairTypeListAdapter(var repairTypes: List<RepairType>) : RecyclerView.Ad
     var onRepairTypeClickListener: ((repairType: RepairType) -> Unit)? = null
     var onRepairTypeLongClickListener: ((repairType: RepairType) -> Unit)? = null
 
-    companion object {
-        private const val SELECTED_ITEM_TYPE = 0
-        private const val UNSELECTED_ITEM_TYPE = 1
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepairTypeListViewHolder {
 
         var binding: ViewBinding? = null
@@ -65,5 +60,10 @@ class RepairTypeListAdapter(var repairTypes: List<RepairType>) : RecyclerView.Ad
         } else {
             UNSELECTED_ITEM_TYPE
         }
+    }
+
+    companion object {
+        private const val SELECTED_ITEM_TYPE = 0
+        private const val UNSELECTED_ITEM_TYPE = 1
     }
 }

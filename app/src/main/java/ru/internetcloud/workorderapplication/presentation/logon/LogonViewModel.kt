@@ -18,14 +18,6 @@ class LogonViewModel @Inject constructor(
     private val loadMockDataUseCase: LoadMockDataUseCase
 ) : ViewModel() {
 
-    companion object {
-        private const val BEGIN_SIZE = 4
-        private const val HTTP_PREFIX = "https://"
-        private const val DEMO_SERVER = "demo"
-        private const val DEMO_LOGIN = "demo"
-        private const val DEMO_PASSWORD = "1"
-    }
-
     private val _canContinue = MutableLiveData<Boolean>()
     val canContinue: LiveData<Boolean>
         get() = _canContinue
@@ -146,5 +138,13 @@ class LogonViewModel @Inject constructor(
 
             _canContinueDemoMode.value = true
         }
+    }
+
+    companion object {
+        private const val BEGIN_SIZE = 4
+        private const val HTTP_PREFIX = "https://"
+        private const val DEMO_SERVER = "demo"
+        private const val DEMO_LOGIN = "demo"
+        private const val DEMO_PASSWORD = "1"
     }
 }

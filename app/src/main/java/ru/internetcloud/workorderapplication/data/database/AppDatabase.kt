@@ -32,6 +32,8 @@ import ru.internetcloud.workorderapplication.data.model.WorkingHourDbModel
 @TypeConverters(DatabaseTypeConverters::class)
 abstract class AppDatabase : RoomDatabase() {
 
+    abstract fun appDao(): AppDao
+
     companion object {
 
         private const val DATABASE_NAME = "work_order.db"
@@ -61,8 +63,6 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
     }
-
-    abstract fun appDao(): AppDao
 }
 
 val MIGRATION_1_2 = object : Migration(1, 2) {

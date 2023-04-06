@@ -12,11 +12,6 @@ class CarListAdapter(var cars: List<Car>) : RecyclerView.Adapter<CarListViewHold
     var onCarClickListener: ((car: Car) -> Unit)? = null
     var onCarLongClickListener: ((car: Car) -> Unit)? = null
 
-    companion object {
-        private const val SELECTED_ITEM_TYPE = 0
-        private const val UNSELECTED_ITEM_TYPE = 1
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarListViewHolder {
 
         var binding: ViewBinding? = null
@@ -67,5 +62,10 @@ class CarListAdapter(var cars: List<Car>) : RecyclerView.Adapter<CarListViewHold
         } else {
             UNSELECTED_ITEM_TYPE
         }
+    }
+
+    companion object {
+        private const val SELECTED_ITEM_TYPE = 0
+        private const val UNSELECTED_ITEM_TYPE = 1
     }
 }

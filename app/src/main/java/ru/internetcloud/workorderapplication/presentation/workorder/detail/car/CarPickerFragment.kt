@@ -22,34 +22,6 @@ import ru.internetcloud.workorderapplication.di.ViewModelFactory
 
 class CarPickerFragment : DialogFragment() {
 
-    companion object {
-
-        private const val CAR = "car"
-        private const val PARTNER = "partner"
-        private const val PARENT_REQUEST_KEY = "parent_request_car_picker_key"
-        private const val PARENT_CAR_ARG_NAME = "parent_car_arg_name"
-
-        private const val NOT_FOUND_POSITION = -1
-        private const val DIFFERENCE_POS = 5
-
-        fun newInstance(
-            car: Car?,
-            partner: Partner,
-            parentRequestKey: String,
-            parentArgDateName: String
-        ): CarPickerFragment {
-            val args = Bundle().apply {
-                putParcelable(CAR, car)
-                putParcelable(PARTNER, partner)
-                putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_CAR_ARG_NAME, parentArgDateName)
-            }
-            return CarPickerFragment().apply {
-                arguments = args
-            }
-        }
-    }
-
     private var requestKey = ""
     private var argCarName = ""
 
@@ -225,5 +197,33 @@ class CarPickerFragment : DialogFragment() {
             }
         }
         return currentPosition
+    }
+
+    companion object {
+
+        private const val CAR = "car"
+        private const val PARTNER = "partner"
+        private const val PARENT_REQUEST_KEY = "parent_request_car_picker_key"
+        private const val PARENT_CAR_ARG_NAME = "parent_car_arg_name"
+
+        private const val NOT_FOUND_POSITION = -1
+        private const val DIFFERENCE_POS = 5
+
+        fun newInstance(
+            car: Car?,
+            partner: Partner,
+            parentRequestKey: String,
+            parentArgDateName: String
+        ): CarPickerFragment {
+            val args = Bundle().apply {
+                putParcelable(CAR, car)
+                putParcelable(PARTNER, partner)
+                putString(PARENT_REQUEST_KEY, parentRequestKey)
+                putString(PARENT_CAR_ARG_NAME, parentArgDateName)
+            }
+            return CarPickerFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

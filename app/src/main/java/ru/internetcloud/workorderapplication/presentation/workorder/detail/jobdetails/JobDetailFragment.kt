@@ -24,30 +24,6 @@ import ru.internetcloud.workorderapplication.presentation.workorder.detail.worki
 
 class JobDetailFragment : DialogFragment(), FragmentResultListener {
 
-    companion object {
-
-        private const val JOB_DETAIL = "job_detail"
-        private const val PARENT_REQUEST_KEY = "parent_request_job_detail_picker_key"
-        private const val PARENT_JOB_DETAIL_ARG_NAME = "parent_job_detail_arg_name"
-
-        private val REQUEST_CAR_JOB_PICKER_KEY = "request_car_job_picker_key"
-        private val ARG_CAR_JOB = "car_job_picker"
-
-        private val REQUEST_WORKING_HOUR_PICKER_KEY = "request_working_hour_picker_key"
-        private val ARG_WORKING_HOUR = "working_hour_picker"
-
-        fun newInstance(jobDetail: JobDetail?, parentRequestKey: String, parentArgName: String): JobDetailFragment {
-            val args = Bundle().apply {
-                putParcelable(JOB_DETAIL, jobDetail)
-                putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_JOB_DETAIL_ARG_NAME, parentArgName)
-            }
-            return JobDetailFragment().apply {
-                arguments = args
-            }
-        }
-    }
-
     private var requestKey = ""
     private var argJobDetailName = ""
 
@@ -277,5 +253,29 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
             }
         }
         return result
+    }
+
+    companion object {
+
+        private const val JOB_DETAIL = "job_detail"
+        private const val PARENT_REQUEST_KEY = "parent_request_job_detail_picker_key"
+        private const val PARENT_JOB_DETAIL_ARG_NAME = "parent_job_detail_arg_name"
+
+        private val REQUEST_CAR_JOB_PICKER_KEY = "request_car_job_picker_key"
+        private val ARG_CAR_JOB = "car_job_picker"
+
+        private val REQUEST_WORKING_HOUR_PICKER_KEY = "request_working_hour_picker_key"
+        private val ARG_WORKING_HOUR = "working_hour_picker"
+
+        fun newInstance(jobDetail: JobDetail?, parentRequestKey: String, parentArgName: String): JobDetailFragment {
+            val args = Bundle().apply {
+                putParcelable(JOB_DETAIL, jobDetail)
+                putString(PARENT_REQUEST_KEY, parentRequestKey)
+                putString(PARENT_JOB_DETAIL_ARG_NAME, parentArgName)
+            }
+            return JobDetailFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

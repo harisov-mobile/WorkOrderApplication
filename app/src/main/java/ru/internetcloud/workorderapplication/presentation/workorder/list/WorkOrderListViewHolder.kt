@@ -15,10 +15,6 @@ class WorkOrderListViewHolder(
 
     private lateinit var workOrder: WorkOrder
 
-    companion object {
-        private const val PERFORMERS_STRING_SIZE = 50
-    }
-
     fun bind(workOrder: WorkOrder) {
         this.workOrder = workOrder
 
@@ -59,5 +55,9 @@ class WorkOrderListViewHolder(
 
     override fun onClick(v: View?) {
         workOrderListListener.onItemClick(workOrder)
+    }
+
+    companion object {
+        private const val PERFORMERS_STRING_SIZE = 50
     }
 }

@@ -43,12 +43,6 @@ class LogonFragment : Fragment() {
     private val binding: FragmentLogonBinding
         get() = _binding ?: throw RuntimeException("Error FragmentWorkOrderBinding is NULL")
 
-    companion object {
-        fun newInstance(): LogonFragment {
-            return LogonFragment()
-        }
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         hostActivity = context as Callbacks
@@ -227,6 +221,12 @@ class LogonFragment : Fragment() {
             // TODO presentation - слой напрямую полез в домайн - слой! разобраться...
             binding.serverEditText.setText(AuthorizationPreferences.getStoredServer(it.applicationContext))
             binding.loginEditText.setText(AuthorizationPreferences.getStoredLogin(it.applicationContext))
+        }
+    }
+
+    companion object {
+        fun newInstance(): LogonFragment {
+            return LogonFragment()
         }
     }
 }

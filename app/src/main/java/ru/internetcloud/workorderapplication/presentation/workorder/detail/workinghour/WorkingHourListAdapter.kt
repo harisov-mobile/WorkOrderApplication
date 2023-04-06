@@ -12,11 +12,6 @@ class WorkingHourListAdapter(var workingHours: List<WorkingHour>) : RecyclerView
     var onWorkingHourClickListener: ((carJob: WorkingHour) -> Unit)? = null
     var onWorkingHourLongClickListener: ((carJob: WorkingHour) -> Unit)? = null
 
-    companion object {
-        private const val SELECTED_ITEM_TYPE = 0
-        private const val UNSELECTED_ITEM_TYPE = 1
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkingHourListViewHolder {
 
         var binding: ViewBinding? = null
@@ -67,5 +62,10 @@ class WorkingHourListAdapter(var workingHours: List<WorkingHour>) : RecyclerView
         } else {
             UNSELECTED_ITEM_TYPE
         }
+    }
+
+    companion object {
+        private const val SELECTED_ITEM_TYPE = 0
+        private const val UNSELECTED_ITEM_TYPE = 1
     }
 }
