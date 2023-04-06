@@ -27,8 +27,6 @@ class LogonFragment : Fragment() {
         fun onLaunchWorkOrderList()
     }
 
-    private var hostActivity: Callbacks? = null
-
     private lateinit var viewModel: LogonViewModel
 
     // даггер:
@@ -45,8 +43,6 @@ class LogonFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        hostActivity = context as Callbacks
-
         // даггер:
         component.inject(this)
     }
@@ -136,11 +132,6 @@ class LogonFragment : Fragment() {
         _binding = null
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        hostActivity = null
-    }
-
     private fun observeViewModel() {
         // подписка на ошибки
         viewModel.errorInputServer.observe(viewLifecycleOwner) {
@@ -196,7 +187,7 @@ class LogonFragment : Fragment() {
                     }
                 }
                 viewModel.resetCanContinue()
-                hostActivity?.onLaunchDataSynchronization() // запустить фрагмент, где будет сихнронизация данных из 1С
+                (requireActivity() as Callbacks).onLaunchDataSynchronization() // запустить фрагмент, где будет сихнронизация данных из 1С
             }
         }
 
@@ -211,7 +202,7 @@ class LogonFragment : Fragment() {
         // демо-режим - переход в список Заказ-нарядов:
         viewModel.canContinueDemoMode.observe(viewLifecycleOwner) {
             if (it) {
-                hostActivity?.onLaunchWorkOrderList() // запустить фрагмент, где будет показан список демо-заказ-нарядов
+                (requireActivity() as Callbacks).onLaunchWorkOrderList() // запустить фрагмент, где будет показан список демо-заказ-нарядов
             }
         }
     }
