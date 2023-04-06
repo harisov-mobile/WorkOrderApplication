@@ -16,6 +16,7 @@ import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentDataSynchronizationBinding
 import ru.internetcloud.workorderapplication.domain.common.UpdateState
 import ru.internetcloud.workorderapplication.di.ViewModelFactory
+import ru.internetcloud.workorderapplication.presentation.logon.LogonFragment
 
 class DataSynchronizationFragment : Fragment() {
 
@@ -32,7 +33,6 @@ class DataSynchronizationFragment : Fragment() {
         (requireActivity().application as WorkOrderApp).component
     }
 
-    private var hostActivity: Callbacks? = null
     private lateinit var viewModel: DataSynchronizationFragmentViewModel
 
     private var _binding: FragmentDataSynchronizationBinding? = null
@@ -41,8 +41,6 @@ class DataSynchronizationFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        hostActivity = context as Callbacks
-
         // даггер:
         component.inject(this)
     }
@@ -60,7 +58,7 @@ class DataSynchronizationFragment : Fragment() {
         binding.versionTextView.text = getString(R.string.version, BuildConfig.VERSION_NAME)
 
         binding.okButton.setOnClickListener {
-            hostActivity?.onLaunchWorkOrderList() // запустить фрагмент, где будет список заказ-нарядов
+            (requireActivity() as Callbacks).onLaunchWorkOrderList() // запустить фрагмент, где будет список заказ-нарядов
         }
 
         binding.exitButton.setOnClickListener {
@@ -77,11 +75,6 @@ class DataSynchronizationFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        hostActivity = null
     }
 
     private fun observeViewModel() {
