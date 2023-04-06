@@ -1,8 +1,8 @@
 package ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.repository.DepartmentRepository
+import javax.inject.Inject
 
 class GetDepartmentListUseCase @Inject constructor(
     private val departmentRepository: DepartmentRepository

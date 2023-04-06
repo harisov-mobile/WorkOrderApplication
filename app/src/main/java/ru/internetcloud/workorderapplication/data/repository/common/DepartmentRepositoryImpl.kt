@@ -1,9 +1,9 @@
 package ru.internetcloud.workorderapplication.data.repository.common
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.datasource.local.DepartmentLocalDataSource
 import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.repository.DepartmentRepository
+import javax.inject.Inject
 
 class DepartmentRepositoryImpl @Inject constructor(
     private val departmentLocalDataSource: DepartmentLocalDataSource

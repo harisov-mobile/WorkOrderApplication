@@ -15,12 +15,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
-import java.math.BigDecimal
-import java.util.Date
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
+import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.catalog.Employee
@@ -31,7 +29,6 @@ import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
 import ru.internetcloud.workorderapplication.presentation.sendemail.SendWorkOrderByIdToEmailDialogFragment
@@ -44,6 +41,9 @@ import ru.internetcloud.workorderapplication.presentation.workorder.detail.partn
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailListAdapter
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.repairtype.RepairTypePickerFragment
+import java.math.BigDecimal
+import java.util.Date
+import javax.inject.Inject
 
 class WorkOrderFragment : Fragment(), FragmentResultListener {
 
@@ -115,11 +115,14 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         setupClickListeners()
 
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                onCloseWorkOrder()
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onCloseWorkOrder()
+                }
             }
-        })
+        )
     }
 
     private fun observeViewModel() {
@@ -202,7 +205,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     }
 
     private fun checkArgs() {
-
         val args = requireArguments()
         if (!args.containsKey(ARG_SCREEN_MODE)) {
             throw RuntimeException("Parameter mode is absent")
@@ -575,7 +577,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     }
 
     private fun setupClickListeners() {
-
         binding.saveButton.setOnClickListener {
             viewModel.updateWorkOrder()
         }
@@ -777,7 +778,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     }
 
     private fun updateUI(order: WorkOrder) {
-
         modifyAllowed = false
 
         binding.numberEditText.setText(order.number)

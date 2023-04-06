@@ -17,7 +17,6 @@ class JobDetailListAdapter : ListAdapter<JobDetail, JobDetailListViewHolder>(Job
     var onJobDetailClickListener: ((jobDetail: JobDetail) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobDetailListViewHolder {
-
         var binding: ViewBinding? = null
         if (viewType == UNSELECTED_ITEM_TYPE) {
             binding = ItemJobDetailListBinding.inflate(LayoutInflater.from(parent.context), parent, false)

@@ -1,9 +1,9 @@
 package ru.internetcloud.workorderapplication.data.datasource.local
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.mapper.CarJobMapper
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
+import javax.inject.Inject
 
 class CarJobLocalDataSource @Inject constructor(
     private val appDao: AppDao,

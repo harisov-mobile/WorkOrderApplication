@@ -1,10 +1,10 @@
 package ru.internetcloud.workorderapplication.data.mapper
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.model.DefaultRepairTypeJobDetailDbModel
 import ru.internetcloud.workorderapplication.data.model.DefaultRepairTypeJobDetailWithRequisities
 import ru.internetcloud.workorderapplication.data.network.dto.DefaultRepairTypeJobDetailDTO
 import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJobDetail
+import javax.inject.Inject
 
 class DefaultRepairTypeJobDetailMapper @Inject constructor(
     private val carModelMapper: CarModelMapper,

@@ -14,7 +14,6 @@ class QuestionDialogFragment : DialogFragment() {
     private var answerArgName = ""
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         arguments?.let { arg ->
             question = arg.getString(QUESTION_ARG, "")
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")

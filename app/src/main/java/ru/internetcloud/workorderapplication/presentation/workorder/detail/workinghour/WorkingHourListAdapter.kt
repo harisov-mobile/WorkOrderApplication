@@ -13,7 +13,6 @@ class WorkingHourListAdapter(var workingHours: List<WorkingHour>) : RecyclerView
     var onWorkingHourLongClickListener: ((carJob: WorkingHour) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkingHourListViewHolder {
-
         var binding: ViewBinding? = null
         if (viewType == UNSELECTED_ITEM_TYPE) {
             binding = ItemWorkingHourListBinding.inflate(LayoutInflater.from(parent.context), parent, false)

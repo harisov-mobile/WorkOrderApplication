@@ -12,7 +12,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
-import java.math.BigDecimal
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
@@ -21,6 +20,7 @@ import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.carjob.CarJobPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.workinghour.WorkingHourPickerFragment
+import java.math.BigDecimal
 
 class JobDetailFragment : DialogFragment(), FragmentResultListener {
 
@@ -40,7 +40,6 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
     private lateinit var timeNormEditText: EditText
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         viewModel = ViewModelProvider(this).get(JobDetailViewModel::class.java)
 
         arguments?.let { arg ->
@@ -51,7 +50,7 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
                 }
 
                 viewModel.jobDetail = jobDetail.copy() // надо копию экземпляра класса, специально чтобы при изменении
-            // копии не пострадал оригинал, если пользователь нажмет "Отмена"
+                // копии не пострадал оригинал, если пользователь нажмет "Отмена"
             }
 
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
@@ -185,7 +184,6 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
     }
 
     private fun calculateSum() {
-
         var sumString = "0"
 
         viewModel.jobDetail?.let { jobdet ->

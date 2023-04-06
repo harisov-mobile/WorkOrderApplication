@@ -16,17 +16,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
+import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.search.SearchWorkOrderFragment
+import javax.inject.Inject
 
 class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
@@ -70,11 +70,14 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(WorkOrderListViewModel::class.java)
 
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                onExitWorkOrderList()
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onExitWorkOrderList()
+                }
             }
-        })
+        )
 
         setHasOptionsMenu(true)
 
@@ -119,7 +122,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         when (item.itemId) {
             R.id.search_menu_item -> {
                 onSearch()
@@ -160,7 +162,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
     }
 
     private fun onSearch() {
-
         SearchWorkOrderFragment
             .newInstance(
                 viewModel.searchWorkOrderData,
@@ -237,37 +238,37 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
         if (searchWorkOrderData.numberText.isNotEmpty()) {
             description = description + getString(R.string.number_hint) +
-                    " " + getString(R.string.contains) + " " + searchWorkOrderData.numberText + "; "
+                " " + getString(R.string.contains) + " " + searchWorkOrderData.numberText + "; "
         }
 
         if (searchWorkOrderData.partnerText.isNotEmpty()) {
             description = description + getString(R.string.partner_hint) +
-                    " " + getString(R.string.contains) + " " + searchWorkOrderData.partnerText + "; "
+                " " + getString(R.string.contains) + " " + searchWorkOrderData.partnerText + "; "
         }
 
         if (searchWorkOrderData.carText.isNotEmpty()) {
             description = description + getString(R.string.car_hint) +
-                    " " + getString(R.string.contains) + " " + searchWorkOrderData.carText + "; "
+                " " + getString(R.string.contains) + " " + searchWorkOrderData.carText + "; "
         }
 
         if (searchWorkOrderData.performerText.isNotEmpty()) {
             description = description + getString(R.string.performer_hint) +
-                    " " + getString(R.string.contains) + " " + searchWorkOrderData.performerText + "; "
+                " " + getString(R.string.contains) + " " + searchWorkOrderData.performerText + "; "
         }
 
         if (searchWorkOrderData.departmentText.isNotEmpty()) {
             description = description + getString(R.string.department_hint) +
-                    " " + getString(R.string.contains) + " " + searchWorkOrderData.departmentText + "; "
+                " " + getString(R.string.contains) + " " + searchWorkOrderData.departmentText + "; "
         }
 
         searchWorkOrderData.dateFrom?.let { fromDate ->
             description = description + getString(R.string.date_from_hint) +
-                    " " + DateConverter.getDateString(fromDate) + "; "
+                " " + DateConverter.getDateString(fromDate) + "; "
         }
 
         searchWorkOrderData.dateTo?.let { toDate ->
             description = description + getString(R.string.date_to_hint) +
-                    " " + DateConverter.getDateString(toDate) + "; "
+                " " + DateConverter.getDateString(toDate) + "; "
         }
 
         if (description.isNotEmpty()) {

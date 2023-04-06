@@ -1,11 +1,11 @@
 package ru.internetcloud.workorderapplication.domain.document
 
-import java.util.Date
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.catalog.Employee
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
+import java.util.Date
 
 data class WorkOrder(
     var id: String = "",

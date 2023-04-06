@@ -17,7 +17,6 @@ class PerformerDetailListAdapter : ListAdapter<PerformerDetail, PerformerDetailL
     var onPerformerDetailClickListener: ((performerDetail: PerformerDetail) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PerformerDetailListViewHolder {
-
         var binding: ViewBinding? = null
         if (viewType == UNSELECTED_ITEM_TYPE) {
             binding = ItemPerformerDetailListBinding.inflate(LayoutInflater.from(parent.context), parent, false)

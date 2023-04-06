@@ -1,12 +1,12 @@
 package ru.internetcloud.workorderapplication.data.mapper
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.model.CarDbModel
 import ru.internetcloud.workorderapplication.data.model.CarWithOwner
 import ru.internetcloud.workorderapplication.data.network.dto.CarDTO
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.CarModel
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
+import javax.inject.Inject
 
 class CarMapper @Inject constructor(
     private val partnerMapper: PartnerMapper,
@@ -55,7 +55,6 @@ class CarMapper @Inject constructor(
     fun fromCarWithOwnerToEntityWithNull(carWithOwner: CarWithOwner?): Car? {
         var result: Car? = null
         if (carWithOwner != null) {
-
             return Car(
                 id = carWithOwner.car.id,
                 code1C = carWithOwner.car.code1C,

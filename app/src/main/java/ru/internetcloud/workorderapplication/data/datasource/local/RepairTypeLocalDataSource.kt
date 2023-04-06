@@ -1,12 +1,12 @@
 package ru.internetcloud.workorderapplication.data.datasource.local
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.mapper.DefaultRepairTypeJobDetailMapper
 import ru.internetcloud.workorderapplication.data.mapper.RepairTypeMapper
 import ru.internetcloud.workorderapplication.data.model.DefaultRepairTypeJobDetailDbModel
 import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJobDetail
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
+import javax.inject.Inject
 
 class RepairTypeLocalDataSource @Inject constructor(
     private val appDao: AppDao,

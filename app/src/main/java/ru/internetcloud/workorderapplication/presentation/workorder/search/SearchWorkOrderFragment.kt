@@ -10,12 +10,12 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
-import java.util.Date
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.FragmentWoFilterBinding
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.DatePickerFragment
+import java.util.Date
 
 class SearchWorkOrderFragment : DialogFragment(), FragmentResultListener {
 
@@ -29,7 +29,6 @@ class SearchWorkOrderFragment : DialogFragment(), FragmentResultListener {
         get() = _binding ?: throw RuntimeException("Error FragmentWoFilterBinding is NULL")
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         viewModel = ViewModelProvider(this).get(SearchWorkOrderViewModel::class.java)
 
         arguments?.let { arg ->
@@ -156,7 +155,6 @@ class SearchWorkOrderFragment : DialogFragment(), FragmentResultListener {
     }
 
     private fun setupClickListeners() {
-
         binding.clearNumberButton.setOnClickListener {
             viewModel.searchWorkOrderData?.numberText = ""
             binding.numberEditText.setText("")
@@ -184,12 +182,12 @@ class SearchWorkOrderFragment : DialogFragment(), FragmentResultListener {
 
         binding.clearDateFromButton.setOnClickListener {
             viewModel.searchWorkOrderData?.dateFrom = null
-                binding.dateFromTextView.text = ""
+            binding.dateFromTextView.text = ""
         }
 
         binding.clearDateToButton.setOnClickListener {
             viewModel.searchWorkOrderData?.dateTo = null
-                binding.dateToTextView.text = ""
+            binding.dateToTextView.text = ""
         }
 
         binding.dateFromSelectButton.setOnClickListener {

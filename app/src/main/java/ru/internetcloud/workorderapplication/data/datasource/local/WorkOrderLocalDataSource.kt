@@ -3,9 +3,6 @@ package ru.internetcloud.workorderapplication.data.datasource.local
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.sqlite.db.SimpleSQLiteQuery
-import java.util.Calendar
-import java.util.Date
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.mapper.JobDetailMapper
 import ru.internetcloud.workorderapplication.data.mapper.PerformerDetailMapper
@@ -16,6 +13,9 @@ import ru.internetcloud.workorderapplication.data.model.WorkOrderDbModel
 import ru.internetcloud.workorderapplication.data.model.WorkOrderWithDetails
 import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
+import java.util.Calendar
+import java.util.Date
+import javax.inject.Inject
 
 class WorkOrderLocalDataSource @Inject constructor(
     private val appDao: AppDao,
@@ -56,7 +56,6 @@ class WorkOrderLocalDataSource @Inject constructor(
     }
 
     fun getFilteredWorkOrderList(searchWorkOrderData: SearchWorkOrderData): LiveData<List<WorkOrder>> {
-
         // Query string
         var queryString = String()
 
@@ -108,9 +107,9 @@ class WorkOrderLocalDataSource @Inject constructor(
                 containsCondition = true
             }
             queryString += " id IN " +
-                    " (SELECT workOrderId FROM performer_details" +
-                    " WHERE performer_details.employeeId IN" +
-                    " (SELECT id FROM employees WHERE employees.name LIKE :param_performer))"
+                " (SELECT workOrderId FROM performer_details" +
+                " WHERE performer_details.employeeId IN" +
+                " (SELECT id FROM employees WHERE employees.name LIKE :param_performer))"
             args.add("%" + searchWorkOrderData.performerText + "%")
             containsCondition = true
         }

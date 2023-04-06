@@ -9,14 +9,13 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentDataSynchronizationBinding
-import ru.internetcloud.workorderapplication.domain.common.UpdateState
 import ru.internetcloud.workorderapplication.di.ViewModelFactory
-import ru.internetcloud.workorderapplication.presentation.logon.LogonFragment
+import ru.internetcloud.workorderapplication.domain.common.UpdateState
+import javax.inject.Inject
 
 class DataSynchronizationFragment : Fragment() {
 
@@ -78,7 +77,6 @@ class DataSynchronizationFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-
         viewModel.updateState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UpdateState.Loading -> {

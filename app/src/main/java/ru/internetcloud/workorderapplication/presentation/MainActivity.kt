@@ -9,7 +9,8 @@ import ru.internetcloud.workorderapplication.presentation.synchro.DataSynchroniz
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.WorkOrderFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.list.WorkOrderListFragment
 
-class MainActivity : AppCompatActivity(),
+class MainActivity :
+    AppCompatActivity(),
     WorkOrderListFragment.Callbacks,
     LogonFragment.Callbacks,
     DataSynchronizationFragment.Callbacks {

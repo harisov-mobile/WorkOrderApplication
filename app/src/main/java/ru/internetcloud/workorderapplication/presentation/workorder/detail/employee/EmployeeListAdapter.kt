@@ -13,7 +13,6 @@ class EmployeeListAdapter(var employees: List<Employee>) : RecyclerView.Adapter<
     var onEmployeeLongClickListener: ((employee: Employee) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmployeeListViewHolder {
-
         var binding: ViewBinding? = null
         if (viewType == UNSELECTED_ITEM_TYPE) {
             binding = ItemEmployeeListBinding.inflate(LayoutInflater.from(parent.context), parent, false)

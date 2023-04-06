@@ -12,7 +12,6 @@ import java.util.GregorianCalendar
 class DatePickerFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         val date = arguments?.getSerializable(ARG_DATE) as Date
         val requestKey = arguments?.getString(ARG_PARENT_REQUEST_KEY, "")
         val argDateName = arguments?.getString(ARG_PARENT_ARG_DATE_NAME, "")

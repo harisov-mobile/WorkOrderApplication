@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import javax.inject.Inject
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.CheckAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.SetAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadMockDataUseCase
+import javax.inject.Inject
 
 // TODO Переделать многочисленные LiveData на один State
 
@@ -59,7 +59,6 @@ class LogonViewModel @Inject constructor(
 
         if (areFieldsValid) {
             viewModelScope.launch {
-
                 server = server.lowercase()
 
                 // демо-режим:
@@ -133,7 +132,6 @@ class LogonViewModel @Inject constructor(
 
     fun loadDemoData() {
         viewModelScope.launch {
-
             loadMockDataUseCase.loadMockData()
 
             _canContinueDemoMode.value = true

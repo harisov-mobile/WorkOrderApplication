@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import javax.inject.Inject
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.GetWorkingHourListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.SearchWorkingHoursUseCase
+import javax.inject.Inject
 
 class WorkingHourListViewModel @Inject constructor(
     private val getWorkingHourListUseCase: GetWorkingHourListUseCase,
@@ -21,7 +21,7 @@ class WorkingHourListViewModel @Inject constructor(
 
     private val _workingHourListLiveData = MutableLiveData<List<WorkingHour>>()
     val workingHourListLiveData: LiveData<List<WorkingHour>>
-    get() = _workingHourListLiveData
+        get() = _workingHourListLiveData
 
     fun loadWorkingHourList() {
         viewModelScope.launch {

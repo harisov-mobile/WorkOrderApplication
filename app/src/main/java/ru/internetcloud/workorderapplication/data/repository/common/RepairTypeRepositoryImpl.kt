@@ -1,10 +1,10 @@
 package ru.internetcloud.workorderapplication.data.repository.common
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.datasource.local.RepairTypeLocalDataSource
 import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJobDetail
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.repository.RepairTypeRepository
+import javax.inject.Inject
 
 class RepairTypeRepositoryImpl @Inject constructor(
     private val repairTypeLocalDataSource: RepairTypeLocalDataSource

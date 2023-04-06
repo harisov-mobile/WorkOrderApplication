@@ -13,7 +13,6 @@ class PartnerListAdapter(var partners: List<Partner>) : RecyclerView.Adapter<Par
     var onPartnerLongClickListener: ((partner: Partner) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartnerListViewHolder {
-
         var binding: ViewBinding? = null
         if (viewType == UNSELECTED_ITEM_TYPE) {
             binding = ItemPartnerListBinding.inflate(LayoutInflater.from(parent.context), parent, false)

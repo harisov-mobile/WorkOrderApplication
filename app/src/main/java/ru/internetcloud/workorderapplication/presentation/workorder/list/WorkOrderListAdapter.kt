@@ -13,7 +13,6 @@ class WorkOrderListAdapter(
 ) : ListAdapter<WorkOrder, WorkOrderListViewHolder>(WorkOrderDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkOrderListViewHolder {
-
         val binding: ViewBinding
         if (viewType == POSTED_ITEM_TYPE) {
             binding = ItemWorkOrderListPostedBinding.inflate(LayoutInflater.from(parent.context), parent, false)

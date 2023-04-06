@@ -1,10 +1,6 @@
 package ru.internetcloud.workorderapplication.data.repository
 
 import android.app.Application
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
-import java.security.MessageDigest
-import javax.inject.Inject
 import retrofit2.HttpException
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.AuthResponse
@@ -12,6 +8,10 @@ import ru.internetcloud.workorderapplication.domain.common.AuthParameters
 import ru.internetcloud.workorderapplication.domain.common.AuthResult
 import ru.internetcloud.workorderapplication.domain.common.AuthorizationPreferences
 import ru.internetcloud.workorderapplication.domain.repository.AuthRepository
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
+import java.security.MessageDigest
+import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val application: Application,
@@ -23,12 +23,10 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun setAuthParameters(server: String, login: String, password: String) {
-
         authParameters = AuthParameters(server, login, password)
     }
 
     override suspend fun checkAuthorization(): AuthResult {
-
         var authResult = AuthResult(false, "Нет связи с сервером.")
 
         // HTTP FAILED: java.net.UnknownHostException: Unable to resolve host "serv.promintel-agro.ru":
@@ -77,7 +75,6 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     private fun savePasswordHashToPreferences() {
-
         val key = authParameters.server + authParameters.login
         val hash = sha1(authParameters.password)
 
@@ -94,7 +91,6 @@ class AuthRepositoryImpl @Inject constructor(
     fun sha1(input: String) = hashString("SHA-1", input)
 
     fun printHexBinary(data: ByteArray): String {
-
         val HEX_CHARS = "0123456789ABCDEF".toCharArray()
 
         val r = StringBuilder(data.size * 2)

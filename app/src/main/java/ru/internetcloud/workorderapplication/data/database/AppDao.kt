@@ -78,6 +78,7 @@ interface AppDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addWorkOrderList(workOrderDbModelList: List<WorkOrderDbModel>)
+
     // ----------------------------------------------------------------------
     @Query("SELECT * FROM repair_types")
     suspend fun getRepairTypeList(): List<RepairTypeDbModel>

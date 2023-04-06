@@ -29,7 +29,6 @@ class PerformerDetailFragment : DialogFragment(), FragmentResultListener {
     private lateinit var lineNumberTextView: TextView
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         viewModel = ViewModelProvider(this).get(PerformerDetailViewModel::class.java)
 
         arguments?.let { arg ->

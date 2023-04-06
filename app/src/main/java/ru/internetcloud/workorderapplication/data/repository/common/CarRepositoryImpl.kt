@@ -1,9 +1,9 @@
 package ru.internetcloud.workorderapplication.data.repository.common
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.datasource.local.CarLocalDataSource
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.repository.CarRepository
+import javax.inject.Inject
 
 class CarRepositoryImpl @Inject constructor(
     private val carLocalDataSource: CarLocalDataSource

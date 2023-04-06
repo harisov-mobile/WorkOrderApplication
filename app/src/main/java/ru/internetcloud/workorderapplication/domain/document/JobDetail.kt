@@ -1,10 +1,10 @@
 package ru.internetcloud.workorderapplication.domain.document
 
 import android.os.Parcelable
-import java.math.BigDecimal
 import kotlinx.parcelize.Parcelize
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
+import java.math.BigDecimal
 
 // это строка табличной части "Работы"
 @Parcelize

@@ -13,7 +13,6 @@ class DepartmentListAdapter(var departments: List<Department>) : RecyclerView.Ad
     var onDepartmentLongClickListener: ((department: Department) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DepartmentListViewHolder {
-
         var binding: ViewBinding? = null
         if (viewType == UNSELECTED_ITEM_TYPE) {
             binding = ItemDepartmentListBinding.inflate(LayoutInflater.from(parent.context), parent, false)

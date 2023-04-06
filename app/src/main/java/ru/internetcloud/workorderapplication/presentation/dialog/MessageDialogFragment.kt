@@ -11,7 +11,6 @@ class MessageDialogFragment : DialogFragment() {
     private var message: String = ""
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         arguments?.let { arg ->
             message = arg.getString(MESSAGE_ARG, "")
         } ?: run {

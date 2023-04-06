@@ -1,9 +1,9 @@
 package ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJobDetail
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.repository.RepairTypeRepository
+import javax.inject.Inject
 
 class GetDefaultRepairTypeJobsUseCase @Inject constructor(
     private val repairTypeRepository: RepairTypeRepository

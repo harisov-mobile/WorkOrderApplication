@@ -13,7 +13,6 @@ class CarListAdapter(var cars: List<Car>) : RecyclerView.Adapter<CarListViewHold
     var onCarLongClickListener: ((car: Car) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarListViewHolder {
-
         var binding: ViewBinding? = null
         if (viewType == UNSELECTED_ITEM_TYPE) {
             binding = ItemCarListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
