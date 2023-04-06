@@ -47,8 +47,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         (requireActivity().application as WorkOrderApp).component
     }
 
-    private var hostActivity: Callbacks? = null
-
     private lateinit var viewModel: WorkOrderListViewModel
     private lateinit var workOrderRecyclerView: RecyclerView
     private lateinit var workOrderListAdapter: WorkOrderListAdapter
@@ -60,8 +58,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
         // даггер:
         component.inject(this)
-
-        hostActivity = context as Callbacks
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -89,7 +85,7 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
             // TODO при добавлении нового заказ-наряда надо спозиционироваться на нем,
             // сейчас же просто в конец списка перемещаюсь.
             viewModel.selectedWorkOrder = null
-            hostActivity?.onAddWorkOrder()
+            (requireActivity() as Callbacks).onAddWorkOrder()
         }
 
         setupWorkOrderRecyclerView(view)
@@ -136,7 +132,7 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
             }
 
             R.id.synchronize_data_menu_item -> {
-                hostActivity?.onLaunchDataSynchronization() // запустить фрагмент, где будет синхронизация данных из 1С
+                (requireActivity() as Callbacks).onLaunchDataSynchronization() // запустить фрагмент, где будет синхронизация данных из 1С
                 return true
             }
 
@@ -174,18 +170,12 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
             .show(childFragmentManager, REQUEST_SEARCH_WO_DATA_PICKER_KEY)
     }
 
-    override fun onDetach() {
-        super.onDetach()
-
-        hostActivity = null
-    }
-
     private fun setupWorkOrderRecyclerView(view: View) {
         workOrderRecyclerView = view.findViewById<RecyclerView>(R.id.work_order_recycler_view)
 
         val workOrderListListener = object : WorkOrderListListener {
             override fun onItemClick(workOrder: WorkOrder) {
-                hostActivity?.onEditWorkOrder(workOrder.id)
+                (requireActivity() as Callbacks).onEditWorkOrder(workOrder.id)
             }
         }
 
