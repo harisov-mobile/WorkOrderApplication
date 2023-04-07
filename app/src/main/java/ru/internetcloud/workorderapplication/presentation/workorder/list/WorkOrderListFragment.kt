@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
@@ -27,8 +28,9 @@ import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFr
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.search.SearchWorkOrderFragment
 import javax.inject.Inject
+import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderListBinding
 
-class WorkOrderListFragment : Fragment(), FragmentResultListener {
+class WorkOrderListFragment : Fragment(R.layout.fragment_work_order_list), FragmentResultListener {
 
     // интерфейс обратного вызова
     interface Callbacks {
@@ -47,11 +49,10 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         (requireActivity().application as WorkOrderApp).component
     }
 
+    private val binding by viewBinding(FragmentWorkOrderListBinding::bind)
+
     private lateinit var viewModel: WorkOrderListViewModel
-    private lateinit var workOrderRecyclerView: RecyclerView
     private lateinit var workOrderListAdapter: WorkOrderListAdapter
-    private lateinit var addFloatingActionButton: FloatingActionButton
-    private lateinit var filterDescriptionTextView: TextView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -59,14 +60,9 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         component.inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_work_order_list, container, false)
-        return view
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
-        workOrderRecyclerView.adapter = null
+        binding.workOrderRecyclerView.adapter = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -85,10 +81,7 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
         setHasOptionsMenu(true)
 
-        filterDescriptionTextView = view.findViewById(R.id.filter_description_text_view)
-
-        addFloatingActionButton = view.findViewById(R.id.add_fab)
-        addFloatingActionButton.setOnClickListener {
+        binding.addFab.setOnClickListener {
             // TODO при добавлении нового заказ-наряда надо спозиционироваться на нем,
             // сейчас же просто в конец списка перемещаюсь.
             viewModel.selectedWorkOrder = null
@@ -112,7 +105,7 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
                     // и можно позиционироваться:
                     viewModel.selectedWorkOrder ?: let {
                         val scrollPosition = workOrderListAdapter.itemCount - 1
-                        workOrderRecyclerView.scrollToPosition(scrollPosition)
+                        binding.workOrderRecyclerView.scrollToPosition(scrollPosition)
                     }
                 }
             }
@@ -176,7 +169,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
     }
 
     private fun setupWorkOrderRecyclerView(view: View) {
-        workOrderRecyclerView = view.findViewById<RecyclerView>(R.id.work_order_recycler_view)
 
         val workOrderListListener = object : WorkOrderListListener {
             override fun onItemClick(workOrder: WorkOrder) {
@@ -185,9 +177,9 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         }
 
         workOrderListAdapter = WorkOrderListAdapter(workOrderListListener)
-        workOrderRecyclerView.adapter = workOrderListAdapter
+        binding.workOrderRecyclerView.adapter = workOrderListAdapter
         // вместо app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" который был в XML
-        workOrderRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.workOrderRecyclerView.layoutManager = LinearLayoutManager(context)
     }
 
     private fun onExitWorkOrderList() {
@@ -226,14 +218,16 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
     }
 
     private fun setupFilterDescription() {
-        if (viewModel.searchWorkOrderDataIsEmpty()) {
-            // пользователь сбросил отбор
-            filterDescriptionTextView.text = ""
-            filterDescriptionTextView.visibility = View.GONE
-        } else {
-            // пользователь установил отбор
-            filterDescriptionTextView.text = getFilterDescription(viewModel.searchWorkOrderData)
-            filterDescriptionTextView.visibility = View.VISIBLE
+        with(binding) {
+            if (viewModel.searchWorkOrderDataIsEmpty()) {
+                // пользователь сбросил отбор
+                filterDescriptionTextView.text = ""
+                filterDescriptionTextView.visibility = View.GONE
+            } else {
+                // пользователь установил отбор
+                filterDescriptionTextView.text = getFilterDescription(viewModel.searchWorkOrderData)
+                filterDescriptionTextView.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -242,37 +236,37 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
         if (searchWorkOrderData.numberText.isNotEmpty()) {
             description = description + getString(R.string.number_hint) +
-                " " + getString(R.string.contains) + " " + searchWorkOrderData.numberText + "; "
+                    " " + getString(R.string.contains) + " " + searchWorkOrderData.numberText + "; "
         }
 
         if (searchWorkOrderData.partnerText.isNotEmpty()) {
             description = description + getString(R.string.partner_hint) +
-                " " + getString(R.string.contains) + " " + searchWorkOrderData.partnerText + "; "
+                    " " + getString(R.string.contains) + " " + searchWorkOrderData.partnerText + "; "
         }
 
         if (searchWorkOrderData.carText.isNotEmpty()) {
             description = description + getString(R.string.car_hint) +
-                " " + getString(R.string.contains) + " " + searchWorkOrderData.carText + "; "
+                    " " + getString(R.string.contains) + " " + searchWorkOrderData.carText + "; "
         }
 
         if (searchWorkOrderData.performerText.isNotEmpty()) {
             description = description + getString(R.string.performer_hint) +
-                " " + getString(R.string.contains) + " " + searchWorkOrderData.performerText + "; "
+                    " " + getString(R.string.contains) + " " + searchWorkOrderData.performerText + "; "
         }
 
         if (searchWorkOrderData.departmentText.isNotEmpty()) {
             description = description + getString(R.string.department_hint) +
-                " " + getString(R.string.contains) + " " + searchWorkOrderData.departmentText + "; "
+                    " " + getString(R.string.contains) + " " + searchWorkOrderData.departmentText + "; "
         }
 
         searchWorkOrderData.dateFrom?.let { fromDate ->
             description = description + getString(R.string.date_from_hint) +
-                " " + DateConverter.getDateString(fromDate) + "; "
+                    " " + DateConverter.getDateString(fromDate) + "; "
         }
 
         searchWorkOrderData.dateTo?.let { toDate ->
             description = description + getString(R.string.date_to_hint) +
-                " " + DateConverter.getDateString(toDate) + "; "
+                    " " + DateConverter.getDateString(toDate) + "; "
         }
 
         if (description.isNotEmpty()) {
