@@ -6,15 +6,14 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Patterns
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
@@ -45,7 +44,7 @@ import java.math.BigDecimal
 import java.util.Date
 import javax.inject.Inject
 
-class WorkOrderFragment : Fragment(), FragmentResultListener {
+class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResultListener {
 
     // даггер:
     @Inject
@@ -55,9 +54,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         (requireActivity().application as WorkOrderApp).component
     }
 
-    private var _binding: FragmentWorkOrderBinding? = null
-    private val binding: FragmentWorkOrderBinding
-        get() = _binding ?: throw RuntimeException("Error FragmentWorkOrderBinding is NULL")
+    private val binding by viewBinding(FragmentWorkOrderBinding::bind)
 
     private val viewModel: WorkOrderViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(WorkOrderViewModel::class.java)
@@ -73,14 +70,8 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
         // даггер:
         component.inject(this)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentWorkOrderBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -341,11 +332,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 }
             }
         })
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun parseText(inputText: String?): String {
