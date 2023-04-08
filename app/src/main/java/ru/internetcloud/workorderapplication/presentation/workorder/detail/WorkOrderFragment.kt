@@ -12,6 +12,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.internetcloud.workorderapplication.R
@@ -67,6 +68,9 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
     private var workOrderId: String? = null
 
     private var modifyAllowed: Boolean = true
+
+    private lateinit var requestKeyNewOrderId: String
+    private lateinit var argNameNewOrderId: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -161,7 +165,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
             if (viewModel.closeOnSave) {
                 Toast.makeText(context, getString(R.string.success_saved), Toast.LENGTH_SHORT).show()
                 activity?.supportFragmentManager?.popBackStack()
-            } else {
+            } else if (viewModel.isChanged) {
                 viewModel.isChanged = false
                 MessageDialogFragment.newInstance(getString(R.string.success_saved))
                     .show(childFragmentManager, null)
@@ -206,8 +210,13 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
             throw RuntimeException("Uknown screen mode $mode")
         }
         screenMode = mode
-        if (screenMode == ScreenMode.EDIT) {
-            workOrderId = args.getString(ARG_WORK_ORDER_ID)
+        when (screenMode) {
+            ScreenMode.EDIT -> workOrderId = args.getString(ARG_WORK_ORDER_ID)
+            ScreenMode.ADD -> {
+                requestKeyNewOrderId = args.getString(REQUEST_KEY_NEW_ORDER_ID, "")
+                argNameNewOrderId = args.getString(ARG_NAME_NEW_ORDER_ID, "")
+            }
+            else -> throw RuntimeException("Uknown screen mode $screenMode")
         }
     }
 
@@ -511,6 +520,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
                 if (needSaveData) {
                     viewModel.closeOnSave = true
                     viewModel.updateWorkOrder()
+                    sendNewIdToWorkOrderListFragment()
                 } else {
                     activity?.supportFragmentManager?.popBackStack()
                 }
@@ -565,6 +575,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
     private fun setupClickListeners() {
         binding.saveButton.setOnClickListener {
             viewModel.updateWorkOrder()
+            sendNewIdToWorkOrderListFragment()
         }
 
         binding.closeButton.setOnClickListener {
@@ -854,6 +865,22 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
         }
     }
 
+    private fun sendResultToFragment(id: String) {
+        // отправка информации в фрагмент: WorkOrderListFragment
+        val bundle = Bundle().apply {
+            putString(argNameNewOrderId, id)
+        }
+        setFragmentResult(requestKeyNewOrderId, bundle)
+    }
+
+    private fun sendNewIdToWorkOrderListFragment() {
+        viewModel.workOrder.value?.let { currentWorkOrder ->
+            if (screenMode == ScreenMode.ADD) {
+                sendResultToFragment(currentWorkOrder.id)
+            }
+        }
+    }
+
     companion object {
 
         const val ARG_SCREEN_MODE = "screen_mode"
@@ -888,14 +915,20 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
         private val REQUEST_ADD_DEFAULT_JOBS_KEY = "add_default_jobs_key"
         private val ARG_ANSWER = "answer"
 
-        private val DEFAULT_TIME_NORM = "1"
+        private const val REQUEST_KEY_NEW_ORDER_ID = "request_key_new_order_id"
+        private const val ARG_NAME_NEW_ORDER_ID = "arg_name_new_order_id"
 
-        fun newInstanceAddWorkOrder(): WorkOrderFragment {
-            val instance = WorkOrderFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_SCREEN_MODE, ScreenMode.ADD)
-            instance.arguments = args
-            return instance
+        fun newInstanceAddWorkOrder(
+            requestKeyNewOrderId: String,
+            argNameNewOrderId: String
+        ): WorkOrderFragment {
+            return WorkOrderFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(ARG_SCREEN_MODE, ScreenMode.ADD)
+                    putString(REQUEST_KEY_NEW_ORDER_ID, requestKeyNewOrderId)
+                    putString(ARG_NAME_NEW_ORDER_ID, argNameNewOrderId)
+                }
+            }
         }
 
         fun newInstanceEditWorkOrder(workOrderId: String): WorkOrderFragment {

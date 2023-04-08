@@ -2,7 +2,6 @@ package ru.internetcloud.workorderapplication.data.network.api
 
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.internetcloud.workorderapplication.BuildConfig
@@ -13,7 +12,7 @@ class ApiClient private constructor(private val authParameters: AuthParameters) 
     private val okHttpClient: OkHttpClient =
         if (BuildConfig.DEBUG) {
             OkHttpClient.Builder()
-                .addInterceptor(HttpLoggingInterceptor().apply { this.level = HttpLoggingInterceptor.Level.BODY })
+                // .addInterceptor(HttpLoggingInterceptor().apply { this.level = HttpLoggingInterceptor.Level.BODY })
                 .addInterceptor(BasicAuthInterceptor(authParameters.login, authParameters.password))
                 .build()
         } else {

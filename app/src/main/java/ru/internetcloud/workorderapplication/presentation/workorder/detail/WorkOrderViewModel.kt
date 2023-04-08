@@ -22,7 +22,6 @@ class WorkOrderViewModel @Inject constructor(
     private val getWorkOrderUseCase: GetWorkOrderUseCase,
     private val updateWorkOrderUseCase: UpdateWorkOrderUseCase,
     private val getDefaultWorkOrderSettingsUseCase: GetDefaultWorkOrderSettingsUseCase,
-
     private val getDefaultRepairTypeJobsUseCase: GetDefaultRepairTypeJobsUseCase
 ) : ViewModel() {
 

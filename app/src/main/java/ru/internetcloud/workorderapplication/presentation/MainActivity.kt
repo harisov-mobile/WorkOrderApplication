@@ -27,8 +27,8 @@ class MainActivity :
         }
     }
 
-    override fun onAddWorkOrder() {
-        val fragment = WorkOrderFragment.newInstanceAddWorkOrder()
+    override fun onAddWorkOrder(requestKeyNewOrderAdded: String, argNameNewOrderAdded: String) {
+        val fragment = WorkOrderFragment.newInstanceAddWorkOrder(requestKeyNewOrderAdded, argNameNewOrderAdded)
         showFragmentWithBackStack(fragment)
     }
 

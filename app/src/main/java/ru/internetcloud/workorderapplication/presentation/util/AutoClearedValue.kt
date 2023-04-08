@@ -1,6 +1,5 @@
 package ru.internetcloud.workorderapplication.presentation.util
 
-import android.util.Log
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
