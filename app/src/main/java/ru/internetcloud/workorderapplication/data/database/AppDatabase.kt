@@ -22,15 +22,19 @@ import ru.internetcloud.workorderapplication.data.model.WorkOrderDbModel
 import ru.internetcloud.workorderapplication.data.model.WorkingHourDbModel
 
 @Database(
-    entities = [WorkOrderDbModel::class, RepairTypeDbModel::class, CarJobDbModel::class, DepartmentDbModel::class,
+    entities = [
+        WorkOrderDbModel::class, RepairTypeDbModel::class, CarJobDbModel::class, DepartmentDbModel::class,
         EmployeeDbModel::class, PartnerDbModel::class, CarDbModel::class, WorkingHourDbModel::class,
         PerformerDetailDbModel::class, JobDetailDbModel::class, DefaultWorkOrderSettingsDbModel::class,
-        CarModelDbModel::class, DefaultRepairTypeJobDetailDbModel::class],
+        CarModelDbModel::class, DefaultRepairTypeJobDetailDbModel::class
+    ],
     version = 3,
     exportSchema = false
 )
 @TypeConverters(DatabaseTypeConverters::class)
 abstract class AppDatabase : RoomDatabase() {
+
+    abstract fun appDao(): AppDao
 
     companion object {
 
@@ -61,8 +65,6 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
     }
-
-    abstract fun appDao(): AppDao
 }
 
 val MIGRATION_1_2 = object : Migration(1, 2) {
@@ -106,14 +108,17 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 //                "COMMIT; " +
 //                "")
 
-        database.execSQL("CREATE TABLE car_models (" +
+        database.execSQL(
+            "CREATE TABLE car_models (" +
                 "id TEXT NOT NULL DEFAULT ' '," +
                 "code1C TEXT NOT NULL DEFAULT ' '," +
                 "name TEXT NOT NULL DEFAULT ' '," +
                 "PRIMARY KEY(id)" +
-                ")")
+                ")"
+        )
 
-        database.execSQL("CREATE TABLE default_repair_type_job_details (" +
+        database.execSQL(
+            "CREATE TABLE default_repair_type_job_details (" +
                 "id TEXT NOT NULL DEFAULT ' '," +
                 "lineNumber INTEGER NOT NULL DEFAULT 0," +
                 "carModelId TEXT NOT NULL DEFAULT ' '," +
@@ -121,7 +126,8 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
                 "quantity TEXT NOT NULL DEFAULT ' '," +
                 "repairTypeId TEXT NOT NULL DEFAULT ' '," +
                 "PRIMARY KEY(id)" +
-                ")")
+                ")"
+        )
     }
 }
 

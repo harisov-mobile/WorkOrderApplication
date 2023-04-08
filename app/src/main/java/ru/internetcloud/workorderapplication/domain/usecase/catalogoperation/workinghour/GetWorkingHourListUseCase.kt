@@ -1,8 +1,8 @@
 package ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.repository.WorkingHourRepository
+import javax.inject.Inject
 
 class GetWorkingHourListUseCase @Inject constructor(
     private val workingHourRepository: WorkingHourRepository

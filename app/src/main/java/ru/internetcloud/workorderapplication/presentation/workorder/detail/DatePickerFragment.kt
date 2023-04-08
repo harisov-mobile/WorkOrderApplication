@@ -11,26 +11,7 @@ import java.util.GregorianCalendar
 
 class DatePickerFragment : DialogFragment() {
 
-    companion object {
-
-        private const val ARG_DATE = "date"
-        private const val ARG_PARENT_REQUEST_KEY = "parent_request_date_picker_key"
-        private const val ARG_PARENT_ARG_DATE_NAME = "parent_arg_date_name"
-
-        fun newInstance(date: Date, parentRequestKey: String, parentArgDateName: String): DatePickerFragment {
-            val args = Bundle().apply {
-                putSerializable(ARG_DATE, date)
-                putString(ARG_PARENT_REQUEST_KEY, parentRequestKey)
-                putString(ARG_PARENT_ARG_DATE_NAME, parentArgDateName)
-            }
-            return DatePickerFragment().apply {
-                arguments = args
-            }
-        }
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         val date = arguments?.getSerializable(ARG_DATE) as Date
         val requestKey = arguments?.getString(ARG_PARENT_REQUEST_KEY, "")
         val argDateName = arguments?.getString(ARG_PARENT_ARG_DATE_NAME, "")
@@ -60,5 +41,23 @@ class DatePickerFragment : DialogFragment() {
             initialMonth,
             initialDay
         )
+    }
+
+    companion object {
+
+        private const val ARG_DATE = "date"
+        private const val ARG_PARENT_REQUEST_KEY = "parent_request_date_picker_key"
+        private const val ARG_PARENT_ARG_DATE_NAME = "parent_arg_date_name"
+
+        fun newInstance(date: Date, parentRequestKey: String, parentArgDateName: String): DatePickerFragment {
+            val args = Bundle().apply {
+                putSerializable(ARG_DATE, date)
+                putString(ARG_PARENT_REQUEST_KEY, parentRequestKey)
+                putString(ARG_PARENT_ARG_DATE_NAME, parentArgDateName)
+            }
+            return DatePickerFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

@@ -18,31 +18,6 @@ import ru.internetcloud.workorderapplication.presentation.workorder.detail.emplo
 
 class PerformerDetailFragment : DialogFragment(), FragmentResultListener {
 
-    companion object {
-
-        private const val PERFORMER_DETAIL = "performer_detail"
-        private const val PARENT_REQUEST_KEY = "parent_request_performer_detail_picker_key"
-        private const val PARENT_PERFORMER_DETAIL_ARG_NAME = "parent_performer_detail_arg_name"
-
-        private val REQUEST_EMPLOYEE_PICKER_KEY = "request_employee_picker_key"
-        private val ARG_EMPLOYEE = "employee_picker"
-
-        fun newInstance(
-            performerDetail: PerformerDetail?,
-            parentRequestKey: String,
-            parentArgName: String
-        ): PerformerDetailFragment {
-            val args = Bundle().apply {
-                putParcelable(PERFORMER_DETAIL, performerDetail)
-                putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_PERFORMER_DETAIL_ARG_NAME, parentArgName)
-            }
-            return PerformerDetailFragment().apply {
-                arguments = args
-            }
-        }
-    }
-
     private var requestKey = ""
     private var argPerformerDetailName = ""
 
@@ -54,7 +29,6 @@ class PerformerDetailFragment : DialogFragment(), FragmentResultListener {
     private lateinit var lineNumberTextView: TextView
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         viewModel = ViewModelProvider(this).get(PerformerDetailViewModel::class.java)
 
         arguments?.let { arg ->
@@ -163,5 +137,30 @@ class PerformerDetailFragment : DialogFragment(), FragmentResultListener {
             }
         }
         return result
+    }
+
+    companion object {
+
+        private const val PERFORMER_DETAIL = "performer_detail"
+        private const val PARENT_REQUEST_KEY = "parent_request_performer_detail_picker_key"
+        private const val PARENT_PERFORMER_DETAIL_ARG_NAME = "parent_performer_detail_arg_name"
+
+        private val REQUEST_EMPLOYEE_PICKER_KEY = "request_employee_picker_key"
+        private val ARG_EMPLOYEE = "employee_picker"
+
+        fun newInstance(
+            performerDetail: PerformerDetail?,
+            parentRequestKey: String,
+            parentArgName: String
+        ): PerformerDetailFragment {
+            val args = Bundle().apply {
+                putParcelable(PERFORMER_DETAIL, performerDetail)
+                putString(PARENT_REQUEST_KEY, parentRequestKey)
+                putString(PARENT_PERFORMER_DETAIL_ARG_NAME, parentArgName)
+            }
+            return PerformerDetailFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

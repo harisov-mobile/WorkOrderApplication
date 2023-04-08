@@ -1,10 +1,10 @@
 package ru.internetcloud.workorderapplication.data.mapper
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.model.PerformerDetailDbModel
 import ru.internetcloud.workorderapplication.data.model.PerformerDetailWithRequisities
 import ru.internetcloud.workorderapplication.data.network.dto.PerformerDetailDTO
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
+import javax.inject.Inject
 
 class PerformerDetailMapper @Inject constructor(
     private val employeeMapper: EmployeeMapper

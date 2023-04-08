@@ -1,10 +1,10 @@
 package ru.internetcloud.workorderapplication.data.mapper
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.model.DefaultWorkOrderSettingsDbModel
 import ru.internetcloud.workorderapplication.data.model.DefaultWorkOrderSettingsWithRequisities
 import ru.internetcloud.workorderapplication.data.network.dto.DefaultWorkOrderSettingsDTO
 import ru.internetcloud.workorderapplication.domain.document.DefaultWorkOrderSettings
+import javax.inject.Inject
 
 class DefaultWorkOrderSettingsMapper @Inject constructor(
     private val departmentMapper: DepartmentMapper,

@@ -1,9 +1,9 @@
 package ru.internetcloud.workorderapplication.data.mapper
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.model.DepartmentDbModel
 import ru.internetcloud.workorderapplication.data.network.dto.DepartmentDTO
 import ru.internetcloud.workorderapplication.domain.catalog.Department
+import javax.inject.Inject
 
 class DepartmentMapper @Inject constructor() {
 
@@ -32,11 +32,11 @@ class DepartmentMapper @Inject constructor() {
     }
 
     fun fromDbModelToEntity(departmentDbModel: DepartmentDbModel): Department {
-            return Department(
-                id = departmentDbModel.id,
-                code1C = departmentDbModel.code1C,
-                name = departmentDbModel.name
-            )
+        return Department(
+            id = departmentDbModel.id,
+            code1C = departmentDbModel.code1C,
+            name = departmentDbModel.name
+        )
     }
 
     fun fromListDbModelToListEntity(list: List<DepartmentDbModel>) = list.map {

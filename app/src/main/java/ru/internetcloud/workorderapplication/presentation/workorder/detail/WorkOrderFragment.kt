@@ -6,21 +6,19 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Patterns
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
-import java.math.BigDecimal
-import java.util.Date
-import javax.inject.Inject
+import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
+import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.domain.catalog.Employee
@@ -31,7 +29,6 @@ import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
 import ru.internetcloud.workorderapplication.presentation.sendemail.SendWorkOrderByIdToEmailDialogFragment
@@ -44,8 +41,11 @@ import ru.internetcloud.workorderapplication.presentation.workorder.detail.partn
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailListAdapter
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.repairtype.RepairTypePickerFragment
+import java.math.BigDecimal
+import java.util.Date
+import javax.inject.Inject
 
-class WorkOrderFragment : Fragment(), FragmentResultListener {
+class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResultListener {
 
     // даггер:
     @Inject
@@ -55,9 +55,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         (requireActivity().application as WorkOrderApp).component
     }
 
-    private var _binding: FragmentWorkOrderBinding? = null
-    private val binding: FragmentWorkOrderBinding
-        get() = _binding ?: throw RuntimeException("Error FragmentWorkOrderBinding is NULL")
+    private val binding by viewBinding(FragmentWorkOrderBinding::bind)
 
     private val viewModel: WorkOrderViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(WorkOrderViewModel::class.java)
@@ -71,70 +69,13 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
     private var modifyAllowed: Boolean = true
 
-    companion object {
-
-        const val ARG_SCREEN_MODE = "screen_mode"
-        const val ARG_WORK_ORDER_ID = "work_order_id"
-
-        private val REQUEST_DATE_PICKER_KEY = "request_date_picker_key"
-        private val ARG_DATE = "date_picker"
-
-        private val REQUEST_PARTNER_PICKER_KEY = "request_partner_picker_key"
-        private val ARG_PARTNER = "partner_picker"
-
-        private val REQUEST_CAR_PICKER_KEY = "request_car_picker_key"
-        private val ARG_CAR = "car_picker"
-
-        private val REQUEST_REPAIR_TYPE_PICKER_KEY = "request_repair_type_picker_key"
-        private val ARG_REPAIR_TYPE = "repair_type_picker"
-
-        private val REQUEST_MASTER_PICKER_KEY = "request_master_picker_key"
-        private val ARG_MASTER = "master_picker"
-
-        private val REQUEST_DEPARTMENT_PICKER_KEY = "request_department_picker_key"
-        private val ARG_DEPARTMENT = "department_picker"
-
-        private val REQUEST_JOB_DETAIL_PICKER_KEY = "request_job_detail_picker_key"
-        private val REQUEST_PERFORMER_DETAIL_PICKER_KEY = "request_performer_detail_picker_key"
-        private val ARG_JOB_DETAIL = "job_detail_picker"
-        private val ARG_PERFORMER_DETAIL = "performer_detail_picker"
-
-        private val REQUEST_DATA_WAS_CHANGED_KEY = "data_was_changed_key"
-        private val REQUEST_DELETE_JOB_DETAIL_KEY = "delete_job_detail_key"
-        private val REQUEST_DELETE_PERFORMER_DETAIL_KEY = "delete_performer_detail_key"
-        private val REQUEST_ADD_DEFAULT_JOBS_KEY = "add_default_jobs_key"
-        private val ARG_ANSWER = "answer"
-
-        private val DEFAULT_TIME_NORM = "1"
-
-        fun newInstanceAddWorkOrder(): WorkOrderFragment {
-            val instance = WorkOrderFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_SCREEN_MODE, ScreenMode.ADD)
-            instance.arguments = args
-            return instance
-        }
-
-        fun newInstanceEditWorkOrder(workOrderId: String): WorkOrderFragment {
-            val instance = WorkOrderFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_SCREEN_MODE, ScreenMode.EDIT)
-            args.putString(ARG_WORK_ORDER_ID, workOrderId)
-            instance.arguments = args
-            return instance
-        }
-    }
+    private lateinit var requestKeyNewOrderId: String
+    private lateinit var argNameNewOrderId: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
         // даггер:
         component.inject(this)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentWorkOrderBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -169,11 +110,14 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
 
         setupClickListeners()
 
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                onCloseWorkOrder()
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onCloseWorkOrder()
+                }
             }
-        })
+        )
     }
 
     private fun observeViewModel() {
@@ -221,7 +165,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             if (viewModel.closeOnSave) {
                 Toast.makeText(context, getString(R.string.success_saved), Toast.LENGTH_SHORT).show()
                 activity?.supportFragmentManager?.popBackStack()
-            } else {
+            } else if (viewModel.isChanged) {
                 viewModel.isChanged = false
                 MessageDialogFragment.newInstance(getString(R.string.success_saved))
                     .show(childFragmentManager, null)
@@ -256,7 +200,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     }
 
     private fun checkArgs() {
-
         val args = requireArguments()
         if (!args.containsKey(ARG_SCREEN_MODE)) {
             throw RuntimeException("Parameter mode is absent")
@@ -267,8 +210,13 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
             throw RuntimeException("Uknown screen mode $mode")
         }
         screenMode = mode
-        if (screenMode == ScreenMode.EDIT) {
-            workOrderId = args.getString(ARG_WORK_ORDER_ID)
+        when (screenMode) {
+            ScreenMode.EDIT -> workOrderId = args.getString(ARG_WORK_ORDER_ID)
+            ScreenMode.ADD -> {
+                requestKeyNewOrderId = args.getString(REQUEST_KEY_NEW_ORDER_ID, "")
+                argNameNewOrderId = args.getString(ARG_NAME_NEW_ORDER_ID, "")
+            }
+            else -> throw RuntimeException("Uknown screen mode $screenMode")
         }
     }
 
@@ -393,11 +341,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 }
             }
         })
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun parseText(inputText: String?): String {
@@ -577,6 +520,7 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
                 if (needSaveData) {
                     viewModel.closeOnSave = true
                     viewModel.updateWorkOrder()
+                    sendNewIdToWorkOrderListFragment()
                 } else {
                     activity?.supportFragmentManager?.popBackStack()
                 }
@@ -629,9 +573,9 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     }
 
     private fun setupClickListeners() {
-
         binding.saveButton.setOnClickListener {
             viewModel.updateWorkOrder()
+            sendNewIdToWorkOrderListFragment()
         }
 
         binding.closeButton.setOnClickListener {
@@ -831,7 +775,6 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
     }
 
     private fun updateUI(order: WorkOrder) {
-
         modifyAllowed = false
 
         binding.numberEditText.setText(order.number)
@@ -919,6 +862,82 @@ class WorkOrderFragment : Fragment(), FragmentResultListener {
         // показать итоговую сумму:
         viewModel.workOrder.value?.let { order ->
             binding.totalSumTextView.setText(getSumFromJobDetail(order.jobDetails).toString())
+        }
+    }
+
+    private fun sendResultToFragment(id: String) {
+        // отправка информации в фрагмент: WorkOrderListFragment
+        val bundle = Bundle().apply {
+            putString(argNameNewOrderId, id)
+        }
+        setFragmentResult(requestKeyNewOrderId, bundle)
+    }
+
+    private fun sendNewIdToWorkOrderListFragment() {
+        viewModel.workOrder.value?.let { currentWorkOrder ->
+            if (screenMode == ScreenMode.ADD) {
+                sendResultToFragment(currentWorkOrder.id)
+            }
+        }
+    }
+
+    companion object {
+
+        const val ARG_SCREEN_MODE = "screen_mode"
+        const val ARG_WORK_ORDER_ID = "work_order_id"
+
+        private val REQUEST_DATE_PICKER_KEY = "request_date_picker_key"
+        private val ARG_DATE = "date_picker"
+
+        private val REQUEST_PARTNER_PICKER_KEY = "request_partner_picker_key"
+        private val ARG_PARTNER = "partner_picker"
+
+        private val REQUEST_CAR_PICKER_KEY = "request_car_picker_key"
+        private val ARG_CAR = "car_picker"
+
+        private val REQUEST_REPAIR_TYPE_PICKER_KEY = "request_repair_type_picker_key"
+        private val ARG_REPAIR_TYPE = "repair_type_picker"
+
+        private val REQUEST_MASTER_PICKER_KEY = "request_master_picker_key"
+        private val ARG_MASTER = "master_picker"
+
+        private val REQUEST_DEPARTMENT_PICKER_KEY = "request_department_picker_key"
+        private val ARG_DEPARTMENT = "department_picker"
+
+        private val REQUEST_JOB_DETAIL_PICKER_KEY = "request_job_detail_picker_key"
+        private val REQUEST_PERFORMER_DETAIL_PICKER_KEY = "request_performer_detail_picker_key"
+        private val ARG_JOB_DETAIL = "job_detail_picker"
+        private val ARG_PERFORMER_DETAIL = "performer_detail_picker"
+
+        private val REQUEST_DATA_WAS_CHANGED_KEY = "data_was_changed_key"
+        private val REQUEST_DELETE_JOB_DETAIL_KEY = "delete_job_detail_key"
+        private val REQUEST_DELETE_PERFORMER_DETAIL_KEY = "delete_performer_detail_key"
+        private val REQUEST_ADD_DEFAULT_JOBS_KEY = "add_default_jobs_key"
+        private val ARG_ANSWER = "answer"
+
+        private const val REQUEST_KEY_NEW_ORDER_ID = "request_key_new_order_id"
+        private const val ARG_NAME_NEW_ORDER_ID = "arg_name_new_order_id"
+
+        fun newInstanceAddWorkOrder(
+            requestKeyNewOrderId: String,
+            argNameNewOrderId: String
+        ): WorkOrderFragment {
+            return WorkOrderFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(ARG_SCREEN_MODE, ScreenMode.ADD)
+                    putString(REQUEST_KEY_NEW_ORDER_ID, requestKeyNewOrderId)
+                    putString(ARG_NAME_NEW_ORDER_ID, argNameNewOrderId)
+                }
+            }
+        }
+
+        fun newInstanceEditWorkOrder(workOrderId: String): WorkOrderFragment {
+            val instance = WorkOrderFragment()
+            val args = Bundle()
+            args.putParcelable(ARG_SCREEN_MODE, ScreenMode.EDIT)
+            args.putString(ARG_WORK_ORDER_ID, workOrderId)
+            instance.arguments = args
+            return instance
         }
     }
 }

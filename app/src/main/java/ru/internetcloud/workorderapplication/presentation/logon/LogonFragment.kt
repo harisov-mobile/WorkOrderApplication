@@ -9,14 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentLogonBinding
-import ru.internetcloud.workorderapplication.domain.common.AuthorizationPreferences
 import ru.internetcloud.workorderapplication.di.ViewModelFactory
+import ru.internetcloud.workorderapplication.domain.common.AuthorizationPreferences
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
+import javax.inject.Inject
 
 class LogonFragment : Fragment() {
 
@@ -26,8 +26,6 @@ class LogonFragment : Fragment() {
 
         fun onLaunchWorkOrderList()
     }
-
-    private var hostActivity: Callbacks? = null
 
     private lateinit var viewModel: LogonViewModel
 
@@ -43,16 +41,8 @@ class LogonFragment : Fragment() {
     private val binding: FragmentLogonBinding
         get() = _binding ?: throw RuntimeException("Error FragmentWorkOrderBinding is NULL")
 
-    companion object {
-        fun newInstance(): LogonFragment {
-            return LogonFragment()
-        }
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        hostActivity = context as Callbacks
-
         // даггер:
         component.inject(this)
     }
@@ -142,11 +132,6 @@ class LogonFragment : Fragment() {
         _binding = null
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        hostActivity = null
-    }
-
     private fun observeViewModel() {
         // подписка на ошибки
         viewModel.errorInputServer.observe(viewLifecycleOwner) {
@@ -202,7 +187,7 @@ class LogonFragment : Fragment() {
                     }
                 }
                 viewModel.resetCanContinue()
-                hostActivity?.onLaunchDataSynchronization() // запустить фрагмент, где будет сихнронизация данных из 1С
+                (requireActivity() as Callbacks).onLaunchDataSynchronization() // запустить фрагмент, где будет сихнронизация данных из 1С
             }
         }
 
@@ -217,7 +202,7 @@ class LogonFragment : Fragment() {
         // демо-режим - переход в список Заказ-нарядов:
         viewModel.canContinueDemoMode.observe(viewLifecycleOwner) {
             if (it) {
-                hostActivity?.onLaunchWorkOrderList() // запустить фрагмент, где будет показан список демо-заказ-нарядов
+                (requireActivity() as Callbacks).onLaunchWorkOrderList() // запустить фрагмент, где будет показан список демо-заказ-нарядов
             }
         }
     }
@@ -227,6 +212,12 @@ class LogonFragment : Fragment() {
             // TODO presentation - слой напрямую полез в домайн - слой! разобраться...
             binding.serverEditText.setText(AuthorizationPreferences.getStoredServer(it.applicationContext))
             binding.loginEditText.setText(AuthorizationPreferences.getStoredLogin(it.applicationContext))
+        }
+    }
+
+    companion object {
+        fun newInstance(): LogonFragment {
+            return LogonFragment()
         }
     }
 }

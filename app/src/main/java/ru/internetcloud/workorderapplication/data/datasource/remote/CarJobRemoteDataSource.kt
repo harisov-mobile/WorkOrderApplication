@@ -1,9 +1,9 @@
 package ru.internetcloud.workorderapplication.data.datasource.remote
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.mapper.CarJobMapper
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
+import javax.inject.Inject
 
 class CarJobRemoteDataSource @Inject constructor(
     private val carJobMapper: CarJobMapper

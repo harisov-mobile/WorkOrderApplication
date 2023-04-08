@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import javax.inject.Inject
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.CheckAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.SetAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadMockDataUseCase
+import javax.inject.Inject
 
 // TODO Переделать многочисленные LiveData на один State
 
@@ -17,14 +17,6 @@ class LogonViewModel @Inject constructor(
     private val checkAuthParametersUseCase: CheckAuthParametersUseCase,
     private val loadMockDataUseCase: LoadMockDataUseCase
 ) : ViewModel() {
-
-    companion object {
-        private const val BEGIN_SIZE = 4
-        private const val HTTP_PREFIX = "https://"
-        private const val DEMO_SERVER = "demo"
-        private const val DEMO_LOGIN = "demo"
-        private const val DEMO_PASSWORD = "1"
-    }
 
     private val _canContinue = MutableLiveData<Boolean>()
     val canContinue: LiveData<Boolean>
@@ -67,7 +59,6 @@ class LogonViewModel @Inject constructor(
 
         if (areFieldsValid) {
             viewModelScope.launch {
-
                 server = server.lowercase()
 
                 // демо-режим:
@@ -141,10 +132,17 @@ class LogonViewModel @Inject constructor(
 
     fun loadDemoData() {
         viewModelScope.launch {
-
             loadMockDataUseCase.loadMockData()
 
             _canContinueDemoMode.value = true
         }
+    }
+
+    companion object {
+        private const val BEGIN_SIZE = 4
+        private const val HTTP_PREFIX = "https://"
+        private const val DEMO_SERVER = "demo"
+        private const val DEMO_LOGIN = "demo"
+        private const val DEMO_PASSWORD = "1"
     }
 }

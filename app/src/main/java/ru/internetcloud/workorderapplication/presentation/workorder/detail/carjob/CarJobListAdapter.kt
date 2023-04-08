@@ -12,13 +12,7 @@ class CarJobListAdapter(var carJobs: List<CarJob>) : RecyclerView.Adapter<CarJob
     var onCarJobClickListener: ((carJob: CarJob) -> Unit)? = null
     var onCarJobLongClickListener: ((carJob: CarJob) -> Unit)? = null
 
-    companion object {
-        private const val SELECTED_ITEM_TYPE = 0
-        private const val UNSELECTED_ITEM_TYPE = 1
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarJobListViewHolder {
-
         var binding: ViewBinding? = null
         if (viewType == UNSELECTED_ITEM_TYPE) {
             binding = ItemCarJobListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -67,5 +61,10 @@ class CarJobListAdapter(var carJobs: List<CarJob>) : RecyclerView.Adapter<CarJob
         } else {
             UNSELECTED_ITEM_TYPE
         }
+    }
+
+    companion object {
+        private const val SELECTED_ITEM_TYPE = 0
+        private const val UNSELECTED_ITEM_TYPE = 1
     }
 }

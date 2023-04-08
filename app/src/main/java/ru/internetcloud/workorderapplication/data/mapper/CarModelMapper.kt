@@ -1,9 +1,9 @@
 package ru.internetcloud.workorderapplication.data.mapper
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.model.CarModelDbModel
 import ru.internetcloud.workorderapplication.data.network.dto.CarModelDTO
 import ru.internetcloud.workorderapplication.domain.catalog.CarModel
+import javax.inject.Inject
 
 class CarModelMapper @Inject constructor() {
 

@@ -1,9 +1,5 @@
 package ru.internetcloud.workorderapplication.data.repository
 
-import java.lang.Exception
-import java.math.BigDecimal
-import java.util.Date
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.datasource.local.CarJobLocalDataSource
 import ru.internetcloud.workorderapplication.data.datasource.local.CarLocalDataSource
 import ru.internetcloud.workorderapplication.data.datasource.local.CarModelLocalDataSource
@@ -47,6 +43,10 @@ import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.SynchroRepository
+import java.lang.Exception
+import java.math.BigDecimal
+import java.util.Date
+import javax.inject.Inject
 
 class SynchroRepositoryImpl @Inject constructor(
     private val jobDetailMapper: JobDetailMapper,
@@ -90,7 +90,6 @@ class SynchroRepositoryImpl @Inject constructor(
 ) : SynchroRepository {
 
     override suspend fun sendWorkOrderToEmail(id: String, email: String): FunctionResult {
-
         val result = FunctionResult()
 
         val sendRequest = SendRequest(id = id, email = email)
@@ -144,7 +143,6 @@ class SynchroRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateData(): UpdateState {
-
         var exception: Exception? = null
 
         val quantity = workOrderLocalDataSource.getModifiedWorkOrdersQuantity()
@@ -175,7 +173,6 @@ class SynchroRepositoryImpl @Inject constructor(
                 return UpdateState.ContinueWithoutSynchro(exception)
             }
         } else {
-
             var refreshingResult = refreshDepartment()
             if (refreshingResult is RefreshingResult.Error) {
                 return UpdateState.Error(refreshingResult.exception)
@@ -231,7 +228,6 @@ class SynchroRepositoryImpl @Inject constructor(
     }
 
     suspend fun uploadWorkOrdersToServer(): UpdateState {
-
         val listWO = workOrderLocalDataSource.getModifiedWorkOrders()
 
         val result = if (listWO.isEmpty()) {
@@ -253,7 +249,6 @@ class SynchroRepositoryImpl @Inject constructor(
     }
 
     suspend fun refreshDepartment(): RefreshingResult {
-
         departmentLocalDataSource.deleteAllDepartments()
 
         try {
@@ -270,7 +265,6 @@ class SynchroRepositoryImpl @Inject constructor(
     }
 
     suspend fun refreshPartner(): RefreshingResult {
-
         partnerLocalDataSource.deleteAllPartners()
 
         try {
@@ -285,7 +279,6 @@ class SynchroRepositoryImpl @Inject constructor(
     }
 
     suspend fun refreshEmployee(): RefreshingResult {
-
         employeeLocalDataSource.deleteAllEmployees()
 
         try {
@@ -300,7 +293,6 @@ class SynchroRepositoryImpl @Inject constructor(
     }
 
     suspend fun refreshCarJob(): RefreshingResult {
-
         carJobLocalDataSource.deleteAllCarJobs()
 
         try {
@@ -315,7 +307,6 @@ class SynchroRepositoryImpl @Inject constructor(
     }
 
     suspend fun refreshCarModel(): RefreshingResult {
-
         carModelLocalDataSource.deleteAllCarModels()
 
         try {
@@ -330,7 +321,6 @@ class SynchroRepositoryImpl @Inject constructor(
     }
 
     suspend fun refreshCar(): RefreshingResult {
-
         carLocalDataSource.deleteAllCars()
 
         try {
@@ -345,7 +335,6 @@ class SynchroRepositoryImpl @Inject constructor(
     }
 
     suspend fun refreshWorkingHour(): RefreshingResult {
-
         workingHourLocalDataSource.deleteAllWorkingHours()
 
         try {
@@ -360,7 +349,6 @@ class SynchroRepositoryImpl @Inject constructor(
     }
 
     suspend fun refreshDefaultWorkOrderSettings(): RefreshingResult {
-
         defWorkOrderSettingsLocal.deleteAllDefaultWorkOrderSettings()
 
         try {
@@ -375,7 +363,6 @@ class SynchroRepositoryImpl @Inject constructor(
     }
 
     suspend fun refreshRepairType(): RefreshingResult {
-
         repairTypeLocalDataSource.deleteAllRepairTypes()
         repairTypeLocalDataSource.deleteAllDefaultRepairTypeJobDetails()
 
@@ -397,7 +384,6 @@ class SynchroRepositoryImpl @Inject constructor(
     }
 
     suspend fun refreshWorkOrder(): RefreshingResult {
-
         workOrderLocalDataSource.deleteAllJobDetails()
         workOrderLocalDataSource.deleteAllPerformers()
         workOrderLocalDataSource.deleteAllWorkOrders()

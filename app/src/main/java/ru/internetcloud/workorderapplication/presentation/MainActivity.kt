@@ -9,7 +9,8 @@ import ru.internetcloud.workorderapplication.presentation.synchro.DataSynchroniz
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.WorkOrderFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.list.WorkOrderListFragment
 
-class MainActivity : AppCompatActivity(),
+class MainActivity :
+    AppCompatActivity(),
     WorkOrderListFragment.Callbacks,
     LogonFragment.Callbacks,
     DataSynchronizationFragment.Callbacks {
@@ -26,8 +27,8 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    override fun onAddWorkOrder() {
-        val fragment = WorkOrderFragment.newInstanceAddWorkOrder()
+    override fun onAddWorkOrder(requestKeyNewOrderAdded: String, argNameNewOrderAdded: String) {
+        val fragment = WorkOrderFragment.newInstanceAddWorkOrder(requestKeyNewOrderAdded, argNameNewOrderAdded)
         showFragmentWithBackStack(fragment)
     }
 

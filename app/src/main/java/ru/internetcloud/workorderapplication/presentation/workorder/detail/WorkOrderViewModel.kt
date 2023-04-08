@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import java.util.UUID
-import javax.inject.Inject
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJobDetail
 import ru.internetcloud.workorderapplication.domain.catalog.RepairType
@@ -17,12 +15,13 @@ import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.rep
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.UpdateWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.settingsoperation.GetDefaultWorkOrderSettingsUseCase
+import java.util.UUID
+import javax.inject.Inject
 
 class WorkOrderViewModel @Inject constructor(
     private val getWorkOrderUseCase: GetWorkOrderUseCase,
     private val updateWorkOrderUseCase: UpdateWorkOrderUseCase,
     private val getDefaultWorkOrderSettingsUseCase: GetDefaultWorkOrderSettingsUseCase,
-
     private val getDefaultRepairTypeJobsUseCase: GetDefaultRepairTypeJobsUseCase
 ) : ViewModel() {
 
@@ -63,12 +62,6 @@ class WorkOrderViewModel @Inject constructor(
 
     var defaultCarJobs: List<DefaultRepairTypeJobDetail> = mutableListOf()
     var defaultWorkOrderSettings: DefaultWorkOrderSettings? = null
-
-    companion object {
-        private const val NUMBER_PREFIX = "new"
-        private const val SPACE_SYMBOL = " "
-        private const val NOT_FOUND = -1
-    }
 
     // -------------------------------------------------------------------------------
     fun loadWorkOrder(workOrderId: String) {
@@ -266,7 +259,6 @@ class WorkOrderViewModel @Inject constructor(
             if (repairType != null && workOrder.value?.car != null) {
                 defaultCarJobs = getDefaultRepairTypeJobsUseCase.getDefaultRepairTypeJobDetails(repairType)
                 if (!defaultCarJobs.isEmpty()) {
-
                     workOrder.value?.car?.let { car ->
                         for (currentCarJob in defaultCarJobs) {
                             if (currentCarJob.carModel == null || currentCarJob.carModel == car.carModel) {
@@ -278,5 +270,11 @@ class WorkOrderViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    companion object {
+        private const val NUMBER_PREFIX = "new"
+        private const val SPACE_SYMBOL = " "
+        private const val NOT_FOUND = -1
     }
 }

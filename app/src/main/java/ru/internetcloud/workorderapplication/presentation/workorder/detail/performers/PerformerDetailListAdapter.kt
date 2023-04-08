@@ -16,13 +16,7 @@ class PerformerDetailListAdapter : ListAdapter<PerformerDetail, PerformerDetailL
     // а первоначально переменная содержит null
     var onPerformerDetailClickListener: ((performerDetail: PerformerDetail) -> Unit)? = null
 
-    companion object {
-        private const val SELECTED_ITEM_TYPE = 0
-        private const val UNSELECTED_ITEM_TYPE = 1
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PerformerDetailListViewHolder {
-
         var binding: ViewBinding? = null
         if (viewType == UNSELECTED_ITEM_TYPE) {
             binding = ItemPerformerDetailListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -62,5 +56,10 @@ class PerformerDetailListAdapter : ListAdapter<PerformerDetail, PerformerDetailL
         } else {
             UNSELECTED_ITEM_TYPE
         }
+    }
+
+    companion object {
+        private const val SELECTED_ITEM_TYPE = 0
+        private const val UNSELECTED_ITEM_TYPE = 1
     }
 }

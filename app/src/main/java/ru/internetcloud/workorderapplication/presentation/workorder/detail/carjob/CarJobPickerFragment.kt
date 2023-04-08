@@ -13,34 +13,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
-import ru.internetcloud.workorderapplication.domain.catalog.CarJob
 import ru.internetcloud.workorderapplication.di.ViewModelFactory
+import ru.internetcloud.workorderapplication.domain.catalog.CarJob
+import javax.inject.Inject
 
 class CarJobPickerFragment : DialogFragment() {
-
-    companion object {
-
-        private const val CAR_JOB = "car_job"
-        private const val PARENT_REQUEST_KEY = "parent_request_car_job_picker_key"
-        private const val PARENT_CAR_JOB_ARG_NAME = "parent_car_job_arg_name"
-
-        private const val NOT_FOUND_POSITION = -1
-        private const val DIFFERENCE_POS = 5
-
-        fun newInstance(carJob: CarJob?, parentRequestKey: String, parentArgDateName: String): CarJobPickerFragment {
-            val args = Bundle().apply {
-                putParcelable(CAR_JOB, carJob)
-                putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_CAR_JOB_ARG_NAME, parentArgDateName)
-            }
-            return CarJobPickerFragment().apply {
-                arguments = args
-            }
-        }
-    }
 
     // даггер:
     @Inject
@@ -62,7 +41,6 @@ class CarJobPickerFragment : DialogFragment() {
     private lateinit var titleTextView: TextView
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         // даггер:
         component.inject(this)
 
@@ -212,5 +190,26 @@ class CarJobPickerFragment : DialogFragment() {
             putParcelable(argCarJobName, result)
         }
         setFragmentResult(requestKey, bundle)
+    }
+
+    companion object {
+
+        private const val CAR_JOB = "car_job"
+        private const val PARENT_REQUEST_KEY = "parent_request_car_job_picker_key"
+        private const val PARENT_CAR_JOB_ARG_NAME = "parent_car_job_arg_name"
+
+        private const val NOT_FOUND_POSITION = -1
+        private const val DIFFERENCE_POS = 5
+
+        fun newInstance(carJob: CarJob?, parentRequestKey: String, parentArgDateName: String): CarJobPickerFragment {
+            val args = Bundle().apply {
+                putParcelable(CAR_JOB, carJob)
+                putString(PARENT_REQUEST_KEY, parentRequestKey)
+                putString(PARENT_CAR_JOB_ARG_NAME, parentArgDateName)
+            }
+            return CarJobPickerFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

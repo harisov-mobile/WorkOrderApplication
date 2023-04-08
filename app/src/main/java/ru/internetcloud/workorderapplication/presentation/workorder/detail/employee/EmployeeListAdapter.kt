@@ -12,13 +12,7 @@ class EmployeeListAdapter(var employees: List<Employee>) : RecyclerView.Adapter<
     var onEmployeeClickListener: ((employee: Employee) -> Unit)? = null
     var onEmployeeLongClickListener: ((employee: Employee) -> Unit)? = null
 
-    companion object {
-        private const val SELECTED_ITEM_TYPE = 0
-        private const val UNSELECTED_ITEM_TYPE = 1
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmployeeListViewHolder {
-
         var binding: ViewBinding? = null
         if (viewType == UNSELECTED_ITEM_TYPE) {
             binding = ItemEmployeeListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -65,5 +59,10 @@ class EmployeeListAdapter(var employees: List<Employee>) : RecyclerView.Adapter<
         } else {
             UNSELECTED_ITEM_TYPE
         }
+    }
+
+    companion object {
+        private const val SELECTED_ITEM_TYPE = 0
+        private const val UNSELECTED_ITEM_TYPE = 1
     }
 }

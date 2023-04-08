@@ -1,9 +1,9 @@
 package ru.internetcloud.workorderapplication.data.repository.common
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.datasource.local.DefaultWorkOrderSettingsLocalDataSource
 import ru.internetcloud.workorderapplication.domain.document.DefaultWorkOrderSettings
 import ru.internetcloud.workorderapplication.domain.repository.DefaultWorkOrderSettingsRepository
+import javax.inject.Inject
 
 class DefaultWorkOrderSettingsRepositoryImpl @Inject constructor(
     private val localDataSource: DefaultWorkOrderSettingsLocalDataSource

@@ -13,34 +13,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
-import ru.internetcloud.workorderapplication.domain.catalog.Department
 import ru.internetcloud.workorderapplication.di.ViewModelFactory
+import ru.internetcloud.workorderapplication.domain.catalog.Department
+import javax.inject.Inject
 
 class DepartmentPickerFragment : DialogFragment() {
-
-    companion object {
-
-        private const val DEPARTMENT = "department"
-        private const val PARENT_REQUEST_KEY = "parent_request_department_picker_key"
-        private const val PARENT_DEPARTMENT_ARG_NAME = "parent_department_arg_name"
-
-        private const val NOT_FOUND_POSITION = -1
-        private const val DIFFERENCE_POS = 5
-
-        fun newInstance(department: Department?, parentRequestKey: String, parentArgName: String): DepartmentPickerFragment {
-            val args = Bundle().apply {
-                putParcelable(DEPARTMENT, department)
-                putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_DEPARTMENT_ARG_NAME, parentArgName)
-            }
-            return DepartmentPickerFragment().apply {
-                arguments = args
-            }
-        }
-    }
 
     // даггер:
     @Inject
@@ -209,5 +188,26 @@ class DepartmentPickerFragment : DialogFragment() {
             putParcelable(argDepartmentName, result)
         }
         setFragmentResult(requestKey, bundle)
+    }
+
+    companion object {
+
+        private const val DEPARTMENT = "department"
+        private const val PARENT_REQUEST_KEY = "parent_request_department_picker_key"
+        private const val PARENT_DEPARTMENT_ARG_NAME = "parent_department_arg_name"
+
+        private const val NOT_FOUND_POSITION = -1
+        private const val DIFFERENCE_POS = 5
+
+        fun newInstance(department: Department?, parentRequestKey: String, parentArgName: String): DepartmentPickerFragment {
+            val args = Bundle().apply {
+                putParcelable(DEPARTMENT, department)
+                putString(PARENT_REQUEST_KEY, parentRequestKey)
+                putString(PARENT_DEPARTMENT_ARG_NAME, parentArgName)
+            }
+            return DepartmentPickerFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

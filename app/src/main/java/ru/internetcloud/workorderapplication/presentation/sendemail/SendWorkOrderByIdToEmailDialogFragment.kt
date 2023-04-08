@@ -11,10 +11,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.di.ViewModelFactory
+import javax.inject.Inject
 
 class SendWorkOrderByIdToEmailDialogFragment : DialogFragment() {
 
@@ -32,22 +32,6 @@ class SendWorkOrderByIdToEmailDialogFragment : DialogFragment() {
     private lateinit var synchroResultTextView: TextView
     private lateinit var emailTextView: TextView
     private lateinit var progressBar: ProgressBar
-
-    companion object {
-
-        private const val ORDER_ID = "order_id"
-        private const val EMAIL = "email"
-
-        fun newInstance(id: String, email: String): SendWorkOrderByIdToEmailDialogFragment {
-            val args = Bundle().apply {
-                putString(ORDER_ID, id)
-                putString(EMAIL, email)
-            }
-            return SendWorkOrderByIdToEmailDialogFragment().apply {
-                arguments = args
-            }
-        }
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // даггер:
@@ -135,6 +119,22 @@ class SendWorkOrderByIdToEmailDialogFragment : DialogFragment() {
                 progressBar.visibility = View.INVISIBLE
                 okButton.visibility = View.VISIBLE
                 cancelButton.visibility = View.INVISIBLE
+            }
+        }
+    }
+
+    companion object {
+
+        private const val ORDER_ID = "order_id"
+        private const val EMAIL = "email"
+
+        fun newInstance(id: String, email: String): SendWorkOrderByIdToEmailDialogFragment {
+            val args = Bundle().apply {
+                putString(ORDER_ID, id)
+                putString(EMAIL, email)
+            }
+            return SendWorkOrderByIdToEmailDialogFragment().apply {
+                arguments = args
             }
         }
     }

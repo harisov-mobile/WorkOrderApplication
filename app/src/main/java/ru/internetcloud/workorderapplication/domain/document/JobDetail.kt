@@ -1,10 +1,10 @@
 package ru.internetcloud.workorderapplication.domain.document
 
 import android.os.Parcelable
-import java.math.BigDecimal
 import kotlinx.parcelize.Parcelize
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
+import java.math.BigDecimal
 
 // это строка табличной части "Работы"
 @Parcelize
@@ -19,15 +19,6 @@ data class JobDetail(
     var isSelected: Boolean = false
 ) : Parcelable {
 
-    companion object {
-        fun getNewJobDetail(order: WorkOrder): JobDetail {
-            var lineNumber = order.jobDetails.size
-            lineNumber++
-            val id = order.id + "_" + lineNumber.toString()
-            return JobDetail(id = id, lineNumber = lineNumber)
-        }
-    }
-
     fun copyFields(anotherJobDetail: JobDetail) {
         this.id = anotherJobDetail.id
         this.lineNumber = anotherJobDetail.lineNumber
@@ -37,5 +28,14 @@ data class JobDetail(
         this.workingHour = anotherJobDetail.workingHour
         this.sum = anotherJobDetail.sum
         this.isSelected = anotherJobDetail.isSelected
+    }
+
+    companion object {
+        fun getNewJobDetail(order: WorkOrder): JobDetail {
+            var lineNumber = order.jobDetails.size
+            lineNumber++
+            val id = order.id + "_" + lineNumber.toString()
+            return JobDetail(id = id, lineNumber = lineNumber)
+        }
     }
 }

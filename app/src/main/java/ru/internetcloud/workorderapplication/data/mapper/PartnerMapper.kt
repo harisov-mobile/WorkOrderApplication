@@ -1,9 +1,9 @@
 package ru.internetcloud.workorderapplication.data.mapper
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.model.PartnerDbModel
 import ru.internetcloud.workorderapplication.data.network.dto.PartnerDTO
 import ru.internetcloud.workorderapplication.domain.catalog.Partner
+import javax.inject.Inject
 
 class PartnerMapper @Inject constructor() {
 
@@ -34,14 +34,14 @@ class PartnerMapper @Inject constructor() {
     }
 
     fun fromDbModelToEntity(partnerDbModel: PartnerDbModel): Partner {
-            return Partner(
-                id = partnerDbModel.id,
-                code1C = partnerDbModel.code1C,
-                name = partnerDbModel.name,
-                fullName = partnerDbModel.fullName,
-                inn = partnerDbModel.inn,
-                kpp = partnerDbModel.kpp
-            )
+        return Partner(
+            id = partnerDbModel.id,
+            code1C = partnerDbModel.code1C,
+            name = partnerDbModel.name,
+            fullName = partnerDbModel.fullName,
+            inn = partnerDbModel.inn,
+            kpp = partnerDbModel.kpp
+        )
     }
 
     fun fromEntityToDbModel(partner: Partner): PartnerDbModel {

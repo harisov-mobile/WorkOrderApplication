@@ -12,13 +12,7 @@ class WorkOrderListAdapter(
     private val workOrderListListener: WorkOrderListListener
 ) : ListAdapter<WorkOrder, WorkOrderListViewHolder>(WorkOrderDiffCallback()) {
 
-    companion object {
-        private const val POSTED_ITEM_TYPE = 1
-        private const val UNPOSTED_ITEM_TYPE = 0
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkOrderListViewHolder {
-
         val binding: ViewBinding
         if (viewType == POSTED_ITEM_TYPE) {
             binding = ItemWorkOrderListPostedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -44,5 +38,10 @@ class WorkOrderListAdapter(
         } else {
             UNPOSTED_ITEM_TYPE
         }
+    }
+
+    companion object {
+        private const val POSTED_ITEM_TYPE = 1
+        private const val UNPOSTED_ITEM_TYPE = 0
     }
 }

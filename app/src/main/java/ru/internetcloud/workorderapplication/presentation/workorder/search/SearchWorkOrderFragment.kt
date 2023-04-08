@@ -10,42 +10,14 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
-import java.util.Date
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.FragmentWoFilterBinding
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.DatePickerFragment
+import java.util.Date
 
 class SearchWorkOrderFragment : DialogFragment(), FragmentResultListener {
-
-    companion object {
-
-        private const val SEARCH_DATA = "search_data"
-        private const val PARENT_REQUEST_KEY = "parent_request_picker_key"
-        private const val PARENT_ARG_NAME = "parent_arg_name"
-
-        private val REQUEST_DATE_FROM_PICKER_KEY = "request_date_from_picker_key"
-        private val ARG_DATE_FROM = "date_from_picker"
-
-        private val REQUEST_DATE_TO_PICKER_KEY = "request_date_to_picker_key"
-        private val ARG_DATE_TO = "date_to_picker"
-
-        fun newInstance(
-            searchWorkOrderData: SearchWorkOrderData,
-            parentRequestKey: String,
-            parentArgName: String
-        ): SearchWorkOrderFragment {
-            val args = Bundle().apply {
-                putParcelable(SEARCH_DATA, searchWorkOrderData)
-                putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_ARG_NAME, parentArgName)
-            }
-            return SearchWorkOrderFragment().apply {
-                arguments = args
-            }
-        }
-    }
 
     private var requestKey = ""
     private var argSearchDataName = ""
@@ -57,7 +29,6 @@ class SearchWorkOrderFragment : DialogFragment(), FragmentResultListener {
         get() = _binding ?: throw RuntimeException("Error FragmentWoFilterBinding is NULL")
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         viewModel = ViewModelProvider(this).get(SearchWorkOrderViewModel::class.java)
 
         arguments?.let { arg ->
@@ -184,7 +155,6 @@ class SearchWorkOrderFragment : DialogFragment(), FragmentResultListener {
     }
 
     private fun setupClickListeners() {
-
         binding.clearNumberButton.setOnClickListener {
             viewModel.searchWorkOrderData?.numberText = ""
             binding.numberEditText.setText("")
@@ -212,12 +182,12 @@ class SearchWorkOrderFragment : DialogFragment(), FragmentResultListener {
 
         binding.clearDateFromButton.setOnClickListener {
             viewModel.searchWorkOrderData?.dateFrom = null
-                binding.dateFromTextView.text = ""
+            binding.dateFromTextView.text = ""
         }
 
         binding.clearDateToButton.setOnClickListener {
             viewModel.searchWorkOrderData?.dateTo = null
-                binding.dateToTextView.text = ""
+            binding.dateToTextView.text = ""
         }
 
         binding.dateFromSelectButton.setOnClickListener {
@@ -290,5 +260,33 @@ class SearchWorkOrderFragment : DialogFragment(), FragmentResultListener {
 
     private fun parseText(inputText: String?): String {
         return inputText?.trim() ?: ""
+    }
+
+    companion object {
+
+        private const val SEARCH_DATA = "search_data"
+        private const val PARENT_REQUEST_KEY = "parent_request_picker_key"
+        private const val PARENT_ARG_NAME = "parent_arg_name"
+
+        private val REQUEST_DATE_FROM_PICKER_KEY = "request_date_from_picker_key"
+        private val ARG_DATE_FROM = "date_from_picker"
+
+        private val REQUEST_DATE_TO_PICKER_KEY = "request_date_to_picker_key"
+        private val ARG_DATE_TO = "date_to_picker"
+
+        fun newInstance(
+            searchWorkOrderData: SearchWorkOrderData,
+            parentRequestKey: String,
+            parentArgName: String
+        ): SearchWorkOrderFragment {
+            val args = Bundle().apply {
+                putParcelable(SEARCH_DATA, searchWorkOrderData)
+                putString(PARENT_REQUEST_KEY, parentRequestKey)
+                putString(PARENT_ARG_NAME, parentArgName)
+            }
+            return SearchWorkOrderFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

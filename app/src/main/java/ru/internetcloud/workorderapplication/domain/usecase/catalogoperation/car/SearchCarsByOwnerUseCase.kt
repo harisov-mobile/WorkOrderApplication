@@ -1,8 +1,8 @@
 package ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.domain.catalog.Car
 import ru.internetcloud.workorderapplication.domain.repository.CarRepository
+import javax.inject.Inject
 
 class SearchCarsByOwnerUseCase @Inject constructor(
     private val carRepository: CarRepository

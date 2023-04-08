@@ -1,10 +1,10 @@
 package ru.internetcloud.workorderapplication.data.mapper
 
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.data.model.JobDetailDbModel
 import ru.internetcloud.workorderapplication.data.model.JobDetailWithRequisities
 import ru.internetcloud.workorderapplication.data.network.dto.JobDetailDTO
 import ru.internetcloud.workorderapplication.domain.document.JobDetail
+import javax.inject.Inject
 
 class JobDetailMapper @Inject constructor(
     private val carJobMapper: CarJobMapper,

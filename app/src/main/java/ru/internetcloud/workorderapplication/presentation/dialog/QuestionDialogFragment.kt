@@ -9,30 +9,11 @@ import ru.internetcloud.workorderapplication.R
 
 class QuestionDialogFragment : DialogFragment() {
 
-    companion object {
-
-        private const val QUESTION_ARG = "question_arg"
-        private const val PARENT_REQUEST_KEY = "parent_request_key"
-        private const val PARENT_ANSWER_ARG_NAME = "parent_answer_arg_name"
-
-        fun newInstance(question: String, parentRequestKey: String, parentAnswerArgName: String): QuestionDialogFragment {
-            val args = Bundle().apply {
-                putString(QUESTION_ARG, question)
-                putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_ANSWER_ARG_NAME, parentAnswerArgName)
-            }
-            return QuestionDialogFragment().apply {
-                arguments = args
-            }
-        }
-    }
-
     private var question: String = ""
     private var requestKey = ""
     private var answerArgName = ""
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         arguments?.let { arg ->
             question = arg.getString(QUESTION_ARG, "")
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
@@ -59,5 +40,23 @@ class QuestionDialogFragment : DialogFragment() {
             putBoolean(answerArgName, result)
         }
         setFragmentResult(requestKey, bundle)
+    }
+
+    companion object {
+
+        private const val QUESTION_ARG = "question_arg"
+        private const val PARENT_REQUEST_KEY = "parent_request_key"
+        private const val PARENT_ANSWER_ARG_NAME = "parent_answer_arg_name"
+
+        fun newInstance(question: String, parentRequestKey: String, parentAnswerArgName: String): QuestionDialogFragment {
+            val args = Bundle().apply {
+                putString(QUESTION_ARG, question)
+                putString(PARENT_REQUEST_KEY, parentRequestKey)
+                putString(PARENT_ANSWER_ARG_NAME, parentAnswerArgName)
+            }
+            return QuestionDialogFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

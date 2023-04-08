@@ -2,40 +2,37 @@ package ru.internetcloud.workorderapplication.presentation.workorder.list
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import javax.inject.Inject
+import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
+import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderListBinding
+import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
 import ru.internetcloud.workorderapplication.domain.document.WorkOrder
-import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.search.SearchWorkOrderFragment
+import javax.inject.Inject
 
-class WorkOrderListFragment : Fragment(), FragmentResultListener {
+class WorkOrderListFragment : Fragment(R.layout.fragment_work_order_list), FragmentResultListener {
 
     // интерфейс обратного вызова
     interface Callbacks {
-        fun onAddWorkOrder()
-
+        fun onAddWorkOrder(requestKeyNewOrderAdded: String, argNameNewOrderAdded: String)
         fun onEditWorkOrder(workOrderId: String)
-
         fun onLaunchDataSynchronization()
     }
 
@@ -47,39 +44,20 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         (requireActivity().application as WorkOrderApp).component
     }
 
-    private var hostActivity: Callbacks? = null
+    private val binding by viewBinding(FragmentWorkOrderListBinding::bind)
 
     private lateinit var viewModel: WorkOrderListViewModel
-    private lateinit var workOrderRecyclerView: RecyclerView
-    private lateinit var workOrderListAdapter: WorkOrderListAdapter
-    private lateinit var addFloatingActionButton: FloatingActionButton
-    private lateinit var filterDescriptionTextView: TextView
-
-    companion object {
-
-        private val REQUEST_EXIT_QUESTION_KEY = "exit_question_key"
-        private val ARG_ANSWER = "answer"
-
-        private val REQUEST_SEARCH_WO_DATA_PICKER_KEY = "request_search_wo_data_picker_key"
-        private val ARG_SEARCH_WO_DATA = "search_wo_data_picker"
-
-        fun newInstance(): WorkOrderListFragment {
-            return WorkOrderListFragment()
-        }
-    }
+    private var workOrderListAdapter: WorkOrderListAdapter? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
         // даггер:
         component.inject(this)
-
-        hostActivity = context as Callbacks
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_work_order_list, container, false)
-        return view
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.workOrderRecyclerView.adapter = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,46 +65,62 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(WorkOrderListViewModel::class.java)
 
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                onExitWorkOrderList()
-            }
-        })
-
         setHasOptionsMenu(true)
-
-        filterDescriptionTextView = view.findViewById(R.id.filter_description_text_view)
-
-        addFloatingActionButton = view.findViewById(R.id.add_fab)
-        addFloatingActionButton.setOnClickListener {
-            // TODO при добавлении нового заказ-наряда надо спозиционироваться на нем,
-            // сейчас же просто в конец списка перемещаюсь.
-            viewModel.selectedWorkOrder = null
-            hostActivity?.onAddWorkOrder()
-        }
-
+        setupClickListeners()
         setupWorkOrderRecyclerView(view)
-        observeViewModel()
         setupFilterDescription()
-
-        childFragmentManager.setFragmentResultListener(REQUEST_EXIT_QUESTION_KEY, viewLifecycleOwner, this)
-        childFragmentManager.setFragmentResultListener(REQUEST_SEARCH_WO_DATA_PICKER_KEY, viewLifecycleOwner, this)
+        setupResultListeners()
+        observeViewModel()
     }
 
-    private fun observeViewModel() {
-        viewModel.workOrderListLiveData.observe(
+    private fun setupResultListeners() {
+        childFragmentManager.setFragmentResultListener(REQUEST_EXIT_QUESTION_KEY, viewLifecycleOwner, this)
+        childFragmentManager.setFragmentResultListener(REQUEST_SEARCH_WO_DATA_PICKER_KEY, viewLifecycleOwner, this)
+
+        setFragmentResultListener(REQUEST_KEY_NEW_ORDER_ID_PARAM) { key, bundle ->
+            viewModel.newWorkOrderId = bundle.getString(ARG_NAME_NEW_ORDER_ID_PARAM)
+        }
+    }
+
+    private fun setupClickListeners() {
+        binding.addFab.setOnClickListener {
+            // при добавлении нового заказ-наряда надо спозиционироваться на нем
+            viewModel.selectedWorkOrder = null
+            (requireActivity() as Callbacks).onAddWorkOrder(REQUEST_KEY_NEW_ORDER_ID_PARAM, ARG_NAME_NEW_ORDER_ID_PARAM)
+        }
+
+        activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
-            { list ->
-                workOrderListAdapter.submitList(list) {
-                    // когда DiffCallback сделает свою работу, тогда itemCount будет выдавать правильное значение
-                    // и можно позиционироваться:
-                    viewModel.selectedWorkOrder ?: let {
-                        val scrollPosition = workOrderListAdapter.itemCount - 1
-                        workOrderRecyclerView.scrollToPosition(scrollPosition)
-                    }
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onExitWorkOrderList()
                 }
             }
         )
+    }
+
+    private fun observeViewModel() {
+        viewModel.workOrderListLiveData.observe(viewLifecycleOwner) { list ->
+            workOrderListAdapter?.submitList(list) {
+                // когда DiffCallback сделает свою работу, тогда itemCount будет выдавать правильное значение
+                // и можно позиционироваться:
+                if (viewModel.scrollDownto) {
+                    binding.workOrderRecyclerView.scrollToPosition(list.size - 1)
+                    viewModel.scrollDownto = false
+                } else {
+                    viewModel.newWorkOrderId?.let { newId ->
+                        workOrderListAdapter?.let { listAdapter ->
+                            val scrollPosition = viewModel.getPosition(newId)
+                            scrollPosition?.let {
+                                // при добавлении нового заказ-наряда надо спозиционироваться на нем
+                                binding.workOrderRecyclerView.scrollToPosition(scrollPosition)
+                                viewModel.newWorkOrderId = null
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -136,7 +130,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         when (item.itemId) {
             R.id.search_menu_item -> {
                 onSearch()
@@ -149,7 +142,9 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
             }
 
             R.id.synchronize_data_menu_item -> {
-                hostActivity?.onLaunchDataSynchronization() // запустить фрагмент, где будет синхронизация данных из 1С
+                viewModel.scrollDownto = true
+                // запустить фрагмент, где будет синхронизация данных из 1С
+                (requireActivity() as Callbacks).onLaunchDataSynchronization()
                 return true
             }
 
@@ -177,7 +172,6 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
     }
 
     private fun onSearch() {
-
         SearchWorkOrderFragment
             .newInstance(
                 viewModel.searchWorkOrderData,
@@ -187,25 +181,20 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
             .show(childFragmentManager, REQUEST_SEARCH_WO_DATA_PICKER_KEY)
     }
 
-    override fun onDetach() {
-        super.onDetach()
-
-        hostActivity = null
-    }
-
     private fun setupWorkOrderRecyclerView(view: View) {
-        workOrderRecyclerView = view.findViewById<RecyclerView>(R.id.work_order_recycler_view)
-
-        val workOrderListListener = object : WorkOrderListListener {
-            override fun onItemClick(workOrder: WorkOrder) {
-                hostActivity?.onEditWorkOrder(workOrder.id)
+        if (workOrderListAdapter == null) {
+            val workOrderListListener = object : WorkOrderListListener {
+                override fun onItemClick(workOrder: WorkOrder) {
+                    (requireActivity() as Callbacks).onEditWorkOrder(workOrder.id)
+                }
             }
+            workOrderListAdapter = WorkOrderListAdapter(workOrderListListener)
         }
 
-        workOrderListAdapter = WorkOrderListAdapter(workOrderListListener)
-        workOrderRecyclerView.adapter = workOrderListAdapter
+        binding.workOrderRecyclerView.adapter = workOrderListAdapter
         // вместо app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" который был в XML
-        workOrderRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.workOrderRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.workOrderRecyclerView.setHasFixedSize(true)
     }
 
     private fun onExitWorkOrderList() {
@@ -233,7 +222,7 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
                     if (data != viewModel.searchWorkOrderData) {
                         viewModel.searchWorkOrderData = data
                         viewModel.selectedWorkOrder = null
-
+                        viewModel.scrollDownto = true
                         setupFilterDescription()
                         viewModel.loadWorkOrderList()
                         observeViewModel()
@@ -244,14 +233,16 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
     }
 
     private fun setupFilterDescription() {
-        if (viewModel.searchWorkOrderDataIsEmpty()) {
-            // пользователь сбросил отбор
-            filterDescriptionTextView.text = ""
-            filterDescriptionTextView.visibility = View.GONE
-        } else {
-            // пользователь установил отбор
-            filterDescriptionTextView.text = getFilterDescription(viewModel.searchWorkOrderData)
-            filterDescriptionTextView.visibility = View.VISIBLE
+        with(binding) {
+            if (viewModel.searchWorkOrderDataIsEmpty()) {
+                // пользователь сбросил отбор
+                filterDescriptionTextView.text = ""
+                filterDescriptionTextView.visibility = View.GONE
+            } else {
+                // пользователь установил отбор
+                filterDescriptionTextView.text = getFilterDescription(viewModel.searchWorkOrderData)
+                filterDescriptionTextView.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -260,37 +251,37 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
 
         if (searchWorkOrderData.numberText.isNotEmpty()) {
             description = description + getString(R.string.number_hint) +
-                    " " + getString(R.string.contains) + " " + searchWorkOrderData.numberText + "; "
+                " " + getString(R.string.contains) + " " + searchWorkOrderData.numberText + "; "
         }
 
         if (searchWorkOrderData.partnerText.isNotEmpty()) {
             description = description + getString(R.string.partner_hint) +
-                    " " + getString(R.string.contains) + " " + searchWorkOrderData.partnerText + "; "
+                " " + getString(R.string.contains) + " " + searchWorkOrderData.partnerText + "; "
         }
 
         if (searchWorkOrderData.carText.isNotEmpty()) {
             description = description + getString(R.string.car_hint) +
-                    " " + getString(R.string.contains) + " " + searchWorkOrderData.carText + "; "
+                " " + getString(R.string.contains) + " " + searchWorkOrderData.carText + "; "
         }
 
         if (searchWorkOrderData.performerText.isNotEmpty()) {
             description = description + getString(R.string.performer_hint) +
-                    " " + getString(R.string.contains) + " " + searchWorkOrderData.performerText + "; "
+                " " + getString(R.string.contains) + " " + searchWorkOrderData.performerText + "; "
         }
 
         if (searchWorkOrderData.departmentText.isNotEmpty()) {
             description = description + getString(R.string.department_hint) +
-                    " " + getString(R.string.contains) + " " + searchWorkOrderData.departmentText + "; "
+                " " + getString(R.string.contains) + " " + searchWorkOrderData.departmentText + "; "
         }
 
         searchWorkOrderData.dateFrom?.let { fromDate ->
             description = description + getString(R.string.date_from_hint) +
-                    " " + DateConverter.getDateString(fromDate) + "; "
+                " " + DateConverter.getDateString(fromDate) + "; "
         }
 
         searchWorkOrderData.dateTo?.let { toDate ->
             description = description + getString(R.string.date_to_hint) +
-                    " " + DateConverter.getDateString(toDate) + "; "
+                " " + DateConverter.getDateString(toDate) + "; "
         }
 
         if (description.isNotEmpty()) {
@@ -298,5 +289,20 @@ class WorkOrderListFragment : Fragment(), FragmentResultListener {
         }
 
         return description
+    }
+
+    companion object {
+        private const val REQUEST_KEY_NEW_ORDER_ID_PARAM = "request_key_new_order_id_param"
+        private const val ARG_NAME_NEW_ORDER_ID_PARAM = "arg_name_new_order_id_param"
+
+        private const val REQUEST_EXIT_QUESTION_KEY = "exit_question_key"
+        private const val ARG_ANSWER = "answer"
+
+        private const val REQUEST_SEARCH_WO_DATA_PICKER_KEY = "request_search_wo_data_picker_key"
+        private const val ARG_SEARCH_WO_DATA = "search_wo_data_picker"
+
+        fun newInstance(): WorkOrderListFragment {
+            return WorkOrderListFragment()
+        }
     }
 }

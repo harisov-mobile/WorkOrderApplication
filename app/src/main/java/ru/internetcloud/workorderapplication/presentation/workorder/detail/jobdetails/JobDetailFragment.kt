@@ -12,7 +12,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
-import java.math.BigDecimal
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.catalog.CarJob
 import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
@@ -21,32 +20,9 @@ import ru.internetcloud.workorderapplication.domain.document.JobDetail
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.carjob.CarJobPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.workinghour.WorkingHourPickerFragment
+import java.math.BigDecimal
 
 class JobDetailFragment : DialogFragment(), FragmentResultListener {
-
-    companion object {
-
-        private const val JOB_DETAIL = "job_detail"
-        private const val PARENT_REQUEST_KEY = "parent_request_job_detail_picker_key"
-        private const val PARENT_JOB_DETAIL_ARG_NAME = "parent_job_detail_arg_name"
-
-        private val REQUEST_CAR_JOB_PICKER_KEY = "request_car_job_picker_key"
-        private val ARG_CAR_JOB = "car_job_picker"
-
-        private val REQUEST_WORKING_HOUR_PICKER_KEY = "request_working_hour_picker_key"
-        private val ARG_WORKING_HOUR = "working_hour_picker"
-
-        fun newInstance(jobDetail: JobDetail?, parentRequestKey: String, parentArgName: String): JobDetailFragment {
-            val args = Bundle().apply {
-                putParcelable(JOB_DETAIL, jobDetail)
-                putString(PARENT_REQUEST_KEY, parentRequestKey)
-                putString(PARENT_JOB_DETAIL_ARG_NAME, parentArgName)
-            }
-            return JobDetailFragment().apply {
-                arguments = args
-            }
-        }
-    }
 
     private var requestKey = ""
     private var argJobDetailName = ""
@@ -64,7 +40,6 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
     private lateinit var timeNormEditText: EditText
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         viewModel = ViewModelProvider(this).get(JobDetailViewModel::class.java)
 
         arguments?.let { arg ->
@@ -75,7 +50,7 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
                 }
 
                 viewModel.jobDetail = jobDetail.copy() // надо копию экземпляра класса, специально чтобы при изменении
-            // копии не пострадал оригинал, если пользователь нажмет "Отмена"
+                // копии не пострадал оригинал, если пользователь нажмет "Отмена"
             }
 
             requestKey = arg.getString(PARENT_REQUEST_KEY, "")
@@ -209,7 +184,6 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
     }
 
     private fun calculateSum() {
-
         var sumString = "0"
 
         viewModel.jobDetail?.let { jobdet ->
@@ -277,5 +251,29 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
             }
         }
         return result
+    }
+
+    companion object {
+
+        private const val JOB_DETAIL = "job_detail"
+        private const val PARENT_REQUEST_KEY = "parent_request_job_detail_picker_key"
+        private const val PARENT_JOB_DETAIL_ARG_NAME = "parent_job_detail_arg_name"
+
+        private val REQUEST_CAR_JOB_PICKER_KEY = "request_car_job_picker_key"
+        private val ARG_CAR_JOB = "car_job_picker"
+
+        private val REQUEST_WORKING_HOUR_PICKER_KEY = "request_working_hour_picker_key"
+        private val ARG_WORKING_HOUR = "working_hour_picker"
+
+        fun newInstance(jobDetail: JobDetail?, parentRequestKey: String, parentArgName: String): JobDetailFragment {
+            val args = Bundle().apply {
+                putParcelable(JOB_DETAIL, jobDetail)
+                putString(PARENT_REQUEST_KEY, parentRequestKey)
+                putString(PARENT_JOB_DETAIL_ARG_NAME, parentArgName)
+            }
+            return JobDetailFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

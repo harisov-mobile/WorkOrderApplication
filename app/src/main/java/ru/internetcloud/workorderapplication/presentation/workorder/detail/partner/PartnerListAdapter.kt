@@ -12,13 +12,7 @@ class PartnerListAdapter(var partners: List<Partner>) : RecyclerView.Adapter<Par
     var onPartnerClickListener: ((partner: Partner) -> Unit)? = null
     var onPartnerLongClickListener: ((partner: Partner) -> Unit)? = null
 
-    companion object {
-        private const val SELECTED_ITEM_TYPE = 0
-        private const val UNSELECTED_ITEM_TYPE = 1
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartnerListViewHolder {
-
         var binding: ViewBinding? = null
         if (viewType == UNSELECTED_ITEM_TYPE) {
             binding = ItemPartnerListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -67,5 +61,10 @@ class PartnerListAdapter(var partners: List<Partner>) : RecyclerView.Adapter<Par
         } else {
             UNSELECTED_ITEM_TYPE
         }
+    }
+
+    companion object {
+        private const val SELECTED_ITEM_TYPE = 0
+        private const val UNSELECTED_ITEM_TYPE = 1
     }
 }
