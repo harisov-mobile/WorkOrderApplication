@@ -1,6 +1,6 @@
 package ru.internetcloud.workorderapplication.domain.repository
 
-import ru.internetcloud.workorderapplication.domain.catalog.Department
+import ru.internetcloud.workorderapplication.domain.model.catalog.Department
 
 interface DepartmentRepository {
 

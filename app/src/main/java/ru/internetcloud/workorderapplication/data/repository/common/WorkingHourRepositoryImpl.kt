@@ -1,7 +1,7 @@
 package ru.internetcloud.workorderapplication.data.repository.common
 
 import ru.internetcloud.workorderapplication.data.datasource.local.WorkingHourLocalDataSource
-import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
+import ru.internetcloud.workorderapplication.domain.model.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.repository.WorkingHourRepository
 import javax.inject.Inject
 

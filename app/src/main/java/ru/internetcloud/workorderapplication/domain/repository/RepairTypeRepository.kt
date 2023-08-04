@@ -1,7 +1,7 @@
 package ru.internetcloud.workorderapplication.domain.repository
 
-import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJobDetail
-import ru.internetcloud.workorderapplication.domain.catalog.RepairType
+import ru.internetcloud.workorderapplication.domain.model.catalog.DefaultRepairTypeJobDetail
+import ru.internetcloud.workorderapplication.domain.model.catalog.RepairType
 
 interface RepairTypeRepository {
 

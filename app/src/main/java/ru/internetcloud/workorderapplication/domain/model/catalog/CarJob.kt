@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.domain.catalog
+package ru.internetcloud.workorderapplication.domain.model.catalog
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

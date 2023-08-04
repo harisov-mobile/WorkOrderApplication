@@ -2,7 +2,6 @@ package ru.internetcloud.workorderapplication.presentation.workorder.list
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -14,6 +13,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import javax.inject.Inject
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
@@ -21,11 +21,10 @@ import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderListBi
 import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
-import ru.internetcloud.workorderapplication.domain.document.WorkOrder
+import ru.internetcloud.workorderapplication.domain.model.document.WorkOrder
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.search.SearchWorkOrderFragment
-import javax.inject.Inject
 
 class WorkOrderListFragment : Fragment(R.layout.fragment_work_order_list), FragmentResultListener {
 

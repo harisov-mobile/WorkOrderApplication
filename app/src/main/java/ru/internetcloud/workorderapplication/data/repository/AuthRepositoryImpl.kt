@@ -1,21 +1,20 @@
 package ru.internetcloud.workorderapplication.data.repository
 
-import android.app.Application
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
+import java.security.MessageDigest
+import javax.inject.Inject
 import retrofit2.HttpException
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.AuthResponse
 import ru.internetcloud.workorderapplication.domain.common.AuthParameters
 import ru.internetcloud.workorderapplication.domain.common.AuthResult
-import ru.internetcloud.workorderapplication.domain.common.AuthorizationPreferences
+import ru.internetcloud.workorderapplication.domain.repository.AuthorizationPreferencesRepository
 import ru.internetcloud.workorderapplication.domain.repository.AuthRepository
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
-import java.security.MessageDigest
-import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val application: Application,
-    private var authParameters: AuthParameters
+    private var authParameters: AuthParameters,
+    private val authorizationPreferencesRepository: AuthorizationPreferencesRepository
 ) : AuthRepository {
 
     override fun getAuthParameters(): AuthParameters {
@@ -78,7 +77,7 @@ class AuthRepositoryImpl @Inject constructor(
         val key = authParameters.server + authParameters.login
         val hash = sha1(authParameters.password)
 
-        AuthorizationPreferences.setStoredPasswordHash(application, key, hash)
+        authorizationPreferencesRepository.setStoredPasswordHash(key, hash)
     }
 
     private fun hashString(type: String, input: String): String {
@@ -106,12 +105,12 @@ class AuthRepositoryImpl @Inject constructor(
         val key = authParameters.server + authParameters.login
         val hash = sha1(authParameters.password)
 
-        val storedHash = AuthorizationPreferences.getStoredPasswordHash(application, key)
+        val storedHash = authorizationPreferencesRepository.getStoredPasswordHash(key)
 
-        if (!storedHash.equals("")) {
+        if (storedHash.isNotEmpty()) {
             if (hash.equals(storedHash)) {
                 authResult.isAuthorized = true
-                authResult.errorMessage = ""
+                authResult.errorMessage = DEFAULT_STRING_VALUE
             } else {
                 // authResult.errorMessage = "Неправильный логин или пароль"
                 // - уже есть сообщение о невозможности подключения от Интернет-попытки подключения!
@@ -123,5 +122,6 @@ class AuthRepositoryImpl @Inject constructor(
 
     companion object {
         private const val HTTP_INTERNAL_SERVER_ERROR = 500
+        private const val DEFAULT_STRING_VALUE = ""
     }
 }

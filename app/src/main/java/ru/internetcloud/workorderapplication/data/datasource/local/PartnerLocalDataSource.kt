@@ -2,7 +2,7 @@ package ru.internetcloud.workorderapplication.data.datasource.local
 
 import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.mapper.PartnerMapper
-import ru.internetcloud.workorderapplication.domain.catalog.Partner
+import ru.internetcloud.workorderapplication.domain.model.catalog.Partner
 import javax.inject.Inject
 
 class PartnerLocalDataSource @Inject constructor(

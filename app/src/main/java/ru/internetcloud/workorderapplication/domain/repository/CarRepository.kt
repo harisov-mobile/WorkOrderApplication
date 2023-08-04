@@ -1,6 +1,6 @@
 package ru.internetcloud.workorderapplication.domain.repository
 
-import ru.internetcloud.workorderapplication.domain.catalog.Car
+import ru.internetcloud.workorderapplication.domain.model.catalog.Car
 
 interface CarRepository {
 

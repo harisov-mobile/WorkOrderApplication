@@ -1,6 +1,6 @@
 package ru.internetcloud.workorderapplication.domain.repository
 
-import ru.internetcloud.workorderapplication.domain.document.DefaultWorkOrderSettings
+import ru.internetcloud.workorderapplication.domain.model.document.DefaultWorkOrderSettings
 
 interface DefaultWorkOrderSettingsRepository {
 

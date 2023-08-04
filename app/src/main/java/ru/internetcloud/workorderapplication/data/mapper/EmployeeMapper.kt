@@ -2,7 +2,7 @@ package ru.internetcloud.workorderapplication.data.mapper
 
 import ru.internetcloud.workorderapplication.data.model.EmployeeDbModel
 import ru.internetcloud.workorderapplication.data.network.dto.EmployeeDTO
-import ru.internetcloud.workorderapplication.domain.catalog.Employee
+import ru.internetcloud.workorderapplication.domain.model.catalog.Employee
 import javax.inject.Inject
 
 class EmployeeMapper @Inject constructor() {

@@ -13,10 +13,10 @@ import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.domain.catalog.CarJob
-import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
+import ru.internetcloud.workorderapplication.domain.model.catalog.CarJob
+import ru.internetcloud.workorderapplication.domain.model.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.common.ValidateInputResult
-import ru.internetcloud.workorderapplication.domain.document.JobDetail
+import ru.internetcloud.workorderapplication.domain.model.document.JobDetail
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.carjob.CarJobPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.workinghour.WorkingHourPickerFragment

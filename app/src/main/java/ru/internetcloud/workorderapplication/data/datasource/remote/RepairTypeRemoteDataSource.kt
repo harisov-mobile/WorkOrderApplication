@@ -3,7 +3,7 @@ package ru.internetcloud.workorderapplication.data.datasource.remote
 import ru.internetcloud.workorderapplication.data.mapper.RepairTypeMapper
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
 import ru.internetcloud.workorderapplication.data.network.dto.RepairTypeResponse
-import ru.internetcloud.workorderapplication.domain.catalog.RepairType
+import ru.internetcloud.workorderapplication.domain.model.catalog.RepairType
 import javax.inject.Inject
 
 class RepairTypeRemoteDataSource @Inject constructor(

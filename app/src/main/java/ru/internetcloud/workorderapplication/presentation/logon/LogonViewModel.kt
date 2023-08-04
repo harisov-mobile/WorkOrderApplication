@@ -1,141 +1,153 @@
 package ru.internetcloud.workorderapplication.presentation.logon
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
+import ru.internetcloud.workorderapplication.di.AssistedSavedStateViewModelFactory
+import ru.internetcloud.workorderapplication.domain.repository.AuthorizationPreferencesRepository
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.CheckAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.SetAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadMockDataUseCase
-import javax.inject.Inject
 
-// TODO Переделать многочисленные LiveData на один State
-
-class LogonViewModel @Inject constructor(
+class LogonViewModel @AssistedInject constructor(
     private val setAuthParametersUseCase: SetAuthParametersUseCase,
     private val checkAuthParametersUseCase: CheckAuthParametersUseCase,
-    private val loadMockDataUseCase: LoadMockDataUseCase
+    private val loadMockDataUseCase: LoadMockDataUseCase,
+    private val authorizationPreferencesRepository: AuthorizationPreferencesRepository,
+    @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _canContinue = MutableLiveData<Boolean>()
-    val canContinue: LiveData<Boolean>
-        get() = _canContinue
+    @AssistedFactory
+    interface Factory : AssistedSavedStateViewModelFactory<LogonViewModel> {
+        override fun create(savedStateHandle: SavedStateHandle): LogonViewModel
+    }
 
-    private val _demoMode = MutableLiveData<Boolean>()
-    val demoMode: LiveData<Boolean>
-        get() = _demoMode
+    private val _state = savedStateHandle.getLiveData(
+        KEY_LOGIN_STATE,
+        UiLoginState(
+            server = authorizationPreferencesRepository.getStoredServer(),
+            login = authorizationPreferencesRepository.getStoredLogin(),
+            password = DEFAULT_STRING_VALUE
+        )
+    )
 
-    private val _canContinueDemoMode = MutableLiveData<Boolean>()
-    val canContinueDemoMode: LiveData<Boolean>
-        get() = _canContinueDemoMode
+    val state: LiveData<UiLoginState> // ToDo сделать на Flow
+        get() = _state
 
-    private val _errorInputServer = MutableLiveData<Boolean>()
-    val errorInputServer: LiveData<Boolean>
-        get() = _errorInputServer
+    fun signin() {
+        state.value?.let { currentState ->
+            var server = parseText(currentState.server)
+            val login = parseText(currentState.login)
+            val password = parseText(currentState.password)
 
-    private val _errorInputLogin = MutableLiveData<Boolean>()
-    val errorInputLogin: LiveData<Boolean>
-        get() = _errorInputLogin
+            val areFieldsValid = validateInput(server, login, password)
 
-    private val _errorInputPassword = MutableLiveData<Boolean>()
-    val errorInputPassword: LiveData<Boolean>
-        get() = _errorInputPassword
+            if (areFieldsValid) {
+                // сохранить имя сервера и логин в SharedPreferences (хеш сохраняется в другом месте при удачном входе):
+                saveToSharedPreferences(server = server, login = login)
 
-    private val _errorAuthorization = MutableLiveData<Boolean>()
-    val errorAuthorization: LiveData<Boolean>
-        get() = _errorAuthorization
+                viewModelScope.launch {
+                    server = server.lowercase()
 
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String>
-        get() = _errorMessage
-
-    fun signin(inputServer: String?, inputLogin: String?, inputPassword: String?) {
-        var server = parseText(inputServer)
-        val login = parseText(inputLogin)
-        val password = parseText(inputPassword)
-
-        val areFieldsValid = validateInput(server, login, password)
-
-        if (areFieldsValid) {
-            viewModelScope.launch {
-                server = server.lowercase()
-
-                // демо-режим:
-                if (server.equals(DEMO_SERVER) && login.equals(DEMO_LOGIN) && password.equals(DEMO_PASSWORD)) {
-                    setAuthParametersUseCase.setAuthParameters(server, login, password)
-                    _demoMode.value = true
-                } else {
-                    if (server.length >= BEGIN_SIZE) {
-                        val firstFourLetters = server.substring(0, BEGIN_SIZE)
-                        if (!firstFourLetters.equals("http")) {
+                    // демо-режим:
+                    if (server.equals(DEMO_SERVER) && login.equals(DEMO_LOGIN) && password.equals(DEMO_PASSWORD)) {
+                        setAuthParametersUseCase.setAuthParameters(server, login, password)
+                        loadDemoData()
+                    } else {
+                        if (server.length >= BEGIN_SIZE) {
+                            val firstFourLetters = server.substring(0, BEGIN_SIZE)
+                            if (!firstFourLetters.equals("http")) {
+                                server = HTTP_PREFIX + server
+                            }
+                        } else {
                             server = HTTP_PREFIX + server
                         }
-                    } else {
-                        server = HTTP_PREFIX + server
-                    }
 
-                    setAuthParametersUseCase.setAuthParameters(server, login, password)
+                        setAuthParametersUseCase.setAuthParameters(server, login, password)
 
-                    // сделать проверку пароля!!!!
-                    val authResult = checkAuthParametersUseCase.checkAuthorization()
-                    if (authResult.isAuthorized) {
-                        _canContinue.value = true
-                    } else {
-                        _errorMessage.value = authResult.errorMessage
-                        _errorAuthorization.value = true
+                        // проверка пароля:
+                        val authResult = checkAuthParametersUseCase.checkAuthorization()
+                        if (authResult.isAuthorized) {
+                            _state.value = _state.value?.copy(canContinue = true) ?: UiLoginState(canContinue = true)
+                        } else {
+                            _state.value = _state.value?.copy(
+                                errorAuthorization = true,
+                                errorMessage = authResult.errorMessage
+                            ) ?: UiLoginState(
+                                errorAuthorization = true,
+                                errorMessage = authResult.errorMessage
+                            )
+                        }
                     }
                 }
             }
         }
     }
 
+    private fun saveToSharedPreferences(server: String, login: String) {
+        authorizationPreferencesRepository.setStoredServer(server)
+        authorizationPreferencesRepository.setStoredLogin(login)
+    }
+
     private fun parseText(input: String?): String {
-        return input?.trim() ?: ""
+        return input?.trim() ?: DEFAULT_STRING_VALUE
     }
 
     private fun validateInput(server: String, login: String, password: String): Boolean {
         var result = true
         if (server.isBlank()) {
-            _errorInputServer.value = true
+            _state.value = _state.value?.copy(errorInputServer = true) ?: UiLoginState(errorInputServer = true)
             result = false
         }
 
         if (login.isBlank()) {
-            _errorInputLogin.value = true
+            _state.value = _state.value?.copy(errorInputLogin = true) ?: UiLoginState(errorInputLogin = true)
             result = false
         }
 
         if (password.isBlank()) {
-            _errorInputPassword.value = true
+            _state.value = _state.value?.copy(errorInputPassword = true) ?: UiLoginState(errorInputPassword = true)
             result = false
         }
 
         return result
     }
 
-    fun resetErrorInputServer() {
-        _errorInputServer.value = false
-    }
-
-    fun resetErrorInputLogin() {
-        _errorInputLogin.value = false
-    }
-
-    fun resetErrorInputPassword() {
-        _errorInputPassword.value = false
-    }
-
-    fun resetCanContinue() {
-        _canContinue.value = false
-    }
-
     fun loadDemoData() {
         viewModelScope.launch {
             loadMockDataUseCase.loadMockData()
-
-            _canContinueDemoMode.value = true
+            _state.value = _state.value?.copy(canContinueDemoMode = true) ?: UiLoginState(canContinueDemoMode = true)
         }
+    }
+
+    fun setServer(server: String) {
+        _state.value = _state.value?.copy(server = server, errorInputServer = false) ?: UiLoginState(server = server)
+    }
+
+    fun setLogin(login: String) {
+        _state.value = _state.value?.copy(login = login, errorInputLogin = false) ?: UiLoginState(login = login)
+    }
+
+    fun setPassword(password: String) {
+        _state.value = _state.value?.copy(
+            password = password,
+            errorInputPassword = false
+        ) ?: UiLoginState(password = password)
+    }
+
+    fun resetErrorAuthorization() {
+        _state.value = _state.value?.copy(
+            errorAuthorization = false,
+            errorMessage = DEFAULT_STRING_VALUE
+        ) ?: UiLoginState(
+            errorAuthorization = false,
+            errorMessage = DEFAULT_STRING_VALUE
+        )
     }
 
     companion object {
@@ -144,5 +156,7 @@ class LogonViewModel @Inject constructor(
         private const val DEMO_SERVER = "demo"
         private const val DEMO_LOGIN = "demo"
         private const val DEMO_PASSWORD = "1"
+        private const val KEY_LOGIN_STATE = "key_login_state"
+        private const val DEFAULT_STRING_VALUE = ""
     }
 }

@@ -1,8 +1,8 @@
-package ru.internetcloud.workorderapplication.domain.document
+package ru.internetcloud.workorderapplication.domain.model.document
 
-import ru.internetcloud.workorderapplication.domain.catalog.Department
-import ru.internetcloud.workorderapplication.domain.catalog.Employee
-import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
+import ru.internetcloud.workorderapplication.domain.model.catalog.Department
+import ru.internetcloud.workorderapplication.domain.model.catalog.Employee
+import ru.internetcloud.workorderapplication.domain.model.catalog.WorkingHour
 import java.math.BigDecimal
 
 data class DefaultWorkOrderSettings(

@@ -1,6 +1,6 @@
 package ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car
 
-import ru.internetcloud.workorderapplication.domain.catalog.Car
+import ru.internetcloud.workorderapplication.domain.model.catalog.Car
 import ru.internetcloud.workorderapplication.domain.repository.CarRepository
 import javax.inject.Inject
 

@@ -1,7 +1,7 @@
 package ru.internetcloud.workorderapplication.data.repository.common
 
 import ru.internetcloud.workorderapplication.data.datasource.local.DefaultWorkOrderSettingsLocalDataSource
-import ru.internetcloud.workorderapplication.domain.document.DefaultWorkOrderSettings
+import ru.internetcloud.workorderapplication.domain.model.document.DefaultWorkOrderSettings
 import ru.internetcloud.workorderapplication.domain.repository.DefaultWorkOrderSettingsRepository
 import javax.inject.Inject
 

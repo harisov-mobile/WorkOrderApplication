@@ -2,21 +2,22 @@ package ru.internetcloud.workorderapplication.presentation.logon
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import javax.inject.Inject
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentLogonBinding
+import ru.internetcloud.workorderapplication.di.InjectingSavedStateViewModelFactory
 import ru.internetcloud.workorderapplication.di.ViewModelFactory
-import ru.internetcloud.workorderapplication.domain.common.AuthorizationPreferences
+import ru.internetcloud.workorderapplication.domain.repository.AuthorizationPreferencesRepository
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
-import javax.inject.Inject
 
 class LogonFragment : Fragment() {
 
@@ -27,15 +28,24 @@ class LogonFragment : Fragment() {
         fun onLaunchWorkOrderList()
     }
 
-    private lateinit var viewModel: LogonViewModel
+    private val component by lazy {
+        (requireActivity().application as WorkOrderApp).component
+    }
+
+    @Inject
+    lateinit var defaultViewModelFactory: dagger.Lazy<InjectingSavedStateViewModelFactory>
+
+    override fun getDefaultViewModelProviderFactory(): ViewModelProvider.Factory =
+        defaultViewModelFactory.get().create(this, arguments)
+
+    private val viewModel: LogonViewModel by viewModels()
 
     // даггер:
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    private val component by lazy {
-        (requireActivity().application as WorkOrderApp).component
-    }
+    @Inject
+    lateinit var authorizationPreferencesRepository: AuthorizationPreferencesRepository
 
     private var _binding: FragmentLogonBinding? = null
     private val binding: FragmentLogonBinding
@@ -52,28 +62,23 @@ class LogonFragment : Fragment() {
         return binding.root
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel = ViewModelProvider(this, viewModelFactory).get(LogonViewModel::class.java)
 
         binding.versionTextView.text = getString(R.string.version, BuildConfig.VERSION_NAME)
 
         binding.enterButton.setOnClickListener {
             binding.enterButton.isEnabled = false
-            viewModel.signin(
-                binding.serverEditText.text?.toString(),
-                binding.loginEditText.text?.toString(),
-                binding.passwordEditText.text?.toString()
-            )
+            viewModel.signin()
         }
 
         binding.cancelButton.setOnClickListener {
             activity?.onBackPressed() // это аналог finish для фрагмента
-        }
-
-        savedInstanceState ?: let {
-            initTextInputEditText()
         }
 
         observeViewModel()
@@ -82,136 +87,73 @@ class LogonFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        // TextWatcher нужно навешивать здесь, а не в onCreate или onCreateView, т.к. там еще не восстановлено
-        // EditText и слушатели будут "дергаться" лишний раз
-        binding.serverEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputServer()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                //
-            }
-        })
-
-        binding.loginEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputLogin()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                //
-            }
-        })
-
-        binding.passwordEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputPassword()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                //
-            }
-        })
+        // doOnTextChanged нужно навешивать здесь, а не в onCreateView или onViewCreated, т.к. там еще не восстановлено
+        // EditText и слушатели будут "дергаться" лишний раз когда ОС Андроид сама восстановит состояние EditText
+        setupOnTextChangedListeners()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun setupOnTextChangedListeners() {
+        binding.serverEditText.doOnTextChanged { text, _, _, _ ->
+            viewModel.setServer(text.toString())
+        }
+        binding.loginEditText.doOnTextChanged { text, _, _, _ ->
+            viewModel.setLogin(text.toString())
+        }
+        binding.passwordEditText.doOnTextChanged { text, _, _, _ ->
+            viewModel.setPassword(text.toString())
+        }
     }
 
     private fun observeViewModel() {
-        // подписка на ошибки
-        viewModel.errorInputServer.observe(viewLifecycleOwner) {
-            val message = if (it) {
-                binding.enterButton.isEnabled = true
+        viewModel.state.observe(viewLifecycleOwner) { currentState ->
+            // чтобы "doOnTextChanged" не дергались и не зацикливалось приложение
+            if (!currentState.server.equals(binding.serverEditText.text.toString())) {
+                binding.serverEditText.setText(currentState.server)
+            }
+            if (!currentState.login.equals(binding.loginEditText.text.toString())) {
+                binding.loginEditText.setText(currentState.login)
+            }
+            if (!currentState.password.equals(binding.passwordEditText.text.toString())) {
+                binding.passwordEditText.setText(currentState.password)
+            }
+
+            binding.serverTextInputLayout.error = if (currentState.errorInputServer) {
                 getString(R.string.error_input_server)
             } else {
                 null
             }
-            binding.serverTextInputLayout.error = message
-        }
-
-        viewModel.errorInputLogin.observe(viewLifecycleOwner) {
-            val message = if (it) {
-                binding.enterButton.isEnabled = true
+            binding.loginTextInputLayout.error = if (currentState.errorInputLogin) {
                 getString(R.string.error_input_login)
             } else {
                 null
             }
-            binding.loginTextInputLayout.error = message
-        }
-
-        viewModel.errorInputPassword.observe(viewLifecycleOwner) {
-            val message = if (it) {
-                binding.enterButton.isEnabled = true
+            binding.passwordTextInputLayout.error = if (currentState.errorInputPassword) {
                 getString(R.string.error_input_password)
             } else {
                 null
             }
-            binding.passwordTextInputLayout.error = message
-        }
 
-        viewModel.errorAuthorization.observe(viewLifecycleOwner) {
-            // показать AlertDialog об ошибке авторизации!!!
-            val errorMessage = viewModel.errorMessage.value ?: ""
-            MessageDialogFragment
-                .newInstance(errorMessage)
-                .show(childFragmentManager, null)
+            if (currentState.errorAuthorization) {
+                // показать AlertDialog об ошибке авторизации!!!
+                MessageDialogFragment
+                    .newInstance(currentState.errorMessage)
+                    .show(childFragmentManager, null)
+                viewModel.resetErrorAuthorization()
+            }
+
+            if (currentState.canContinue) {
+                // подписка на завершение экрана:
+                // запустить фрагмент, где будет сихнронизация данных из 1С
+                (requireActivity() as Callbacks).onLaunchDataSynchronization()
+            }
+
+            if (currentState.canContinueDemoMode) {
+                // демо-режим - переход в список Заказ-нарядов:
+                // запустить фрагмент, где будет показан список демо-заказ-нарядов
+                (requireActivity() as Callbacks).onLaunchWorkOrderList()
+            }
+
             binding.enterButton.isEnabled = true
-        }
-
-        // подписка на завершение экрана:
-        viewModel.canContinue.observe(viewLifecycleOwner) {
-            if (it) {
-                context?.let { currentContext ->
-                    val server = binding.serverEditText.text?.toString()
-                    server?.let { serverAddress ->
-                        AuthorizationPreferences.setStoredServer(currentContext.applicationContext, serverAddress)
-                    }
-                    val login = binding.loginEditText.text?.toString()
-                    login?.let { loginName ->
-                        AuthorizationPreferences.setStoredLogin(currentContext.applicationContext, loginName)
-                    }
-                }
-                viewModel.resetCanContinue()
-                (requireActivity() as Callbacks).onLaunchDataSynchronization() // запустить фрагмент, где будет сихнронизация данных из 1С
-            }
-        }
-
-        // демо-режим:
-        viewModel.demoMode.observe(viewLifecycleOwner) {
-            if (it) {
-                viewModel.resetCanContinue()
-                viewModel.loadDemoData()
-            }
-        }
-
-        // демо-режим - переход в список Заказ-нарядов:
-        viewModel.canContinueDemoMode.observe(viewLifecycleOwner) {
-            if (it) {
-                (requireActivity() as Callbacks).onLaunchWorkOrderList() // запустить фрагмент, где будет показан список демо-заказ-нарядов
-            }
-        }
-    }
-
-    private fun initTextInputEditText() {
-        context?.let {
-            // TODO presentation - слой напрямую полез в домайн - слой! разобраться...
-            binding.serverEditText.setText(AuthorizationPreferences.getStoredServer(it.applicationContext))
-            binding.loginEditText.setText(AuthorizationPreferences.getStoredLogin(it.applicationContext))
         }
     }
 

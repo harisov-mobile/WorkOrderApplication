@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.di.ViewModelFactory
-import ru.internetcloud.workorderapplication.domain.catalog.Car
-import ru.internetcloud.workorderapplication.domain.catalog.Partner
+import ru.internetcloud.workorderapplication.domain.model.catalog.Car
+import ru.internetcloud.workorderapplication.domain.model.catalog.Partner
 import javax.inject.Inject
 
 class CarPickerFragment : DialogFragment() {

@@ -25,7 +25,7 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(LogonViewModel::class)
     @Binds
-    fun bindLogonViewModel(impl: LogonViewModel): ViewModel
+    fun bindLogonViewModelFactory(f: LogonViewModel.Factory): AssistedSavedStateViewModelFactory<out ViewModel>
 
     @IntoMap
     @ViewModelKey(SendWorkOrderByIdToEmailViewModel::class)

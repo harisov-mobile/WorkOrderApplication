@@ -62,7 +62,5 @@ interface ApiInterface {
 
     companion object {
         private const val PUB_NAME = BuildConfig.PUB_NAME_ADD_ON
-        // private const val PUB_NAME = "alpha2"
-        // private const val PUB_NAME = "rabota"
     }
 }

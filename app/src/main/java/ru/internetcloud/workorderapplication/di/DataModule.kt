@@ -7,7 +7,9 @@ import dagger.Provides
 import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.database.AppDatabase
 import ru.internetcloud.workorderapplication.data.repository.AuthRepositoryImpl
+import ru.internetcloud.workorderapplication.data.repository.FirstLaunchRepositoryImpl
 import ru.internetcloud.workorderapplication.data.repository.SynchroRepositoryImpl
+import ru.internetcloud.workorderapplication.data.repository.common.AuthorizationPreferencesRepositoryImpl
 import ru.internetcloud.workorderapplication.data.repository.common.CarJobRepositoryImpl
 import ru.internetcloud.workorderapplication.data.repository.common.CarModelRepositoryImpl
 import ru.internetcloud.workorderapplication.data.repository.common.CarRepositoryImpl
@@ -19,7 +21,9 @@ import ru.internetcloud.workorderapplication.data.repository.common.RepairTypeRe
 import ru.internetcloud.workorderapplication.data.repository.common.WorkOrderRepositoryImpl
 import ru.internetcloud.workorderapplication.data.repository.common.WorkingHourRepositoryImpl
 import ru.internetcloud.workorderapplication.domain.common.AuthParameters
+import ru.internetcloud.workorderapplication.domain.common.FirstLaunchRepository
 import ru.internetcloud.workorderapplication.domain.repository.AuthRepository
+import ru.internetcloud.workorderapplication.domain.repository.AuthorizationPreferencesRepository
 import ru.internetcloud.workorderapplication.domain.repository.CarJobRepository
 import ru.internetcloud.workorderapplication.domain.repository.CarModelRepository
 import ru.internetcloud.workorderapplication.domain.repository.CarRepository
@@ -82,6 +86,14 @@ interface DataModule {
     @ApplicationScope
     @Binds
     fun bindWorkOrderRepository(impl: WorkOrderRepositoryImpl): WorkOrderRepository
+
+    @ApplicationScope
+    @Binds
+    fun bindAuthorizationPreferencesRepository(impl: AuthorizationPreferencesRepositoryImpl): AuthorizationPreferencesRepository
+
+    @ApplicationScope
+    @Binds
+    fun bindFirstLaunchRepository(impl: FirstLaunchRepositoryImpl): FirstLaunchRepository
 
     companion object {
 

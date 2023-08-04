@@ -1,8 +1,8 @@
 package ru.internetcloud.workorderapplication.data.repository.common
 
 import ru.internetcloud.workorderapplication.data.datasource.local.RepairTypeLocalDataSource
-import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJobDetail
-import ru.internetcloud.workorderapplication.domain.catalog.RepairType
+import ru.internetcloud.workorderapplication.domain.model.catalog.DefaultRepairTypeJobDetail
+import ru.internetcloud.workorderapplication.domain.model.catalog.RepairType
 import ru.internetcloud.workorderapplication.domain.repository.RepairTypeRepository
 import javax.inject.Inject
 

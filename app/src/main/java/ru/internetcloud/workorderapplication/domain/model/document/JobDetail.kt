@@ -1,9 +1,9 @@
-package ru.internetcloud.workorderapplication.domain.document
+package ru.internetcloud.workorderapplication.domain.model.document
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import ru.internetcloud.workorderapplication.domain.catalog.CarJob
-import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
+import ru.internetcloud.workorderapplication.domain.model.catalog.CarJob
+import ru.internetcloud.workorderapplication.domain.model.catalog.WorkingHour
 import java.math.BigDecimal
 
 // это строка табличной части "Работы"

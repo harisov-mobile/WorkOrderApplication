@@ -3,7 +3,7 @@ package ru.internetcloud.workorderapplication.data.mapper
 import ru.internetcloud.workorderapplication.data.model.PerformerDetailDbModel
 import ru.internetcloud.workorderapplication.data.model.PerformerDetailWithRequisities
 import ru.internetcloud.workorderapplication.data.network.dto.PerformerDetailDTO
-import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
+import ru.internetcloud.workorderapplication.domain.model.document.PerformerDetail
 import javax.inject.Inject
 
 class PerformerDetailMapper @Inject constructor(

@@ -10,9 +10,9 @@ import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.domain.catalog.Employee
+import ru.internetcloud.workorderapplication.domain.model.catalog.Employee
 import ru.internetcloud.workorderapplication.domain.common.ValidateInputResult
-import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
+import ru.internetcloud.workorderapplication.domain.model.document.PerformerDetail
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.employee.EmployeePickerFragment
 

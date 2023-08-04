@@ -1,10 +1,10 @@
-package ru.internetcloud.workorderapplication.domain.document
+package ru.internetcloud.workorderapplication.domain.model.document
 
-import ru.internetcloud.workorderapplication.domain.catalog.Car
-import ru.internetcloud.workorderapplication.domain.catalog.Department
-import ru.internetcloud.workorderapplication.domain.catalog.Employee
-import ru.internetcloud.workorderapplication.domain.catalog.Partner
-import ru.internetcloud.workorderapplication.domain.catalog.RepairType
+import ru.internetcloud.workorderapplication.domain.model.catalog.Car
+import ru.internetcloud.workorderapplication.domain.model.catalog.Department
+import ru.internetcloud.workorderapplication.domain.model.catalog.Employee
+import ru.internetcloud.workorderapplication.domain.model.catalog.Partner
+import ru.internetcloud.workorderapplication.domain.model.catalog.RepairType
 import java.util.Date
 
 data class WorkOrder(

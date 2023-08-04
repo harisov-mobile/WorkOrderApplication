@@ -6,7 +6,7 @@ import androidx.viewbinding.ViewBinding
 import ru.internetcloud.workorderapplication.databinding.ItemWorkOrderListBinding
 import ru.internetcloud.workorderapplication.databinding.ItemWorkOrderListPostedBinding
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
-import ru.internetcloud.workorderapplication.domain.document.WorkOrder
+import ru.internetcloud.workorderapplication.domain.model.document.WorkOrder
 
 class WorkOrderListViewHolder(
     private val binding: ViewBinding,

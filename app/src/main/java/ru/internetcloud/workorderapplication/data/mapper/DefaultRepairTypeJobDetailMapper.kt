@@ -3,7 +3,7 @@ package ru.internetcloud.workorderapplication.data.mapper
 import ru.internetcloud.workorderapplication.data.model.DefaultRepairTypeJobDetailDbModel
 import ru.internetcloud.workorderapplication.data.model.DefaultRepairTypeJobDetailWithRequisities
 import ru.internetcloud.workorderapplication.data.network.dto.DefaultRepairTypeJobDetailDTO
-import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJobDetail
+import ru.internetcloud.workorderapplication.domain.model.catalog.DefaultRepairTypeJobDetail
 import javax.inject.Inject
 
 class DefaultRepairTypeJobDetailMapper @Inject constructor(

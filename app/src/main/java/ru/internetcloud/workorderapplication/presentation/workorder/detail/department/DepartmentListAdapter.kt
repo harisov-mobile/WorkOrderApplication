@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import ru.internetcloud.workorderapplication.databinding.ItemDepartmentListBinding
 import ru.internetcloud.workorderapplication.databinding.ItemDepartmentListSelectedBinding
-import ru.internetcloud.workorderapplication.domain.catalog.Department
+import ru.internetcloud.workorderapplication.domain.model.catalog.Department
 
 class DepartmentListAdapter(var departments: List<Department>) : RecyclerView.Adapter<DepartmentListViewHolder>() {
     var onDepartmentClickListener: ((department: Department) -> Unit)? = null

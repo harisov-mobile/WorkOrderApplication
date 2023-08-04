@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import ru.internetcloud.workorderapplication.databinding.ItemRepairTypeListBinding
 import ru.internetcloud.workorderapplication.databinding.ItemRepairTypeListSelectedBinding
-import ru.internetcloud.workorderapplication.domain.catalog.RepairType
+import ru.internetcloud.workorderapplication.domain.model.catalog.RepairType
 
 class RepairTypeListAdapter(var repairTypes: List<RepairType>) : RecyclerView.Adapter<RepairTypeListViewHolder>() {
     var onRepairTypeClickListener: ((repairType: RepairType) -> Unit)? = null

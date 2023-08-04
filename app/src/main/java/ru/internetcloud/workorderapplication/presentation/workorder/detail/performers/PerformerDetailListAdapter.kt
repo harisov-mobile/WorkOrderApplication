@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
 import ru.internetcloud.workorderapplication.databinding.ItemPerformerDetailListBinding
 import ru.internetcloud.workorderapplication.databinding.ItemPerformerDetailListSelectedBinding
-import ru.internetcloud.workorderapplication.domain.document.PerformerDetail
+import ru.internetcloud.workorderapplication.domain.model.document.PerformerDetail
 
 class PerformerDetailListAdapter : ListAdapter<PerformerDetail, PerformerDetailListViewHolder>(PerformerDetailDiffCallback()) {
 

@@ -3,7 +3,7 @@ package ru.internetcloud.workorderapplication.data.repository.common
 import androidx.lifecycle.LiveData
 import ru.internetcloud.workorderapplication.data.datasource.local.WorkOrderLocalDataSource
 import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
-import ru.internetcloud.workorderapplication.domain.document.WorkOrder
+import ru.internetcloud.workorderapplication.domain.model.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
 import javax.inject.Inject
 

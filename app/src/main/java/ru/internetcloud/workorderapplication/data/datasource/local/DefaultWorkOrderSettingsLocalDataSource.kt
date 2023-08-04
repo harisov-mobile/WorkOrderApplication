@@ -3,7 +3,7 @@ package ru.internetcloud.workorderapplication.data.datasource.local
 import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.mapper.DefaultWorkOrderSettingsMapper
 import ru.internetcloud.workorderapplication.data.model.DefaultWorkOrderSettingsDbModel
-import ru.internetcloud.workorderapplication.domain.document.DefaultWorkOrderSettings
+import ru.internetcloud.workorderapplication.domain.model.document.DefaultWorkOrderSettings
 import javax.inject.Inject
 
 class DefaultWorkOrderSettingsLocalDataSource @Inject constructor(
