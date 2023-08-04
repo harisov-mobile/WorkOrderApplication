@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.presentation.logon
+package ru.internetcloud.workorderapplication.presentation.login
 
 import android.content.Context
 import android.os.Bundle
@@ -19,7 +19,7 @@ import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.domain.repository.AuthorizationPreferencesRepository
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 
-class LogonFragment : Fragment() {
+class LoginFragment : Fragment() {
 
     // интерфейс обратного вызова
     interface Callbacks {
@@ -38,7 +38,7 @@ class LogonFragment : Fragment() {
     override fun getDefaultViewModelProviderFactory(): ViewModelProvider.Factory =
         defaultViewModelFactory.get().create(this, arguments)
 
-    private val viewModel: LogonViewModel by viewModels()
+    private val viewModel: LoginViewModel by viewModels()
 
     // даггер:
     @Inject
@@ -158,8 +158,8 @@ class LogonFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): LogonFragment {
-            return LogonFragment()
+        fun newInstance(): LoginFragment {
+            return LoginFragment()
         }
     }
 }

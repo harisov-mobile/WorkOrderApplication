@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.presentation.logon
+package ru.internetcloud.workorderapplication.presentation.login
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

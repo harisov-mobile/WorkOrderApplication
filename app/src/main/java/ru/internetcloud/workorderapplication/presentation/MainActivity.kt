@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.presentation.logon.LogonFragment
+import ru.internetcloud.workorderapplication.presentation.login.LoginFragment
 import ru.internetcloud.workorderapplication.presentation.synchro.DataSynchronizationFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.WorkOrderFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.list.WorkOrderListFragment
@@ -12,7 +12,7 @@ import ru.internetcloud.workorderapplication.presentation.workorder.list.WorkOrd
 class MainActivity :
     AppCompatActivity(),
     WorkOrderListFragment.Callbacks,
-    LogonFragment.Callbacks,
+    LoginFragment.Callbacks,
     DataSynchronizationFragment.Callbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +20,7 @@ class MainActivity :
         setContentView(R.layout.activity_fragment)
 
         if (savedInstanceState == null) {
-            val fragment = LogonFragment.newInstance() // фрагмент, который запускается первым
+            val fragment = LoginFragment.newInstance() // фрагмент, который запускается первым
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit()

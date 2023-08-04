@@ -1,4 +1,4 @@
-package ru.internetcloud.workorderapplication.presentation.logon
+package ru.internetcloud.workorderapplication.presentation.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
@@ -14,7 +14,7 @@ import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.Check
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.SetAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadMockDataUseCase
 
-class LogonViewModel @AssistedInject constructor(
+class LoginViewModel @AssistedInject constructor(
     private val setAuthParametersUseCase: SetAuthParametersUseCase,
     private val checkAuthParametersUseCase: CheckAuthParametersUseCase,
     private val loadMockDataUseCase: LoadMockDataUseCase,
@@ -23,8 +23,8 @@ class LogonViewModel @AssistedInject constructor(
 ) : ViewModel() {
 
     @AssistedFactory
-    interface Factory : AssistedSavedStateViewModelFactory<LogonViewModel> {
-        override fun create(savedStateHandle: SavedStateHandle): LogonViewModel
+    interface Factory : AssistedSavedStateViewModelFactory<LoginViewModel> {
+        override fun create(savedStateHandle: SavedStateHandle): LoginViewModel
     }
 
     private val _state = savedStateHandle.getLiveData(
