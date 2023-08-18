@@ -58,7 +58,6 @@ class CarJobPickerFragment : DialogFragment() {
         }
 
         val alertDialogBuilder = AlertDialog.Builder(activity)
-        // alertDialogBuilder.setTitle(R.string.car_job_picker_title)
 
         val container = layoutInflater.inflate(R.layout.fragment_picker, null, false)
         clearSearchTextImageButton = container.findViewById(R.id.clear_search_text_button)
