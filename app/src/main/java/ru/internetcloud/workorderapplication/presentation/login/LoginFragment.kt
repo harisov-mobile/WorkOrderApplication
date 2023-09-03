@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -73,8 +74,15 @@ class LoginFragment : Fragment() {
         binding.versionTextView.text = getString(R.string.version, BuildConfig.VERSION_NAME)
 
         binding.enterButton.setOnClickListener {
-            binding.enterButton.isEnabled = false
-            viewModel.signin()
+            onEnterButtonPressed()
+        }
+
+        // обработчик на кнопку в клавиатуре android:imeOptions="actionDone"
+        binding.passwordEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                return@setOnEditorActionListener onEnterButtonPressed()
+            }
+            return@setOnEditorActionListener false
         }
 
         binding.cancelButton.setOnClickListener {
@@ -82,6 +90,12 @@ class LoginFragment : Fragment() {
         }
 
         observeViewModel()
+    }
+
+    private fun onEnterButtonPressed(): Boolean {
+        binding.enterButton.isEnabled = false
+        viewModel.signin()
+        return false // чтобы клавиатура скрылась с экрана
     }
 
     override fun onStart() {
