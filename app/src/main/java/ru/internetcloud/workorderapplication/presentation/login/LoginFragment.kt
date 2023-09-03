@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -93,7 +94,6 @@ class LoginFragment : Fragment() {
     }
 
     private fun onEnterButtonPressed(): Boolean {
-        binding.enterButton.isEnabled = false
         viewModel.signin()
         return false // чтобы клавиатура скрылась с экрана
     }
@@ -120,6 +120,12 @@ class LoginFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.state.observe(viewLifecycleOwner) { currentState ->
+            binding.enterProgressBar.isVisible = currentState.entering
+            binding.enterButton.isEnabled = !currentState.entering
+            binding.serverEditText.isEnabled = !currentState.entering
+            binding.loginEditText.isEnabled = !currentState.entering
+            binding.passwordEditText.isEnabled = !currentState.entering
+
             // чтобы "doOnTextChanged" не дергались и не зацикливалось приложение
             if (!currentState.server.equals(binding.serverEditText.text.toString())) {
                 binding.serverEditText.setText(currentState.server)
@@ -166,8 +172,6 @@ class LoginFragment : Fragment() {
                 // запустить фрагмент, где будет показан список демо-заказ-нарядов
                 (requireActivity() as Callbacks).onLaunchWorkOrderList()
             }
-
-            binding.enterButton.isEnabled = true
         }
     }
 

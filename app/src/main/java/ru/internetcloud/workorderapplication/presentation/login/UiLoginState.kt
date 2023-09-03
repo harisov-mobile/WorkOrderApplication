@@ -9,6 +9,7 @@ data class UiLoginState(
     val login: String = "",
     val password: String = "",
     val loading: Boolean = true,
+    val entering: Boolean = false,
     val canContinue: Boolean = false,
     val canContinueDemoMode: Boolean = false,
     val errorInputServer: Boolean = false,

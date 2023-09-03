@@ -41,6 +41,8 @@ class LoginViewModel @AssistedInject constructor(
 
     fun signin() {
         state.value?.let { currentState ->
+            _state.value = currentState.copy(entering = true) // отобразим ПрогрессБар в кнопке "Enter"
+
             var server = parseText(currentState.server)
             val login = parseText(currentState.login)
             val password = parseText(currentState.password)
@@ -84,7 +86,10 @@ class LoginViewModel @AssistedInject constructor(
                             )
                         }
                     }
+                    _state.value = _state.value?.copy(entering = false) // скроем ПрогрессБар в кнопке "Enter"
                 }
+            } else {
+                _state.value = _state.value?.copy(entering = false) // скроем ПрогрессБар в кнопке "Enter"
             }
         }
     }
