@@ -5,9 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class UiLoginState(
-    val server: String = "",
-    val login: String = "",
-    val password: String = "",
+    val loginParams: LoginParams,
     val loading: Boolean = true,
     val entering: Boolean = false,
     val canContinue: Boolean = false,

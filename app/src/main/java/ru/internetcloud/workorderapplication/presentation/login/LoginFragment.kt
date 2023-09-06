@@ -127,14 +127,14 @@ class LoginFragment : Fragment() {
             binding.passwordEditText.isEnabled = !currentState.entering
 
             // чтобы "doOnTextChanged" не дергались и не зацикливалось приложение
-            if (!currentState.server.equals(binding.serverEditText.text.toString())) {
-                binding.serverEditText.setText(currentState.server)
+            if (!currentState.loginParams.server.equals(binding.serverEditText.text.toString())) {
+                binding.serverEditText.setText(currentState.loginParams.server)
             }
-            if (!currentState.login.equals(binding.loginEditText.text.toString())) {
-                binding.loginEditText.setText(currentState.login)
+            if (!currentState.loginParams.login.equals(binding.loginEditText.text.toString())) {
+                binding.loginEditText.setText(currentState.loginParams.login)
             }
-            if (!currentState.password.equals(binding.passwordEditText.text.toString())) {
-                binding.passwordEditText.setText(currentState.password)
+            if (!currentState.loginParams.password.equals(binding.passwordEditText.text.toString())) {
+                binding.passwordEditText.setText(currentState.loginParams.password)
             }
 
             binding.serverTextInputLayout.error = if (currentState.errorInputServer) {

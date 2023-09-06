@@ -30,9 +30,11 @@ class LoginViewModel @AssistedInject constructor(
     private val _state = savedStateHandle.getLiveData(
         KEY_LOGIN_STATE,
         UiLoginState(
-            server = authorizationPreferencesRepository.getStoredServer(),
-            login = authorizationPreferencesRepository.getStoredLogin(),
-            password = DEFAULT_STRING_VALUE
+            loginParams = LoginParams(
+                server = authorizationPreferencesRepository.getStoredServer(),
+                login = authorizationPreferencesRepository.getStoredLogin(),
+                password = DEFAULT_STRING_VALUE
+            )
         )
     )
 
@@ -43,9 +45,9 @@ class LoginViewModel @AssistedInject constructor(
         state.value?.let { currentState ->
             _state.value = currentState.copy(entering = true) // отобразим ПрогрессБар в кнопке "Enter"
 
-            var server = parseText(currentState.server)
-            val login = parseText(currentState.login)
-            val password = parseText(currentState.password)
+            var server = parseText(currentState.loginParams.server)
+            val login = parseText(currentState.loginParams.login)
+            val password = parseText(currentState.loginParams.password)
 
             val areFieldsValid = validateInput(server, login, password)
 
@@ -75,15 +77,12 @@ class LoginViewModel @AssistedInject constructor(
                         // проверка пароля:
                         val authResult = checkAuthParametersUseCase.checkAuthorization()
                         if (authResult.isAuthorized) {
-                            _state.value = _state.value?.copy(canContinue = true) ?: UiLoginState(canContinue = true)
+                            _state.value = _state.value?.copy(canContinue = true) ?: error("_state.value is null in LoginViewModel")
                         } else {
                             _state.value = _state.value?.copy(
                                 errorAuthorization = true,
                                 errorMessage = authResult.errorMessage
-                            ) ?: UiLoginState(
-                                errorAuthorization = true,
-                                errorMessage = authResult.errorMessage
-                            )
+                            ) ?: error("_state.value is null in LoginViewModel")
                         }
                     }
                     _state.value = _state.value?.copy(entering = false) // скроем ПрогрессБар в кнопке "Enter"
@@ -106,17 +105,17 @@ class LoginViewModel @AssistedInject constructor(
     private fun validateInput(server: String, login: String, password: String): Boolean {
         var result = true
         if (server.isBlank()) {
-            _state.value = _state.value?.copy(errorInputServer = true) ?: UiLoginState(errorInputServer = true)
+            _state.value = _state.value?.copy(errorInputServer = true) ?: error("_state.value is null in LoginViewModel")
             result = false
         }
 
         if (login.isBlank()) {
-            _state.value = _state.value?.copy(errorInputLogin = true) ?: UiLoginState(errorInputLogin = true)
+            _state.value = _state.value?.copy(errorInputLogin = true) ?: error("_state.value is null in LoginViewModel")
             result = false
         }
 
         if (password.isBlank()) {
-            _state.value = _state.value?.copy(errorInputPassword = true) ?: UiLoginState(errorInputPassword = true)
+            _state.value = _state.value?.copy(errorInputPassword = true) ?: error("_state.value is null in LoginViewModel")
             result = false
         }
 
@@ -126,33 +125,42 @@ class LoginViewModel @AssistedInject constructor(
     fun loadDemoData() {
         viewModelScope.launch {
             loadMockDataUseCase.loadMockData()
-            _state.value = _state.value?.copy(canContinueDemoMode = true) ?: UiLoginState(canContinueDemoMode = true)
+            _state.value = _state.value?.copy(canContinueDemoMode = true) ?: error("_state.value is null in LoginViewModel")
         }
     }
 
     fun setServer(server: String) {
-        _state.value = _state.value?.copy(server = server, errorInputServer = false) ?: UiLoginState(server = server)
+        _state.value = _state.value?.let {currentState ->
+            currentState.copy(
+                loginParams = currentState.loginParams.copy(server = server),
+                errorInputServer = false
+            )
+        } ?: error("_state.value is null in LoginViewModel")
     }
 
     fun setLogin(login: String) {
-        _state.value = _state.value?.copy(login = login, errorInputLogin = false) ?: UiLoginState(login = login)
+        _state.value = _state.value?.let {currentState ->
+            currentState.copy(
+                loginParams = currentState.loginParams.copy(login = login),
+                errorInputLogin = false
+            )
+        } ?: error("_state.value is null in LoginViewModel")
     }
 
     fun setPassword(password: String) {
-        _state.value = _state.value?.copy(
-            password = password,
-            errorInputPassword = false
-        ) ?: UiLoginState(password = password)
+        _state.value = _state.value?.let {currentState ->
+            currentState.copy(
+                loginParams = currentState.loginParams.copy(password = password),
+                errorInputPassword = false
+            )
+        } ?: error("_state.value is null in LoginViewModel")
     }
 
     fun resetErrorAuthorization() {
         _state.value = _state.value?.copy(
             errorAuthorization = false,
             errorMessage = DEFAULT_STRING_VALUE
-        ) ?: UiLoginState(
-            errorAuthorization = false,
-            errorMessage = DEFAULT_STRING_VALUE
-        )
+        ) ?: error("_state.value is null in LoginViewModel")
     }
 
     companion object {
