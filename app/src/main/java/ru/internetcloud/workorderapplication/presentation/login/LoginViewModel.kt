@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.di.AssistedSavedStateViewModelFactory
 import ru.internetcloud.workorderapplication.domain.repository.AuthorizationPreferencesRepository
@@ -41,7 +43,11 @@ class LoginViewModel @AssistedInject constructor(
     val state: LiveData<UiLoginState> // ToDo сделать на Flow
         get() = _state
 
-    fun signin() {
+    private val screenEventChannel = Channel<LoginScreenEvent>(Channel.BUFFERED)
+    val screenEventFlow = screenEventChannel.receiveAsFlow()
+
+
+    private fun signIn() {
         state.value?.let { currentState ->
             _state.value = currentState.copy(entering = true) // отобразим ПрогрессБар в кнопке "Enter"
 
@@ -79,10 +85,8 @@ class LoginViewModel @AssistedInject constructor(
                         if (authResult.isAuthorized) {
                             _state.value = _state.value?.copy(canContinue = true) ?: error("_state.value is null in LoginViewModel")
                         } else {
-                            _state.value = _state.value?.copy(
-                                errorAuthorization = true,
-                                errorMessage = authResult.errorMessage
-                            ) ?: error("_state.value is null in LoginViewModel")
+                            // одноразовый показ сообщения во фрагменте:
+                            screenEventChannel.trySend(LoginScreenEvent.ShowMessage(message = authResult.errorMessage))
                         }
                     }
                     _state.value = _state.value?.copy(entering = false) // скроем ПрогрессБар в кнопке "Enter"
@@ -122,45 +126,48 @@ class LoginViewModel @AssistedInject constructor(
         return result
     }
 
-    fun loadDemoData() {
+    private fun loadDemoData() {
         viewModelScope.launch {
             loadMockDataUseCase.loadMockData()
             _state.value = _state.value?.copy(canContinueDemoMode = true) ?: error("_state.value is null in LoginViewModel")
         }
     }
 
-    fun setServer(server: String) {
-        _state.value = _state.value?.let {currentState ->
-            currentState.copy(
-                loginParams = currentState.loginParams.copy(server = server),
-                errorInputServer = false
-            )
-        } ?: error("_state.value is null in LoginViewModel")
-    }
+    fun handleEvent(event: LoginEvent) {
+        val oldState = _state.value ?: error("_state.value is null in LoginViewModel")
 
-    fun setLogin(login: String) {
-        _state.value = _state.value?.let {currentState ->
-            currentState.copy(
-                loginParams = currentState.loginParams.copy(login = login),
-                errorInputLogin = false
-            )
-        } ?: error("_state.value is null in LoginViewModel")
-    }
+        when (event) {
+            is LoginEvent.OnServerChange -> {
+                _state.value = oldState.copy(
+                    loginParams = oldState.loginParams.copy(
+                        server = event.server
+                    ),
+                    errorInputServer = false
+                )
+            }
 
-    fun setPassword(password: String) {
-        _state.value = _state.value?.let {currentState ->
-            currentState.copy(
-                loginParams = currentState.loginParams.copy(password = password),
-                errorInputPassword = false
-            )
-        } ?: error("_state.value is null in LoginViewModel")
-    }
+            is LoginEvent.OnLoginChange -> {
+                _state.value = oldState.copy(
+                    loginParams = oldState.loginParams.copy(
+                        login = event.login
+                    ),
+                    errorInputLogin = false
+                )
+            }
 
-    fun resetErrorAuthorization() {
-        _state.value = _state.value?.copy(
-            errorAuthorization = false,
-            errorMessage = DEFAULT_STRING_VALUE
-        ) ?: error("_state.value is null in LoginViewModel")
+            is LoginEvent.OnPasswordChange -> {
+                _state.value = oldState.copy(
+                    loginParams = oldState.loginParams.copy(
+                        password = event.password
+                    ),
+                    errorInputPassword = false
+                )
+            }
+
+            LoginEvent.OnSignIn -> {
+                signIn()
+            }
+        }
     }
 
     companion object {

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +20,7 @@ import ru.internetcloud.workorderapplication.di.InjectingSavedStateViewModelFact
 import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.domain.repository.AuthorizationPreferencesRepository
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
+import ru.internetcloud.workorderapplication.presentation.util.launchAndCollectIn
 
 class LoginFragment : Fragment() {
 
@@ -51,7 +52,7 @@ class LoginFragment : Fragment() {
 
     private var _binding: FragmentLogonBinding? = null
     private val binding: FragmentLogonBinding
-        get() = _binding ?: throw RuntimeException("Error FragmentWorkOrderBinding is NULL")
+        get() = _binding ?: error("FragmentWorkOrderBinding is null")
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -72,8 +73,21 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.versionTextView.text = getString(R.string.version, BuildConfig.VERSION_NAME)
+        setupClickListeners()
+        setupUi()
+        observeViewModel()
+    }
 
+    override fun onStart() {
+        super.onStart()
+
+        // doOnTextChanged или doAfterTextChanged нужно навешивать здесь, а не в onCreateView или onViewCreated,
+        // т.к. там еще не восстановлено EditText и слушатели будут "дергаться" лишний раз
+        // когда ОС Андроид сама восстановит состояние EditText
+        setupOnTextChangedListeners()
+    }
+
+    private fun setupClickListeners() {
         binding.enterButton.setOnClickListener {
             onEnterButtonPressed()
         }
@@ -87,34 +101,28 @@ class LoginFragment : Fragment() {
         }
 
         binding.cancelButton.setOnClickListener {
-            activity?.onBackPressed() // это аналог finish для фрагмента
+            activity?.onBackPressed() // это аналог finish для фрагмента, потом замени на findNavController().popBackStack
         }
+    }
 
-        observeViewModel()
+    private fun setupUi() {
+        binding.versionTextView.text = getString(R.string.version, BuildConfig.VERSION_NAME)
     }
 
     private fun onEnterButtonPressed(): Boolean {
-        viewModel.signin()
+        viewModel.handleEvent(LoginEvent.OnSignIn)
         return false // чтобы клавиатура скрылась с экрана
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        // doOnTextChanged нужно навешивать здесь, а не в onCreateView или onViewCreated, т.к. там еще не восстановлено
-        // EditText и слушатели будут "дергаться" лишний раз когда ОС Андроид сама восстановит состояние EditText
-        setupOnTextChangedListeners()
-    }
-
     private fun setupOnTextChangedListeners() {
-        binding.serverEditText.doOnTextChanged { text, _, _, _ ->
-            viewModel.setServer(text.toString())
+        binding.serverEditText.doAfterTextChanged { text ->
+            viewModel.handleEvent(LoginEvent.OnServerChange(server = text.toString()))
         }
-        binding.loginEditText.doOnTextChanged { text, _, _, _ ->
-            viewModel.setLogin(text.toString())
+        binding.loginEditText.doAfterTextChanged { text ->
+            viewModel.handleEvent(LoginEvent.OnLoginChange(login = text.toString()))
         }
-        binding.passwordEditText.doOnTextChanged { text, _, _, _ ->
-            viewModel.setPassword(text.toString())
+        binding.passwordEditText.doAfterTextChanged { text ->
+            viewModel.handleEvent(LoginEvent.OnPasswordChange(password = text.toString()))
         }
     }
 
@@ -126,7 +134,7 @@ class LoginFragment : Fragment() {
             binding.loginEditText.isEnabled = !currentState.entering
             binding.passwordEditText.isEnabled = !currentState.entering
 
-            // чтобы "doOnTextChanged" не дергались и не зацикливалось приложение
+            // чтобы "doOnTextChanged" или "doAfterTextChanged" не дергались и не зацикливалось приложение
             if (!currentState.loginParams.server.equals(binding.serverEditText.text.toString())) {
                 binding.serverEditText.setText(currentState.loginParams.server)
             }
@@ -153,17 +161,9 @@ class LoginFragment : Fragment() {
                 null
             }
 
-            if (currentState.errorAuthorization) {
-                // показать AlertDialog об ошибке авторизации!!!
-                MessageDialogFragment
-                    .newInstance(currentState.errorMessage)
-                    .show(childFragmentManager, null)
-                viewModel.resetErrorAuthorization()
-            }
-
             if (currentState.canContinue) {
                 // подписка на завершение экрана:
-                // запустить фрагмент, где будет сихнронизация данных из 1С
+                // запустить фрагмент, где будет синхронизация данных из 1С
                 (requireActivity() as Callbacks).onLaunchDataSynchronization()
             }
 
@@ -171,6 +171,15 @@ class LoginFragment : Fragment() {
                 // демо-режим - переход в список Заказ-нарядов:
                 // запустить фрагмент, где будет показан список демо-заказ-нарядов
                 (requireActivity() as Callbacks).onLaunchWorkOrderList()
+            }
+
+            viewModel.screenEventFlow.launchAndCollectIn(viewLifecycleOwner) { event ->
+                when (event) {
+                    is LoginScreenEvent.ShowMessage -> {
+                        MessageDialogFragment.newInstance(event.message)
+                            .show(childFragmentManager, null)
+                    }
+                }
             }
         }
     }
