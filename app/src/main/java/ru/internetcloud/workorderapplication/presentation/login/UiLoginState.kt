@@ -13,6 +13,4 @@ data class UiLoginState(
     val errorInputServer: Boolean = false,
     val errorInputLogin: Boolean = false,
     val errorInputPassword: Boolean = false,
-//    val errorAuthorization: Boolean = false,
-//    val errorMessage: String = ""
 ) : Parcelable

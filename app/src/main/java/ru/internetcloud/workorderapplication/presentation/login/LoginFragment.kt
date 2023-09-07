@@ -127,7 +127,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.state.observe(viewLifecycleOwner) { currentState ->
+        viewModel.state.launchAndCollectIn(viewLifecycleOwner) { currentState ->
             binding.enterProgressBar.isVisible = currentState.entering
             binding.enterButton.isEnabled = !currentState.entering
             binding.serverEditText.isEnabled = !currentState.entering
@@ -172,13 +172,13 @@ class LoginFragment : Fragment() {
                 // запустить фрагмент, где будет показан список демо-заказ-нарядов
                 (requireActivity() as Callbacks).onLaunchWorkOrderList()
             }
+        }
 
-            viewModel.screenEventFlow.launchAndCollectIn(viewLifecycleOwner) { event ->
-                when (event) {
-                    is LoginScreenEvent.ShowMessage -> {
-                        MessageDialogFragment.newInstance(event.message)
-                            .show(childFragmentManager, null)
-                    }
+        viewModel.screenEventFlow.launchAndCollectIn(viewLifecycleOwner) { event ->
+            when (event) {
+                is LoginScreenEvent.ShowMessage -> {
+                    MessageDialogFragment.newInstance(event.message)
+                        .show(childFragmentManager, null)
                 }
             }
         }

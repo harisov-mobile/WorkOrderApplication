@@ -1,6 +1,5 @@
 package ru.internetcloud.workorderapplication.presentation.login
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +7,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.di.AssistedSavedStateViewModelFactory
@@ -29,9 +29,8 @@ class LoginViewModel @AssistedInject constructor(
         override fun create(savedStateHandle: SavedStateHandle): LoginViewModel
     }
 
-    private val _state = savedStateHandle.getLiveData(
-        KEY_LOGIN_STATE,
-        UiLoginState(
+    val state: StateFlow<UiLoginState> = savedStateHandle.getStateFlow(
+        KEY_LOGIN_STATE, UiLoginState(
             loginParams = LoginParams(
                 server = authorizationPreferencesRepository.getStoredServer(),
                 login = authorizationPreferencesRepository.getStoredLogin(),
@@ -40,60 +39,57 @@ class LoginViewModel @AssistedInject constructor(
         )
     )
 
-    val state: LiveData<UiLoginState> // ToDo сделать на Flow
-        get() = _state
-
     private val screenEventChannel = Channel<LoginScreenEvent>(Channel.BUFFERED)
     val screenEventFlow = screenEventChannel.receiveAsFlow()
 
-
     private fun signIn() {
-        state.value?.let { currentState ->
-            _state.value = currentState.copy(entering = true) // отобразим ПрогрессБар в кнопке "Enter"
+        // отобразим ПрогрессБар в кнопке "Enter"
+        savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(entering = true)
 
-            var server = parseText(currentState.loginParams.server)
-            val login = parseText(currentState.loginParams.login)
-            val password = parseText(currentState.loginParams.password)
+        var server = parseText(state.value.loginParams.server)
+        val login = parseText(state.value.loginParams.login)
+        val password = parseText(state.value.loginParams.password)
 
-            val areFieldsValid = validateInput(server, login, password)
+        val areFieldsValid = validateInput(server, login, password)
 
-            if (areFieldsValid) {
-                // сохранить имя сервера и логин в SharedPreferences (хеш сохраняется в другом месте при удачном входе):
-                saveToSharedPreferences(server = server, login = login)
+        if (areFieldsValid) {
+            // сохранить имя сервера и логин в SharedPreferences (хеш сохраняется в другом месте при удачном входе):
+            saveToSharedPreferences(server = server, login = login)
 
-                viewModelScope.launch {
-                    server = server.lowercase()
+            viewModelScope.launch {
+                server = server.lowercase()
 
-                    // демо-режим:
-                    if (server.equals(DEMO_SERVER) && login.equals(DEMO_LOGIN) && password.equals(DEMO_PASSWORD)) {
-                        setAuthParametersUseCase.setAuthParameters(server, login, password)
-                        loadDemoData()
-                    } else {
-                        if (server.length >= BEGIN_SIZE) {
-                            val firstFourLetters = server.substring(0, BEGIN_SIZE)
-                            if (!firstFourLetters.equals("http")) {
-                                server = HTTP_PREFIX + server
-                            }
-                        } else {
+                // демо-режим:
+                if (server.equals(DEMO_SERVER) && login.equals(DEMO_LOGIN) && password.equals(DEMO_PASSWORD)) {
+                    setAuthParametersUseCase.setAuthParameters(server, login, password)
+                    loadDemoData()
+                } else {
+                    if (server.length >= BEGIN_SIZE) {
+                        val firstFourLetters = server.substring(0, BEGIN_SIZE)
+                        if (!firstFourLetters.equals("http")) {
                             server = HTTP_PREFIX + server
                         }
-
-                        setAuthParametersUseCase.setAuthParameters(server, login, password)
-
-                        // проверка пароля:
-                        val authResult = checkAuthParametersUseCase.checkAuthorization()
-                        if (authResult.isAuthorized) {
-                            _state.value = _state.value?.copy(canContinue = true) ?: error("_state.value is null in LoginViewModel")
-                        } else {
-                            // одноразовый показ сообщения во фрагменте:
-                            screenEventChannel.trySend(LoginScreenEvent.ShowMessage(message = authResult.errorMessage))
-                        }
+                    } else {
+                        server = HTTP_PREFIX + server
                     }
-                    _state.value = _state.value?.copy(entering = false) // скроем ПрогрессБар в кнопке "Enter"
+
+                    setAuthParametersUseCase.setAuthParameters(server, login, password)
+
+                    // проверка пароля:
+                    val authResult = checkAuthParametersUseCase.checkAuthorization()
+                    if (authResult.isAuthorized) {
+                        savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(canContinue = true)
+                    } else {
+                        // одноразовый показ сообщения во фрагменте:
+                        screenEventChannel.trySend(LoginScreenEvent.ShowMessage(message = authResult.errorMessage))
+                    }
                 }
-            } else {
-                _state.value = _state.value?.copy(entering = false) // скроем ПрогрессБар в кнопке "Enter"
+                // скроем ПрогрессБар в кнопке "Enter"
+                savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(entering = false)
             }
+        } else {
+            // скроем ПрогрессБар в кнопке "Enter"
+            savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(entering = false)
         }
     }
 
@@ -109,17 +105,17 @@ class LoginViewModel @AssistedInject constructor(
     private fun validateInput(server: String, login: String, password: String): Boolean {
         var result = true
         if (server.isBlank()) {
-            _state.value = _state.value?.copy(errorInputServer = true) ?: error("_state.value is null in LoginViewModel")
+            savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(errorInputServer = true)
             result = false
         }
 
         if (login.isBlank()) {
-            _state.value = _state.value?.copy(errorInputLogin = true) ?: error("_state.value is null in LoginViewModel")
+            savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(errorInputLogin = true)
             result = false
         }
 
         if (password.isBlank()) {
-            _state.value = _state.value?.copy(errorInputPassword = true) ?: error("_state.value is null in LoginViewModel")
+            savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(errorInputPassword = true)
             result = false
         }
 
@@ -129,16 +125,16 @@ class LoginViewModel @AssistedInject constructor(
     private fun loadDemoData() {
         viewModelScope.launch {
             loadMockDataUseCase.loadMockData()
-            _state.value = _state.value?.copy(canContinueDemoMode = true) ?: error("_state.value is null in LoginViewModel")
+            savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(canContinueDemoMode = true)
         }
     }
 
     fun handleEvent(event: LoginEvent) {
-        val oldState = _state.value ?: error("_state.value is null in LoginViewModel")
+        val oldState = state.value
 
         when (event) {
             is LoginEvent.OnServerChange -> {
-                _state.value = oldState.copy(
+                savedStateHandle[KEY_LOGIN_STATE] = oldState.copy(
                     loginParams = oldState.loginParams.copy(
                         server = event.server
                     ),
@@ -147,7 +143,7 @@ class LoginViewModel @AssistedInject constructor(
             }
 
             is LoginEvent.OnLoginChange -> {
-                _state.value = oldState.copy(
+                savedStateHandle[KEY_LOGIN_STATE] = oldState.copy(
                     loginParams = oldState.loginParams.copy(
                         login = event.login
                     ),
@@ -156,7 +152,7 @@ class LoginViewModel @AssistedInject constructor(
             }
 
             is LoginEvent.OnPasswordChange -> {
-                _state.value = oldState.copy(
+                savedStateHandle[KEY_LOGIN_STATE] = oldState.copy(
                     loginParams = oldState.loginParams.copy(
                         password = event.password
                     ),
