@@ -39,7 +39,7 @@ class LoginViewModel @AssistedInject constructor(
         )
     )
 
-    private val screenEventChannel = Channel<LoginScreenEvent>(Channel.BUFFERED)
+    private val screenEventChannel = Channel<LoginSideEffectEvent>(Channel.BUFFERED)
     val screenEventFlow = screenEventChannel.receiveAsFlow()
 
     private fun signIn() {
@@ -81,7 +81,7 @@ class LoginViewModel @AssistedInject constructor(
                         savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(canContinue = true)
                     } else {
                         // одноразовый показ сообщения во фрагменте:
-                        screenEventChannel.trySend(LoginScreenEvent.ShowMessage(message = authResult.errorMessage))
+                        screenEventChannel.trySend(LoginSideEffectEvent.ShowMessage(message = authResult.errorMessage))
                     }
                 }
                 // скроем ПрогрессБар в кнопке "Enter"

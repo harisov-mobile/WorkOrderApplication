@@ -176,7 +176,7 @@ class LoginFragment : Fragment() {
 
         viewModel.screenEventFlow.launchAndCollectIn(viewLifecycleOwner) { event ->
             when (event) {
-                is LoginScreenEvent.ShowMessage -> {
+                is LoginSideEffectEvent.ShowMessage -> {
                     MessageDialogFragment.newInstance(event.message)
                         .show(childFragmentManager, null)
                 }
