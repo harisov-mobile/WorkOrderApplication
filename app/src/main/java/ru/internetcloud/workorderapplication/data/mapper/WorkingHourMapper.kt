@@ -2,7 +2,7 @@ package ru.internetcloud.workorderapplication.data.mapper
 
 import ru.internetcloud.workorderapplication.data.model.WorkingHourDbModel
 import ru.internetcloud.workorderapplication.data.network.dto.WorkingHourDTO
-import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
+import ru.internetcloud.workorderapplication.domain.model.catalog.WorkingHour
 import javax.inject.Inject
 
 class WorkingHourMapper @Inject constructor() {

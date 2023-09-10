@@ -1,8 +1,8 @@
-package ru.internetcloud.workorderapplication.domain.document
+package ru.internetcloud.workorderapplication.domain.model.document
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import ru.internetcloud.workorderapplication.domain.catalog.Employee
+import ru.internetcloud.workorderapplication.domain.model.catalog.Employee
 
 // это строка табличной части "Исполнители"
 @Parcelize

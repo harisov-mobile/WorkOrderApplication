@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import ru.internetcloud.workorderapplication.databinding.ItemPartnerListBinding
 import ru.internetcloud.workorderapplication.databinding.ItemPartnerListSelectedBinding
-import ru.internetcloud.workorderapplication.domain.catalog.Partner
+import ru.internetcloud.workorderapplication.domain.model.catalog.Partner
 
 class PartnerListAdapter(var partners: List<Partner>) : RecyclerView.Adapter<PartnerListViewHolder>() {
     var onPartnerClickListener: ((partner: Partner) -> Unit)? = null

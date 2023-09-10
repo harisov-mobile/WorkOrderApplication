@@ -2,7 +2,7 @@ package ru.internetcloud.workorderapplication.data.datasource.remote
 
 import ru.internetcloud.workorderapplication.data.mapper.EmployeeMapper
 import ru.internetcloud.workorderapplication.data.network.api.ApiClient
-import ru.internetcloud.workorderapplication.domain.catalog.Employee
+import ru.internetcloud.workorderapplication.domain.model.catalog.Employee
 import javax.inject.Inject
 
 class EmployeeRemoteDataSource @Inject constructor(

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import ru.internetcloud.workorderapplication.databinding.ItemWorkingHourListBinding
 import ru.internetcloud.workorderapplication.databinding.ItemWorkingHourListSelectedBinding
-import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
+import ru.internetcloud.workorderapplication.domain.model.catalog.WorkingHour
 
 class WorkingHourListAdapter(var workingHours: List<WorkingHour>) : RecyclerView.Adapter<WorkingHourListViewHolder>() {
     var onWorkingHourClickListener: ((carJob: WorkingHour) -> Unit)? = null

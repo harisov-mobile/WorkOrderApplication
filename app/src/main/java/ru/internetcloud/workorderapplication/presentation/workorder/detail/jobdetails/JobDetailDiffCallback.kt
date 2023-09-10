@@ -1,7 +1,7 @@
 package ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails
 
 import androidx.recyclerview.widget.DiffUtil
-import ru.internetcloud.workorderapplication.domain.document.JobDetail
+import ru.internetcloud.workorderapplication.domain.model.document.JobDetail
 
 class JobDetailDiffCallback : DiffUtil.ItemCallback<JobDetail>() {
     override fun areItemsTheSame(oldItem: JobDetail, newItem: JobDetail): Boolean {

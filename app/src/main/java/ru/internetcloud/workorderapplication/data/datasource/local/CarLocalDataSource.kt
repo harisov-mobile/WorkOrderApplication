@@ -2,7 +2,7 @@ package ru.internetcloud.workorderapplication.data.datasource.local
 
 import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.mapper.CarMapper
-import ru.internetcloud.workorderapplication.domain.catalog.Car
+import ru.internetcloud.workorderapplication.domain.model.catalog.Car
 import javax.inject.Inject
 
 class CarLocalDataSource @Inject constructor(

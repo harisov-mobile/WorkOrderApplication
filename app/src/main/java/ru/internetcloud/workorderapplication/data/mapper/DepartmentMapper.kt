@@ -2,7 +2,7 @@ package ru.internetcloud.workorderapplication.data.mapper
 
 import ru.internetcloud.workorderapplication.data.model.DepartmentDbModel
 import ru.internetcloud.workorderapplication.data.network.dto.DepartmentDTO
-import ru.internetcloud.workorderapplication.domain.catalog.Department
+import ru.internetcloud.workorderapplication.domain.model.catalog.Department
 import javax.inject.Inject
 
 class DepartmentMapper @Inject constructor() {

@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.di.ViewModelFactory
-import ru.internetcloud.workorderapplication.domain.catalog.CarJob
+import ru.internetcloud.workorderapplication.domain.model.catalog.CarJob
 import javax.inject.Inject
 
 class CarJobPickerFragment : DialogFragment() {
@@ -58,7 +58,6 @@ class CarJobPickerFragment : DialogFragment() {
         }
 
         val alertDialogBuilder = AlertDialog.Builder(activity)
-        // alertDialogBuilder.setTitle(R.string.car_job_picker_title)
 
         val container = layoutInflater.inflate(R.layout.fragment_picker, null, false)
         clearSearchTextImageButton = container.findViewById(R.id.clear_search_text_button)

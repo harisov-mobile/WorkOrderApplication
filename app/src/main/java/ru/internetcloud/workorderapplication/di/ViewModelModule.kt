@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import ru.internetcloud.workorderapplication.presentation.logon.LogonViewModel
+import ru.internetcloud.workorderapplication.presentation.login.LoginViewModel
 import ru.internetcloud.workorderapplication.presentation.sendemail.SendWorkOrderByIdToEmailViewModel
 import ru.internetcloud.workorderapplication.presentation.synchro.DataSynchronizationFragmentViewModel
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.WorkOrderViewModel
@@ -23,9 +23,9 @@ interface ViewModelModule {
     // перечислить тут все вью-модели
 
     @IntoMap
-    @ViewModelKey(LogonViewModel::class)
+    @ViewModelKey(LoginViewModel::class)
     @Binds
-    fun bindLogonViewModel(impl: LogonViewModel): ViewModel
+    fun bindLogonViewModelFactory(f: LoginViewModel.Factory): AssistedSavedStateViewModelFactory<out ViewModel>
 
     @IntoMap
     @ViewModelKey(SendWorkOrderByIdToEmailViewModel::class)

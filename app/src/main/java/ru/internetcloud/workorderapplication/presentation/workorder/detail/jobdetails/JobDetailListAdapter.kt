@@ -7,7 +7,7 @@ import androidx.viewbinding.ViewBinding
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.ItemJobDetailListBinding
 import ru.internetcloud.workorderapplication.databinding.ItemJobDetailListSelectedBinding
-import ru.internetcloud.workorderapplication.domain.document.JobDetail
+import ru.internetcloud.workorderapplication.domain.model.document.JobDetail
 
 class JobDetailListAdapter : ListAdapter<JobDetail, JobDetailListViewHolder>(JobDetailDiffCallback()) {
 

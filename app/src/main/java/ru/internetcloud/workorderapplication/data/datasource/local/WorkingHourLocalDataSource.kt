@@ -2,7 +2,7 @@ package ru.internetcloud.workorderapplication.data.datasource.local
 
 import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.mapper.WorkingHourMapper
-import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
+import ru.internetcloud.workorderapplication.domain.model.catalog.WorkingHour
 import javax.inject.Inject
 
 class WorkingHourLocalDataSource @Inject constructor(

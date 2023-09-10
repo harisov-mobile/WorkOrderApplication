@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import ru.internetcloud.workorderapplication.databinding.ItemEmployeeListBinding
 import ru.internetcloud.workorderapplication.databinding.ItemEmployeeListSelectedBinding
-import ru.internetcloud.workorderapplication.domain.catalog.Employee
+import ru.internetcloud.workorderapplication.domain.model.catalog.Employee
 
 class EmployeeListAdapter(var employees: List<Employee>) : RecyclerView.Adapter<EmployeeListViewHolder>() {
     var onEmployeeClickListener: ((employee: Employee) -> Unit)? = null

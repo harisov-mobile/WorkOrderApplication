@@ -3,7 +3,7 @@ package ru.internetcloud.workorderapplication.presentation.workorder.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
-import ru.internetcloud.workorderapplication.domain.document.WorkOrder
+import ru.internetcloud.workorderapplication.domain.model.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetFilteredWorkOrderListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderListUseCase
 import javax.inject.Inject

@@ -1,13 +1,13 @@
-package ru.internetcloud.workorderapplication.domain.catalog
+package ru.internetcloud.workorderapplication.domain.model.catalog
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-// спр-к Цеха
+// спр-к Сотрудники
 @Parcelize
-data class Department(
+data class Employee(
     var id: String = "",
-    var code1C: String = "",
     var name: String = "",
+    var code1C: String = "",
     var isSelected: Boolean = false
 ) : Parcelable

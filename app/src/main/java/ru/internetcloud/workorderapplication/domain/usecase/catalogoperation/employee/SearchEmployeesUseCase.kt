@@ -1,6 +1,6 @@
 package ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.employee
 
-import ru.internetcloud.workorderapplication.domain.catalog.Employee
+import ru.internetcloud.workorderapplication.domain.model.catalog.Employee
 import ru.internetcloud.workorderapplication.domain.repository.EmployeeRepository
 import javax.inject.Inject
 

@@ -1,6 +1,6 @@
 package ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour
 
-import ru.internetcloud.workorderapplication.domain.catalog.WorkingHour
+import ru.internetcloud.workorderapplication.domain.model.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.repository.WorkingHourRepository
 import javax.inject.Inject
 

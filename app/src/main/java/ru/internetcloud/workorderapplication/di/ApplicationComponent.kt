@@ -3,7 +3,7 @@ package ru.internetcloud.workorderapplication.di
 import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
-import ru.internetcloud.workorderapplication.presentation.logon.LogonFragment
+import ru.internetcloud.workorderapplication.presentation.login.LoginFragment
 import ru.internetcloud.workorderapplication.presentation.sendemail.SendWorkOrderByIdToEmailDialogFragment
 import ru.internetcloud.workorderapplication.presentation.synchro.DataSynchronizationFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.WorkOrderFragment
@@ -20,7 +20,7 @@ import ru.internetcloud.workorderapplication.presentation.workorder.list.WorkOrd
 @ApplicationScope
 interface ApplicationComponent {
 
-    fun inject(fragment: LogonFragment)
+    fun inject(fragment: LoginFragment)
 
     fun inject(fragment: CarPickerFragment)
 

@@ -1,7 +1,7 @@
 package ru.internetcloud.workorderapplication.data.repository.common
 
 import ru.internetcloud.workorderapplication.data.datasource.local.DepartmentLocalDataSource
-import ru.internetcloud.workorderapplication.domain.catalog.Department
+import ru.internetcloud.workorderapplication.domain.model.catalog.Department
 import ru.internetcloud.workorderapplication.domain.repository.DepartmentRepository
 import javax.inject.Inject
 

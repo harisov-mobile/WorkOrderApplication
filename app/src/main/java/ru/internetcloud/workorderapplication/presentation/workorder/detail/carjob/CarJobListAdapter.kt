@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import ru.internetcloud.workorderapplication.databinding.ItemCarJobListBinding
 import ru.internetcloud.workorderapplication.databinding.ItemCarJobListSelectedBinding
-import ru.internetcloud.workorderapplication.domain.catalog.CarJob
+import ru.internetcloud.workorderapplication.domain.model.catalog.CarJob
 
 class CarJobListAdapter(var carJobs: List<CarJob>) : RecyclerView.Adapter<CarJobListViewHolder>() {
     var onCarJobClickListener: ((carJob: CarJob) -> Unit)? = null

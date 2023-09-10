@@ -92,9 +92,6 @@ interface AppDao {
     @Query("DELETE FROM repair_types")
     suspend fun deleteAllRepairTypes()
 
-    @Query("SELECT * FROM repair_types WHERE id=:id LIMIT 1")
-    suspend fun getRepairType(id: String): RepairTypeDbModel?
-
     @Query("SELECT * FROM repair_types WHERE name LIKE :searchText")
     suspend fun searhRepairTypes(searchText: String): List<RepairTypeDbModel>
 
@@ -111,9 +108,6 @@ interface AppDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addCarJob(carJobDbModel: CarJobDbModel)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addCarModel(carModelDbModel: CarModelDbModel)
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addCarJobList(carJobDbModelList: List<CarJobDbModel>)
 
@@ -125,12 +119,6 @@ interface AppDao {
 
     @Query("DELETE FROM car_models")
     suspend fun deleteAllCarModels()
-
-    @Query("SELECT * FROM car_jobs WHERE id=:id LIMIT 1")
-    suspend fun getCarJob(id: String): CarJobDbModel?
-
-    @Query("SELECT * FROM car_models WHERE id=:id LIMIT 1")
-    suspend fun getCarModel(id: String): CarModelDbModel?
 
     @Query("SELECT * FROM car_jobs WHERE name LIKE :searchText")
     suspend fun searhCarJobs(searchText: String): List<CarJobDbModel>
@@ -161,9 +149,6 @@ interface AppDao {
     @Query("DELETE FROM employees")
     suspend fun deleteAllEmployees()
 
-    @Query("SELECT * FROM employees WHERE id=:id LIMIT 1")
-    suspend fun getEmployee(id: String): EmployeeDbModel?
-
     @Query("SELECT * FROM employees WHERE name LIKE :searchText")
     suspend fun searchEmployees(searchText: String): List<EmployeeDbModel>
 
@@ -176,9 +161,6 @@ interface AppDao {
 
     @Query("DELETE FROM partners")
     suspend fun deleteAllPartners()
-
-    @Query("SELECT * FROM partners WHERE id=:id LIMIT 1")
-    suspend fun getPartner(id: String): PartnerDbModel?
 
     @Query("SELECT * FROM partners WHERE name LIKE :searchText OR inn LIKE :searchText")
     suspend fun searhPartners(searchText: String): List<PartnerDbModel>

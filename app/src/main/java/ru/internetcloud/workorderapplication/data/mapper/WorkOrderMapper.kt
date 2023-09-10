@@ -4,7 +4,7 @@ import ru.internetcloud.workorderapplication.data.model.WorkOrderDbModel
 import ru.internetcloud.workorderapplication.data.model.WorkOrderWithDetails
 import ru.internetcloud.workorderapplication.data.network.dto.WorkOrderDTO
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
-import ru.internetcloud.workorderapplication.domain.document.WorkOrder
+import ru.internetcloud.workorderapplication.domain.model.document.WorkOrder
 import javax.inject.Inject
 
 class WorkOrderMapper @Inject constructor(

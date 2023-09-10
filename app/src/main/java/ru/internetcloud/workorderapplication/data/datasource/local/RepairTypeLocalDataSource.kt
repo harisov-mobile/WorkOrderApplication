@@ -4,8 +4,8 @@ import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.mapper.DefaultRepairTypeJobDetailMapper
 import ru.internetcloud.workorderapplication.data.mapper.RepairTypeMapper
 import ru.internetcloud.workorderapplication.data.model.DefaultRepairTypeJobDetailDbModel
-import ru.internetcloud.workorderapplication.domain.catalog.DefaultRepairTypeJobDetail
-import ru.internetcloud.workorderapplication.domain.catalog.RepairType
+import ru.internetcloud.workorderapplication.domain.model.catalog.DefaultRepairTypeJobDetail
+import ru.internetcloud.workorderapplication.domain.model.catalog.RepairType
 import javax.inject.Inject
 
 class RepairTypeLocalDataSource @Inject constructor(
