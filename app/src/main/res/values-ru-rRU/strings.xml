@@ -135,4 +135,8 @@
     <string name="department_hint">Цех</string>
     <string name="date_from_hint">Дата с</string>
     <string name="date_to_hint">Дата по</string>
+
+    <string name="try_again">Попробовать снова</string>
+
+    <string name="work_order_list_no_data">Нет данных</string>
 </resources>

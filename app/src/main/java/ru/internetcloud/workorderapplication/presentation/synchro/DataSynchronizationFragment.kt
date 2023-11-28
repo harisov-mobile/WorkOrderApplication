@@ -1,6 +1,5 @@
 package ru.internetcloud.workorderapplication.presentation.synchro
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,41 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentDataSynchronizationBinding
-import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.domain.common.UpdateState
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class DataSynchronizationFragment : Fragment() {
 
-    // интерфейс обратного вызова
-    interface Callbacks {
-        fun onLaunchWorkOrderList()
-    }
-
-    // даггер:
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val component by lazy {
-        (requireActivity().application as WorkOrderApp).component
-    }
-
-    private lateinit var viewModel: DataSynchronizationFragmentViewModel
+    private val viewModel by viewModels<DataSynchronizationFragmentViewModel>()
 
     private var _binding: FragmentDataSynchronizationBinding? = null
     private val binding: FragmentDataSynchronizationBinding
         get() = _binding ?: throw RuntimeException("Error DataSynchronizationFragmentBinding is NULL")
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        // даггер:
-        component.inject(this)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentDataSynchronizationBinding.inflate(inflater, container, false)
@@ -52,12 +32,11 @@ class DataSynchronizationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this, viewModelFactory).get(DataSynchronizationFragmentViewModel::class.java)
-
         binding.versionTextView.text = getString(R.string.version, BuildConfig.VERSION_NAME)
 
         binding.okButton.setOnClickListener {
-            (requireActivity() as Callbacks).onLaunchWorkOrderList() // запустить фрагмент, где будет список заказ-нарядов
+            // запустить фрагмент, где будет список заказ-нарядов
+            findNavController().navigate(DataSynchronizationFragmentDirections.actionDataSynchronizationFragmentToWorkOrderListFragment())
         }
 
         binding.exitButton.setOnClickListener {
@@ -132,12 +111,6 @@ class DataSynchronizationFragment : Fragment() {
                     }
                 }
             }
-        }
-    }
-
-    companion object {
-        fun newInstance(): DataSynchronizationFragment {
-            return DataSynchronizationFragment()
         }
     }
 }

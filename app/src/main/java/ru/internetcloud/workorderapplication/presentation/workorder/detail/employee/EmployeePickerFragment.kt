@@ -11,28 +11,20 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.WorkOrderApp
-import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.domain.model.catalog.Employee
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class EmployeePickerFragment : DialogFragment() {
-
-    // даггер:
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val component by lazy {
-        (requireActivity().application as WorkOrderApp).component
-    }
 
     private var requestKey = ""
     private var argEmployeeName = ""
 
-    private lateinit var viewModel: EmployeeListViewModel
+    private val viewModel by viewModels<EmployeeListViewModel>()
+
     private lateinit var employeeListRecyclerView: RecyclerView
     private lateinit var employeeListAdapter: EmployeeListAdapter
 
@@ -41,11 +33,6 @@ class EmployeePickerFragment : DialogFragment() {
     private lateinit var titleTextView: TextView
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // даггер:
-        component.inject(this)
-
-        viewModel = ViewModelProvider(this, viewModelFactory).get(EmployeeListViewModel::class.java)
-
         arguments?.let { arg ->
             viewModel.selectedEmployee ?: let {
                 viewModel.selectedEmployee = arg.getParcelable(EMPLOYEE)

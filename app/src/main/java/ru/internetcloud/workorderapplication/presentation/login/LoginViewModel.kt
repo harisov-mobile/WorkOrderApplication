@@ -3,31 +3,25 @@ package ru.internetcloud.workorderapplication.presentation.login
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import ru.internetcloud.workorderapplication.di.AssistedSavedStateViewModelFactory
 import ru.internetcloud.workorderapplication.domain.repository.AuthorizationPreferencesRepository
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.CheckAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.logonoperation.SetAuthParametersUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.LoadMockDataUseCase
 
-class LoginViewModel @AssistedInject constructor(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val setAuthParametersUseCase: SetAuthParametersUseCase,
     private val checkAuthParametersUseCase: CheckAuthParametersUseCase,
     private val loadMockDataUseCase: LoadMockDataUseCase,
     private val authorizationPreferencesRepository: AuthorizationPreferencesRepository,
-    @Assisted private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-
-    @AssistedFactory
-    interface Factory : AssistedSavedStateViewModelFactory<LoginViewModel> {
-        override fun create(savedStateHandle: SavedStateHandle): LoginViewModel
-    }
 
     val state: StateFlow<UiLoginState> = savedStateHandle.getStateFlow(
         KEY_LOGIN_STATE, UiLoginState(
@@ -78,14 +72,14 @@ class LoginViewModel @AssistedInject constructor(
                     // проверка пароля:
                     val authResult = checkAuthParametersUseCase.checkAuthorization()
                     if (authResult.isAuthorized) {
-                        savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(canContinue = true)
+                        savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(canContinue = true, entering = false)
                     } else {
                         // одноразовый показ сообщения во фрагменте:
                         screenEventChannel.trySend(LoginSideEffectEvent.ShowMessage(message = authResult.errorMessage))
+                        // скроем ПрогрессБар в кнопке "Enter"
+                        savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(entering = false)
                     }
                 }
-                // скроем ПрогрессБар в кнопке "Enter"
-                savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(entering = false)
             }
         } else {
             // скроем ПрогрессБар в кнопке "Enter"

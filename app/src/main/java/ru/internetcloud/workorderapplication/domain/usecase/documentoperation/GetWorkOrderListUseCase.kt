@@ -1,14 +1,14 @@
 package ru.internetcloud.workorderapplication.domain.usecase.documentoperation
 
-import androidx.lifecycle.LiveData
+import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 import ru.internetcloud.workorderapplication.domain.model.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.repository.WorkOrderRepository
-import javax.inject.Inject
 
 class GetWorkOrderListUseCase @Inject constructor(
     private val workOrderRepository: WorkOrderRepository
 ) {
-    fun getWorkOrderList(): LiveData<List<WorkOrder>> {
+    fun getWorkOrderList(): Flow<List<WorkOrder>> {
         return workOrderRepository.getWorkOrderList()
     }
 }

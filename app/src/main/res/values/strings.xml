@@ -156,4 +156,7 @@
     <string name="date_from_hint">Date from</string>
     <string name="date_to_hint">Date to</string>
 
+    <string name="try_again">Try again</string>
+
+    <string name="work_order_list_no_data">There is no data</string>
 </resources>

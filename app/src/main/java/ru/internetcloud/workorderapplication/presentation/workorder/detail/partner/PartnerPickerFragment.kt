@@ -11,28 +11,20 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.WorkOrderApp
-import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.domain.model.catalog.Partner
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class PartnerPickerFragment : DialogFragment() {
-
-    // даггер:
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val component by lazy {
-        (requireActivity().application as WorkOrderApp).component
-    }
 
     private var requestKey = ""
     private var argPartnerName = ""
 
-    private lateinit var viewModel: PartnerListViewModel
+    private val viewModel by viewModels<PartnerListViewModel>()
+
     private lateinit var partnerListRecyclerView: RecyclerView
     private lateinit var partnerListAdapter: PartnerListAdapter
 
@@ -41,11 +33,6 @@ class PartnerPickerFragment : DialogFragment() {
     private lateinit var titleTextView: TextView
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // даггер:
-        component.inject(this)
-
-        viewModel = ViewModelProvider(this, viewModelFactory).get(PartnerListViewModel::class.java)
-
         arguments?.let { arg ->
             viewModel.selectedPartner ?: let {
                 viewModel.selectedPartner = arg.getParcelable(PARTNER)

@@ -1,9 +1,13 @@
 package ru.internetcloud.workorderapplication.di
 
-import android.app.Application
+import android.content.Context
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.database.AppDatabase
 import ru.internetcloud.workorderapplication.data.repository.AuthRepositoryImpl
@@ -37,75 +41,76 @@ import ru.internetcloud.workorderapplication.domain.repository.WorkOrderReposito
 import ru.internetcloud.workorderapplication.domain.repository.WorkingHourRepository
 
 @Module
+@InstallIn(SingletonComponent::class)
 interface DataModule {
 
-    @ApplicationScope
+    @Singleton
     @Binds
     fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
 
-    @ApplicationScope
+    @Singleton
     @Binds
     fun bindPartnerRepository(impl: PartnerRepositoryImpl): PartnerRepository
 
-    @ApplicationScope
+    @Singleton
     @Binds
     fun bindRepairTypeRepository(impl: RepairTypeRepositoryImpl): RepairTypeRepository
 
-    @ApplicationScope
+    @Singleton
     @Binds
     fun bindCarJobRepository(impl: CarJobRepositoryImpl): CarJobRepository
 
-    @ApplicationScope
+    @Singleton
     @Binds
     fun bindCarModelRepository(impl: CarModelRepositoryImpl): CarModelRepository
 
-    @ApplicationScope
+    @Singleton
     @Binds
     fun bindDepartmentRepository(impl: DepartmentRepositoryImpl): DepartmentRepository
 
-    @ApplicationScope
+    @Singleton
     @Binds
     fun bindEmployeeRepository(impl: EmployeeRepositoryImpl): EmployeeRepository
 
-    @ApplicationScope
+    @Singleton
     @Binds
     fun bindCarRepository(impl: CarRepositoryImpl): CarRepository
 
-    @ApplicationScope
+    @Singleton
     @Binds
     fun bindWorkingHourRepository(impl: WorkingHourRepositoryImpl): WorkingHourRepository
 
-    @ApplicationScope
+    @Singleton
     @Binds
     fun bindDefaultWorkOrderSettingsRepository(impl: DefaultWorkOrderSettingsRepositoryImpl): DefaultWorkOrderSettingsRepository
 
-    @ApplicationScope
+    @Singleton
     @Binds
     fun bindSynchroRepository(impl: SynchroRepositoryImpl): SynchroRepository
 
-    @ApplicationScope
+    @Singleton
     @Binds
     fun bindWorkOrderRepository(impl: WorkOrderRepositoryImpl): WorkOrderRepository
 
-    @ApplicationScope
+    @Singleton
     @Binds
     fun bindAuthorizationPreferencesRepository(impl: AuthorizationPreferencesRepositoryImpl): AuthorizationPreferencesRepository
 
-    @ApplicationScope
+    @Singleton
     @Binds
     fun bindFirstLaunchRepository(impl: FirstLaunchRepositoryImpl): FirstLaunchRepository
 
     companion object {
 
-        @ApplicationScope
+        @Singleton
         @Provides
         fun provideAppDao(
-            application: Application
+            @ApplicationContext context: Context
         ): AppDao {
-            return AppDatabase.getInstance(application).appDao()
+            return AppDatabase.getInstance(context).appDao()
         }
 
-        @ApplicationScope
+        @Singleton
         @Provides
         fun provideAuthParameters(): AuthParameters {
             return AuthParameters()

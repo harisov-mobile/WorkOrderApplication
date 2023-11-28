@@ -1,14 +1,14 @@
 package ru.internetcloud.workorderapplication.domain.repository
 
-import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
 import ru.internetcloud.workorderapplication.domain.model.document.WorkOrder
 
 interface WorkOrderRepository {
 
-    fun getWorkOrderList(): LiveData<List<WorkOrder>>
+    fun getWorkOrderList(): Flow<List<WorkOrder>>
 
-    fun getFilteredWorkOrderList(searchWorkOrderData: SearchWorkOrderData): LiveData<List<WorkOrder>>
+    fun getFilteredWorkOrderList(searchWorkOrderData: SearchWorkOrderData): Flow<List<WorkOrder>>
 
     suspend fun getWorkOrder(workOrderId: String): WorkOrder?
 

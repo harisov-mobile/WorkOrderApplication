@@ -10,23 +10,15 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.WorkOrderApp
-import ru.internetcloud.workorderapplication.di.ViewModelFactory
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class SendWorkOrderByIdToEmailDialogFragment : DialogFragment() {
 
-    // даггер:
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel by viewModels<SendWorkOrderByIdToEmailViewModel>()
 
-    private val component by lazy {
-        (requireActivity().application as WorkOrderApp).component
-    }
-
-    private lateinit var viewModel: SendWorkOrderByIdToEmailViewModel
     private lateinit var okButton: Button
     private lateinit var cancelButton: Button
     private lateinit var synchroResultTextView: TextView
@@ -34,11 +26,6 @@ class SendWorkOrderByIdToEmailDialogFragment : DialogFragment() {
     private lateinit var progressBar: ProgressBar
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // даггер:
-        component.inject(this)
-
-        viewModel = ViewModelProvider(this, viewModelFactory).get(SendWorkOrderByIdToEmailViewModel::class.java)
-
         arguments?.let { arg ->
             savedInstanceState ?: let {
                 viewModel.id = arg.getString(ORDER_ID, "") ?: throw RuntimeException("Id can not be NULL.")

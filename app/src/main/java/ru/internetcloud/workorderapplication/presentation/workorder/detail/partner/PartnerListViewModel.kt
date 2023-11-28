@@ -4,12 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.domain.model.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.GetPartnerListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.partner.SearchPartnersUseCase
-import javax.inject.Inject
 
+@HiltViewModel
 class PartnerListViewModel @Inject constructor(
     private val getPartnerListUseCase: GetPartnerListUseCase,
     private val searchPartnersUseCase: SearchPartnersUseCase

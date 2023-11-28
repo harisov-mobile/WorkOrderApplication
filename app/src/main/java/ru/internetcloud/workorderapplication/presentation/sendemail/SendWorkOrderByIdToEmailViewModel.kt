@@ -4,19 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.SendWorkOrderToEmailUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.synchrooperation.UploadWorkOrderByIdUseCase
-import javax.inject.Inject
 
+@HiltViewModel
 class SendWorkOrderByIdToEmailViewModel @Inject constructor(
     private val uploadWorkOrderByIdUseCase: UploadWorkOrderByIdUseCase,
     private val sendWorkOrderToEmailUseCase: SendWorkOrderToEmailUseCase
 ) : ViewModel() {
-
-//    // Репозитории
-//    private val synchroRepositoryImpl = SynchroRepositoryImpl.get() // требуется инъекция зависимостей!!!
 
     var id: String = ""
     var email: String = ""

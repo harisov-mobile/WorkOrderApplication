@@ -4,20 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.domain.model.catalog.WorkingHour
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.GetWorkingHourListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.workinghour.SearchWorkingHoursUseCase
-import javax.inject.Inject
 
+@HiltViewModel
 class WorkingHourListViewModel @Inject constructor(
     private val getWorkingHourListUseCase: GetWorkingHourListUseCase,
     private val searchWorkingHoursUseCase: SearchWorkingHoursUseCase
 ) : ViewModel() {
 
     var selectedWorkingHour: WorkingHour? = null
-
-    // private val repository = DbWorkingHourRepositoryImpl.get()
 
     private val _workingHourListLiveData = MutableLiveData<List<WorkingHour>>()
     val workingHourListLiveData: LiveData<List<WorkingHour>>

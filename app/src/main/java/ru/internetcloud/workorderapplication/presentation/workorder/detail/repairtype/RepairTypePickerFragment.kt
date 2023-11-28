@@ -11,28 +11,20 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.WorkOrderApp
-import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.domain.model.catalog.RepairType
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class RepairTypePickerFragment : DialogFragment() {
-
-    // даггер:
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val component by lazy {
-        (requireActivity().application as WorkOrderApp).component
-    }
 
     private var requestKey = ""
     private var argRepairTypeName = ""
 
-    private lateinit var viewModel: RepairTypeListViewModel
+    private val viewModel by viewModels<RepairTypeListViewModel>()
+
     private lateinit var repairTypeListRecyclerView: RecyclerView
     private lateinit var repairTypeListAdapter: RepairTypeListAdapter
 
@@ -41,11 +33,6 @@ class RepairTypePickerFragment : DialogFragment() {
     private lateinit var titleTextView: TextView
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // даггер:
-        component.inject(this)
-
-        viewModel = ViewModelProvider(this, viewModelFactory).get(RepairTypeListViewModel::class.java)
-
         arguments?.let { arg ->
             viewModel.selectedRepairType ?: let {
                 viewModel.selectedRepairType = arg.getParcelable(REPAIR_TYPE)

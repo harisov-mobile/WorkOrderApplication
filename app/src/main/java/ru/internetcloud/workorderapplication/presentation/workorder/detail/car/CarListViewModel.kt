@@ -4,18 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.domain.model.catalog.Car
 import ru.internetcloud.workorderapplication.domain.model.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.GetCarListByOwnerUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.car.SearchCarsByOwnerUseCase
-import javax.inject.Inject
 
+@HiltViewModel
 class CarListViewModel @Inject constructor(
     private val getCarListByOwnerUseCase: GetCarListByOwnerUseCase,
     private val searchCarsByOwnerUseCase: SearchCarsByOwnerUseCase
 ) : ViewModel() {
-    // private val repository = DbCarRepositoryImpl.get()
 
     var partner: Partner? = null
     var selectedCar: Car? = null
