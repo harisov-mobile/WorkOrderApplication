@@ -73,11 +73,9 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
         // сначала - обработчик нажатий на элемент списка:
         val performerDetailListListener = object : PerformerDetailListListener {
             override fun onClickPerformerDetail(performerDetail: PerformerDetail) {
-                //viewModel.changeSelectedPerformer(performerDetail)
-                viewModel.handleEvent(WorkOrderDetailEvent.OnSelectedPerformerChange(performerDetail))
+                viewModel.handleEvent(WorkOrderDetailEvent.OnSelectPerformerChange(performerDetail))
             }
         }
-
         // потом - создаем адаптер, который не будет зануляться при
         // жонглировании фрагментами
         PerformerDetailListAdapter(performerDetailListListener)
@@ -87,10 +85,9 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
         // сначала - обработчик нажатий на элемент списка:
         val jobDetailListListener = object : JobDetailListListener {
             override fun onClickJobDetail(jobDetail: JobDetail) {
-                viewModel.changeSelectedJob(jobDetail)
+                viewModel.handleEvent(WorkOrderDetailEvent.OnSelectJobChange(jobDetail))
             }
         }
-
         // потом - создаем адаптер, который не будет зануляться при
         // жонглировании фрагментами
         JobDetailListAdapter(jobDetailListListener)
@@ -424,7 +421,15 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
                 }
             } // Табличная часть Исполнители:
 
-            jobDetailListAdapter.submitList(state.workOrder.jobDetails)  // Табличная часть Работы:
+            jobDetailListAdapter.submitList(state.workOrder.jobDetails) {
+                state.selectedJobDetail?.let { selectedJobDetail ->
+                    binding.jobDetailsRecyclerView.scrollToPosition(
+                        state.workOrder.jobDetails.indexOf(
+                            selectedJobDetail
+                        )
+                    )
+                }
+            } // Табличная часть Работы:
 
             refreshTotalSum()
         }
@@ -535,6 +540,11 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
             REQUEST_JOB_DETAIL_PICKER_KEY -> {
                 val jobDetail: JobDetail? = result.getParcelable(ARG_JOB_DETAIL)
                 viewModel.handleEvent(WorkOrderDetailEvent.OnJobDetailChange(jobDetail = jobDetail))
+                jobDetailListAdapter.notifyItemChanged(
+                    viewModel.screenState.value.workOrder.jobDetails.indexOf(jobDetail),
+                    Unit
+                )
+                refreshTotalSum()
             }
 
             // ввели строку ТЧ "Исполнители":
@@ -563,6 +573,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
                 val delete: Boolean = result.getBoolean(ARG_ANSWER, false)
                 if (delete) {
                     viewModel.handleEvent(WorkOrderDetailEvent.OnJobDetailDelete)
+                    jobDetailListAdapter.notifyDataSetChanged()
                 }
             }
 
@@ -656,7 +667,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
         }
 
         binding.editJobDetailButton.setOnClickListener {
-            viewModel.selectedJobDetail?.let {
+            viewModel.screenState.value.selectedJobDetail?.let {
                 JobDetailFragment
                     .newInstance(it, REQUEST_JOB_DETAIL_PICKER_KEY, ARG_JOB_DETAIL)
                     .show(childFragmentManager, REQUEST_JOB_DETAIL_PICKER_KEY)
@@ -667,7 +678,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
         }
 
         binding.deleteJobDetailButton.setOnClickListener {
-            viewModel.selectedJobDetail?.let {
+            viewModel.screenState.value.selectedJobDetail?.let {
                 QuestionDialogFragment
                     .newInstance(
                         getString(R.string.delete_job_detail_question),
@@ -740,7 +751,8 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
                         MessageDialogFragment.newInstance(getString(R.string.fill_in_email))
                             .show(childFragmentManager, null)
                     } else {
-                        val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(binding.emailEditText.text.toString()).matches()
+                        val isEmailValid =
+                            Patterns.EMAIL_ADDRESS.matcher(binding.emailEditText.text.toString()).matches()
                         if (isEmailValid) {
                             // показать фрагмент
                             val emailAddress: String = viewModel.parseText(binding.emailEditText.text.toString())

@@ -50,9 +50,6 @@ class WorkOrderViewModel @Inject constructor(
     var defaultWorkOrderSettings: DefaultWorkOrderSettings? = null
     var defaultCarJobs: List<DefaultRepairTypeJobDetail> = emptyList() // mutableListOf()
 
-    //var selectedPerformerDetail: PerformerDetail? = null
-    var selectedJobDetail: JobDetail? = null
-
     init {
         if (screenState.value.shouldInit) {
             when (editMode) {
@@ -243,23 +240,14 @@ class WorkOrderViewModel @Inject constructor(
                             oldWorkOrder.jobDetails.forEach {
                                 it.isSelected = false
                             }
-
-                            //oldWorkOrder.jobDetails.add(jobdet)
                             jobdet.isSelected = true
-                            selectedJobDetail = jobdet
-
                             mutableJobDetailsList.add(jobdet)
-                            // binding.jobDetailsRecyclerView.scrollToPosition(order.jobDetails.indexOf(jobdet))
                         }
                     savedStateHandle[KEY_WORK_ORDER_DETAIL_STATE] = screenState.value.copy(
                         workOrder = oldWorkOrder.copy(jobDetails = mutableJobDetailsList.toList()),
+                        selectedJobDetail = jobdet,
                         isModified = true
                     )
-//                        jobDetailListAdapter.notifyItemChanged(
-//                            order.jobDetails.indexOf(viewModel.selectedJobDetail),
-//                            Unit
-//                        )
-//                        refreshTotalSum()
                 }
             }
 
@@ -290,8 +278,7 @@ class WorkOrderViewModel @Inject constructor(
             WorkOrderDetailEvent.OnJobDetailDelete -> {
                 // пользователь удалил строку в ТЧ "Работы":
                 val mutableJobDetailsList = oldWorkOrder.jobDetails.toMutableList()
-                mutableJobDetailsList.remove(selectedJobDetail)
-                selectedJobDetail = null
+                mutableJobDetailsList.remove(screenState.value.selectedJobDetail)
 
                 var pos = 0
                 mutableJobDetailsList.forEach {
@@ -300,10 +287,9 @@ class WorkOrderViewModel @Inject constructor(
                 }
                 savedStateHandle[KEY_WORK_ORDER_DETAIL_STATE] = screenState.value.copy(
                     workOrder = oldWorkOrder.copy(jobDetails = mutableJobDetailsList.toList()),
+                    selectedJobDetail = null,
                     isModified = true
                 )
-//                jobDetailListAdapter.notifyDataSetChanged()
-//                refreshTotalSum()
             }
 
             WorkOrderDetailEvent.OnPerformerDetailDelete -> {
@@ -323,11 +309,23 @@ class WorkOrderViewModel @Inject constructor(
                 )
             }
 
-            is WorkOrderDetailEvent.OnSelectedPerformerChange -> {
-                screenState.value.selectedPerformerDetail?.isSelected = false
+            is WorkOrderDetailEvent.OnSelectPerformerChange -> {
+                screenState.value.workOrder.performers.forEach {
+                    it.isSelected = false
+                }
                 event.performerDetail.isSelected = true
                 savedStateHandle[KEY_WORK_ORDER_DETAIL_STATE] = screenState.value.copy(
                     selectedPerformerDetail = event.performerDetail
+                )
+            }
+
+            is WorkOrderDetailEvent.OnSelectJobChange -> {
+                screenState.value.workOrder.jobDetails.forEach {
+                    it.isSelected = false
+                }
+                event.jobDetail.isSelected = true
+                savedStateHandle[KEY_WORK_ORDER_DETAIL_STATE] = screenState.value.copy(
+                    selectedJobDetail = event.jobDetail
                 )
             }
         }
@@ -521,18 +519,6 @@ class WorkOrderViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-//    fun changeSelectedPerformer(performerDetail: PerformerDetail) {
-//        selectedPerformerDetail?.isSelected = false
-//        performerDetail.isSelected = true
-//        selectedPerformerDetail = performerDetail
-//    }
-
-    fun changeSelectedJob(jobDetail: JobDetail) {
-        selectedJobDetail?.isSelected = false
-        selectedJobDetail = jobDetail
-        selectedJobDetail?.isSelected = true
     }
 
     fun resetcanFillDefaultJobs() {

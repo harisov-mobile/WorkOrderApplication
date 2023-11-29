@@ -2,6 +2,7 @@ package ru.internetcloud.workorderapplication.presentation.workorder.detail
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import ru.internetcloud.workorderapplication.domain.model.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.model.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.model.document.WorkOrder
 
@@ -16,6 +17,7 @@ data class UiWorkOrderDetailState(
     val canFillDefaultJobs: Boolean = false, //
 
     val selectedPerformerDetail: PerformerDetail? = null,
+    val selectedJobDetail: JobDetail? = null,
 
     val isModified: Boolean = false,
     val shouldCloseScreen: Boolean = false,
