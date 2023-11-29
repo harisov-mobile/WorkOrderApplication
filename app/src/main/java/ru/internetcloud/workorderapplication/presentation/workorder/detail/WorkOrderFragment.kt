@@ -541,6 +541,10 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
             REQUEST_PERFORMER_DETAIL_PICKER_KEY -> {
                 val performerDetail: PerformerDetail? = result.getParcelable(ARG_PERFORMER_DETAIL)
                 viewModel.handleEvent(WorkOrderDetailEvent.OnPerformerDetailChange(performerDetail = performerDetail))
+                performerDetailListAdapter.notifyItemChanged(
+                    viewModel.screenState.value.workOrder.performers.indexOf(performerDetail),
+                    Unit
+                )
             }
 
             // ответ на вопрос: "Записать данные?"
@@ -567,6 +571,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
                 val delete: Boolean = result.getBoolean(ARG_ANSWER, false)
                 if (delete) {
                     viewModel.handleEvent(WorkOrderDetailEvent.OnPerformerDetailDelete)
+                    performerDetailListAdapter.notifyDataSetChanged()
                 }
             }
         }
