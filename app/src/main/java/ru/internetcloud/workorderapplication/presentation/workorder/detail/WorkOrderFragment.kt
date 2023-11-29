@@ -21,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.math.BigDecimal
 import java.util.Date
 import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrder2Binding
+import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.model.catalog.Car
 import ru.internetcloud.workorderapplication.domain.model.catalog.Department
@@ -49,9 +49,9 @@ import ru.internetcloud.workorderapplication.presentation.workorder.detail.perfo
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.repairtype.RepairTypePickerFragment
 
 @AndroidEntryPoint
-class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResultListener {
+class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResultListener {
 
-    private val binding by viewBinding(FragmentWorkOrder2Binding::bind)
+    private val binding by viewBinding(FragmentWorkOrderBinding::bind)
     private val args by navArgs<WorkOrderFragmentArgs>()
     private val viewModel by viewModels<WorkOrderViewModel>()
 

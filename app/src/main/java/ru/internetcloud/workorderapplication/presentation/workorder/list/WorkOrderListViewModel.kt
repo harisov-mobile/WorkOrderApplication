@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -38,8 +37,6 @@ class WorkOrderListViewModel @Inject constructor(
     fun fetchWorkOrders() {
         viewModelScope.launch {
             _screenState.value = UiState.Loading
-
-            delay(7000)
 
             try {
                 if (searchWorkOrderDataIsEmpty()) {

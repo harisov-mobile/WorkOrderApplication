@@ -26,5 +26,5 @@ data class UiWorkOrderDetailState(
     // поля, касающиеся валидации - правильности ввода
     val errorInputNumber: Boolean = false,
     val errorInputEmail: Boolean = false,
-    val errorInputPerformer: Boolean = false,
+    val errorInputPerformer: Boolean = false
 ) : Parcelable

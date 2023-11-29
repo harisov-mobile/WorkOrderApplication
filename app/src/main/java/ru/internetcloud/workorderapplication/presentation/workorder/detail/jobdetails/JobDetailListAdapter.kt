@@ -14,7 +14,7 @@ class JobDetailListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobDetailListViewHolder {
         lateinit var jobDetailListViewHolder: JobDetailListViewHolder
 
-        val binding = when(viewType) {
+        val binding = when (viewType) {
             UNSELECTED_ITEM_TYPE -> {
                 ItemJobDetailListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             }

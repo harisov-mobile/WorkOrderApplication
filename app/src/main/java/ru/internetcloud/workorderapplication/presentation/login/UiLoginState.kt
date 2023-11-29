@@ -12,5 +12,5 @@ data class UiLoginState(
     val canContinueDemoMode: Boolean = false,
     val errorInputServer: Boolean = false,
     val errorInputLogin: Boolean = false,
-    val errorInputPassword: Boolean = false,
+    val errorInputPassword: Boolean = false
 ) : Parcelable

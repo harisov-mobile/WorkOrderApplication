@@ -34,7 +34,6 @@ class CarPickerFragment : DialogFragment() {
     private val viewModel by viewModels<CarListViewModel>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         arguments?.let { arg ->
             viewModel.selectedCar ?: let {
                 viewModel.selectedCar = arg.getParcelable(CAR)

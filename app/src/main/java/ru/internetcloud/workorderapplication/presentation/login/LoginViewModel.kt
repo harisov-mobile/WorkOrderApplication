@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -25,7 +24,8 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
 
     val state: StateFlow<UiLoginState> = savedStateHandle.getStateFlow(
-        KEY_LOGIN_STATE, UiLoginState(
+        KEY_LOGIN_STATE,
+        UiLoginState(
             loginParams = LoginParams(
                 server = authorizationPreferencesRepository.getStoredServer(),
                 login = authorizationPreferencesRepository.getStoredLogin(),
@@ -53,8 +53,6 @@ class LoginViewModel @Inject constructor(
 
             viewModelScope.launch {
                 server = server.lowercase()
-
-                delay(7000)
 
                 // демо-режим:
                 if (server.equals(DEMO_SERVER) && login.equals(DEMO_LOGIN) && password.equals(DEMO_PASSWORD)) {

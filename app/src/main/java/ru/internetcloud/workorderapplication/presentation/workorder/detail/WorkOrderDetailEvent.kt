@@ -52,5 +52,4 @@ sealed interface WorkOrderDetailEvent {
     object OnPerformerDetailDelete : WorkOrderDetailEvent
 
     object OnIncorrectEmail : WorkOrderDetailEvent
-
 }

@@ -14,7 +14,7 @@ class PerformerDetailListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PerformerDetailListViewHolder {
         lateinit var performerDetailListViewHolder: PerformerDetailListViewHolder
 
-        val binding = when(viewType) {
+        val binding = when (viewType) {
             UNSELECTED_ITEM_TYPE -> {
                 ItemPerformerDetailListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             }

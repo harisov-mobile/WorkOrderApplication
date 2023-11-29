@@ -414,7 +414,7 @@ class WorkOrderViewModel @Inject constructor(
     }
 
     private fun checkDefaultRepairTypeJobDetails(repairType: RepairType?) {
-        defaultCarJobs = emptyList() //mutableListOf()
+        defaultCarJobs = emptyList()
         savedStateHandle[KEY_WORK_ORDER_DETAIL_STATE] = screenState.value.copy(
             canFillDefaultJobs = false
         )
@@ -440,11 +440,8 @@ class WorkOrderViewModel @Inject constructor(
 
     private fun fillDefaultJobs() {
         if (defaultCarJobs.isNotEmpty()) {
-
             defaultWorkOrderSettings?.let { settings ->
-
                 settings.workingHour?.let { wh ->
-
                     screenState.value.workOrder.jobDetails.forEach {
                         it.isSelected = false
                     }
@@ -469,7 +466,6 @@ class WorkOrderViewModel @Inject constructor(
                                     newJobDetail.timeNorm = settings.defaultTimeNorm
                                     newJobDetail.workingHour = wh
                                     newJobDetail.sum = newJobDetail.quantity * newJobDetail.timeNorm * wh.price
-                                    //screenState.value.workOrder.jobDetails.add(newJobDetail)
 
                                     val mutableList = screenState.value.workOrder.jobDetails.toMutableList()
                                     mutableList.add(newJobDetail)
@@ -490,7 +486,6 @@ class WorkOrderViewModel @Inject constructor(
                                     newJobDetail.timeNorm = settings.defaultTimeNorm
                                     newJobDetail.workingHour = wh
                                     newJobDetail.sum = newJobDetail.quantity * newJobDetail.timeNorm * wh.price
-                                    //order.jobDetails.add(newJobDetail)
                                     val mutableList = screenState.value.workOrder.jobDetails.toMutableList()
                                     mutableList.add(newJobDetail)
 
@@ -512,7 +507,6 @@ class WorkOrderViewModel @Inject constructor(
                                 newJobDetail.timeNorm = settings.defaultTimeNorm
                                 newJobDetail.workingHour = wh
                                 newJobDetail.sum = newJobDetail.quantity * newJobDetail.timeNorm * wh.price
-                                //order.jobDetails.add(newJobDetail)
                                 val mutableList = screenState.value.workOrder.jobDetails.toMutableList()
                                 mutableList.add(newJobDetail)
 
