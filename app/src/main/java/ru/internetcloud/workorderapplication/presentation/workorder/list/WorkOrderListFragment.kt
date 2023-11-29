@@ -53,7 +53,6 @@ class WorkOrderListFragment : Fragment(R.layout.fragment_work_order_list), Fragm
                 )
             }
         }
-
         // потом - создаем адаптер, который не будет зануляться при
         // жонглировании фрагментами
         WorkOrderListAdapter(workOrderListListener)

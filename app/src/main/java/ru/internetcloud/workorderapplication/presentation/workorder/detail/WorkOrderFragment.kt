@@ -23,7 +23,6 @@ import java.util.Date
 import ru.internetcloud.workorderapplication.R
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrder2Binding
 import ru.internetcloud.workorderapplication.domain.common.DateConverter
-import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 import ru.internetcloud.workorderapplication.domain.model.catalog.Car
 import ru.internetcloud.workorderapplication.domain.model.catalog.Department
 import ru.internetcloud.workorderapplication.domain.model.catalog.Employee
@@ -803,13 +802,9 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
     }
 
     companion object {
-
         // эти константы нужны для диалогового окна - "Данные изменились. Записать?"
         private val REQUEST_KEY_DATA_WAS_CHANGED = "request_key_data_was_changed"
         private val ANSWER_ARG_NAME_DATA_WAS_CHANGED = "answer_arg_name_data_was_changed"
-
-        const val ARG_SCREEN_MODE = "screen_mode"
-        const val ARG_WORK_ORDER_ID = "work_order_id"
 
         private val REQUEST_DATE_PICKER_KEY = "request_date_picker_key"
         private val ARG_DATE = "date_picker"
@@ -839,30 +834,5 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
         private val REQUEST_DELETE_PERFORMER_DETAIL_KEY = "delete_performer_detail_key"
         private val REQUEST_ADD_DEFAULT_JOBS_KEY = "add_default_jobs_key"
         private val ARG_ANSWER = "answer"
-
-        private const val REQUEST_KEY_NEW_ORDER_ID = "request_key_new_order_id"
-        private const val ARG_NAME_NEW_ORDER_ID = "arg_name_new_order_id"
-
-        fun newInstanceAddWorkOrder(
-            requestKeyNewOrderId: String,
-            argNameNewOrderId: String
-        ): WorkOrderFragment {
-            return WorkOrderFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(ARG_SCREEN_MODE, ScreenMode.ADD)
-                    putString(REQUEST_KEY_NEW_ORDER_ID, requestKeyNewOrderId)
-                    putString(ARG_NAME_NEW_ORDER_ID, argNameNewOrderId)
-                }
-            }
-        }
-
-        fun newInstanceEditWorkOrder(workOrderId: String): WorkOrderFragment {
-            val instance = WorkOrderFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_SCREEN_MODE, ScreenMode.EDIT)
-            args.putString(ARG_WORK_ORDER_ID, workOrderId)
-            instance.arguments = args
-            return instance
-        }
     }
 }

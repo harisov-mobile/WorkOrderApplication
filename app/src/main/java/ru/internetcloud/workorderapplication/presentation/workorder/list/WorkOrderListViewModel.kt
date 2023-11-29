@@ -22,8 +22,6 @@ class WorkOrderListViewModel @Inject constructor(
 
     var scrollDownto = true
 
-    // Сумин делает LivaData, а я более продвинутое:
-    //var workOrderListLiveData: LiveData<List<WorkOrder>> = getWorkOrderListUseCase.getWorkOrderList()
     private val _screenState: MutableStateFlow<UiState<List<WorkOrder>>> = MutableStateFlow(UiState.Loading)
     val screenState = _screenState.asStateFlow()
 
@@ -48,10 +46,6 @@ class WorkOrderListViewModel @Inject constructor(
                 }
 
                 if (searchWorkOrderDataIsEmpty()) {
-                    // workOrderListLiveData = getWorkOrderListUseCase.getWorkOrderList()
-//                    getFilteredWorkOrderListUseCase.getFilteredWorkOrderList(searchWorkOrderData).collect { _ ->
-//                        // ничего не делаем
-//                    }
                     getWorkOrderListUseCase.getWorkOrderList().collect { list ->
                         if (list.isEmpty()) {
                             _screenState.value = UiState.EmptyData
@@ -63,10 +57,6 @@ class WorkOrderListViewModel @Inject constructor(
                         }
                     }
                 } else {
-                    //workOrderListLiveData = getFilteredWorkOrderListUseCase.getFilteredWorkOrderList(searchWorkOrderData)
-//                    getWorkOrderListUseCase.getWorkOrderList().collect { _ ->
-//                        // ничего не делаем
-//                    }
                     getFilteredWorkOrderListUseCase.getFilteredWorkOrderList(searchWorkOrderData).collect { list ->
                         if (list.isEmpty()) {
                             _screenState.value = UiState.EmptyData
@@ -93,5 +83,4 @@ class WorkOrderListViewModel @Inject constructor(
     }
 
     fun searchWorkOrderDataIsEmpty() = searchWorkOrderData == SearchWorkOrderData()
-
 }
