@@ -101,6 +101,7 @@ class LoginFragment : Fragment() {
         viewModel.state.launchAndCollectIn(viewLifecycleOwner) { currentState ->
             binding.enterProgressBar.isVisible = currentState.entering
             binding.enterButton.isEnabled = !currentState.entering
+            binding.cancelButton.isEnabled = !currentState.entering
             binding.serverEditText.isEnabled = !currentState.entering
             binding.loginEditText.isEnabled = !currentState.entering
             binding.passwordEditText.isEnabled = !currentState.entering

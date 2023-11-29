@@ -94,7 +94,6 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         // адаптер в binding занулять, так как
         //        В книге "Real World" на стр. 133 занулению адаптера посвящен абзац:
         //        Having an Adapter as a property of a Fragment is a known way of
@@ -121,7 +120,6 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
 
     override fun onStart() {
         super.onStart()
-
         // doAfterTextChanged нужно навешивать здесь, а не в onCreateView или onViewCreated, т.к. там еще не восстановлено
         // EditText и слушатели будут "дергаться" лишний раз когда ОС Андроид сама восстановит состояние EditText
         setupOnTextChangedListeners()
@@ -292,6 +290,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
                 mileageTextInputLayout.isEnabled = !saving && !posted
                 requestReasonTextInputLayout.isEnabled = !saving && !posted
                 commentTextInputLayout.isEnabled = !saving && !posted
+                emailTextInputLayout.isEnabled = !saving
 
                 if (posted) {
                     context?.let { currentContext ->
@@ -312,6 +311,8 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
                     saveButton.isEnabled = !saving
                     savingProgressBar.isVisible = saving
 
+                    closeButton.isEnabled = !saving
+
                     dateSelectButton.isVisible = true
                     dateSelectButton.isEnabled = !saving
 
@@ -327,23 +328,13 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
                     departmentSelectButton.isVisible = true
                     departmentSelectButton.isEnabled = !saving
 
-                    addPerformerDetailButton.isVisible = true
-                    addPerformerDetailButton.isEnabled = !saving
+                    addPerformerDetailButton.visibility = if (!saving) View.VISIBLE else View.INVISIBLE
+                    editPerformerDetailButton.visibility = if (!saving) View.VISIBLE else View.INVISIBLE
+                    deletePerformerDetailButton.visibility = if (!saving) View.VISIBLE else View.INVISIBLE
 
-                    editPerformerDetailButton.isVisible = true
-                    editPerformerDetailButton.isEnabled = !saving
-
-                    deletePerformerDetailButton.isVisible = true
-                    deletePerformerDetailButton.isEnabled = !saving
-
-                    addJobDetailButton.isVisible = true
-                    addJobDetailButton.isEnabled = !saving
-
-                    deleteJobDetailButton.isVisible = true
-                    deleteJobDetailButton.isEnabled = !saving
-
-                    editJobDetailButton.isVisible = true
-                    editJobDetailButton.isEnabled = !saving
+                    addJobDetailButton.visibility = if (!saving) View.VISIBLE else View.INVISIBLE
+                    deleteJobDetailButton.visibility = if (!saving) View.VISIBLE else View.INVISIBLE
+                    editJobDetailButton.visibility = if (!saving) View.VISIBLE else View.INVISIBLE
 
                     masterSelectButton.isVisible = true
                     masterSelectButton.isEnabled = !saving
@@ -786,14 +777,6 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
     }
 
     private fun sendResultToFragment() {
-        // так было:
-        // отправка информации в фрагмент: WorkOrderListFragment
-//        val bundle = Bundle().apply {
-//            putString(argNameNewOrderId, id)
-//        }
-//        setFragmentResult(requestKeyNewOrderId, bundle)
-
-        // так стало:
         // отправка информации в фрагмент: WorkOrderListFragment
         val bundle = Bundle().apply {
             putParcelable(argNameReturnResult, viewModel.returnResult)

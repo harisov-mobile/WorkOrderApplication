@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -53,6 +54,8 @@ class LoginViewModel @Inject constructor(
             viewModelScope.launch {
                 server = server.lowercase()
 
+                delay(7000)
+
                 // демо-режим:
                 if (server.equals(DEMO_SERVER) && login.equals(DEMO_LOGIN) && password.equals(DEMO_PASSWORD)) {
                     setAuthParametersUseCase.setAuthParameters(server, login, password)
@@ -72,7 +75,10 @@ class LoginViewModel @Inject constructor(
                     // проверка пароля:
                     val authResult = checkAuthParametersUseCase.checkAuthorization()
                     if (authResult.isAuthorized) {
-                        savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(canContinue = true, entering = false)
+                        savedStateHandle[KEY_LOGIN_STATE] = state.value.copy(
+                            canContinue = true,
+                            entering = true // специально оставляю заблокированными чтобы не моргали кнопки при переходе
+                        )
                     } else {
                         // одноразовый показ сообщения во фрагменте:
                         screenEventChannel.trySend(LoginSideEffectEvent.ShowMessage(message = authResult.errorMessage))
