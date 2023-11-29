@@ -23,7 +23,7 @@
 
     <LinearLayout
         android:id="@+id/error_container"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
@@ -34,10 +34,11 @@
             android:id="@+id/errorTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
             android:textColor="@color/red"
             android:textSize="@dimen/work_order_error_text_size"
+            android:gravity="center_horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             tools:text="errorTextView" />
 
         <Button

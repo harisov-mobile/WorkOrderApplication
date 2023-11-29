@@ -82,7 +82,7 @@
 
     <TextView
         android:id="@+id/errorTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="@color/red"
         android:layout_marginTop="32dp"
@@ -92,6 +92,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center_horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         tools:text="errorTextView"
         tools:visibility="invisible"
         />
