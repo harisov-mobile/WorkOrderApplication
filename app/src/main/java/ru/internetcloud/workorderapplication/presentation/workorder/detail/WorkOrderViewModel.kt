@@ -342,6 +342,7 @@ class WorkOrderViewModel @Inject constructor(
                 number = parseText(oldWorkOrder.number),
                 requestReason = parseText(oldWorkOrder.requestReason),
                 comment = parseText(oldWorkOrder.comment),
+                performersString = getPerformersString(oldWorkOrder),
                 isModified = oldWorkOrder.isModified || screenState.value.isModified
             )
 
@@ -543,44 +544,35 @@ class WorkOrderViewModel @Inject constructor(
 //        }
 //    }
 //
-//    fun getPerformersString(order: WorkOrder): String {
-//        var performersString = ""
-//        for (performer in order.performers) {
-//            performer.employee?.let {
-//                performersString = performersString + "; " + getShortName(it.name)
-//            }
-//        }
-//        val performerLength = performersString.length
-//        if (performerLength > 2) {
-//            performersString = performersString.substring(2)
-//        }
-//        return performersString
-//    }
-//
-//    fun getShortName(name: String): String {
-//        var shortName = ""
-//
-//        val firstSpacePos = name.indexOf(SPACE_SYMBOL)
-//        val secondSpacePos = name.indexOf(SPACE_SYMBOL, firstSpacePos + 1)
-//
-//        if (secondSpacePos == NOT_FOUND) {
-//            shortName = name
-//        } else {
-//            shortName = name.substring(0, secondSpacePos)
-//        }
-//
-//        return shortName
-//    }
-//
-//    fun updatePerformersString(order: WorkOrder) {
-//        order.performersString = getPerformersString(order)
-//    }
-//
-//    fun setErrorEmailValue(value: Boolean) {
-//        _errorInputEmail.value = value
-//    }
-//
-//
+    fun getPerformersString(order: WorkOrder): String {
+        var performersString = ""
+        for (performer in order.performers) {
+            performer.employee?.let {
+                performersString = performersString + "; " + getShortName(it.name)
+            }
+        }
+        val performerLength = performersString.length
+        if (performerLength > 2) {
+            performersString = performersString.substring(2)
+        }
+        return performersString
+    }
+
+    fun getShortName(name: String): String {
+        var shortName = ""
+
+        val firstSpacePos = name.indexOf(SPACE_SYMBOL)
+        val secondSpacePos = name.indexOf(SPACE_SYMBOL, firstSpacePos + 1)
+
+        if (secondSpacePos == NOT_FOUND) {
+            shortName = name
+        } else {
+            shortName = name.substring(0, secondSpacePos)
+        }
+
+        return shortName
+    }
+
 //    fun checkDefaultRepairTypeJobDetails(repairType: RepairType) {
 //        defaultCarJobs = mutableListOf()
 //        _canFillDefaultJobs.value = false
