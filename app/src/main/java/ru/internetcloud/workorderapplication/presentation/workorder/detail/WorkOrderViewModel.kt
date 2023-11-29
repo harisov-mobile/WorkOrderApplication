@@ -168,7 +168,7 @@ class WorkOrderViewModel @Inject constructor(
             }
 
             is WorkOrderDetailEvent.OnSave -> {
-                saveWorkOrder(shouldCloseScreen = false)
+                saveWorkOrder(shouldCloseScreen = event.shouldCloseScreen)
             }
 
             is WorkOrderDetailEvent.OnPartnerChange -> {
@@ -328,10 +328,17 @@ class WorkOrderViewModel @Inject constructor(
                     selectedJobDetail = event.jobDetail
                 )
             }
+
+            WorkOrderDetailEvent.OnFillDefaultJobs -> {
+                fillDefaultJobs()
+            }
+            WorkOrderDetailEvent.OnResetFillDefaultJobs -> {
+                resetcanFillDefaultJobs()
+            }
         }
     }
 
-    fun saveWorkOrder(shouldCloseScreen: Boolean = false) {
+    private fun saveWorkOrder(shouldCloseScreen: Boolean = false) {
         viewModelScope.launch {
             // перед началом сохранения можно показать прогресс-бар и заблокировать кнопку "SAVE" и остальные элементы заблокировать
             savedStateHandle[KEY_WORK_ORDER_DETAIL_STATE] = screenState.value.copy(
@@ -431,7 +438,7 @@ class WorkOrderViewModel @Inject constructor(
         }
     }
 
-    fun fillDefaultJobs() {
+    private fun fillDefaultJobs() {
         if (defaultCarJobs.isNotEmpty()) {
 
             defaultWorkOrderSettings?.let { settings ->
@@ -572,28 +579,6 @@ class WorkOrderViewModel @Inject constructor(
 
         return shortName
     }
-
-//    fun checkDefaultRepairTypeJobDetails(repairType: RepairType) {
-//        defaultCarJobs = mutableListOf()
-//        _canFillDefaultJobs.value = false
-//
-//        viewModelScope.launch {
-//            if (repairType != null && workOrder.value?.car != null) {
-//                defaultCarJobs = getDefaultRepairTypeJobsUseCase.getDefaultRepairTypeJobDetails(repairType)
-//                if (!defaultCarJobs.isEmpty()) {
-//                    workOrder.value?.car?.let { car ->
-//                        for (currentCarJob in defaultCarJobs) {
-//                            if (currentCarJob.carModel == null || currentCarJob.carModel == car.carModel) {
-//                                _canFillDefaultJobs.value = true
-//                                break
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-
 
     companion object {
         private const val DEFAULT_STRING_VALUE = ""

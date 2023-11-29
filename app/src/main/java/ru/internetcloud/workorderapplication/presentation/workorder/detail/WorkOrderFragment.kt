@@ -200,7 +200,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
                             ARG_ANSWER
                         )
                         .show(childFragmentManager, REQUEST_ADD_DEFAULT_JOBS_KEY)
-                    viewModel.resetcanFillDefaultJobs()
+                    viewModel.handleEvent(WorkOrderDetailEvent.OnResetFillDefaultJobs)
                 } else {
                     if (currentState.loading) {
                         renderWorkOrderViews(visible = false, posted = currentState.workOrder.posted)
@@ -517,7 +517,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
             REQUEST_ADD_DEFAULT_JOBS_KEY -> {
                 val needAddDefaultJobs: Boolean = result.getBoolean(ARG_ANSWER, false)
                 if (needAddDefaultJobs) {
-                    viewModel.fillDefaultJobs()
+                    viewModel.handleEvent(WorkOrderDetailEvent.OnFillDefaultJobs)
                     binding.jobDetailsRecyclerView.scrollToPosition(
                         viewModel.screenState.value.workOrder.jobDetails.size - 1
                     )
@@ -561,7 +561,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
             REQUEST_KEY_DATA_WAS_CHANGED -> {
                 val needSaveData: Boolean = result.getBoolean(ANSWER_ARG_NAME_DATA_WAS_CHANGED, false)
                 if (needSaveData) {
-                    viewModel.saveWorkOrder(shouldCloseScreen = true)
+                    viewModel.handleEvent(WorkOrderDetailEvent.OnSave(shouldCloseScreen = true))
                 } else {
                     sendResultToFragment()
                     findNavController().popBackStack()
@@ -590,7 +590,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order2), FragmentResul
 
     private fun setupClickListeners() {
         binding.saveButton.setOnClickListener {
-            viewModel.handleEvent(WorkOrderDetailEvent.OnSave)
+            viewModel.handleEvent(WorkOrderDetailEvent.OnSave(shouldCloseScreen = false))
         }
 
         binding.closeButton.setOnClickListener {

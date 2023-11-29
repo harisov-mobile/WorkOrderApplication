@@ -38,13 +38,18 @@ sealed interface WorkOrderDetailEvent {
     data class OnPerformerDetailChange(val performerDetail: PerformerDetail?) : WorkOrderDetailEvent
 
     data class OnSelectPerformerChange(val performerDetail: PerformerDetail) : WorkOrderDetailEvent
+
     data class OnSelectJobChange(val jobDetail: JobDetail) : WorkOrderDetailEvent
+
+    data class OnSave(val shouldCloseScreen: Boolean) : WorkOrderDetailEvent
 
     object OnJobDetailDelete : WorkOrderDetailEvent
 
-    object OnPerformerDetailDelete : WorkOrderDetailEvent
+    object OnFillDefaultJobs : WorkOrderDetailEvent
 
-    object OnSave : WorkOrderDetailEvent
+    object OnResetFillDefaultJobs : WorkOrderDetailEvent
+
+    object OnPerformerDetailDelete : WorkOrderDetailEvent
 
     object OnIncorrectEmail : WorkOrderDetailEvent
 
