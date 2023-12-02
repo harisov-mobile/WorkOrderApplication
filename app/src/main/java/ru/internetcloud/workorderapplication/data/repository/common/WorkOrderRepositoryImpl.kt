@@ -23,6 +23,10 @@ class WorkOrderRepositoryImpl @Inject constructor(
         return workOrderLocalDataSource.getWorkOrder(workOrderId)
     }
 
+    override suspend fun getDuplicateWorkOrderByNumber(number: String, workOrderId: String): WorkOrder? {
+        return workOrderLocalDataSource.getDuplicateWorkOrderByNumber(number = number, workOrderId = workOrderId)
+    }
+
     override suspend fun updateWorkOrder(workOrder: WorkOrder) {
         workOrderLocalDataSource.updateWorkOrder(workOrder)
     }

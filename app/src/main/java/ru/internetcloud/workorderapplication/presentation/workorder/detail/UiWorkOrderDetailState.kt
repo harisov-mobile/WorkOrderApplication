@@ -24,7 +24,8 @@ data class UiWorkOrderDetailState(
     val error: Throwable? = null,
 
     // поля, касающиеся валидации - правильности ввода
-    val errorInputNumber: Boolean = false,
-    val errorInputEmail: Boolean = false,
-    val errorInputPerformer: Boolean = false
+    val errorInputNumber: Boolean = false,      // не заполнен номер
+    val errorDuplicateNumber: Boolean = false, // существует ли в Room другой заказ-наряд с таким номером
+    val errorInputEmail: Boolean = false,      // неправильный или незаполненный email
+    val errorInputPerformer: Boolean = false  // не указан исполнитель или исполнители
 ) : Parcelable

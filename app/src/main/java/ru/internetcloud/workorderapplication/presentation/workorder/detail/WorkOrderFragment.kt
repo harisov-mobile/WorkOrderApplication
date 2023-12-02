@@ -250,6 +250,10 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
                         errorMessage = errorMessage + getString(R.string.error_input_performer) + "\n"
                     }
 
+                    if (event.errorDuplicateNumber) {
+                        errorMessage = errorMessage + getString(R.string.error_duplicate_number) + "\n"
+                    }
+
                     MessageDialogFragment.newInstance(errorMessage)
                         .show(childFragmentManager, null)
                 }
@@ -392,7 +396,11 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
             numberTextInputLayout.error = if (state.errorInputNumber) {
                 getString(R.string.error_input_number)
             } else {
-                null
+                if (state.errorDuplicateNumber) {
+                    getString(R.string.error_duplicate_number)
+                } else {
+                    null
+                }
             }
 
             emailTextInputLayout.error = if (state.errorInputEmail) {

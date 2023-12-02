@@ -161,13 +161,19 @@ class WorkOrderLocalDataSource @Inject constructor(
 
     suspend fun getWorkOrder(workOrderId: String): WorkOrder? {
         var workOrder: WorkOrder? = null
-
         val workOrderWithDetails = appDao.getWorkOrder(workOrderId)
-
         workOrderWithDetails?.let {
             workOrder = workOrderMapper.fromDbModelToEntity(it)
         }
+        return workOrder
+    }
 
+    suspend fun getDuplicateWorkOrderByNumber(number: String, workOrderId: String): WorkOrder? {
+        var workOrder: WorkOrder? = null
+        val workOrderDbModel = appDao.getDuplicateWorkOrderByNumber(number = number, workOrderId = workOrderId)
+        workOrderDbModel?.let {
+            workOrder = workOrderMapper.fromDbModelToEntity(it)
+        }
         return workOrder
     }
 

@@ -17,6 +17,7 @@ import ru.internetcloud.workorderapplication.domain.model.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.model.document.PerformerDetail
 import ru.internetcloud.workorderapplication.domain.model.document.WorkOrder
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.repairtype.GetDefaultRepairTypeJobsUseCase
+import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetDuplicateWorkOrderByNumberUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.GetWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.documentoperation.UpdateWorkOrderUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.settingsoperation.GetDefaultWorkOrderSettingsUseCase
@@ -25,6 +26,7 @@ import ru.internetcloud.workorderapplication.presentation.util.ReturnResult
 @HiltViewModel
 class WorkOrderViewModel @Inject constructor(
     private val getWorkOrderUseCase: GetWorkOrderUseCase,
+    private val getDuplicateWorkOrderByNumberUseCase: GetDuplicateWorkOrderByNumberUseCase,
     private val updateWorkOrderUseCase: UpdateWorkOrderUseCase,
     private val getDefaultWorkOrderSettingsUseCase: GetDefaultWorkOrderSettingsUseCase,
     private val getDefaultRepairTypeJobsUseCase: GetDefaultRepairTypeJobsUseCase,
@@ -391,22 +393,31 @@ class WorkOrderViewModel @Inject constructor(
         return input?.trim() ?: DEFAULT_STRING_VALUE
     }
 
-    private fun validateInput(workOrder: WorkOrder): Boolean {
-        val valid = workOrder.number.isNotBlank() && workOrder.performers.isNotEmpty()
-        // ToDo надо еще проверить а не существует ли в Room заказ-наряд с таким номером?
+    private suspend fun validateInput(workOrder: WorkOrder): Boolean {
+
+        val duplicateWorkOrder = getDuplicateWorkOrderByNumberUseCase.getDuplicateWorkOrderByNumber(
+            number = workOrder.number,
+            workOrderId = workOrder.id
+        )
+
+        val valid = workOrder.number.isNotBlank()
+                && workOrder.performers.isNotEmpty()
+                && duplicateWorkOrder == null // а не существует ли в Room другой заказ-наряд с таким номером?
 
         if (!valid) {
             savedStateHandle[KEY_WORK_ORDER_DETAIL_STATE] = screenState.value.copy(
                 saving = false,
                 errorInputNumber = workOrder.number.isBlank(),
-                errorInputPerformer = workOrder.performers.isEmpty()
+                errorInputPerformer = workOrder.performers.isEmpty(),
+                errorDuplicateNumber = duplicateWorkOrder != null
             )
 
             screenEventChannel
                 .trySend(
                     WorkOrderDetailScreenEvent.ShowFieldsError(
                         errorInputNumber = workOrder.number.isBlank(),
-                        errorInputPerformer = workOrder.performers.isEmpty()
+                        errorInputPerformer = workOrder.performers.isEmpty(),
+                        errorDuplicateNumber = duplicateWorkOrder != null
                     )
                 )
         }
@@ -529,22 +540,6 @@ class WorkOrderViewModel @Inject constructor(
         )
     }
 
-//    fun updateWorkOrder() {
-//        val areFieldsValid = validateInput()
-//        if (areFieldsValid) {
-//            _workOrder.value?.let { order ->
-//                viewModelScope.launch {
-//                    updatePerformersString(order)
-//                    // ToDo подумать над тем, если пользователь успевает нажать BACK и ничего не успеет сохраниться?
-//                    updateWorkOrderUseCase.updateWorkOrder(order)
-//                    _canFinish.value = true
-//                }
-//            }
-//        } else {
-//            _showErrorMessage.value = true
-//        }
-//    }
-//
     fun getPerformersString(order: WorkOrder): String {
         var performersString = ""
         for (performer in order.performers) {

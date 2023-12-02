@@ -48,8 +48,13 @@ interface AppDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addWorkOrder(workOrderDbModel: WorkOrderDbModel)
 
+    @Transaction
     @Query("SELECT * FROM work_orders WHERE id=:workOrderId LIMIT 1")
     suspend fun getWorkOrder(workOrderId: String): WorkOrderWithDetails? // Андрей Сумин почему-то не Лив дату возвращает...
+
+    @Transaction
+    @Query("SELECT * FROM work_orders WHERE id!=:workOrderId AND number=:number LIMIT 1")
+    suspend fun getDuplicateWorkOrderByNumber(number: String, workOrderId: String): WorkOrderWithDetails? // если заказ-наряд с таким номером уже есть...
 
     @Query("DELETE FROM work_orders")
     suspend fun deleteAllWorkOrders()

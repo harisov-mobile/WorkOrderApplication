@@ -12,5 +12,7 @@ interface WorkOrderRepository {
 
     suspend fun getWorkOrder(workOrderId: String): WorkOrder?
 
+    suspend fun getDuplicateWorkOrderByNumber(number: String, workOrderId: String): WorkOrder?
+
     suspend fun updateWorkOrder(workOrder: WorkOrder)
 }
