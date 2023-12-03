@@ -1,6 +1,5 @@
 package ru.internetcloud.workorderapplication.data.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -8,6 +7,7 @@ import androidx.room.Query
 import androidx.room.RawQuery
 import androidx.room.Transaction
 import androidx.sqlite.db.SupportSQLiteQuery
+import kotlinx.coroutines.flow.Flow
 import ru.internetcloud.workorderapplication.data.model.CarDbModel
 import ru.internetcloud.workorderapplication.data.model.CarJobDbModel
 import ru.internetcloud.workorderapplication.data.model.CarModelDbModel
@@ -31,12 +31,11 @@ interface AppDao {
 
     @Transaction
     @Query("SELECT * FROM work_orders ORDER BY date, number")
-    fun getWorkOrderList(): LiveData<List<WorkOrderWithDetails>>
-    // ToDo Не использовать LiveData в репозитории, переделать на Flow
+    fun getWorkOrderList(): Flow<List<WorkOrderWithDetails>>
 
     @Transaction
     @RawQuery
-    fun getFilteredWorkOrderList(query: SupportSQLiteQuery): LiveData<List<WorkOrderWithDetails>> // Не использовать LiveData в репозитории
+    fun getFilteredWorkOrderList(query: SupportSQLiteQuery): Flow<List<WorkOrderWithDetails>>
 
     @Transaction
     @Query("SELECT * FROM work_orders WHERE isModified")
@@ -49,8 +48,13 @@ interface AppDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addWorkOrder(workOrderDbModel: WorkOrderDbModel)
 
+    @Transaction
     @Query("SELECT * FROM work_orders WHERE id=:workOrderId LIMIT 1")
     suspend fun getWorkOrder(workOrderId: String): WorkOrderWithDetails? // Андрей Сумин почему-то не Лив дату возвращает...
+
+    @Transaction
+    @Query("SELECT * FROM work_orders WHERE id!=:workOrderId AND number=:number LIMIT 1")
+    suspend fun getDuplicateWorkOrderByNumber(number: String, workOrderId: String): WorkOrderWithDetails? // если заказ-наряд с таким номером уже есть...
 
     @Query("DELETE FROM work_orders")
     suspend fun deleteAllWorkOrders()

@@ -1,8 +1,11 @@
 package ru.internetcloud.workorderapplication.data.datasource.local
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.sqlite.db.SimpleSQLiteQuery
+import java.util.Calendar
+import java.util.Date
+import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.mapper.JobDetailMapper
 import ru.internetcloud.workorderapplication.data.mapper.PerformerDetailMapper
@@ -13,9 +16,6 @@ import ru.internetcloud.workorderapplication.data.model.WorkOrderDbModel
 import ru.internetcloud.workorderapplication.data.model.WorkOrderWithDetails
 import ru.internetcloud.workorderapplication.domain.common.SearchWorkOrderData
 import ru.internetcloud.workorderapplication.domain.model.document.WorkOrder
-import java.util.Calendar
-import java.util.Date
-import javax.inject.Inject
 
 class WorkOrderLocalDataSource @Inject constructor(
     private val appDao: AppDao,
@@ -49,13 +49,13 @@ class WorkOrderLocalDataSource @Inject constructor(
         )
     }
 
-    fun getWorkOrderList(): LiveData<List<WorkOrder>> {
-        return Transformations.map(appDao.getWorkOrderList()) {
+    fun getWorkOrderList(): Flow<List<WorkOrder>> {
+        return appDao.getWorkOrderList().map {
             workOrderMapper.fromListDbModelToListEntity(it)
         }
     }
 
-    fun getFilteredWorkOrderList(searchWorkOrderData: SearchWorkOrderData): LiveData<List<WorkOrder>> {
+    fun getFilteredWorkOrderList(searchWorkOrderData: SearchWorkOrderData): Flow<List<WorkOrder>> {
         // Query string
         var queryString = String()
 
@@ -154,20 +154,26 @@ class WorkOrderLocalDataSource @Inject constructor(
         // val query = SimpleSQLiteQuery(queryString, args.toTypedArray())
         val query = SimpleSQLiteQuery(queryString, args.toTypedArray())
 
-        return Transformations.map(appDao.getFilteredWorkOrderList(query)) {
+        return appDao.getFilteredWorkOrderList(query).map {
             workOrderMapper.fromListDbModelToListEntity(it)
         }
     }
 
     suspend fun getWorkOrder(workOrderId: String): WorkOrder? {
         var workOrder: WorkOrder? = null
-
         val workOrderWithDetails = appDao.getWorkOrder(workOrderId)
-
         workOrderWithDetails?.let {
             workOrder = workOrderMapper.fromDbModelToEntity(it)
         }
+        return workOrder
+    }
 
+    suspend fun getDuplicateWorkOrderByNumber(number: String, workOrderId: String): WorkOrder? {
+        var workOrder: WorkOrder? = null
+        val workOrderDbModel = appDao.getDuplicateWorkOrderByNumber(number = number, workOrderId = workOrderId)
+        workOrderDbModel?.let {
+            workOrder = workOrderMapper.fromDbModelToEntity(it)
+        }
         return workOrder
     }
 

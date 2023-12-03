@@ -1,6 +1,5 @@
 package ru.internetcloud.workorderapplication.presentation.login
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,42 +9,20 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import ru.internetcloud.workorderapplication.BuildConfig
 import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentLogonBinding
-import ru.internetcloud.workorderapplication.di.InjectingSavedStateViewModelFactory
-import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.domain.repository.AuthorizationPreferencesRepository
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.util.launchAndCollectIn
 
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
-    // интерфейс обратного вызова
-    interface Callbacks {
-        fun onLaunchDataSynchronization()
-
-        fun onLaunchWorkOrderList()
-    }
-
-    private val component by lazy {
-        (requireActivity().application as WorkOrderApp).component
-    }
-
-    @Inject
-    lateinit var defaultViewModelFactory: dagger.Lazy<InjectingSavedStateViewModelFactory>
-
-    override fun getDefaultViewModelProviderFactory(): ViewModelProvider.Factory =
-        defaultViewModelFactory.get().create(this, arguments)
-
-    private val viewModel: LoginViewModel by viewModels()
-
-    // даггер:
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel by viewModels<LoginViewModel>()
 
     @Inject
     lateinit var authorizationPreferencesRepository: AuthorizationPreferencesRepository
@@ -53,12 +30,6 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLogonBinding? = null
     private val binding: FragmentLogonBinding
         get() = _binding ?: error("FragmentWorkOrderBinding is null")
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        // даггер:
-        component.inject(this)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentLogonBinding.inflate(inflater, container, false)
@@ -130,6 +101,7 @@ class LoginFragment : Fragment() {
         viewModel.state.launchAndCollectIn(viewLifecycleOwner) { currentState ->
             binding.enterProgressBar.isVisible = currentState.entering
             binding.enterButton.isEnabled = !currentState.entering
+            binding.cancelButton.isEnabled = !currentState.entering
             binding.serverEditText.isEnabled = !currentState.entering
             binding.loginEditText.isEnabled = !currentState.entering
             binding.passwordEditText.isEnabled = !currentState.entering
@@ -164,13 +136,13 @@ class LoginFragment : Fragment() {
             if (currentState.canContinue) {
                 // подписка на завершение экрана:
                 // запустить фрагмент, где будет синхронизация данных из 1С
-                (requireActivity() as Callbacks).onLaunchDataSynchronization()
+                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToDataSynchronizationFragment())
             }
 
             if (currentState.canContinueDemoMode) {
                 // демо-режим - переход в список Заказ-нарядов:
                 // запустить фрагмент, где будет показан список демо-заказ-нарядов
-                (requireActivity() as Callbacks).onLaunchWorkOrderList()
+                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToWorkOrderListFragment())
             }
         }
 
@@ -181,12 +153,6 @@ class LoginFragment : Fragment() {
                         .show(childFragmentManager, null)
                 }
             }
-        }
-    }
-
-    companion object {
-        fun newInstance(): LoginFragment {
-            return LoginFragment()
         }
     }
 }

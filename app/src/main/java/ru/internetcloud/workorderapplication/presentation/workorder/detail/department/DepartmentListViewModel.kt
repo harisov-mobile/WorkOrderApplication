@@ -4,12 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import ru.internetcloud.workorderapplication.domain.model.catalog.Department
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.GetDepartmentListUseCase
 import ru.internetcloud.workorderapplication.domain.usecase.catalogoperation.department.SearchDepartmentsUseCase
-import javax.inject.Inject
 
+@HiltViewModel
 class DepartmentListViewModel @Inject constructor(
     private val getDepartmentListUseCase: GetDepartmentListUseCase,
     private val searchDepartmentsUseCase: SearchDepartmentsUseCase

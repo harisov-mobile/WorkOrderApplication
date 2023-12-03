@@ -11,28 +11,20 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.WorkOrderApp
-import ru.internetcloud.workorderapplication.di.ViewModelFactory
 import ru.internetcloud.workorderapplication.domain.model.catalog.WorkingHour
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class WorkingHourPickerFragment : DialogFragment() {
-
-    // даггер:
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val component by lazy {
-        (requireActivity().application as WorkOrderApp).component
-    }
 
     private var requestKey = ""
     private var argWorkingHourName = ""
 
-    private lateinit var viewModel: WorkingHourListViewModel
+    private val viewModel by viewModels<WorkingHourListViewModel>()
+
     private lateinit var workingHourListRecyclerView: RecyclerView
     private lateinit var workingHourListAdapter: WorkingHourListAdapter
 
@@ -41,11 +33,6 @@ class WorkingHourPickerFragment : DialogFragment() {
     private lateinit var titleTextView: TextView
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // даггер:
-        component.inject(this)
-
-        viewModel = ViewModelProvider(this, viewModelFactory).get(WorkingHourListViewModel::class.java)
-
         arguments?.let { arg ->
             viewModel.selectedWorkingHour ?: let {
                 viewModel.selectedWorkingHour = arg.getParcelable(WORKING_HOUR)

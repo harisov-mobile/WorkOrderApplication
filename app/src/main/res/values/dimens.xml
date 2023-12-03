@@ -9,4 +9,9 @@
     <dimen name="top_server_margin">80dp</dimen>
     <dimen name="enter_progress_size">30dp</dimen>
 
+    <dimen name="work_order_error_text_size">30sp</dimen>
+
+    <dimen name="work_order_list_error_text_size">30sp</dimen>
+    <dimen name="work_order_list_empty_text_size">30sp</dimen>
+    <dimen name="work_order_detail_error_text_size">30sp</dimen>
 </resources>

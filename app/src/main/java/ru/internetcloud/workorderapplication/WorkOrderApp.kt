@@ -1,11 +1,7 @@
 package ru.internetcloud.workorderapplication
 
 import android.app.Application
-import ru.internetcloud.workorderapplication.di.DaggerApplicationComponent
+import dagger.hilt.android.HiltAndroidApp
 
-class WorkOrderApp : Application() {
-
-    val component by lazy {
-        DaggerApplicationComponent.factory().create(this)
-    }
-}
+@HiltAndroidApp
+class WorkOrderApp : Application()

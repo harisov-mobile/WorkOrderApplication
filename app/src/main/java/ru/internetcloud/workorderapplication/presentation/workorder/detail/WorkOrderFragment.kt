@@ -1,100 +1,172 @@
 package ru.internetcloud.workorderapplication.presentation.workorder.detail
 
-import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import java.math.BigDecimal
+import java.util.Date
 import ru.internetcloud.workorderapplication.R
-import ru.internetcloud.workorderapplication.WorkOrderApp
 import ru.internetcloud.workorderapplication.databinding.FragmentWorkOrderBinding
-import ru.internetcloud.workorderapplication.di.ViewModelFactory
+import ru.internetcloud.workorderapplication.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.domain.model.catalog.Car
 import ru.internetcloud.workorderapplication.domain.model.catalog.Department
 import ru.internetcloud.workorderapplication.domain.model.catalog.Employee
 import ru.internetcloud.workorderapplication.domain.model.catalog.Partner
 import ru.internetcloud.workorderapplication.domain.model.catalog.RepairType
-import ru.internetcloud.workorderapplication.domain.common.DateConverter
-import ru.internetcloud.workorderapplication.domain.common.ScreenMode
 import ru.internetcloud.workorderapplication.domain.model.document.JobDetail
 import ru.internetcloud.workorderapplication.domain.model.document.PerformerDetail
-import ru.internetcloud.workorderapplication.domain.model.document.WorkOrder
 import ru.internetcloud.workorderapplication.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.presentation.dialog.QuestionDialogFragment
 import ru.internetcloud.workorderapplication.presentation.sendemail.SendWorkOrderByIdToEmailDialogFragment
+import ru.internetcloud.workorderapplication.presentation.util.convertToString
+import ru.internetcloud.workorderapplication.presentation.util.launchAndCollectIn
+import ru.internetcloud.workorderapplication.presentation.util.toIntOrDefault
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.car.CarPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.department.DepartmentPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.employee.EmployeePickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailListAdapter
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.jobdetails.JobDetailListListener
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.partner.PartnerPickerFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailFragment
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailListAdapter
+import ru.internetcloud.workorderapplication.presentation.workorder.detail.performers.PerformerDetailListListener
 import ru.internetcloud.workorderapplication.presentation.workorder.detail.repairtype.RepairTypePickerFragment
-import java.math.BigDecimal
-import java.util.Date
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResultListener {
 
-    // даггер:
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val component by lazy {
-        (requireActivity().application as WorkOrderApp).component
-    }
-
     private val binding by viewBinding(FragmentWorkOrderBinding::bind)
+    private val args by navArgs<WorkOrderFragmentArgs>()
+    private val viewModel by viewModels<WorkOrderViewModel>()
 
-    private val viewModel: WorkOrderViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(WorkOrderViewModel::class.java)
+    // эти переменные нужны для возврата во фрагмент со списком : надо ли делать скролл
+    private val requestKeyReturnResult: String by lazy {
+        args.requestKeyReturnResult
+    }
+    private val argNameReturnResult: String by lazy {
+        args.argNameReturnResult
     }
 
-    private lateinit var performerDetailListAdapter: PerformerDetailListAdapter
-    private lateinit var jobDetailListAdapter: JobDetailListAdapter
+    private var editTextInitialisation: Boolean = false
 
-    private var screenMode: ScreenMode? = null
-    private var workOrderId: String? = null
+    // согласно моему открытию: Не надо самому вмешиваться в позиционирование списка после удаления!
+    // RecyclerView и Adapter сами знают, что надо делать!
+    // Надо просто не занулять адаптер
+    private val performerDetailListAdapter: PerformerDetailListAdapter by lazy {
+        // сначала - обработчик нажатий на элемент списка:
+        val performerDetailListListener = object : PerformerDetailListListener {
+            override fun onClickPerformerDetail(performerDetail: PerformerDetail) {
+                viewModel.handleEvent(WorkOrderDetailEvent.OnSelectPerformerChange(performerDetail))
+            }
+        }
+        // потом - создаем адаптер, который не будет зануляться при
+        // жонглировании фрагментами
+        PerformerDetailListAdapter(performerDetailListListener)
+    }
 
-    private var modifyAllowed: Boolean = true
+    private val jobDetailListAdapter: JobDetailListAdapter by lazy {
+        // сначала - обработчик нажатий на элемент списка:
+        val jobDetailListListener = object : JobDetailListListener {
+            override fun onClickJobDetail(jobDetail: JobDetail) {
+                viewModel.handleEvent(WorkOrderDetailEvent.OnSelectJobChange(jobDetail))
+            }
+        }
+        // потом - создаем адаптер, который не будет зануляться при
+        // жонглировании фрагментами
+        JobDetailListAdapter(jobDetailListListener)
+    }
 
-    private lateinit var requestKeyNewOrderId: String
-    private lateinit var argNameNewOrderId: String
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        // даггер:
-        component.inject(this)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // адаптер в binding занулять, так как
+        //        В книге "Real World" на стр. 133 занулению адаптера посвящен абзац:
+        //        Having an Adapter as a property of a Fragment is a known way of
+        //        leaking the RecyclerView.
+        //        That’s because, when the View is destroyed, the RecyclerView is destroyed
+        //        along with it. But if the Fragment references the Adapter, the garbage
+        //        collector won’t be able to collect the RecyclerView instance because
+        //                Adapter s and RecyclerViews have a circular dependency. In other words,
+        //        they reference each other.
+        binding.performerDetailsRecyclerView.adapter = null
+        binding.jobDetailsRecyclerView.adapter = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        savedInstanceState?.let {
-            viewModel.workOrder.value?.let { order ->
-                updateUI(order)
-            }
-        } ?: let {
-            checkArgs()
-            // списки сначала инициализирую пустым списком, потом они заполнятся
-            setupPerformerDetailListRecyclerView(emptyList())
-            setupJobDetailListRecyclerView(emptyList())
-            launchCorrectMode()
-        }
-
+        setupPerformerDetailListRecyclerView()
+        setupJobDetailListRecyclerView()
+        setupClickListeners()
+        interceptExit() // перехват нажатия кнопки Back
+        setupFragmentResultListeners()
         observeViewModel()
+    }
 
+    override fun onStart() {
+        super.onStart()
+        // doAfterTextChanged нужно навешивать здесь, а не в onCreateView или onViewCreated, т.к. там еще не восстановлено
+        // EditText и слушатели будут "дергаться" лишний раз когда ОС Андроид сама восстановит состояние EditText
+        setupOnTextChangedListeners()
+    }
+
+    private fun interceptExit() {
+        // перехват нажатия кнопки "Back"
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onCloseWorkOrder()
+                }
+            }
+        )
+    }
+
+    private fun onCloseWorkOrder() {
+        // перехват нажатия кнопки "Back"
+        if (viewModel.screenState.value.saving) {
+            // ради чего все затевалось - это блокирование кнопки "Back"
+            // пока не закончится запись
+            // причина: если успеть нажать BACK то ВьюМодель уничтожится и отменится корутина, которая записывает
+            // а если отменится корутина то запись произведена не будет.
+        } else {
+            if (viewModel.screenState.value.isModified) { // подумай над if (!order.posted && ...
+                QuestionDialogFragment
+                    .newInstance(
+                        getString(R.string.data_was_changed_question),
+                        REQUEST_KEY_DATA_WAS_CHANGED,
+                        ANSWER_ARG_NAME_DATA_WAS_CHANGED
+                    )
+                    .show(childFragmentManager, REQUEST_KEY_DATA_WAS_CHANGED)
+            } else {
+                // можно смело выходить, так как или ничего не поменялось,
+                // или было нажатие кнопки "save" и все уже сохранено
+                sendResultToFragment()
+                findNavController().popBackStack()
+            }
+        }
+    }
+
+    private fun setupFragmentResultListeners() {
+        // чтобы получать от дочерних фрагментов информацию (диалоговое окно - "Данные изменились. Записать?")
+        childFragmentManager.setFragmentResultListener(REQUEST_KEY_DATA_WAS_CHANGED, viewLifecycleOwner, this)
+
+        // чтобы получить от дочерних фрагментов информацию об изменении: Даты, Заказчика, Автомобиля и т.д.
         childFragmentManager.setFragmentResultListener(REQUEST_DATE_PICKER_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_PARTNER_PICKER_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_CAR_PICKER_KEY, viewLifecycleOwner, this)
@@ -107,466 +179,408 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
         childFragmentManager.setFragmentResultListener(REQUEST_DELETE_PERFORMER_DETAIL_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_MASTER_PICKER_KEY, viewLifecycleOwner, this)
         childFragmentManager.setFragmentResultListener(REQUEST_ADD_DEFAULT_JOBS_KEY, viewLifecycleOwner, this)
-
-        setupClickListeners()
-
-        activity?.onBackPressedDispatcher?.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    onCloseWorkOrder()
-                }
-            }
-        )
     }
 
     private fun observeViewModel() {
-        // подписка на ошибки
-        viewModel.errorInputNumber.observe(viewLifecycleOwner) { isError ->
-            val message = if (isError) {
-                getString(R.string.error_input_number)
+        viewModel.screenState.launchAndCollectIn(viewLifecycleOwner) { currentState ->
+            if (currentState.shouldCloseScreen) {
+                Toast.makeText(context, getString(R.string.success_saved), Toast.LENGTH_SHORT).show()
+                sendResultToFragment()
+                findNavController().popBackStack()
             } else {
-                null
+                if (currentState.canFillDefaultJobs) {
+                    // спросить надо ли добавить в ТЧ "Работы":
+                    QuestionDialogFragment
+                        .newInstance(
+                            getString(R.string.add_default_jobs_question),
+                            REQUEST_ADD_DEFAULT_JOBS_KEY,
+                            ARG_ANSWER
+                        )
+                        .show(childFragmentManager, REQUEST_ADD_DEFAULT_JOBS_KEY)
+                    viewModel.handleEvent(WorkOrderDetailEvent.OnResetFillDefaultJobs)
+                } else {
+                    if (currentState.loading) {
+                        renderWorkOrderViews(visible = false, posted = currentState.workOrder.posted)
+                        renderErrorViews(visible = false, errorMessage = null)
+                        renderLoadingViews(visible = true)
+                    } else {
+                        if (currentState.error != null) {
+                            renderWorkOrderViews(visible = false, posted = currentState.workOrder.posted)
+                            renderLoadingViews(visible = false)
+                            renderErrorViews(visible = true, errorMessage = currentState.error.message)
+                        } else {
+                            renderLoadingViews(visible = false)
+                            renderErrorViews(visible = false, errorMessage = null)
+                            renderWorkOrderViews(
+                                visible = true,
+                                posted = currentState.workOrder.posted,
+                                saving = currentState.saving
+                            )
+                            showWorkOrderValues(currentState)
+                        }
+                    }
+                }
             }
-            binding.numberTextInputLayout.error = message
         }
 
-        viewModel.errorInputEmail.observe(viewLifecycleOwner) { isError ->
-            val message = if (isError) {
+        viewModel.screenEventFlow.launchAndCollectIn(viewLifecycleOwner) { event ->
+            when (event) {
+                is WorkOrderDetailScreenEvent.ShowMessage -> {
+                    val snackBar = Snackbar.make(
+                        binding.root,
+                        event.message,
+                        Snackbar.LENGTH_INDEFINITE
+                    )
+                    snackBar.setAction("OK") {
+                        snackBar.dismiss() // если не исчезает - вызови dismiss()
+                    }
+                    snackBar.show()
+                }
+
+                is WorkOrderDetailScreenEvent.ShowFieldsError -> {
+                    // сборная солянка из сообщений об ошибках:
+                    var errorMessage = ""
+
+                    if (event.errorInputNumber) {
+                        errorMessage = errorMessage + getString(R.string.error_input_number) + "\n"
+                    }
+
+                    // тут еще должны добавиться сообщения о других ошибках....
+                    if (event.errorInputPerformer) {
+                        errorMessage = errorMessage + getString(R.string.error_input_performer) + "\n"
+                    }
+
+                    if (event.errorDuplicateNumber) {
+                        errorMessage = errorMessage + getString(R.string.error_duplicate_number) + "\n"
+                    }
+
+                    MessageDialogFragment.newInstance(errorMessage)
+                        .show(childFragmentManager, null)
+                }
+
+                is WorkOrderDetailScreenEvent.ShowSavingSuccess -> {
+                    MessageDialogFragment.newInstance(getString(R.string.success_saved))
+                        .show(childFragmentManager, null)
+                }
+            }
+        }
+    }
+
+    private fun renderLoadingViews(visible: Boolean) {
+        setMenuVisibility(false)
+
+        with(binding) {
+            loadingContainer.isVisible = visible
+        }
+    }
+
+    private fun renderErrorViews(visible: Boolean, errorMessage: String? = null) {
+        setMenuVisibility(false)
+        with(binding) {
+            errorTextView.text = errorMessage
+            errorContainer.isVisible = visible
+        }
+    }
+
+    private fun renderWorkOrderViews(
+        visible: Boolean,
+        posted: Boolean, // проведен или не проведен Заказ-наряд
+        saving: Boolean = false
+    ) {
+        with(binding) {
+            if (visible) {
+                mainContainer.isVisible = true
+                numberTextInputLayout.isEnabled = !saving && !posted
+                mileageTextInputLayout.isEnabled = !saving && !posted
+                requestReasonTextInputLayout.isEnabled = !saving && !posted
+                commentTextInputLayout.isEnabled = !saving && !posted
+                emailTextInputLayout.isEnabled = !saving
+
+                if (posted) {
+                    context?.let { currentContext ->
+                        val grayColor = ContextCompat.getColor(currentContext, R.color.gray_850)
+                        mainContainer.setBackgroundColor(
+                            ContextCompat.getColor(
+                                currentContext,
+                                R.color.light_green_200
+                            )
+                        )
+                        numberEditText.setTextColor(grayColor)
+                        mileageEditText.setTextColor(grayColor)
+                        requestReasonEditText.setTextColor(grayColor)
+                        commentEditText.setTextColor(grayColor)
+                    }
+                } else {
+                    saveButton.isVisible = true
+                    saveButton.isEnabled = !saving
+                    savingProgressBar.isVisible = saving
+
+                    closeButton.isEnabled = !saving
+
+                    dateSelectButton.isVisible = true
+                    dateSelectButton.isEnabled = !saving
+
+                    partnerSelectButton.isVisible = true
+                    partnerSelectButton.isEnabled = !saving
+
+                    carSelectButton.isVisible = true
+                    carSelectButton.isEnabled = !saving
+
+                    repairTypeSelectButton.isVisible = true
+                    repairTypeSelectButton.isEnabled = !saving
+
+                    departmentSelectButton.isVisible = true
+                    departmentSelectButton.isEnabled = !saving
+
+                    addPerformerDetailButton.visibility = if (!saving) View.VISIBLE else View.INVISIBLE
+                    editPerformerDetailButton.visibility = if (!saving) View.VISIBLE else View.INVISIBLE
+                    deletePerformerDetailButton.visibility = if (!saving) View.VISIBLE else View.INVISIBLE
+
+                    addJobDetailButton.visibility = if (!saving) View.VISIBLE else View.INVISIBLE
+                    deleteJobDetailButton.visibility = if (!saving) View.VISIBLE else View.INVISIBLE
+                    editJobDetailButton.visibility = if (!saving) View.VISIBLE else View.INVISIBLE
+
+                    masterSelectButton.isVisible = true
+                    masterSelectButton.isEnabled = !saving
+
+                    sendToEmailButton.isEnabled = !saving
+                }
+            } else {
+                mainContainer.isVisible = false
+            }
+        }
+    }
+
+    private fun showWorkOrderValues(state: UiWorkOrderDetailState) {
+        with(binding) {
+            dateTextView.text = DateConverter.getDateString(state.workOrder.date)
+            partnerTextView.text = state.workOrder.partner?.name
+            carTextView.text = state.workOrder.car?.name
+            repairTypeTextView.text = state.workOrder.repairType?.name
+            departmentTextView.text = state.workOrder.department?.name
+            masterTextView.text = state.workOrder.master?.name
+
+            // чтобы "doAfterTextChanged" не дергались и не зацикливалось приложение
+            if (!state.workOrder.number.equals(numberEditText.text.toString())) {
+                // не дергайся
+                editTextInitialisation = true
+                numberEditText.setText(state.workOrder.number)
+                // дергайся
+                editTextInitialisation = false
+            }
+
+            if (!state.workOrder.mileage.convertToString().equals(mileageEditText.text.toString())) {
+                // не дергайся
+                editTextInitialisation = true
+                mileageEditText.setText(state.workOrder.mileage.convertToString())
+                // дергайся
+                editTextInitialisation = false
+            }
+
+            if (!state.workOrder.requestReason.equals(requestReasonEditText.text.toString())) {
+                // не дергайся
+                editTextInitialisation = true
+                requestReasonEditText.setText(state.workOrder.requestReason)
+                // дергайся
+                editTextInitialisation = false
+            }
+
+            if (!state.workOrder.comment.equals(commentEditText.text.toString())) {
+                // не дергайся
+                editTextInitialisation = true
+                commentEditText.setText(state.workOrder.comment)
+                // дергайся
+                editTextInitialisation = false
+            }
+
+            numberTextInputLayout.error = if (state.errorInputNumber) {
+                getString(R.string.error_input_number)
+            } else {
+                if (state.errorDuplicateNumber) {
+                    getString(R.string.error_duplicate_number)
+                } else {
+                    null
+                }
+            }
+
+            emailTextInputLayout.error = if (state.errorInputEmail) {
                 getString(R.string.wrong_email)
             } else {
                 null
             }
-            binding.emailTextInputLayout.error = message
-        }
 
-        viewModel.showErrorMessage.observe(viewLifecycleOwner) { show ->
-            if (show) {
-                var errorMessage = ""
-                viewModel.errorInputNumber.value?.let { isError ->
-                    if (isError) {
-                        errorMessage = errorMessage + getString(R.string.error_input_number) + "\n"
-                    }
-                }
-
-                if (viewModel.errorInputPerformer) {
-                    errorMessage = errorMessage + getString(R.string.error_input_performer) + "\n"
-                }
-
-                viewModel.resetShowErrorMessage()
-
-                MessageDialogFragment.newInstance(errorMessage)
-                    .show(childFragmentManager, null)
-            }
-        }
-
-        // подписка на успешное завершение сохранения
-        viewModel.canFinish.observe(viewLifecycleOwner) {
-            if (viewModel.closeOnSave) {
-                Toast.makeText(context, getString(R.string.success_saved), Toast.LENGTH_SHORT).show()
-                activity?.supportFragmentManager?.popBackStack()
-            } else if (viewModel.isChanged) {
-                viewModel.isChanged = false
-                MessageDialogFragment.newInstance(getString(R.string.success_saved))
-                    .show(childFragmentManager, null)
-            }
-        }
-
-        // подписка на заполнение работ по-умолчанию из Вида ремонта:
-        viewModel.canFillDefaultJobs.observe(viewLifecycleOwner) { canFill ->
-            if (canFill) {
-                // спросить надо ли добавить в ТЧ "Работы":
-                QuestionDialogFragment
-                    .newInstance(
-                        getString(R.string.add_default_jobs_question),
-                        REQUEST_ADD_DEFAULT_JOBS_KEY,
-                        ARG_ANSWER
+            performerDetailListAdapter.submitList(state.workOrder.performers) {
+                state.selectedPerformerDetail?.let { selectedPerformerDetail ->
+                    binding.performerDetailsRecyclerView.scrollToPosition(
+                        state.workOrder.performers.indexOf(
+                            selectedPerformerDetail
+                        )
                     )
-                    .show(childFragmentManager, REQUEST_ADD_DEFAULT_JOBS_KEY)
-            }
+                }
+            } // Табличная часть Исполнители:
+
+            jobDetailListAdapter.submitList(state.workOrder.jobDetails) {
+                state.selectedJobDetail?.let { selectedJobDetail ->
+                    binding.jobDetailsRecyclerView.scrollToPosition(
+                        state.workOrder.jobDetails.indexOf(
+                            selectedJobDetail
+                        )
+                    )
+                }
+            } // Табличная часть Работы:
+
+            refreshTotalSum()
         }
     }
 
-    private fun launchCorrectMode() {
-        when (screenMode) {
-            ScreenMode.EDIT -> launchEditMode()
-            ScreenMode.ADD -> launchAddMode()
-            null -> throw IllegalStateException("screenMode is NULL")
-        }
-
-        viewModel.workOrder.observe(viewLifecycleOwner) { order ->
-            updateUI(order)
-        }
-    }
-
-    private fun checkArgs() {
-        val args = requireArguments()
-        if (!args.containsKey(ARG_SCREEN_MODE)) {
-            throw RuntimeException("Parameter mode is absent")
-        }
-
-        val mode = args.getParcelable<ScreenMode>(ARG_SCREEN_MODE)
-        if (mode != ScreenMode.EDIT && mode != ScreenMode.ADD) {
-            throw RuntimeException("Uknown screen mode $mode")
-        }
-        screenMode = mode
-        when (screenMode) {
-            ScreenMode.EDIT -> workOrderId = args.getString(ARG_WORK_ORDER_ID)
-            ScreenMode.ADD -> {
-                requestKeyNewOrderId = args.getString(REQUEST_KEY_NEW_ORDER_ID, "")
-                argNameNewOrderId = args.getString(ARG_NAME_NEW_ORDER_ID, "")
-            }
-            else -> throw RuntimeException("Uknown screen mode $screenMode")
-        }
-    }
-
-    private fun launchEditMode() {
-        workOrderId?.let {
-            viewModel.loadWorkOrder(it)
-        }
-    }
-
-    private fun launchAddMode() {
-        viewModel.createWorkOrder()
-    }
-
-    private fun setupPerformerDetailListRecyclerView(performerDetailList: List<PerformerDetail>) {
-        performerDetailListAdapter = PerformerDetailListAdapter()
-        performerDetailListAdapter.submitList(performerDetailList)
+    private fun setupPerformerDetailListRecyclerView() {
         binding.performerDetailsRecyclerView.adapter = performerDetailListAdapter
-
-        performerDetailListAdapter.onPerformerDetailClickListener = { currentPerformerDetail ->
-            viewModel.selectedPerformerDetail?.isSelected = false
-            viewModel.selectedPerformerDetail = currentPerformerDetail
-            viewModel.selectedPerformerDetail?.isSelected = true
-        }
+        binding.performerDetailsRecyclerView.layoutManager = LinearLayoutManager(context)
     }
 
-    private fun setupJobDetailListRecyclerView(jobDetailList: List<JobDetail>) {
-        jobDetailListAdapter = JobDetailListAdapter()
-        jobDetailListAdapter.submitList(jobDetailList)
+    private fun setupJobDetailListRecyclerView() {
         binding.jobDetailsRecyclerView.adapter = jobDetailListAdapter
-
-        jobDetailListAdapter.onJobDetailClickListener = { currentJobDetail ->
-            viewModel.selectedJobDetail?.isSelected = false // предыдущую отмеченную строку работ сделаем неотмеченной
-            viewModel.selectedJobDetail = currentJobDetail
-            viewModel.selectedJobDetail?.isSelected = true
-        }
+        binding.jobDetailsRecyclerView.layoutManager = LinearLayoutManager(context)
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        // TextWatcher нужно навешивать здесь, а не в onCreate или onCreateView, т.к. там еще не восстановлено
-        // EditText и слушатели будут "дергаться" лишний раз
-        binding.numberEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputNumber()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                if (modifyAllowed) {
-                    viewModel.workOrder.value?.number = parseText(p0?.toString())
-                    viewModel.workOrder.value?.isModified = true
-                    viewModel.isChanged = true
-                }
-            }
-        })
-
-        binding.emailEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputEmail()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-        })
-
-        binding.mileageEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                if (modifyAllowed) {
-                    viewModel.workOrder.value?.mileage = parseNumber(p0?.toString()).toInt()
-                    viewModel.workOrder.value?.isModified = true
-                    viewModel.isChanged = true
-                }
-            }
-        })
-
-        binding.requestReasonEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                if (modifyAllowed) {
-                    viewModel.workOrder.value?.requestReason = parseText(p0?.toString())
-                    viewModel.workOrder.value?.isModified = true
-                    viewModel.isChanged = true
-                }
-            }
-        })
-
-        binding.commentEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                if (modifyAllowed) {
-                    viewModel.workOrder.value?.comment = parseText(p0?.toString())
-                    viewModel.workOrder.value?.isModified = true
-                    viewModel.isChanged = true
-                }
-            }
-        })
-    }
-
-    private fun parseText(inputText: String?): String {
-        return inputText?.trim() ?: ""
-    }
-
-    private fun parseNumber(inputText: String?): String {
-        var result = "0"
-        inputText?.let {
-            if (!it.isEmpty()) {
-                result = it
+    private fun setupOnTextChangedListeners() {
+        binding.numberEditText.doAfterTextChanged { text ->
+            if (!editTextInitialisation) {
+                viewModel.handleEvent(WorkOrderDetailEvent.OnNumberChange(number = text.toString()))
             }
         }
-        return result
+
+        binding.emailEditText.doAfterTextChanged { text ->
+            viewModel.handleEvent(WorkOrderDetailEvent.OnEmailChange(email = text.toString()))
+        }
+
+        binding.mileageEditText.doAfterTextChanged { text ->
+            if (!editTextInitialisation) {
+                viewModel.handleEvent(
+                    WorkOrderDetailEvent.OnMileageChange(
+                        mileage = text.toString().toIntOrDefault()
+                    )
+                )
+            }
+        }
+
+        binding.requestReasonEditText.doAfterTextChanged { text ->
+            if (!editTextInitialisation) {
+                viewModel.handleEvent(
+                    WorkOrderDetailEvent.OnRequestReasonChange(
+                        requestReason = text.toString()
+                    )
+                )
+            }
+        }
+
+        binding.commentEditText.doAfterTextChanged { text ->
+            if (!editTextInitialisation) {
+                viewModel.handleEvent(
+                    WorkOrderDetailEvent.OnCommentChange(
+                        comment = text.toString()
+                    )
+                )
+            }
+        }
     }
 
     override fun onFragmentResult(requestKey: String, result: Bundle) {
         when (requestKey) {
+            // выбрали новую Дату заказ-наряда
             REQUEST_DATE_PICKER_KEY -> {
                 val date = result.getSerializable(ARG_DATE) as Date
-                viewModel.workOrder.value?.let { order ->
-                    if (order.date != date) {
-                        order.date = date
-                        binding.dateTextView.text = DateConverter.getDateString(date)
-                        order.isModified = true
-                        viewModel.isChanged = true
-                    }
-                }
+                viewModel.handleEvent(WorkOrderDetailEvent.OnDateChange(date = date))
             }
 
+            // Выбрали Заказчика:
             REQUEST_PARTNER_PICKER_KEY -> {
                 val partner: Partner? = result.getParcelable(ARG_PARTNER)
-                viewModel.workOrder.value?.let { order ->
-                    if (order.partner != partner) {
-                        order.partner = partner
-                        binding.partnerTextView.text = partner?.name ?: ""
-                        order.isModified = true
-                        viewModel.isChanged = true
-
-                        // т.к. изменили Заказчика надо очистить СХТ, .т.к. СХТ от другого заказчика
-                        order.car = null
-                        binding.carTextView.text = ""
-                    }
-                }
+                viewModel.handleEvent(WorkOrderDetailEvent.OnPartnerChange(partner = partner))
             }
 
+            // выбрали Автомобиль (СХТ):
             REQUEST_CAR_PICKER_KEY -> {
                 val car: Car? = result.getParcelable(ARG_CAR)
-                viewModel.workOrder.value?.let { order ->
-                    if (order.car != car) {
-                        order.car = car
-                        binding.carTextView.text = car?.name ?: ""
-                        order.isModified = true
-                        viewModel.isChanged = true
-                    }
-                }
+                viewModel.handleEvent(WorkOrderDetailEvent.OnCarChange(car = car))
             }
 
+            // выбрали Вид ремонта:
             REQUEST_REPAIR_TYPE_PICKER_KEY -> {
                 val repairType: RepairType? = result.getParcelable(ARG_REPAIR_TYPE)
-                viewModel.workOrder.value?.let { order ->
-                    if (order.repairType != repairType) {
-                        order.repairType = repairType
-                        binding.repairTypeTextView.text = repairType?.name ?: ""
-                        order.isModified = true
-                        viewModel.isChanged = true
-
-                        // у Вида ремонта могут быть Работы по-умолчанию, надо их найти и предложить заполнить:
-                        repairType?.let {
-                            viewModel.checkDefaultRepairTypeJobDetails(repairType)
-                        }
-                    }
-                }
+                viewModel.handleEvent(WorkOrderDetailEvent.OnRepairTypeChange(repairType = repairType))
             }
 
+            // после ответа на вопрос: "Заполнить работы по-умолчанию?"
             REQUEST_ADD_DEFAULT_JOBS_KEY -> {
                 val needAddDefaultJobs: Boolean = result.getBoolean(ARG_ANSWER, false)
                 if (needAddDefaultJobs) {
-                    viewModel.fillDefaultJobs()
-                    viewModel.workOrder.value?.let { order ->
-                        binding.jobDetailsRecyclerView.scrollToPosition(order.jobDetails.size - 1)
-                    }
+                    viewModel.handleEvent(WorkOrderDetailEvent.OnFillDefaultJobs)
+                    binding.jobDetailsRecyclerView.scrollToPosition(
+                        viewModel.screenState.value.workOrder.jobDetails.size - 1
+                    )
                 }
             }
 
-            REQUEST_MASTER_PICKER_KEY -> {
-                val master: Employee? = result.getParcelable(ARG_MASTER)
-                viewModel.workOrder.value?.let { order ->
-                    if (order.master != master) {
-                        order.master = master
-                        binding.masterTextView.text = master?.name ?: ""
-                        order.isModified = true
-                        viewModel.isChanged = true
-                    }
-                }
-            }
-
+            // выбрали Цех:
             REQUEST_DEPARTMENT_PICKER_KEY -> {
                 val department: Department? = result.getParcelable(ARG_DEPARTMENT)
-                viewModel.workOrder.value?.let { order ->
-                    if (order.department != department) {
-                        order.department = department
-                        binding.departmentTextView.text = department?.name ?: ""
-                        order.isModified = true
-                        viewModel.isChanged = true
-                    }
-                }
+                viewModel.handleEvent(WorkOrderDetailEvent.OnDepartmentChange(department = department))
             }
 
+            // выбрали Бригадира:
+            REQUEST_MASTER_PICKER_KEY -> {
+                val master: Employee? = result.getParcelable(ARG_MASTER)
+                viewModel.handleEvent(WorkOrderDetailEvent.OnMasterChange(master = master))
+            }
+
+            // ввели строку ТЧ "Работы":
             REQUEST_JOB_DETAIL_PICKER_KEY -> {
                 val jobDetail: JobDetail? = result.getParcelable(ARG_JOB_DETAIL)
-                jobDetail?.let { jobdet ->
-                    viewModel.workOrder.value?.let { order ->
-                        val foundJobDetail = order.jobDetails.find { it.lineNumber == jobdet.lineNumber }
-                        foundJobDetail?.let {
-                            it.copyFields(jobdet)
-                        } ?: let {
-                            // это новая строка, добавленная в ТЧ
-                            order.jobDetails.forEach {
-                                it.isSelected = false
-                            }
-
-                            order.jobDetails.add(jobdet)
-                            viewModel.selectedJobDetail = jobdet
-                            viewModel.selectedJobDetail?.isSelected = true
-                            binding.jobDetailsRecyclerView.scrollToPosition(order.jobDetails.indexOf(jobdet))
-                        }
-
-                        jobDetailListAdapter.notifyItemChanged(
-                            order.jobDetails.indexOf(viewModel.selectedJobDetail),
-                            Unit
-                        )
-                        order.isModified = true
-                        viewModel.isChanged = true
-
-                        refreshTotalSum()
-                    }
-                }
+                viewModel.handleEvent(WorkOrderDetailEvent.OnJobDetailChange(jobDetail = jobDetail))
+                jobDetailListAdapter.notifyItemChanged(
+                    viewModel.screenState.value.workOrder.jobDetails.indexOf(jobDetail),
+                    Unit
+                )
+                refreshTotalSum()
             }
 
+            // ввели строку ТЧ "Исполнители":
             REQUEST_PERFORMER_DETAIL_PICKER_KEY -> {
                 val performerDetail: PerformerDetail? = result.getParcelable(ARG_PERFORMER_DETAIL)
-                performerDetail?.let { currentPerformerDetail ->
-                    viewModel.workOrder.value?.let { order ->
-                        val foundPerformerDetail =
-                            order.performers.find { it.lineNumber == currentPerformerDetail.lineNumber }
-                        foundPerformerDetail?.let {
-                            it.copyFields(currentPerformerDetail)
-                        } ?: let {
-                            // это новая строка, добавленная в ТЧ
-                            order.performers.forEach {
-                                it.isSelected = false
-                            }
-
-                            order.performers.add(currentPerformerDetail)
-                            viewModel.selectedPerformerDetail = currentPerformerDetail
-                            viewModel.selectedPerformerDetail?.isSelected = true
-                            binding.performerDetailsRecyclerView.scrollToPosition(
-                                order.performers.indexOf(
-                                    currentPerformerDetail
-                                )
-                            )
-                        }
-
-                        performerDetailListAdapter.notifyItemChanged(
-                            order.performers.indexOf(viewModel.selectedPerformerDetail),
-                            Unit
-                        )
-                        order.isModified = true
-                        viewModel.isChanged = true
-                    }
-                }
+                viewModel.handleEvent(WorkOrderDetailEvent.OnPerformerDetailChange(performerDetail = performerDetail))
+                performerDetailListAdapter.notifyItemChanged(
+                    viewModel.screenState.value.workOrder.performers.indexOf(performerDetail),
+                    Unit
+                )
             }
 
-            REQUEST_DATA_WAS_CHANGED_KEY -> {
-                val needSaveData: Boolean = result.getBoolean(ARG_ANSWER, false)
+            // ответ на вопрос: "Записать данные?"
+            REQUEST_KEY_DATA_WAS_CHANGED -> {
+                val needSaveData: Boolean = result.getBoolean(ANSWER_ARG_NAME_DATA_WAS_CHANGED, false)
                 if (needSaveData) {
-                    viewModel.closeOnSave = true
-                    viewModel.updateWorkOrder()
-                    sendNewIdToWorkOrderListFragment()
+                    viewModel.handleEvent(WorkOrderDetailEvent.OnSave(shouldCloseScreen = true))
                 } else {
-                    activity?.supportFragmentManager?.popBackStack()
+                    sendResultToFragment()
+                    findNavController().popBackStack()
                 }
             }
 
+            // пользователь удалил строку в ТЧ "Работы":
             REQUEST_DELETE_JOB_DETAIL_KEY -> {
                 val delete: Boolean = result.getBoolean(ARG_ANSWER, false)
                 if (delete) {
-                    viewModel.workOrder.value?.let { order ->
-                        val removedPosition = order.jobDetails.indexOf(viewModel.selectedJobDetail)
-                        order.jobDetails.remove(viewModel.selectedJobDetail)
-                        viewModel.selectedJobDetail = null
-
-                        var pos = 0
-                        order.jobDetails.forEach {
-                            pos++
-                            it.lineNumber = pos
-                        }
-
-                        jobDetailListAdapter.notifyDataSetChanged()
-                        order.isModified = true
-                        viewModel.isChanged = true
-
-                        refreshTotalSum()
-                    }
+                    viewModel.handleEvent(WorkOrderDetailEvent.OnJobDetailDelete)
+                    jobDetailListAdapter.notifyDataSetChanged()
                 }
             }
 
+            // пользователь удалил строку в ТЧ "Исполнители":
             REQUEST_DELETE_PERFORMER_DETAIL_KEY -> {
                 val delete: Boolean = result.getBoolean(ARG_ANSWER, false)
                 if (delete) {
-                    viewModel.workOrder.value?.let { order ->
-                        val removedPosition = order.performers.indexOf(viewModel.selectedPerformerDetail)
-                        order.performers.remove(viewModel.selectedPerformerDetail)
-                        viewModel.selectedPerformerDetail = null
-
-                        var pos = 0
-                        order.performers.forEach {
-                            pos++
-                            it.lineNumber = pos
-                        }
-
-                        performerDetailListAdapter.notifyDataSetChanged()
-                        order.isModified = true
-                        viewModel.isChanged = true
-                    }
+                    viewModel.handleEvent(WorkOrderDetailEvent.OnPerformerDetailDelete)
+                    performerDetailListAdapter.notifyDataSetChanged()
                 }
             }
         }
@@ -574,8 +588,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
 
     private fun setupClickListeners() {
         binding.saveButton.setOnClickListener {
-            viewModel.updateWorkOrder()
-            sendNewIdToWorkOrderListFragment()
+            viewModel.handleEvent(WorkOrderDetailEvent.OnSave(shouldCloseScreen = false))
         }
 
         binding.closeButton.setOnClickListener {
@@ -583,108 +596,97 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
         }
 
         binding.dateSelectButton.setOnClickListener {
-            viewModel.workOrder.value?.let { order ->
-                DatePickerFragment
-                    .newInstance(order.date, REQUEST_DATE_PICKER_KEY, ARG_DATE)
-                    .show(childFragmentManager, REQUEST_DATE_PICKER_KEY)
-            }
+            DatePickerFragment
+                .newInstance(viewModel.screenState.value.workOrder.date, REQUEST_DATE_PICKER_KEY, ARG_DATE)
+                .show(childFragmentManager, REQUEST_DATE_PICKER_KEY)
         }
 
         binding.partnerSelectButton.setOnClickListener {
-            viewModel.workOrder.value?.let { order ->
-                order.partner?.isSelected = true
+            viewModel.screenState.value.workOrder.partner?.isSelected = true
 
-                PartnerPickerFragment
-                    .newInstance(order.partner, REQUEST_PARTNER_PICKER_KEY, ARG_PARTNER)
-                    .show(childFragmentManager, REQUEST_PARTNER_PICKER_KEY)
-            }
+            PartnerPickerFragment
+                .newInstance(viewModel.screenState.value.workOrder.partner, REQUEST_PARTNER_PICKER_KEY, ARG_PARTNER)
+                .show(childFragmentManager, REQUEST_PARTNER_PICKER_KEY)
         }
 
         binding.carSelectButton.setOnClickListener {
-            viewModel.workOrder.value?.let { order ->
+            viewModel.screenState.value.workOrder.partner?.let { partner ->
+                viewModel.screenState.value.workOrder.car?.isSelected = true
 
-                order.partner?.let { partner ->
-                    order.car?.isSelected = true
-
-                    CarPickerFragment
-                        .newInstance(order.car, partner, REQUEST_CAR_PICKER_KEY, ARG_CAR)
-                        .show(childFragmentManager, REQUEST_CAR_PICKER_KEY)
-                } ?: let {
-                    MessageDialogFragment.newInstance(getString(R.string.error_specify_partner))
-                        .show(childFragmentManager, null)
-                }
+                CarPickerFragment
+                    .newInstance(viewModel.screenState.value.workOrder.car, partner, REQUEST_CAR_PICKER_KEY, ARG_CAR)
+                    .show(childFragmentManager, REQUEST_CAR_PICKER_KEY)
+            } ?: let {
+                MessageDialogFragment.newInstance(getString(R.string.error_specify_partner))
+                    .show(childFragmentManager, null)
             }
         }
 
         binding.repairTypeSelectButton.setOnClickListener {
-            viewModel.workOrder.value?.let { order ->
-                order.repairType?.isSelected = true
+            viewModel.screenState.value.workOrder.repairType?.isSelected = true
 
-                RepairTypePickerFragment
-                    .newInstance(order.repairType, REQUEST_REPAIR_TYPE_PICKER_KEY, ARG_REPAIR_TYPE)
-                    .show(childFragmentManager, REQUEST_REPAIR_TYPE_PICKER_KEY)
-            }
+            RepairTypePickerFragment
+                .newInstance(
+                    viewModel.screenState.value.workOrder.repairType,
+                    REQUEST_REPAIR_TYPE_PICKER_KEY,
+                    ARG_REPAIR_TYPE
+                )
+                .show(childFragmentManager, REQUEST_REPAIR_TYPE_PICKER_KEY)
         }
 
         binding.masterSelectButton.setOnClickListener {
-            viewModel.workOrder.value?.let { order ->
-                order.master?.isSelected = true
+            viewModel.screenState.value.workOrder.master?.isSelected = true
 
-                EmployeePickerFragment
-                    .newInstance(order.master, REQUEST_MASTER_PICKER_KEY, ARG_MASTER)
-                    .show(childFragmentManager, REQUEST_MASTER_PICKER_KEY)
-            }
+            EmployeePickerFragment
+                .newInstance(viewModel.screenState.value.workOrder.master, REQUEST_MASTER_PICKER_KEY, ARG_MASTER)
+                .show(childFragmentManager, REQUEST_MASTER_PICKER_KEY)
         }
 
         binding.departmentSelectButton.setOnClickListener {
-            viewModel.workOrder.value?.let { order ->
-                order.department?.isSelected = true
+            viewModel.screenState.value.workOrder.department?.isSelected = true
 
-                DepartmentPickerFragment
-                    .newInstance(order.department, REQUEST_DEPARTMENT_PICKER_KEY, ARG_DEPARTMENT)
-                    .show(childFragmentManager, REQUEST_DEPARTMENT_PICKER_KEY)
-            }
+            DepartmentPickerFragment
+                .newInstance(
+                    viewModel.screenState.value.workOrder.department,
+                    REQUEST_DEPARTMENT_PICKER_KEY,
+                    ARG_DEPARTMENT
+                )
+                .show(childFragmentManager, REQUEST_DEPARTMENT_PICKER_KEY)
         }
 
         binding.addJobDetailButton.setOnClickListener {
-            viewModel.workOrder.value?.let { order ->
-                JobDetailFragment
-                    .newInstance(
-                        JobDetail.getNewJobDetail(order),
-                        REQUEST_JOB_DETAIL_PICKER_KEY,
-                        ARG_JOB_DETAIL
-                    ) // здесь надо подумать как правильно создавать новую строку ТЧ
-                    .show(childFragmentManager, REQUEST_JOB_DETAIL_PICKER_KEY)
-            }
+            JobDetailFragment
+                .newInstance(
+                    JobDetail.getNewJobDetail(viewModel.screenState.value.workOrder),
+                    REQUEST_JOB_DETAIL_PICKER_KEY,
+                    ARG_JOB_DETAIL
+                ) // здесь надо подумать как правильно создавать новую строку ТЧ
+                .show(childFragmentManager, REQUEST_JOB_DETAIL_PICKER_KEY)
         }
 
         binding.editJobDetailButton.setOnClickListener {
-            viewModel.workOrder.value?.let { order ->
-                viewModel.selectedJobDetail?.let {
-                    JobDetailFragment
-                        .newInstance(it, REQUEST_JOB_DETAIL_PICKER_KEY, ARG_JOB_DETAIL)
-                        .show(childFragmentManager, REQUEST_JOB_DETAIL_PICKER_KEY)
-                } ?: run {
-                    MessageDialogFragment.newInstance(getString(R.string.edit_job_detail_not_selected))
-                        .show(childFragmentManager, null)
-                }
+            viewModel.screenState.value.selectedJobDetail?.let {
+                JobDetailFragment
+                    .newInstance(it, REQUEST_JOB_DETAIL_PICKER_KEY, ARG_JOB_DETAIL)
+                    .show(childFragmentManager, REQUEST_JOB_DETAIL_PICKER_KEY)
+            } ?: let {
+                MessageDialogFragment.newInstance(getString(R.string.edit_job_detail_not_selected))
+                    .show(childFragmentManager, null)
             }
         }
 
         binding.deleteJobDetailButton.setOnClickListener {
-            viewModel.workOrder.value?.let { order ->
-                viewModel.selectedJobDetail?.let {
-                    QuestionDialogFragment
-                        .newInstance(
-                            getString(R.string.delete_job_detail_question),
-                            REQUEST_DELETE_JOB_DETAIL_KEY,
-                            ARG_ANSWER
-                        )
-                        .show(childFragmentManager, REQUEST_DELETE_JOB_DETAIL_KEY)
-                } ?: run {
-                    MessageDialogFragment.newInstance(getString(R.string.delete_job_detail_not_selected))
-                        .show(childFragmentManager, null)
-                }
+            viewModel.screenState.value.selectedJobDetail?.let {
+                QuestionDialogFragment
+                    .newInstance(
+                        getString(R.string.delete_job_detail_question),
+                        REQUEST_DELETE_JOB_DETAIL_KEY,
+                        ARG_ANSWER
+                    )
+                    .show(childFragmentManager, REQUEST_DELETE_JOB_DETAIL_KEY)
+            } ?: let {
+                MessageDialogFragment.newInstance(getString(R.string.delete_job_detail_not_selected))
+                    .show(childFragmentManager, null)
             }
         }
 
@@ -698,155 +700,72 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
         }
 
         binding.addPerformerDetailButton.setOnClickListener {
-            viewModel.workOrder.value?.let { order ->
-                PerformerDetailFragment
-                    .newInstance(
-                        PerformerDetail.getNewPerformerDetail(order),
-                        REQUEST_PERFORMER_DETAIL_PICKER_KEY,
-                        ARG_PERFORMER_DETAIL
-                    ) // здесь надо подумать как правильно создавать новую строку ТЧ
-                    .show(childFragmentManager, REQUEST_PERFORMER_DETAIL_PICKER_KEY)
-            }
+            PerformerDetailFragment
+                .newInstance(
+                    PerformerDetail.getNewPerformerDetail(viewModel.screenState.value.workOrder),
+                    REQUEST_PERFORMER_DETAIL_PICKER_KEY,
+                    ARG_PERFORMER_DETAIL
+                ) // здесь надо подумать как правильно создавать новую строку ТЧ
+                .show(childFragmentManager, REQUEST_PERFORMER_DETAIL_PICKER_KEY)
         }
 
         binding.editPerformerDetailButton.setOnClickListener {
-            viewModel.workOrder.value?.let { order ->
-                viewModel.selectedPerformerDetail?.let {
-                    PerformerDetailFragment
-                        .newInstance(it, REQUEST_PERFORMER_DETAIL_PICKER_KEY, ARG_PERFORMER_DETAIL)
-                        .show(childFragmentManager, REQUEST_PERFORMER_DETAIL_PICKER_KEY)
-                } ?: run {
-                    MessageDialogFragment.newInstance(getString(R.string.edit_performer_detail_not_selected))
-                        .show(childFragmentManager, null)
-                }
+            viewModel.screenState.value.selectedPerformerDetail?.let {
+                PerformerDetailFragment
+                    .newInstance(it, REQUEST_PERFORMER_DETAIL_PICKER_KEY, ARG_PERFORMER_DETAIL)
+                    .show(childFragmentManager, REQUEST_PERFORMER_DETAIL_PICKER_KEY)
+            } ?: let {
+                MessageDialogFragment.newInstance(getString(R.string.edit_performer_detail_not_selected))
+                    .show(childFragmentManager, null)
             }
         }
 
         binding.deletePerformerDetailButton.setOnClickListener {
-            viewModel.workOrder.value?.let { order ->
-                viewModel.selectedPerformerDetail?.let {
-                    QuestionDialogFragment
-                        .newInstance(
-                            getString(R.string.delete_performer_detail_question),
-                            REQUEST_DELETE_PERFORMER_DETAIL_KEY,
-                            ARG_ANSWER
-                        )
-                        .show(childFragmentManager, REQUEST_DELETE_PERFORMER_DETAIL_KEY)
-                } ?: run {
-                    MessageDialogFragment.newInstance(getString(R.string.delete_performer_detail_not_selected))
-                        .show(childFragmentManager, null)
-                }
+            viewModel.screenState.value.selectedPerformerDetail?.let {
+                QuestionDialogFragment
+                    .newInstance(
+                        getString(R.string.delete_performer_detail_question),
+                        REQUEST_DELETE_PERFORMER_DETAIL_KEY,
+                        ARG_ANSWER
+                    )
+                    .show(childFragmentManager, REQUEST_DELETE_PERFORMER_DETAIL_KEY)
+            } ?: let {
+                MessageDialogFragment.newInstance(getString(R.string.delete_performer_detail_not_selected))
+                    .show(childFragmentManager, null)
             }
         }
 
         binding.sendToEmailButton.setOnClickListener {
-            viewModel.workOrder.value?.let { order ->
-                if (viewModel.isChanged) {
-                    MessageDialogFragment.newInstance(getString(R.string.save_work_order_before))
+            if (viewModel.screenState.value.isModified) {
+                MessageDialogFragment.newInstance(getString(R.string.save_work_order_before))
+                    .show(childFragmentManager, null)
+            } else {
+                if (viewModel.screenState.value.workOrder.isNew) {
+                    MessageDialogFragment.newInstance(getString(R.string.can_not_send_work_order))
                         .show(childFragmentManager, null)
                 } else {
-                    if (order.isNew) {
-                        MessageDialogFragment.newInstance(getString(R.string.can_not_send_work_order))
+                    if (binding.emailEditText.text.toString().isEmpty()) {
+                        viewModel.handleEvent(WorkOrderDetailEvent.OnIncorrectEmail)
+                        MessageDialogFragment.newInstance(getString(R.string.fill_in_email))
                             .show(childFragmentManager, null)
                     } else {
-                        if (TextUtils.isEmpty(binding.emailEditText.text)) {
-                            viewModel.setErrorEmailValue(true)
-                            MessageDialogFragment.newInstance(getString(R.string.fill_in_email))
+                        val isEmailValid =
+                            Patterns.EMAIL_ADDRESS.matcher(binding.emailEditText.text.toString()).matches()
+                        if (isEmailValid) {
+                            // показать фрагмент
+                            val emailAddress: String = viewModel.parseText(binding.emailEditText.text.toString())
+
+                            SendWorkOrderByIdToEmailDialogFragment
+                                .newInstance(viewModel.screenState.value.workOrder.id, emailAddress)
                                 .show(childFragmentManager, null)
                         } else {
-                            val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(binding.emailEditText.text).matches()
-                            if (isEmailValid) {
-                                // показать фрагмент
-                                val emailAddress: String = parseText(binding.emailEditText.text?.toString())
-
-                                SendWorkOrderByIdToEmailDialogFragment
-                                    .newInstance(order.id, emailAddress)
-                                    .show(childFragmentManager, null)
-                            } else {
-                                viewModel.setErrorEmailValue(true)
-                                MessageDialogFragment.newInstance(getString(R.string.wrong_email))
-                                    .show(childFragmentManager, null)
-                            }
+                            viewModel.handleEvent(WorkOrderDetailEvent.OnIncorrectEmail)
+                            MessageDialogFragment.newInstance(getString(R.string.wrong_email))
+                                .show(childFragmentManager, null)
                         }
                     }
                 }
             }
-        }
-    }
-
-    private fun updateUI(order: WorkOrder) {
-        modifyAllowed = false
-
-        binding.numberEditText.setText(order.number)
-        binding.dateTextView.text = DateConverter.getDateString(order.date)
-        binding.partnerTextView.text = order.partner?.name
-        binding.carTextView.text = order.car?.name
-        binding.repairTypeTextView.text = order.repairType?.name
-        binding.departmentTextView.text = order.department?.name
-        binding.masterTextView.text = order.master?.name
-
-        binding.mileageEditText.setText(order.mileage.toString())
-        binding.requestReasonEditText.setText(order.requestReason)
-        binding.commentEditText.setText(order.comment)
-
-        // Табличная часть Исполнители:
-        setupPerformerDetailListRecyclerView(order.performers)
-
-        // Табличная часть Работы:
-        setupJobDetailListRecyclerView(order.jobDetails)
-
-        refreshTotalSum()
-
-        modifyAllowed = true
-
-        if (order.posted) {
-            context?.let {
-                binding.mainContainer.setBackgroundColor(ContextCompat.getColor(it, R.color.light_green_200))
-
-                binding.numberEditText.setEnabled(false)
-                binding.numberEditText.setTextColor(ContextCompat.getColor(it, R.color.gray_850))
-
-                binding.mileageEditText.setEnabled(false)
-                binding.mileageEditText.setTextColor(ContextCompat.getColor(it, R.color.gray_850))
-
-                binding.requestReasonEditText.setEnabled(false)
-                binding.requestReasonEditText.setTextColor(ContextCompat.getColor(it, R.color.gray_850))
-
-                binding.commentEditText.setEnabled(false)
-                binding.commentEditText.setTextColor(ContextCompat.getColor(it, R.color.gray_850))
-            }
-
-            binding.saveButton.visibility = View.INVISIBLE
-            binding.dateSelectButton.visibility = View.INVISIBLE
-            binding.partnerSelectButton.visibility = View.INVISIBLE
-            binding.carSelectButton.visibility = View.INVISIBLE
-            binding.repairTypeSelectButton.visibility = View.INVISIBLE
-            binding.departmentSelectButton.visibility = View.INVISIBLE
-            binding.addPerformerDetailButton.visibility = View.INVISIBLE
-            binding.editPerformerDetailButton.visibility = View.INVISIBLE
-            binding.deletePerformerDetailButton.visibility = View.INVISIBLE
-            binding.addJobDetailButton.visibility = View.INVISIBLE
-            binding.deleteJobDetailButton.visibility = View.INVISIBLE
-            binding.editJobDetailButton.visibility = View.INVISIBLE
-            binding.masterSelectButton.visibility = View.INVISIBLE
-        }
-    }
-
-    private fun onCloseWorkOrder() {
-        viewModel.workOrder.value?.let { order ->
-            if (!order.posted && viewModel.isChanged) {
-                QuestionDialogFragment
-                    .newInstance(
-                        getString(R.string.data_was_changed_question),
-                        REQUEST_DATA_WAS_CHANGED_KEY,
-                        ARG_ANSWER
-                    )
-                    .show(childFragmentManager, REQUEST_DATA_WAS_CHANGED_KEY)
-            } else {
-                activity?.supportFragmentManager?.popBackStack()
-            }
-        } ?: let {
-            activity?.supportFragmentManager?.popBackStack()
         }
     }
 
@@ -860,31 +779,23 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
 
     private fun refreshTotalSum() {
         // показать итоговую сумму:
-        viewModel.workOrder.value?.let { order ->
-            binding.totalSumTextView.setText(getSumFromJobDetail(order.jobDetails).toString())
-        }
+        binding.totalSumTextView.setText(
+            getSumFromJobDetail(viewModel.screenState.value.workOrder.jobDetails).toString()
+        )
     }
 
-    private fun sendResultToFragment(id: String) {
+    private fun sendResultToFragment() {
         // отправка информации в фрагмент: WorkOrderListFragment
         val bundle = Bundle().apply {
-            putString(argNameNewOrderId, id)
+            putParcelable(argNameReturnResult, viewModel.returnResult)
         }
-        setFragmentResult(requestKeyNewOrderId, bundle)
-    }
-
-    private fun sendNewIdToWorkOrderListFragment() {
-        viewModel.workOrder.value?.let { currentWorkOrder ->
-            if (screenMode == ScreenMode.ADD) {
-                sendResultToFragment(currentWorkOrder.id)
-            }
-        }
+        setFragmentResult(requestKeyReturnResult, bundle)
     }
 
     companion object {
-
-        const val ARG_SCREEN_MODE = "screen_mode"
-        const val ARG_WORK_ORDER_ID = "work_order_id"
+        // эти константы нужны для диалогового окна - "Данные изменились. Записать?"
+        private val REQUEST_KEY_DATA_WAS_CHANGED = "request_key_data_was_changed"
+        private val ANSWER_ARG_NAME_DATA_WAS_CHANGED = "answer_arg_name_data_was_changed"
 
         private val REQUEST_DATE_PICKER_KEY = "request_date_picker_key"
         private val ARG_DATE = "date_picker"
@@ -914,30 +825,5 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
         private val REQUEST_DELETE_PERFORMER_DETAIL_KEY = "delete_performer_detail_key"
         private val REQUEST_ADD_DEFAULT_JOBS_KEY = "add_default_jobs_key"
         private val ARG_ANSWER = "answer"
-
-        private const val REQUEST_KEY_NEW_ORDER_ID = "request_key_new_order_id"
-        private const val ARG_NAME_NEW_ORDER_ID = "arg_name_new_order_id"
-
-        fun newInstanceAddWorkOrder(
-            requestKeyNewOrderId: String,
-            argNameNewOrderId: String
-        ): WorkOrderFragment {
-            return WorkOrderFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(ARG_SCREEN_MODE, ScreenMode.ADD)
-                    putString(REQUEST_KEY_NEW_ORDER_ID, requestKeyNewOrderId)
-                    putString(ARG_NAME_NEW_ORDER_ID, argNameNewOrderId)
-                }
-            }
-        }
-
-        fun newInstanceEditWorkOrder(workOrderId: String): WorkOrderFragment {
-            val instance = WorkOrderFragment()
-            val args = Bundle()
-            args.putParcelable(ARG_SCREEN_MODE, ScreenMode.EDIT)
-            args.putString(ARG_WORK_ORDER_ID, workOrderId)
-            instance.arguments = args
-            return instance
-        }
     }
 }

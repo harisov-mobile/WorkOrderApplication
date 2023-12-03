@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 data class LoginParams(
     val server: String = "",
     val login: String = "",
-    val password: String = "",
-): Parcelable
+    val password: String = ""
+) : Parcelable
