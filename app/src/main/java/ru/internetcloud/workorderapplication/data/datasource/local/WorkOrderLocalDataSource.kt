@@ -5,6 +5,7 @@ import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import ru.internetcloud.workorderapplication.data.database.AppDao
 import ru.internetcloud.workorderapplication.data.mapper.JobDetailMapper
@@ -50,9 +51,11 @@ class WorkOrderLocalDataSource @Inject constructor(
     }
 
     fun getWorkOrderList(): Flow<List<WorkOrder>> {
-        return appDao.getWorkOrderList().map {
-            workOrderMapper.fromListDbModelToListEntity(it)
-        }
+        return appDao.getWorkOrderList()
+            .distinctUntilChanged()
+            .map {
+                workOrderMapper.fromListDbModelToListEntity(it)
+            }
     }
 
     fun getFilteredWorkOrderList(searchWorkOrderData: SearchWorkOrderData): Flow<List<WorkOrder>> {
@@ -107,9 +110,9 @@ class WorkOrderLocalDataSource @Inject constructor(
                 containsCondition = true
             }
             queryString += " id IN " +
-                " (SELECT workOrderId FROM performer_details" +
-                " WHERE performer_details.employeeId IN" +
-                " (SELECT id FROM employees WHERE employees.name LIKE :param_performer))"
+                    " (SELECT workOrderId FROM performer_details" +
+                    " WHERE performer_details.employeeId IN" +
+                    " (SELECT id FROM employees WHERE employees.name LIKE :param_performer))"
             args.add("%" + searchWorkOrderData.performerText + "%")
             containsCondition = true
         }

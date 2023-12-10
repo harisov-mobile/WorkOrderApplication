@@ -78,7 +78,8 @@ lint/tmp/
 *.hprof
 keystore.properties
 
-
-
 *.tmp
 *.docx
+
+/app/release/
+
