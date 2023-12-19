@@ -15,3 +15,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "WorkOrderApplication"
 include ':app'
+include ':common'
+
+include ':features:login'
+include ':features:synchro'
+include ':features:workorders'
+include ':features:workorderdetail'

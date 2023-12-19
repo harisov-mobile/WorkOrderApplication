@@ -77,7 +77,7 @@ class WorkOrderListFragment : Fragment(R.layout.fragment_work_order_list), Fragm
 
         setHasOptionsMenu(true)
 
-        setupWorkOrderRecyclerView(view)
+        setupWorkOrderRecyclerView()
         setupFilterDescription()
 
         setupClickListeners()
@@ -276,7 +276,7 @@ class WorkOrderListFragment : Fragment(R.layout.fragment_work_order_list), Fragm
             .show(childFragmentManager, REQUEST_SEARCH_WO_DATA_PICKER_KEY)
     }
 
-    private fun setupWorkOrderRecyclerView(view: View) {
+    private fun setupWorkOrderRecyclerView() {
         binding.workOrderRecyclerView.adapter = workOrderListAdapter
         binding.workOrderRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.workOrderRecyclerView.setHasFixedSize(true)
