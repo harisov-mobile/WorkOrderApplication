@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- common, used in many places -->
+    <string name="version">Версия %1$s</string>
+    <string name="ok_button">OK</string>
+
+    <!-- DataSynchronizationFragment -->
+    <string name="exit_button">Закрыть</string>
+    <string name="synchro_data_label">Синхронизация данных</string>
+
+    <string name="success_synchronization">Синхронизация данных произведена успешно.</string>
+    <string name="success_autonomus">Синхронизация данных не произведена, но можно продолжить работу в автономном режиме.</string>
+    <string name="fail_synchronization">Ошибка при синхронизации данных. Дальнейшая работа программы невозможна.</string>
+
+    <string name="success_upload_work_orders">Заказ-наряды в количестве %1$s успешно выгружены на сервер 1С.</string>
+    <string name="no_work_orders_to_upload">Нет заказ-нарядов, которые нужно выгрузить на сервер 1С.</string>
+
+</resources>
