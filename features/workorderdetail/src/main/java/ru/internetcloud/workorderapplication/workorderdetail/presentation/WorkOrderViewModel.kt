@@ -143,7 +143,8 @@ class WorkOrderViewModel @Inject constructor(
                 savedStateHandle[KEY_WORK_ORDER_DETAIL_STATE] = screenState.value.copy(
                     workOrder = oldWorkOrder.copy(number = event.number),
                     isModified = true,
-                    errorInputNumber = false
+                    errorInputNumber = false,
+                    errorDuplicateNumber = false
                 )
             }
 
