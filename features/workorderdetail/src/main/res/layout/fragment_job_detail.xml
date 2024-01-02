@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/label_right_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="right"
+            app:constraint_referenced_ids="line_number_label_text_view, car_job_label_text_view, working_hour_label_text_view, quantity_label_text_view" />
+
+        <TextView
+            android:id="@+id/line_number_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="18dp"
+            android:text="@string/line_number_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/line_number_text_view"
+            style="@style/detail_text_view"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
+
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="line_number" />
+
+        <TextView
+            android:id="@+id/car_job_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="18dp"
+            android:text="@string/car_job_label"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/line_number_text_view"
+
+            />
+
+        <TextView
+            android:id="@+id/car_job_text_view"
+            style="@style/detail_text_view"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+
+            app:layout_constraintEnd_toStartOf="@+id/car_job_select_button"
+            app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
+            app:layout_constraintTop_toBottomOf="@+id/line_number_text_view"
+
+            tools:text="car_job" />
+
+        <Button
+            android:id="@+id/car_job_select_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+
+            android:minWidth="40dp"
+            android:text="@string/choose_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/line_number_text_view" />
+
+        <TextView
+            android:id="@+id/working_hour_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/working_hour_label"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/car_job_text_view"
+
+            />
+
+        <TextView
+            android:id="@+id/working_hour_text_view"
+            style="@style/detail_text_view"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+
+            app:layout_constraintEnd_toStartOf="@+id/car_job_select_button"
+            app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
+            app:layout_constraintTop_toBottomOf="@+id/car_job_text_view"
+
+            tools:text="working_hour" />
+
+        <Button
+            android:id="@+id/working_hour_select_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+
+            android:minWidth="40dp"
+            android:text="@string/choose_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/car_job_text_view" />
+
+        <TextView
+            android:id="@+id/quantity_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/quantity_label"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/working_hour_text_view" />
+
+        <EditText
+            android:id="@+id/quantity_edit_text"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+
+            android:ems="10"
+            android:inputType="numberDecimal"
+
+            app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
+            app:layout_constraintTop_toBottomOf="@+id/working_hour_text_view"
+
+            tools:text="quantity_edit_text" />
+
+        <TextView
+            android:id="@+id/time_norm_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/time_norm_label"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/quantity_edit_text" />
+
+        <EditText
+            android:id="@+id/time_norm_edit_text"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+
+            android:ems="10"
+            android:inputType="numberDecimal"
+
+            app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
+            app:layout_constraintTop_toBottomOf="@+id/quantity_edit_text"
+            tools:text="time_norm_edit_text" />
+
+        <TextView
+            android:id="@+id/sum_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/sum_label"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/time_norm_edit_text"
+            />
+
+        <TextView
+            android:id="@+id/sum_text_view"
+            style="@style/detail_text_view"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+
+            app:layout_constraintEnd_toEndOf="@+id/working_hour_text_view"
+            app:layout_constraintStart_toEndOf="@+id/label_right_barrier"
+            app:layout_constraintTop_toBottomOf="@+id/time_norm_edit_text"
+
+            tools:text="sum" />
+
+        <Button
+            android:id="@+id/ok_button"
+            style="@style/dialog_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="8dp"
+
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:minWidth="0dp"
+
+            android:minHeight="0dp"
+            android:text="@string/ok_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sum_text_view" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            style="@style/dialog_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+
+            android:layout_marginBottom="16dp"
+            android:minWidth="0dp"
+
+            android:minHeight="0dp"
+
+            android:text="@string/cancel_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ok_button"
+            app:layout_constraintTop_toBottomOf="@+id/sum_text_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</FrameLayout>

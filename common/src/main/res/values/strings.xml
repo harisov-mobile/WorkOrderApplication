@@ -1,0 +1,69 @@
+<resources>
+    <!-- common, used in many places -->
+    <string name="app_name">Work Orders Agro-Service</string>
+    <string name="version">Version %1$s</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="clear_button">Clear</string>
+    <string name="ok_button">Ок</string>
+    <string name="yes_button">Yes</string>
+    <string name="no_button">No</string>
+    <string name="partner_label">Client:</string>
+    <string name="choose_label">...</string>
+    <string name="car_label">Car:</string>
+    <string name="department_label">Department:</string>
+    <string name="line_number_label">Line No.:</string>
+    <string name="search_label">Search</string>
+    <string name="clear_search_text_button">X</string>
+    <string name="filter_fragment_title">Filter</string>
+    <string name="try_again">Try again</string>
+    <string name="number_hint">Number</string>
+
+    <!-- LoginFragment -->
+    <string name="server_hint">Server</string>
+    <string name="login_hint">Login</string>
+    <string name="password_hint">Password</string>
+
+    <string name="enter">Enter</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="error_input_server">Specify server</string>
+    <string name="error_input_login">Specify user</string>
+    <string name="error_input_password">Enter a password</string>
+
+
+
+    <!-- SearchWorkOrderFragment -->
+    <string name="number_label">Number:</string>
+    <string name="performer_label">Performer:</string>
+    <string name="date_from_label">Date from:</string>
+    <string name="date_to_label">Date to:</string>
+
+    <!-- unused -->
+    <string name="work_order_presentation">Work order № %s dated %s</string>
+    <string name="server">Server</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="error_network_wrong_server">It is impossible to connect to the 1C server, the server may be incorrectly specified.</string>
+    <string name="fail_upload_work_orders">Error while uploading work orders:</string>
+    <string name="search_button">Search</string>
+    <string name="add_performers_button">Add</string>
+    <string name="delete_performers_button">Delete</string>
+    <string name="get_car_job_list">Obtaining a catalog of CarJobs from 1C</string>
+    <string name="prepare_car_job_list">Processing a catalog of CarJobs</string>
+    <string name="get_department_list">Obtaining a catalog of Departments from 1C</string>
+    <string name="prepare_department_list">Processing a catalog of Departments</string>
+    <string name="get_employee_list">Obtaining a catalog of Employees from 1C</string>
+    <string name="prepare_employee_list">Processing a catalog of Employees</string>
+    <string name="get_partner_list">Obtaining a catalog of Partners from 1C</string>
+    <string name="prepare_partner_list">Processing a catalog of Partners</string>
+    <string name="get_car_list">Obtaining a catalog of Cars from 1C</string>
+    <string name="prepare_car_list">Processing a catalog of Cars</string>
+    <string name="get_working_hour_list">Obtaining a catalog of Working hours from 1C</string>
+    <string name="prepare_working_hour_list">Processing a catalog of Working hours</string>
+    <string name="get_default_wo_settings_list">Getting filling settings from 1C</string>
+    <string name="load_work_orders">Obtaining work-orders from 1C</string>
+    <string name="upload_work_orders">Sending work-orders to 1C</string>
+    <string name="load_repair_types">Obtaining a catalog of Repair types from 1C</string>
+    <string name="get_car_model_list">Obtaining a catalog of Car Models from 1C</string>
+    <string name="prepare_car_model_list">Processing a catalog of Car models</string>
+</resources>

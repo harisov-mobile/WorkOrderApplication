@@ -1,0 +1,97 @@
+<resources>
+    <!-- common, used in many places -->
+    <string name="app_name">Work Orders Agro-Service</string>
+    <string name="number_hint">Number</string>
+    <string name="filter_fragment_title">Filter</string>
+
+    <!-- WorkOrderFragment -->
+    <string name="date_hint">Date</string>
+    <string name="request_reason_hint">Request reason</string>
+    <string name="comment_hint">Comment</string>
+    <string name="email_hint">E-mail</string>
+    <string name="mileage_hint">Mileage</string>
+
+    <string name="error_input_number">Error! No number specified</string>
+    <string name="error_input_performer">Error! No performer specified</string>
+    <string name="error_specify_partner">Specify the client</string>
+    <string name="error_duplicate_number">Error! This number is already taken</string>
+
+    <string name="success_saved">Information saved</string>
+    <string name="save_work_order_before">The work order has been changed. Before sending by e-mail, you must write down the work order.</string>
+    <string name="can_not_send_work_order">This work order can only be sent by e-mail after Data Synchronization. In the list of work orders on the menu, select Synchronize Data.</string>
+
+    <string name="save_button">Save</string>
+    <string name="close_button">Close</string>
+
+    <string name="send_to_email_label">Send work order to e-mail</string>
+    <string name="repair_type_label">Repair type:</string>
+    <string name="master_type_label">Master:</string>
+    <string name="performer_details_label">Performers:</string>
+    <string name="job_detals_label">Works:</string>
+    <string name="date_label">Date:</string>
+
+    <string name="job_detail_quantity">Quantity = %1$s</string>
+    <string name="job_detail_line_number">No = %1$s</string>
+    <string name="job_detail_sum">Sum = %1$s</string>
+    <string name="job_detail_time_norm">Time norm = %1$s</string>
+    <string name="job_detail_working_hour">Working hour = %1$s</string>
+
+    <string name="edit_job_detail_not_selected">Job line not selected for editing.</string>
+    <string name="delete_job_detail_not_selected">Job line not selected for deletion.</string>
+
+    <string name="edit_performer_detail_not_selected">There is no performer selected for editing.</string>
+    <string name="delete_performer_detail_not_selected">There is no performer selected for deletion.</string>
+
+    <string name="data_was_changed_question">The data has been changed. Save changes?</string>
+    <string name="delete_job_detail_question">Delete line of works?</string>
+    <string name="delete_performer_detail_question">Delete line of performers?</string>
+
+    <string name="fill_in_email">Enter an email address.</string>
+    <string name="wrong_email">Email address is incorrect.</string>
+
+    <string name="add_default_jobs_question">For the selected Repair type and the selected Car, there are jobs that need to be performed. Add jobs to Jobs list?</string>
+
+    <!-- SendWorkOrderByIdToEmailDialogFragment -->
+    <string name="send_to_email_caption_label">Sending an order by e-mail</string>
+    <string name="wait">Wait...</string>
+    <string name="fail_send_work_order">An error occurred while sending:</string>
+    <string name="success_send_work_order">Successfully sent</string>
+
+    <!-- JobDetailFragment -->
+    <string name="car_job_label">Work:</string>
+    <string name="working_hour_label">Working hour:</string>
+    <string name="quantity_label">Quantity:</string>
+    <string name="time_norm_label">Time norm:</string>
+    <string name="sum_label">Sum:</string>
+    <string name="job_detail_title">Works</string>
+
+    <string name="error_empty_working_hour">Error! The working hour is not filled.</string>
+    <string name="error_empty_car_job">Error! The work is not filled.</string>
+
+    <!-- PerformerDetailFragment -->
+    <string name="performer_detail_title">Performers</string>
+    <string name="employee_label">Performer:</string>
+    <string name="error_empty_employee">Error! The performer is not filled.</string>
+
+    <!-- PartnerPickerFragment -->
+    <string name="partner_picker_title">Coose a client</string>
+
+    <!-- CarJobPickerFragment -->
+    <string name="car_job_picker_title">Select auto work</string>
+
+    <!-- EmployeePickerFragment -->
+    <string name="employee_picker_title">Choose an employee</string>
+
+    <!-- WorkingHourPickerFragment -->
+    <string name="working_fragment_picker_title">Choose a working hour</string>
+
+    <!-- CarPickerFragment -->
+    <string name="car_picker_title">Choose a car from %1$s</string>
+
+    <!-- RepairTypePickerFragment -->
+    <string name="repair_type_picker_title">Choose a repair type</string>
+
+    <!-- DepartmentPickerFragment -->
+    <string name="department_picker_title">Choose a department</string>
+
+</resources>
