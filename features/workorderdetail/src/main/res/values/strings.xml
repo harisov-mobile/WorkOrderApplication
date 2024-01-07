@@ -1,6 +1,5 @@
 <resources>
     <!-- common, used in many places -->
-    <string name="app_name">Work Orders Agro-Service</string>
     <string name="number_hint">Number</string>
     <string name="filter_fragment_title">Filter</string>
 

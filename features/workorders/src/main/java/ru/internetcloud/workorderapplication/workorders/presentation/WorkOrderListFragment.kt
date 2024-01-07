@@ -141,7 +141,7 @@ class WorkOrderListFragment : Fragment(R.layout.fragment_work_order_list), Fragm
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    onExitWorkOrderList()
+                    onExitApplication()
                 }
             }
         )
@@ -244,7 +244,7 @@ class WorkOrderListFragment : Fragment(R.layout.fragment_work_order_list), Fragm
             }
 
             R.id.exit_menu_item -> {
-                onExitWorkOrderList()
+                onExitApplication()
                 return true
             }
 
@@ -268,7 +268,7 @@ class WorkOrderListFragment : Fragment(R.layout.fragment_work_order_list), Fragm
                 MessageDialogFragment.newInstance(
                     getString(
                         R.string.about_application,
-                        getString(R.string.app_name),
+                        getString(ru.internetcloud.workorderapplication.common.R.string.app_name),
                         buildConfigFieldsProvider.get().versionName
                     )
                 )
@@ -298,10 +298,11 @@ class WorkOrderListFragment : Fragment(R.layout.fragment_work_order_list), Fragm
         binding.workOrderRecyclerView.setHasFixedSize(true)
     }
 
-    private fun onExitWorkOrderList() {
+    private fun onExitApplication() {
         QuestionDialogFragment
             .newInstance(
-                getString(R.string.exit_from_app_question, getString(R.string.app_name)),
+                getString(ru.internetcloud.workorderapplication.common.R.string.exit_from_app_question,
+                    getString(ru.internetcloud.workorderapplication.common.R.string.app_name)),
                 REQUEST_KEY_EXIT_QUESTION,
                 ARG_NAME_EXIT_QUESTION
             )

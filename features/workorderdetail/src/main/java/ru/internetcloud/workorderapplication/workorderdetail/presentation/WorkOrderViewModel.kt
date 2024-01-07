@@ -51,21 +51,12 @@ class WorkOrderViewModel @Inject constructor(
     val screenEventFlow = screenEventChannel.receiveAsFlow()
 
     var returnResult: ReturnResult =
-        ReturnResult.NoOperation // почему бы returnResult в screenState не добавить? Подумай...
+        ReturnResult.NoOperation // ToDo почему бы returnResult в screenState не добавить? Подумай...
 
     var defaultWorkOrderSettings: DefaultWorkOrderSettings? = null
     var defaultCarJobs: List<DefaultRepairTypeJobDetail> = emptyList() // mutableListOf()
 
-    init {
-//        if (screenState.value.shouldInit) {
-//            when (editMode) {
-//                EditMode.Add -> createWorkOrder()
-//                EditMode.Edit -> fetchWorkOrder(workOrderId = workOrderId)
-//            }
-//        }
-    }
-
-    fun putArgs(argsFromFragment: WorkOrderDetailArgs) {
+    fun initialize(argsFromFragment: WorkOrderDetailArgs) {
         navArgs = argsFromFragment
         if (screenState.value.shouldInit) {
             when (navArgs.editMode) {

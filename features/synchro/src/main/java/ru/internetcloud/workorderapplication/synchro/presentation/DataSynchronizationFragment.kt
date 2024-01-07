@@ -31,8 +31,16 @@ class DataSynchronizationFragment : Fragment(R.layout.fragment_data_synchronizat
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.versionTextView.text = getString(R.string.version, buildConfigFieldsProvider.get().versionName)
+        setupUi()
+        setupClickListeners()
+        observeViewModel()
+    }
 
+    private fun setupUi() {
+        binding.versionTextView.text = getString(R.string.version, buildConfigFieldsProvider.get().versionName)
+    }
+
+    private fun setupClickListeners() {
         binding.okButton.setOnClickListener {
             // запустить фрагмент, где будет список заказ-нарядов
             navigationApi.navigate(SynchroDirections.ToWorkOrders)
@@ -41,8 +49,6 @@ class DataSynchronizationFragment : Fragment(R.layout.fragment_data_synchronizat
         binding.exitButton.setOnClickListener {
             activity?.onBackPressed() // это finish - закрыть приложение
         }
-
-        observeViewModel()
     }
 
     private fun observeViewModel() {

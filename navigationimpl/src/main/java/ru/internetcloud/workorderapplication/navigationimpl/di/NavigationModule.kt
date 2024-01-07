@@ -41,8 +41,7 @@ interface NavigationModule {
         fun provideNavController(
             activityProvider: NavigationActivityProvider
         ): NavController = activityProvider.get()
-            ?.getNavigationFragment()
-            ?.navController
+            ?.getNavController()
             ?: error("Do not make navigation calls while activity is not available")
     }
 }

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- common, used in many places -->
-    <string name="app_name">Заказ-наряды Агро-Сервис</string>
 	<string name="number_hint">Номер</string>
     <string name="filter_fragment_title">Отбор</string>
 
     <!-- WorkOrderListFragment -->
     <string name="add_work_order_fab_description">Добавить заказ-наряд</string>
-    <string name="exit_from_app_question">Выйти из %1$s?</string>
 
     <string name="search_menu_item">Поиск</string>
     <string name="synchronize_data_menu_item">Синхронизировать данные</string>

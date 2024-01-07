@@ -31,6 +31,5 @@ interface AppModule {
         ): NavigationActivityProvider {
             return (context as WorkOrderApp).navigationActivityProvider
         }
-
     }
 }

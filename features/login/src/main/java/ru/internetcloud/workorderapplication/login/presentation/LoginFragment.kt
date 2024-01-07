@@ -3,15 +3,18 @@ package ru.internetcloud.workorderapplication.login.presentation
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import ru.internetcloud.workorderapplication.common.buildconfig.BuildConfigFieldsProvider
 import ru.internetcloud.workorderapplication.common.presentation.dialog.MessageDialogFragment
+import ru.internetcloud.workorderapplication.common.presentation.dialog.QuestionDialogFragment
 import ru.internetcloud.workorderapplication.common.presentation.util.launchAndCollectIn
 import ru.internetcloud.workorderapplication.login.R
 import ru.internetcloud.workorderapplication.login.databinding.FragmentLoginBinding
@@ -19,7 +22,7 @@ import ru.internetcloud.workorderapplication.login.presentation.navigation.Login
 import ru.internetcloud.workorderapplication.navigationapi.NavigationApi
 
 @AndroidEntryPoint
-class LoginFragment : Fragment(R.layout.fragment_login) {
+class LoginFragment : Fragment(R.layout.fragment_login), FragmentResultListener {
 
     private val binding by viewBinding(FragmentLoginBinding::bind)
     private val viewModel by viewModels<LoginViewModel>()
@@ -33,8 +36,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupClickListeners()
         setupUi()
+        setupClickListeners()
+        setupFragmentResultListeners()
+        interceptExit() // перехват нажатия кнопки "Back" (задаем вопрос "Do you want to exit the app?")
         observeViewModel()
     }
 
@@ -61,7 +66,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         binding.cancelButton.setOnClickListener {
-            activity?.onBackPressed() // это аналог finish для фрагмента, потом замени на findNavController().popBackStack
+            onExitApplication()
         }
     }
 
@@ -145,5 +150,51 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
             }
         }
+    }
+
+    private fun interceptExit() {
+        // перехват нажатия кнопки "Back"
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onExitApplication()
+                }
+            }
+        )
+    }
+
+    private fun onExitApplication() {
+        QuestionDialogFragment
+            .newInstance(
+                getString(ru.internetcloud.workorderapplication.common.R.string.exit_from_app_question,
+                    getString(ru.internetcloud.workorderapplication.common.R.string.app_name)),
+                REQUEST_KEY_EXIT_QUESTION,
+                ARG_NAME_EXIT_QUESTION
+            )
+            .show(childFragmentManager, REQUEST_KEY_EXIT_QUESTION)
+    }
+
+    private fun setupFragmentResultListeners() {
+        // чтобы получать от дочерних диалоговых фрагментов информацию
+        childFragmentManager.setFragmentResultListener(REQUEST_KEY_EXIT_QUESTION, viewLifecycleOwner, this)
+    }
+
+    override fun onFragmentResult(requestKey: String, result: Bundle) {
+        when (requestKey) {
+            // ответ на вопрос: "Выйти из приложения?"
+            REQUEST_KEY_EXIT_QUESTION -> {
+                val exit: Boolean = result.getBoolean(ARG_NAME_EXIT_QUESTION, false)
+                if (exit) {
+                    activity?.finish()
+                }
+            }
+        }
+    }
+
+    companion object {
+        // эти константы нужны для диалогового окна - "Выйти из приложения?"
+        private val REQUEST_KEY_EXIT_QUESTION = "request_key_exit_question"
+        private val ARG_NAME_EXIT_QUESTION = "arg_name_exit_question"
     }
 }

@@ -106,7 +106,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            viewModel.putArgs(args)
+            viewModel.initialize(args)
         }
     }
 
@@ -163,7 +163,7 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
             // причина: если успеть нажать BACK то ВьюМодель уничтожится и отменится корутина, которая записывает
             // а если отменится корутина то запись произведена не будет.
         } else {
-            if (viewModel.screenState.value.isModified) { // подумай над if (!order.posted && ...
+            if (viewModel.screenState.value.isModified) { // ToDo подумай над if (!order.posted && ...
                 QuestionDialogFragment
                     .newInstance(
                         getString(R.string.data_was_changed_question),
@@ -175,7 +175,6 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
                 // можно смело выходить, так как или ничего не поменялось,
                 // или было нажатие кнопки "save" и все уже сохранено
                 sendResultToFragment()
-                // findNavController().popBackStack()
                 navigationApi.navigate(WorkOrderDetailDirections.Up)
             }
         }
@@ -205,7 +204,6 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
             if (currentState.shouldCloseScreen) {
                 Toast.makeText(context, getString(R.string.success_saved), Toast.LENGTH_SHORT).show()
                 sendResultToFragment()
-                //findNavController().popBackStack()
                 navigationApi.navigate(WorkOrderDetailDirections.Up)
             } else {
                 if (currentState.canFillDefaultJobs) {
@@ -582,7 +580,6 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
                     viewModel.handleEvent(WorkOrderDetailEvent.OnSave(shouldCloseScreen = true))
                 } else {
                     sendResultToFragment()
-                    //findNavController().popBackStack()
                     navigationApi.navigate(WorkOrderDetailDirections.Up)
                 }
             }

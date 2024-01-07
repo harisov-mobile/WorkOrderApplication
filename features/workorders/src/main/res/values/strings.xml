@@ -1,12 +1,10 @@
 <resources>
     <!-- common, used in many places -->
-    <string name="app_name">Work Orders Agro-Service</string>
     <string name="number_hint">Number</string>
     <string name="filter_fragment_title">Filter</string>
 
     <!-- WorkOrderListFragment -->
     <string name="add_work_order_fab_description">Add work order</string>
-    <string name="exit_from_app_question">Do you want to exit the %1$s?</string>
 
     <string name="search_menu_item">Search</string>
     <string name="synchronize_data_menu_item">Synchronize data</string>

@@ -2,6 +2,7 @@
 <resources>
     <!-- common, used in many places -->
     <string name="app_name">Заказ-наряды Агро-Сервис</string>
+    <string name="exit_from_app_question">Выйти из %1$s?</string>
     <string name="version">Версия %1$s</string>
     <string name="cancel_button">Отмена</string>
     <string name="clear_button">Очистить</string>

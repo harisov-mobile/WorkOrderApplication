@@ -9,4 +9,3 @@ class WorkOrderApp : Application() {
 
     var navigationActivityProvider = NavigationActivityProvider(this)
 }
-

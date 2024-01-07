@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- common, used in many places -->
-    <string name="app_name">Заказ-наряды Агро-Сервис</string>
 	<string name="number_hint">Номер</string>
     <string name="filter_fragment_title">Отбор</string>
 
