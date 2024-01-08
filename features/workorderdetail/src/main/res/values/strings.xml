@@ -1,7 +1,6 @@
 <resources>
     <!-- common, used in many places -->
     <string name="number_hint">Number</string>
-    <string name="filter_fragment_title">Filter</string>
 
     <!-- WorkOrderFragment -->
     <string name="date_hint">Date</string>

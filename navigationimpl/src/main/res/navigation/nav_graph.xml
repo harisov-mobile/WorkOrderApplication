@@ -42,7 +42,9 @@
             app:destination="@id/workOrderFragment" />
         <action
             android:id="@+id/action_workOrderListFragment_to_dataSynchronizationFragment"
-            app:destination="@id/dataSynchronizationFragment" />
+            app:destination="@id/dataSynchronizationFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/workOrderFragment"

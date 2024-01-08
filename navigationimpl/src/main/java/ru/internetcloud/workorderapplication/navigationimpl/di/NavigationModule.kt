@@ -6,7 +6,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 import ru.internetcloud.workorderapplication.login.presentation.navigation.LoginDirections
 import ru.internetcloud.workorderapplication.navigationapi.NavigationApi
 import ru.internetcloud.workorderapplication.navigationimpl.NavigationActivityProvider
@@ -36,7 +35,6 @@ interface NavigationModule {
 
     companion object {
 
-        @Singleton
         @Provides
         fun provideNavController(
             activityProvider: NavigationActivityProvider

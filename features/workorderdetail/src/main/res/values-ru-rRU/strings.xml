@@ -2,7 +2,6 @@
 <resources>
     <!-- common, used in many places -->
 	<string name="number_hint">Номер</string>
-    <string name="filter_fragment_title">Отбор</string>
 
     <!-- WorkOrderFragment -->
     <string name="date_hint">Дата</string>

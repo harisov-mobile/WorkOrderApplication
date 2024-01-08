@@ -130,14 +130,12 @@ class LoginFragment : Fragment(R.layout.fragment_login), FragmentResultListener 
             if (currentState.canContinue) {
                 // подписка на завершение экрана:
                 // запустить фрагмент, где будет синхронизация данных из 1С
-                //findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToDataSynchronizationFragment())
                 navigationApi.navigate(LoginDirections.ToDataSynchronization)
             }
 
             if (currentState.canContinueDemoMode) {
                 // демо-режим - переход в список Заказ-нарядов:
                 // запустить фрагмент, где будет показан список демо-заказ-нарядов
-                //findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToWorkOrderListFragment())
                 navigationApi.navigate(LoginDirections.ToWorkOrders)
             }
         }
