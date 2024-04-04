@@ -7,5 +7,7 @@ import ru.internetcloud.workorderapplication.navigationimpl.NavigationActivityPr
 @HiltAndroidApp
 class WorkOrderApp : Application() {
 
-    var navigationActivityProvider = NavigationActivityProvider(this)
+    val navigationActivityProvider = NavigationActivityProvider(this)
 }
+
+// ToDo - пагинацию сделать из Room

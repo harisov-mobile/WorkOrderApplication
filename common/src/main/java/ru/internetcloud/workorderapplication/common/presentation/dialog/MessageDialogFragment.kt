@@ -17,7 +17,7 @@ class MessageDialogFragment : DialogFragment() {
             throw RuntimeException("There are not arguments in MessageDialogFragment")
         }
 
-        val alertDialogBuilder = AlertDialog.Builder(activity)
+        val alertDialogBuilder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialogSmallCorners)
         alertDialogBuilder.setMessage(message)
         alertDialogBuilder.setPositiveButton(R.string.ok_button, null)
 

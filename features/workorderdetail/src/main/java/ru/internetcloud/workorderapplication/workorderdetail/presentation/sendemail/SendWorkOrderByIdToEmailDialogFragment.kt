@@ -35,7 +35,7 @@ class SendWorkOrderByIdToEmailDialogFragment : DialogFragment() {
             throw RuntimeException("There are not arguments in SendWorkOrderByIdToEmailDialogFragment")
         }
 
-        val alertDialogBuilder = AlertDialog.Builder(activity)
+        val alertDialogBuilder = AlertDialog.Builder(requireContext(), ru.internetcloud.workorderapplication.common.R.style.CustomAlertDialogSmallCorners)
 
         val container = layoutInflater.inflate(R.layout.fragment_send_work_order_to_email, null, false)
         okButton = container.findViewById(R.id.ok_button)

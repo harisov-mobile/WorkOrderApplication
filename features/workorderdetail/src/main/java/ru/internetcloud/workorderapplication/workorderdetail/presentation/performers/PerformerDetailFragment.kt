@@ -51,7 +51,7 @@ class PerformerDetailFragment : DialogFragment(), FragmentResultListener {
             throw RuntimeException("There are not arguments in PerformerDetailFragment")
         }
 
-        val alertDialogBuilder = AlertDialog.Builder(activity)
+        val alertDialogBuilder = AlertDialog.Builder(requireContext(), ru.internetcloud.workorderapplication.common.R.style.CustomAlertDialogSmallCorners)
         alertDialogBuilder.setTitle(R.string.performer_detail_title)
 
         val container = layoutInflater.inflate(R.layout.fragment_performer_detail, null, false)

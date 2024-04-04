@@ -12,7 +12,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
-import java.math.BigDecimal
 import ru.internetcloud.workorderapplication.common.domain.common.ValidateInputResult
 import ru.internetcloud.workorderapplication.common.domain.model.catalog.CarJob
 import ru.internetcloud.workorderapplication.common.domain.model.catalog.WorkingHour
@@ -21,6 +20,7 @@ import ru.internetcloud.workorderapplication.common.presentation.dialog.MessageD
 import ru.internetcloud.workorderapplication.workorderdetail.R
 import ru.internetcloud.workorderapplication.workorderdetail.presentation.carjob.CarJobPickerFragment
 import ru.internetcloud.workorderapplication.workorderdetail.presentation.workinghour.WorkingHourPickerFragment
+import java.math.BigDecimal
 
 class JobDetailFragment : DialogFragment(), FragmentResultListener {
 
@@ -59,7 +59,7 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
             throw RuntimeException("There are not arguments in JobDetailFragment")
         }
 
-        val alertDialogBuilder = AlertDialog.Builder(activity)
+        val alertDialogBuilder = AlertDialog.Builder(requireContext(), ru.internetcloud.workorderapplication.common.R.style.CustomAlertDialogSmallCorners)
         alertDialogBuilder.setTitle(R.string.job_detail_title)
 
         val container = layoutInflater.inflate(R.layout.fragment_job_detail, null, false)

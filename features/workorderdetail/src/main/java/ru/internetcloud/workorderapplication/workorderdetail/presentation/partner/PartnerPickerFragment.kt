@@ -43,8 +43,7 @@ class PartnerPickerFragment : DialogFragment() {
             throw RuntimeException("There are not arguments in PartnerPickerFragment")
         }
 
-        val alertDialogBuilder = AlertDialog.Builder(activity)
-        // alertDialogBuilder.setTitle(R.string.partner_picker_title)
+        val alertDialogBuilder = AlertDialog.Builder(requireContext(), ru.internetcloud.workorderapplication.common.R.style.CustomAlertDialogSmallCorners)
 
         val container = layoutInflater.inflate(R.layout.fragment_picker, null, false)
         clearSearchTextImageButton = container.findViewById(R.id.clear_search_text_button)

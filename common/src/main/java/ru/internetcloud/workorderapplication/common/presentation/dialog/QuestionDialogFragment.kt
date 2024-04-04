@@ -22,7 +22,7 @@ class QuestionDialogFragment : DialogFragment() {
             throw RuntimeException("There are not arguments in QuestionDialogFragment")
         }
 
-        val alertDialogBuilder = AlertDialog.Builder(activity)
+        val alertDialogBuilder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialogSmallCorners)
         alertDialogBuilder.setMessage(question)
         alertDialogBuilder.setPositiveButton(R.string.yes_button) { dialog, which ->
             sendResultToFragment(true)
