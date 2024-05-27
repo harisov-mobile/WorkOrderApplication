@@ -48,6 +48,8 @@ android {
 
 dependencies {
 
+    implementation project(":core:brandbook")
+
     implementation "androidx.core:core-ktx:$coreVersion"
     implementation "androidx.appcompat:appcompat:$supportLibVersion"
     implementation "com.google.android.material:material:$materialVersion"
@@ -75,5 +77,4 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$converterGsonVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$loggingInterCeptorVerion"
-
 }

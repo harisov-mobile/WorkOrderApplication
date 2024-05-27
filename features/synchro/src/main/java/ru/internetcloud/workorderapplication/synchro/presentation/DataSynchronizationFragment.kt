@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.common.buildconfig.BuildConfigFieldsProvider
 import ru.internetcloud.workorderapplication.common.domain.common.UpdateState
 import ru.internetcloud.workorderapplication.common.presentation.dialog.QuestionDialogFragment
@@ -18,6 +17,7 @@ import ru.internetcloud.workorderapplication.navigationapi.NavigationApi
 import ru.internetcloud.workorderapplication.synchro.R
 import ru.internetcloud.workorderapplication.synchro.databinding.FragmentDataSynchronizationBinding
 import ru.internetcloud.workorderapplication.synchro.presentation.navigation.SynchroDirections
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DataSynchronizationFragment : Fragment(R.layout.fragment_data_synchronization), FragmentResultListener {
@@ -72,7 +72,7 @@ class DataSynchronizationFragment : Fragment(R.layout.fragment_data_synchronizat
                         binding.synchroResultTextView.setTextColor(
                             ContextCompat.getColor(
                                 currentContext,
-                                R.color.dark_green
+                                ru.internetcloud.workorderapplication.core.brandbook.R.color.dark_green
                             )
                         )
                     }
@@ -104,7 +104,7 @@ class DataSynchronizationFragment : Fragment(R.layout.fragment_data_synchronizat
                         binding.synchroResultTextView.setTextColor(
                             ContextCompat.getColor(
                                 currentContext,
-                                R.color.dark_yellow
+                                ru.internetcloud.workorderapplication.core.brandbook.R.color.dark_yellow
                             )
                         )
 

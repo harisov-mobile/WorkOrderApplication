@@ -4,8 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.UUID
-import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -24,6 +22,8 @@ import ru.internetcloud.workorderapplication.common.domain.usecase.settingsopera
 import ru.internetcloud.workorderapplication.common.presentation.util.EditMode
 import ru.internetcloud.workorderapplication.common.presentation.util.ReturnResult
 import ru.internetcloud.workorderapplication.workorderdetail.presentation.navigation.WorkOrderDetailArgs
+import java.util.UUID
+import javax.inject.Inject
 
 @HiltViewModel
 class WorkOrderViewModel @Inject constructor(
@@ -114,6 +114,7 @@ class WorkOrderViewModel @Inject constructor(
                     savedStateHandle[KEY_WORK_ORDER_DETAIL_STATE] = screenState.value.copy(
                         shouldInit = false,
                         loading = false,
+                        error = null,
                         workOrder = currentWorkOrder
                     )
                 } ?: error("Not found WorkOrder with id = $workOrderId")
@@ -348,7 +349,8 @@ class WorkOrderViewModel @Inject constructor(
 
     private fun saveWorkOrder(shouldCloseScreen: Boolean = false) {
         viewModelScope.launch {
-            // перед началом сохранения можно показать прогресс-бар и заблокировать кнопку "SAVE" и остальные элементы заблокировать
+            // перед началом сохранения можно показать прогресс-бар и заблокировать кнопку "SAVE"
+            // и остальные элементы заблокировать
             savedStateHandle[KEY_WORK_ORDER_DETAIL_STATE] = screenState.value.copy(
                 saving = true
             )
@@ -574,8 +576,6 @@ class WorkOrderViewModel @Inject constructor(
 
         return shortName
     }
-
-
 
     companion object {
         private const val DEFAULT_STRING_VALUE = ""

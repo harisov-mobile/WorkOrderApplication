@@ -46,6 +46,7 @@ android {
 dependencies {
 
     // Modules
+    implementation project(":core:brandbook")
     implementation project(":features:login")
     implementation project(":features:synchro")
     implementation project(":features:workorderdetail")

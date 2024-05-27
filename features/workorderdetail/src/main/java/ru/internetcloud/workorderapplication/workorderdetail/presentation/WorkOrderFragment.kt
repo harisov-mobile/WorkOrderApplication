@@ -17,9 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.math.BigDecimal
-import java.util.Date
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.common.domain.common.DateConverter
 import ru.internetcloud.workorderapplication.common.domain.model.catalog.Car
 import ru.internetcloud.workorderapplication.common.domain.model.catalog.Department
@@ -51,6 +48,9 @@ import ru.internetcloud.workorderapplication.workorderdetail.presentation.perfor
 import ru.internetcloud.workorderapplication.workorderdetail.presentation.performers.PerformerDetailListListener
 import ru.internetcloud.workorderapplication.workorderdetail.presentation.repairtype.RepairTypePickerFragment
 import ru.internetcloud.workorderapplication.workorderdetail.presentation.sendemail.SendWorkOrderByIdToEmailDialogFragment
+import java.math.BigDecimal
+import java.util.Date
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResultListener {
@@ -316,11 +316,14 @@ class WorkOrderFragment : Fragment(R.layout.fragment_work_order), FragmentResult
 
                 if (posted) {
                     context?.let { currentContext ->
-                        val grayColor = ContextCompat.getColor(currentContext, R.color.gray_850)
+                        val grayColor = ContextCompat.getColor(
+                            currentContext,
+                            ru.internetcloud.workorderapplication.core.brandbook.R.color.gray_850
+                        )
                         mainContainer.setBackgroundColor(
                             ContextCompat.getColor(
                                 currentContext,
-                                R.color.light_green_200
+                                ru.internetcloud.workorderapplication.core.brandbook.R.color.light_green_200
                             )
                         )
                         numberEditText.setTextColor(grayColor)

@@ -44,7 +44,9 @@ class EmployeePickerFragment : DialogFragment() {
             throw RuntimeException("There are not arguments in EmployeePickerFragment")
         }
 
-        val alertDialogBuilder = AlertDialog.Builder(requireContext(), ru.internetcloud.workorderapplication.common.R.style.CustomAlertDialogSmallCorners)
+        val alertDialogBuilder = AlertDialog.Builder(
+            requireContext(),
+            ru.internetcloud.workorderapplication.core.brandbook.R.style.CustomAlertDialogSmallCorners)
 
         val container = layoutInflater.inflate(R.layout.fragment_picker, null, false)
         clearSearchTextImageButton = container.findViewById(R.id.clear_search_text_button)

@@ -2,23 +2,25 @@
 
 <resources>
 
+    <style name="LoginTextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_marginTop">@dimen/super_big_margin</item>
+        <item name="android:layout_marginStart">@dimen/super_big_margin</item>
+        <item name="android:layout_marginEnd">@dimen/super_big_margin</item>
+        <item name="boxStrokeErrorColor">@color/red_800</item>
+        <item name="errorIconTint">@color/red_800</item>
+        <item name="errorTextColor">@color/red_800</item>
+    </style>
+
+    <style name="CustomAlertDialogSmallCorners" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="dialogCornerRadius">10dp</item>
+    </style>
+
     <style name="picker_text_view">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/gray_850</item>
         <item name="android:background">@drawable/text_view_without_border_line</item>
-    </style>
-
-    <style name="small_clear_button">
-        <item name="android:minWidth">0dp</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
-        <item name="android:layout_marginEnd">8dp</item>
-        <item name="android:text">@string/clear_search_text_button</item>
     </style>
 
     <style name="small_select_button">
@@ -29,7 +31,6 @@
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
         <item name="android:layout_marginEnd">8dp</item>
-        <item name="android:text">@string/choose_label</item>
     </style>
 
     <style name="filter_edit_text">

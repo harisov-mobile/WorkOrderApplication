@@ -40,6 +40,7 @@ android {
 dependencies {
 
     // Modules
+    implementation project(":core:brandbook")
     implementation project(":common")
     implementation project(":navigationapi")
 
@@ -54,12 +55,7 @@ dependencies {
     // reflection-free flavor
     implementation "com.github.kirich1409:viewbindingpropertydelegate-noreflection:$viewBindingPropertyDelegateVersion"
 
-    // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
-
     // Hilt
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-compiler:$hiltVersion"
-
 }

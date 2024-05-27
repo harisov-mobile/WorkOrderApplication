@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import ru.internetcloud.workorderapplication.common.R
 
 class MessageDialogFragment : DialogFragment() {
 
@@ -17,9 +16,14 @@ class MessageDialogFragment : DialogFragment() {
             throw RuntimeException("There are not arguments in MessageDialogFragment")
         }
 
-        val alertDialogBuilder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialogSmallCorners)
+        val alertDialogBuilder = AlertDialog.Builder(
+            requireContext(),
+            ru.internetcloud.workorderapplication.core.brandbook.R.style.CustomAlertDialogSmallCorners
+        )
         alertDialogBuilder.setMessage(message)
-        alertDialogBuilder.setPositiveButton(R.string.ok_button, null)
+        alertDialogBuilder.setPositiveButton(
+            ru.internetcloud.workorderapplication.common.R.string.ok_button,
+            null)
 
         return alertDialogBuilder.create()
     }

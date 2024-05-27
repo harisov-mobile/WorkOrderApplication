@@ -59,7 +59,9 @@ class JobDetailFragment : DialogFragment(), FragmentResultListener {
             throw RuntimeException("There are not arguments in JobDetailFragment")
         }
 
-        val alertDialogBuilder = AlertDialog.Builder(requireContext(), ru.internetcloud.workorderapplication.common.R.style.CustomAlertDialogSmallCorners)
+        val alertDialogBuilder = AlertDialog.Builder(
+            requireContext(),
+            ru.internetcloud.workorderapplication.core.brandbook.R.style.CustomAlertDialogSmallCorners)
         alertDialogBuilder.setTitle(R.string.job_detail_title)
 
         val container = layoutInflater.inflate(R.layout.fragment_job_detail, null, false)
