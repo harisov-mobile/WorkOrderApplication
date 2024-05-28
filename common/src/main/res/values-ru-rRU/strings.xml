@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- common, used in many places -->
+    <string name="app_name">Заказ-наряды Агро-Сервис</string>
+    <string name="exit_from_app_question">Выйти из %1$s?</string>
+    <string name="version">Версия %1$s</string>
+    <string name="cancel_button">Отмена</string>
+    <string name="clear_button">Очистить</string>
+    <string name="ok_button">Ок</string>
+    <string name="yes_button">Да</string>
+    <string name="no_button">Нет</string>
+    <string name="partner_label">Заказчик:</string>
+    <string name="choose_label">...</string>
+    <string name="car_label">СХТ:</string>
+    <string name="department_label">Цех:</string>
+    <string name="line_number_label">No строки:</string>
+    <string name="search_label">Поиск</string>
+    <string name="clear_search_text_button">X</string>
+    <string name="filter_fragment_title">Отбор</string>
+    <string name="try_again">Попробовать снова</string>
+</resources>

@@ -3,7 +3,6 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
-    id 'androidx.navigation.safeargs.kotlin'
     id 'com.google.dagger.hilt.android'
 }
 
@@ -17,29 +16,18 @@ android {
         applicationId "ru.internetcloud.workorderapplication"
         minSdk 21
         targetSdk 33
-        versionCode 11
-        versionName "11"
+        versionCode 12
+        versionName "12"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
-        debug {
-            buildConfigField 'String', 'PUB_NAME_ADD_ON', '"alpha2"'
-        }
-        staging {
-            buildConfigField 'String', 'PUB_NAME_ADD_ON', '"alpha2"'
-        }
-
         release {
             buildConfigField 'String', 'PUB_NAME_ADD_ON', '"rabota"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-
-    buildFeatures {
-        dataBinding true
     }
 
     viewBinding {
@@ -56,6 +44,15 @@ android {
 }
 
 dependencies {
+
+    // Modules
+    implementation project(":core:brandbook")
+    implementation project(":features:login")
+    implementation project(":features:synchro")
+    implementation project(":features:workorderdetail")
+    implementation project(":features:workorders")
+    implementation project(":common")
+    implementation project(":navigationimpl")
 
     // Architecture components
     implementation "androidx.core:core-ktx:$coreVersion"
@@ -84,25 +81,10 @@ dependencies {
 
     androidTestImplementation 'androidx.test:runner:1.5.2'
 
-    // Room
-    implementation("androidx.room:room-runtime:$roomVersion")
-    // To use Kotlin annotation processing tool (kapt)
-    kapt("androidx.room:room-compiler:$roomVersion")
-    // optional - Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:$roomVersion")
 
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesCoreVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesAndroidVersion"
-
-    // Retrofit
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$converterGsonVersion"
-    implementation "com.squareup.okhttp3:logging-interceptor:$loggingInterCeptorVerion"
-
-    // Dagger2
-    implementation "com.google.dagger:dagger:$daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // fragment
     implementation "androidx.fragment:fragment:$fragmentVersion"
@@ -116,8 +98,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
     // Hilt
-    implementation "com.google.dagger:hilt-android:2.44"
-    kapt "com.google.dagger:hilt-compiler:2.44"
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
 }
 
 // Hilt - Allow references to generated code
