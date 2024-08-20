@@ -1,0 +1,58 @@
+apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'com.google.dagger.hilt.android'
+
+android {
+  compileSdk rootProject.ext.compileSdkVersion
+
+  defaultConfig {
+    minSdk rootProject.ext.minSdkVersion
+    targetSdk rootProject.ext.targetSdkVersion
+
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    consumerProguardFiles "consumer-rules.pro"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+  kotlinOptions {
+    jvmTarget = '1.8'
+  }
+
+  viewBinding {
+    enabled = true
+  }
+}
+
+dependencies {
+
+  // Modules
+  implementation project(":core:brandbook")
+  implementation project(":common")
+  implementation project(":navigationapi")
+
+  implementation "androidx.core:core-ktx:$coreVersion"
+  implementation "androidx.appcompat:appcompat:$supportLibVersion"
+  implementation "com.google.android.material:material:$materialVersion"
+
+  // fragment
+  implementation "androidx.fragment:fragment:$fragmentVersion"
+  implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
+
+  // reflection-free flavor
+  implementation "com.github.kirich1409:viewbindingpropertydelegate-noreflection:$viewBindingPropertyDelegateVersion"
+
+  // Hilt
+  implementation "com.google.dagger:hilt-android:$hiltVersion"
+  kapt "com.google.dagger:hilt-compiler:$hiltVersion"
+}

@@ -10,12 +10,12 @@ plugins {
 apply from: "../ktlint.gradle"
 
 android {
-    compileSdk 34
+    compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
         applicationId "ru.internetcloud.workorderapplication"
-        minSdk 25
-        targetSdk 34
+        minSdk rootProject.ext.minSdkVersion
+        targetSdk rootProject.ext.targetSdkVersion
         versionCode 13
         versionName "13.0"
 
@@ -23,15 +23,7 @@ android {
     }
 
     buildTypes {
-        debug {
-            buildConfigField 'String', 'PUB_NAME_ADD_ON', '"alpha2"'
-        }
-        staging {
-            buildConfigField 'String', 'PUB_NAME_ADD_ON', '"alpha2"'
-        }
-
         release {
-            buildConfigField 'String', 'PUB_NAME_ADD_ON', '"rabota"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
