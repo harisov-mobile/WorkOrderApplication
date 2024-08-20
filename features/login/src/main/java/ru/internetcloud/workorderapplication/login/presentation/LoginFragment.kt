@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.common.buildconfig.BuildConfigFieldsProvider
 import ru.internetcloud.workorderapplication.common.presentation.dialog.MessageDialogFragment
 import ru.internetcloud.workorderapplication.common.presentation.dialog.QuestionDialogFragment
@@ -20,6 +19,7 @@ import ru.internetcloud.workorderapplication.login.R
 import ru.internetcloud.workorderapplication.login.databinding.FragmentLoginBinding
 import ru.internetcloud.workorderapplication.login.presentation.navigation.LoginDirections
 import ru.internetcloud.workorderapplication.navigationapi.NavigationApi
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login), FragmentResultListener {

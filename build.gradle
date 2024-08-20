@@ -1,11 +1,14 @@
 buildscript {
     ext {
+        compileSdkVersion = 34
+        targetSdkVersion = compileSdkVersion
+        minSdkVersion = 25
+
         constraintVersion = '2.1.4'
         converterGsonVersion = '2.9.0'
         coreVersion = '1.7.0'
         coroutinesCoreVersion = "1.4.1"
         coroutinesAndroidVersion = "1.4.1"
-        // daggerVersion = "2.40.1"
         espressoVersion = '3.4.0-beta01'
         fragmentVersion = "1.5.6"
         hiltVersion = '2.44'
@@ -18,8 +21,8 @@ buildscript {
         mockitoKotlinVersion = '4.0.0'
         navVersion = "2.6.0"
         retrofitVersion = '2.9.0'
-        supportLibVersion = '1.6.1'
         roomVersion = "2.5.1"
+        supportLibVersion = '1.6.1'
         viewBindingPropertyDelegateVersion = "1.5.8"
     }
 
