@@ -1,3 +1,4 @@
+
 # Built application files
 *.apk
 *.aar
@@ -76,10 +77,8 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
-keystore.properties
 
+keystore.properties
 *.tmp
 *.docx
-
-/app/release/
-
+.DS_Store
