@@ -1,8 +1,5 @@
 package ru.internetcloud.workorderapplication.common.data.repository
 
-import java.math.BigDecimal
-import java.util.Date
-import javax.inject.Inject
 import ru.internetcloud.workorderapplication.common.data.datasource.local.CarJobLocalDataSource
 import ru.internetcloud.workorderapplication.common.data.datasource.local.CarLocalDataSource
 import ru.internetcloud.workorderapplication.common.data.datasource.local.CarModelLocalDataSource
@@ -46,6 +43,9 @@ import ru.internetcloud.workorderapplication.common.domain.model.document.JobDet
 import ru.internetcloud.workorderapplication.common.domain.model.document.PerformerDetail
 import ru.internetcloud.workorderapplication.common.domain.model.document.WorkOrder
 import ru.internetcloud.workorderapplication.common.domain.repository.SynchroRepository
+import java.math.BigDecimal
+import java.util.Date
+import javax.inject.Inject
 
 class SynchroRepositoryImpl @Inject constructor(
     private val jobDetailMapper: JobDetailMapper,
@@ -172,6 +172,7 @@ class SynchroRepositoryImpl @Inject constructor(
                 return UpdateState.ContinueWithoutSynchro(exception)
             }
         } else {
+            // var startTimeTotal = System.currentTimeMillis()
             var refreshingResult = refreshDepartment()
             if (refreshingResult is RefreshingResult.Error) {
                 return UpdateState.Error(refreshingResult.exception)
@@ -221,6 +222,10 @@ class SynchroRepositoryImpl @Inject constructor(
             if (refreshingResult is RefreshingResult.Error) {
                 return UpdateState.Error(refreshingResult.exception)
             }
+
+            // var endTimeTotal = System.currentTimeMillis()
+            // var executionTime = endTimeTotal - startTimeTotal
+            // Log.d("rustam", "время выполнения TOTAL = $executionTime мс")
         }
 
         return UpdateState.Success(quantity)
