@@ -82,3 +82,4 @@ keystore.properties
 *.tmp
 *.docx
 .DS_Store
+/app/release/baselineProfiles/0/app-release.dm
